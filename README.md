@@ -1,5 +1,5 @@
 # Robot Name
-Zen is FRC Team 1816's robot for the 2024 FRC season, *Crescendo*. This software uses Java 17, 
+Zone is FRC Team 1816's robot for the 2025 FRC season, *Reefscape*. This software uses Java 17, 
 [WPILib](https://github.com/wpilibsuite/allwpilib), the [CTRE Phoenix](https://github.com/CrossTheRoadElec/Phoenix-api) Library, [Guice](https://github.com/google/guice), and [Apache Commons Math](https://github.com/apache/commons-math).
 
 ## Prerequisites
@@ -12,7 +12,7 @@ Zen is FRC Team 1816's robot for the 2024 FRC season, *Crescendo*. This software
 
 Open a new Bash shell and clone:
 ```bash
-$ git clone https://github.com/TheGreenMachine/Zen.git
+$ git clone https://github.com/TheGreenMachine/Zone.git
 ```
 ## Importing
 
@@ -52,4 +52,4 @@ To clear previous built binaries and minimize the possibility of bugs, it is rec
 $ ./gradlew clean deploy
 ```
 ---
-2024 - FRC Team 1816 The Green Machine
+2025 - FRC Team 1816 The Green Machine
