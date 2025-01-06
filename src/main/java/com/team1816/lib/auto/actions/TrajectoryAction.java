@@ -8,6 +8,7 @@ import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.subsystems.drive.TankDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.core.configuration.Constants;
+import edu.wpi.first.math.controller.LTVUnicycleController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -85,16 +86,18 @@ public class TrajectoryAction implements AutoAction {
 
         // create command (wpi version of an action)
         if (drive instanceof TankDrive) {
-            command =
-                new RamseteCommand(
-                    trajectory,
-                    drive::getPose,
-                    new RamseteController(), //defaults of
-                    new DifferentialDriveKinematics(
-                        Units.inchesToMeters(kDriveWheelTrackWidthInches)
-                    ),
-                    ((TankDrive) drive)::updateTrajectoryVelocities
-                );
+//            command =
+//                new RamseteCommand(
+//                    trajectory,
+//                    drive::getPose,
+//                    new RamseteController(), //defaults of
+//                    new DifferentialDriveKinematics(
+//                        Units.inchesToMeters(kDriveWheelTrackWidthInches)
+//                    ),
+//                    ((TankDrive) drive)::updateTrajectoryVelocities
+//                );
+            GreenLogger.log("Tank Drive is no longer supported.");
+            throw new IllegalArgumentException("Tank Drive is no longer supported.");
         } else if (drive instanceof EnhancedSwerveDrive) {
             var thetaController = new ProfiledPIDController(
                     Constants.kPRotational,

@@ -2,6 +2,7 @@ package com.team1816.core.configuration;
 
 import com.google.inject.Singleton;
 import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -19,7 +20,7 @@ import java.util.List;
 public class FieldConfig { //FIXME
 
     public static Field2d field;
-    public static List<AprilTag> aprilTags = AprilTagFields.kDefaultField.loadAprilTagLayoutField().getTags(); //should be current season field
+    public static List<AprilTag> aprilTags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField).getTags();    //should be current season field
     public static final HashMap<Integer, Pose3d> fiducialTargets = new HashMap<>() {
         {
             /**

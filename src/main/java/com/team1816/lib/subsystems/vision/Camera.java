@@ -31,7 +31,7 @@ public class Camera extends Subsystem{
     private static final String NAME = "camera";
     private static final String CAM = "Arducam_OV9281_USB_Camera";
     public static final AprilTagFieldLayout kTagLayout =
-            AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+            AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
     private static final Transform3d robotToCam = Constants.kCameraMountingOffset3D;
 
     /**
