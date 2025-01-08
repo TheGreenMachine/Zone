@@ -8,6 +8,7 @@ import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.lib.auto.modes.AutopathMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
+import com.team1816.season.auto.TrajectoryOnlyAutoMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -114,11 +115,9 @@ public class AutoModeManager {
             if (colorChanged) {
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
-            autoMode = generateAutoMode(selectedAuto, selectedColor);
-
-
-            autoModeThread = new Thread(autoMode::run);
         }
+        autoMode = generateAutoMode(selectedAuto, selectedColor);
+        autoModeThread = new Thread(autoMode::run);
         desiredAuto = selectedAuto;
         teamColor = selectedColor;
         robotState.allianceColor = teamColor;
@@ -188,7 +187,9 @@ public class AutoModeManager {
     enum DesiredAuto {
         DRIVE_STRAIGHT,
 
-        AUTOPATH
+        AUTOPATH,
+
+        DYNAMIC_TRAJECTORY_ONLY
         }
 
 
@@ -205,6 +206,8 @@ public class AutoModeManager {
                 return new DriveStraightMode();
             case AUTOPATH:
                 return new AutopathMode();
+            case DYNAMIC_TRAJECTORY_ONLY:
+                return new TrajectoryOnlyAutoMode(robotState);
             default:
                 GreenLogger.log("Defaulting to drive straight mode");
                 return new DriveStraightMode();
