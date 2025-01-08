@@ -1,5 +1,6 @@
 package com.team1816.lib.autopath;
 
+import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.subsystems.drive.Drive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,6 +22,8 @@ public class AutopathAlgorithm {
     }
 
     public static Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition){
+        if(autopathStartPosition.equals(autopathTargetPosition))
+            return new Trajectory();
         Autopath.robotState.autopathWaypoints.clear();
         Autopath.robotState.autopathTrajectory = null;
         Autopath.robotState.autopathCollisionStarts.clear();
@@ -41,6 +44,7 @@ public class AutopathAlgorithm {
 
         TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
         config.setStartVelocity(Autopath.robotState.robotVelocity);
+        config.setEndVelocity(Autopath.robotState.robotVelocity);
 //        config.setEndVelocity(Math.min(Drive.kPathFollowingMaxVelMeters/2, 3));
 
         ArrayList<WaypointTreeNode> branches = new ArrayList<>();

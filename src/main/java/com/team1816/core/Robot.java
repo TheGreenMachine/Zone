@@ -509,6 +509,8 @@ public class Robot extends TimedRobot {
                         );
             }
 
+            robotState.dynamicAutoScript2025.updateSendableChoosers();
+
             if (drive.isDemoMode()) { // Demo-mode
                 drive.update();
             }

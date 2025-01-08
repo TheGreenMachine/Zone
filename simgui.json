@@ -96,6 +96,9 @@
       "/SmartDashboard/SendableChooser[2]": "String Chooser",
       "/SmartDashboard/Starting Position": "String Chooser",
       "/SmartDashboard/Third collected note": "String Chooser",
+      "/SmartDashboard/TrajectoryAction 0": "String Chooser",
+      "/SmartDashboard/TrajectoryAction 1": "String Chooser",
+      "/SmartDashboard/TrajectoryAction 2": "String Chooser",
       "/SmartDashboard/Turret Sim": "Mechanism2d",
       "/SmartDashboard/Velocity Multiplier": "String Chooser",
       "/SmartDashboard/VisionSystemSim-SimVision/Sim Field": "Field2d",
@@ -319,6 +322,21 @@
         }
       },
       "/SmartDashboard/Second shooting position": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/TrajectoryAction 0": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/TrajectoryAction 1": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/TrajectoryAction 2": {
         "window": {
           "visible": true
         }
