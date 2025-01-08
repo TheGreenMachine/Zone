@@ -44,7 +44,7 @@ public class TrajectoryAction implements AutoAction {
      *
      * @see Trajectory
      */
-    private final Trajectory trajectory;
+    public final Trajectory trajectory;
 
     /**
      * List of headings for swerve commands
