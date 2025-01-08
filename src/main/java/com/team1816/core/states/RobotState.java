@@ -8,6 +8,7 @@ import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
+import com.team1816.season.DynamicAutoScript2025;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -116,6 +117,11 @@ public class RobotState {
     public double robotVelocity = 0;
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
+
+    /**
+     * DynamicAuto2025
+     */
+    public DynamicAutoScript2025 dynamicAutoScript2025 = new DynamicAutoScript2025(3);
 
     /**
      * Pigeon state

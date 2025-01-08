@@ -22,7 +22,7 @@ import java.util.List;
  * An abstract class that is the basis of a robot's autonomous routines.
  * Actions can be implemented in the routine and can be performed  (which are routines that do actions).
  */
-public abstract class AutoMode {
+public abstract class AutoMode implements Runnable{
 
     public static RobotState robotState;
 
