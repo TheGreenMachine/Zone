@@ -2,12 +2,18 @@ package com.team1816.lib.hardware.components.motor;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.revrobotics.*;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLimitSwitch;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.team1816.lib.hardware.components.motor.configurations.*;
 import com.team1816.lib.util.ConfigurationTranslator;
 import com.team1816.lib.util.logUtil.GreenLogger;
 
-public class LazySparkMax extends CANSparkMax implements IGreenMotor {
-    private SparkPIDController pidController;
+public class LazySparkMax extends SparkMax implements IGreenMotor {
+    private SparkClosedLoopController pidController;
+    private SparkMaxConfig config;
     private RelativeEncoder encoder;
 
     protected String name = "";
@@ -27,11 +33,12 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
      * Create a new object to control a SPARK MAX motor Controller
      *
      * @param deviceNumber The device ID.
-     * @param motorName The name of the motor
+     * @param motorName    The name of the motor
      */
     public LazySparkMax(int deviceNumber, String motorName) {
-        super(deviceNumber, CANSparkLowLevel.MotorType.kBrushless);
-        pidController = super.getPIDController();
+        super(deviceNumber, SparkLowLevel.MotorType.kBrushless);
+        pidController = super.closedLoopController;
+        config = new SparkMaxConfig();
         encoder = configureRelativeEncoder(FeedbackDeviceType.HALL_SENSOR);
         name = motorName;
     }
@@ -58,8 +65,8 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
 
     private RelativeEncoder configureRelativeEncoder(FeedbackDeviceType deviceType) {
         return super.getEncoder(
-            ConfigurationTranslator.toSparkRelativeEncoderType(deviceType),
-            42
+                ConfigurationTranslator.toSparkRelativeEncoderType(deviceType),
+                42
         );
     }
 
@@ -70,12 +77,14 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
 
     @Override
     public void configCurrentLimit(int current) {
-        super.setSmartCurrentLimit(current);
+        config.smartCurrentLimit(current);
+        reconfigure();
     }
 
     @Override
     public void configStatorCurrentLimit(double current, boolean enable) {
-        super.setSecondaryCurrentLimit(current);
+        config.secondaryCurrentLimit(current);
+        reconfigure();
     }
 
     @Override
@@ -85,9 +94,9 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
             lastSet = demand;
             lastControlMode = currentControlMode;
             pidController.setReference(
-                demand,
-                ConfigurationTranslator.toSparkMaxControlType(controlMode),
-                currentPIDSlot
+                    demand,
+                    ConfigurationTranslator.toSparkMaxControlType(controlMode),
+                    currentPIDSlot
             );
         }
     }
@@ -122,7 +131,7 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     public void setSensorPhase(boolean isInverted) {
         GreenLogger.log("Cannot invert sensor phase of a Spark in brushless mode");
         //If we ever have a spark controlling a brushed motor, the next line can be uncommented.
-            //encoder.setInverted(isInverted); // This is NOT the same as a call to super.getInverted().
+        //encoder.setInverted(isInverted); // This is NOT the same as a call to super.getInverted().
     }
 
     @Override
@@ -307,10 +316,10 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     public double get_ClosedLoopError() {
         // This isn't worth implementing as of 2023-24 because we aren't using rev motors for driving or anything that needs that much precision.
         // If anyone in the future wants to take a stab at it go ahead:
-            //This is theoretically possible in a few ways
-                // The actual firmware implementation is here https://docs.revrobotics.com/sparkmax/operating-modes/closed-loop-control but error is not retrievable
-                    //if we figured out what pv meant then we could calc it ourselves
-                // Could also reverse engineer the output from the PID equation but that could potentially be really slow
+        //This is theoretically possible in a few ways
+        // The actual firmware implementation is here https://docs.revrobotics.com/sparkmax/operating-modes/closed-loop-control but error is not retrievable
+        //if we figured out what pv meant then we could calc it ourselves
+        // Could also reverse engineer the output from the PID equation but that could potentially be really slow
         return Double.NaN;
     }
 
@@ -327,8 +336,8 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     @Override
     public void configMotionCurve(MotionCurveType motionCurveType, int curveStrength) {
         pidController.setSmartMotionAccelStrategy(
-            motionCurveType == MotionCurveType.S_CURVE ? SparkPIDController.AccelStrategy.kSCurve : SparkPIDController.AccelStrategy.kTrapezoidal,
-            currentPIDSlot
+                motionCurveType == MotionCurveType.S_CURVE ? SparkPIDController.AccelStrategy.kSCurve : SparkPIDController.AccelStrategy.kTrapezoidal,
+                currentPIDSlot
         );
     }
 
@@ -370,5 +379,12 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     @Override
     public void configControlFramePeriod(ControlFrame controlFrame, int periodms) {
         super.setControlFramePeriodMs(periodms);
+    }
+
+    /**
+     * Re-configures the SparkMax based on the state of config
+     */
+    private void reconfigure() {
+        super.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 }
