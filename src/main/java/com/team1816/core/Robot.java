@@ -6,6 +6,7 @@ import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.*;
@@ -26,6 +27,7 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
@@ -36,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Robot extends TimedRobot {
@@ -500,7 +503,28 @@ public class Robot extends TimedRobot {
             }
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
-            if (autoModeManager.update()) {
+            if(RobotState.dynamicAutoChanged){
+                autoModeManager.update();
+
+                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
+
+                ArrayList<Trajectory.State> trajectoryStates = new ArrayList<>();
+                var trajectoryActions = robotState.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty();
+                for(int i = 0; i < trajectoryActions.size(); i++) {
+                    ArrayList<Trajectory.State> trajectoryActionStates = new ArrayList<>(trajectoryActions.get(i).getTrajectory().getStates());
+                    trajectoryStates.addAll(trajectoryActionStates);
+                }
+
+//                System.out.println(fullDynamicAutoPath);
+
+                robotState.field
+                        .getObject("Trajectory")
+                        .setTrajectory(
+                                new Trajectory(trajectoryStates)
+                        );
+
+                RobotState.dynamicAutoChanged = false;
+            } else if(autoModeManager.update()) {
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
                 robotState.field
                         .getObject("Trajectory")

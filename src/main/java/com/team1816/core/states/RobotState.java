@@ -8,7 +8,7 @@ import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
-import com.team1816.season.DynamicAutoScript2025;
+import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -122,6 +122,7 @@ public class RobotState {
      * DynamicAuto2025
      */
     public DynamicAutoScript2025 dynamicAutoScript2025 = new DynamicAutoScript2025(3);
+    public static boolean dynamicAutoChanged = false;
 
     /**
      * Pigeon state
@@ -263,7 +264,7 @@ public class RobotState {
             field.getObject("AutopathWaypoints").setPoses(autopathWaypoints);
         }
 
-        if (autopathTrajectoryChanged) {
+        if (autopathTrajectoryChanged && printAutopathing) {
             if(autopathTrajectory != null){
                 for (int i = 0; i < autopathMaxBranches; i++) {
                     field.getObject("AutopathTrajectory: " + i).close();

@@ -16,7 +16,7 @@ public class TrajectoryOnlyAutoMode extends AutoMode {
     private RobotState rs;
 
     public TrajectoryOnlyAutoMode(RobotState rs){
-        super(rs.dynamicAutoScript2025.getAutoTrajectoryActions());
+        super(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty());
         this.rs = rs;
     }
 
