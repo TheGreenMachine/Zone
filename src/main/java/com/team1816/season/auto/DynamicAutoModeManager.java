@@ -1,4 +1,4 @@
-package com.team1816.season;
+package com.team1816.season.auto;
 
 import com.team1816.lib.auto.modes.AutoMode;
 

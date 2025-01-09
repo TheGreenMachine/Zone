@@ -36,7 +36,7 @@ public class AutoModeManager {
     /**
      * Properties: Execution
      */
-    private AutoMode autoMode;
+    private AutoMode autoMode = new DriveStraightMode();
     private static Thread autoModeThread;
 
     /**
