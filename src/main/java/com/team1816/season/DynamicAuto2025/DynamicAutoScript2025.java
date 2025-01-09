@@ -46,7 +46,8 @@ public class DynamicAutoScript2025 {
     public void updateSendableChoosers(){
         boolean somethingChanged = false;
 
-        if(!startPos.equals(startingPositionChooser.getSelected())) {
+        Pose2d selected = startingPositionChooser.getSelected();
+        if(!startPos.equals(selected)) {
             somethingChanged = true;
             startPos = startingPositionChooser.getSelected();
         }
@@ -54,18 +55,24 @@ public class DynamicAutoScript2025 {
         ArrayList<TrajectoryAction> newAutoTrajectoryActions = new ArrayList<>();
         currentStartPos = startPos;
         for(int i = 0; i < trajectoryActionChoosers.size(); i++) {
-            SendableChooser<Pose2d> trajectoryAction = trajectoryActionChoosers.get(i);
+            SendableChooser<Pose2d> trajectoryActionChooser = trajectoryActionChoosers.get(i);
 
-            if(!currentTrajectoryActionChoices.get(i).equals(trajectoryAction.getSelected())) {
-                currentTrajectoryActionChoices.set(i, trajectoryAction.getSelected());
+            Pose2d selected2 = trajectoryActionChooser.getSelected();
+            if(!currentTrajectoryActionChoices.get(i).equals(selected2)) {
+                currentTrajectoryActionChoices.set(i, trajectoryActionChooser.getSelected());
                 somethingChanged = true;
             }
 
-            Trajectory newTraj = AutopathAlgorithm.calculateAutopath(currentStartPos, trajectoryAction.getSelected());
-            TrajectoryAction newTrajAction = new TrajectoryAction(newTraj, List.of(Rotation2d.fromDegrees(0)));
+            Trajectory newTraj = AutopathAlgorithm.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
+            TrajectoryAction newTrajAction;
+            assert newTraj != null;
+            if(newTraj.getStates().isEmpty())
+                newTrajAction = null;
+            else
+                newTrajAction = new TrajectoryAction(newTraj, List.of(Rotation2d.fromDegrees(0)));
             newAutoTrajectoryActions.add(newTrajAction);
 
-            currentStartPos = trajectoryAction.getSelected();
+            currentStartPos = trajectoryActionChooser.getSelected();
         }
 
         autoTrajectoryActions = newAutoTrajectoryActions;
@@ -85,8 +92,18 @@ public class DynamicAutoScript2025 {
         ArrayList<TrajectoryAction> culledAutoTrajectoryActions = new ArrayList<>();
 
         for(TrajectoryAction action : autoTrajectoryActions)
-            if(!action.getTrajectory().getStates().isEmpty())
+            if(action != null && !action.getTrajectory().getStates().isEmpty())
                 culledAutoTrajectoryActions.add(action);
+
+        return culledAutoTrajectoryActions;
+    }
+
+    public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmptyOriented(Rotation2d targetRotation){
+        ArrayList<TrajectoryAction> culledAutoTrajectoryActions = new ArrayList<>();
+
+        for(TrajectoryAction action : autoTrajectoryActions)
+            if(action != null && !action.getTrajectory().getStates().isEmpty())
+                culledAutoTrajectoryActions.add(new TrajectoryAction(action.trajectory, List.of(targetRotation)));
 
         return culledAutoTrajectoryActions;
     }

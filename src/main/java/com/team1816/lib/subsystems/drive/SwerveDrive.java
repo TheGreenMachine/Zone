@@ -498,7 +498,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
      */
     @Override
     public void zeroSensors(Pose2d pose) {
-        GreenLogger.log("Zeroing drive sensors!");
+        GreenLogger.log("Zeroing drive sensors using "+pose);
 
         // resetting ACTUAL module states
         for (int i = 0; i < 4; i++) {

@@ -503,9 +503,8 @@ public class Robot extends TimedRobot {
             }
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
-            if(RobotState.dynamicAutoChanged){
-                autoModeManager.update();
-
+            boolean autoChanged = autoModeManager.update();
+            if(robotState.isAutoDynamic && RobotState.dynamicAutoChanged){
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
                 ArrayList<Trajectory.State> trajectoryStates = new ArrayList<>();
@@ -524,7 +523,7 @@ public class Robot extends TimedRobot {
                         );
 
                 RobotState.dynamicAutoChanged = false;
-            } else if(autoModeManager.update()) {
+            } else if(!robotState.isAutoDynamic && autoChanged) {
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
                 robotState.field
                         .getObject("Trajectory")
