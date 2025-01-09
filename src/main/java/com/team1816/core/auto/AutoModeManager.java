@@ -115,9 +115,10 @@ public class AutoModeManager {
             if (colorChanged) {
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
+
+            autoMode = generateAutoMode(selectedAuto, selectedColor);
+            autoModeThread = new Thread(autoMode::run);
         }
-        autoMode = generateAutoMode(selectedAuto, selectedColor);
-        autoModeThread = new Thread(autoMode::run);
         desiredAuto = selectedAuto;
         teamColor = selectedColor;
         robotState.allianceColor = teamColor;
@@ -210,7 +211,7 @@ public class AutoModeManager {
                 return new AutopathMode();
             case DYNAMIC_TRAJECTORY_ONLY:
                 robotState.isAutoDynamic = true;
-//                RobotState.dynamicAutoChanged = true;
+                RobotState.dynamicAutoChanged = true;
                 return new TrajectoryOnlyAutoMode(robotState);
             default:
                 GreenLogger.log("Defaulting to drive straight mode");
