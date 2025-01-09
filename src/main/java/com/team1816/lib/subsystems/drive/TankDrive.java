@@ -211,7 +211,7 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
      */
     @Override
     public void zeroSensors(Pose2d pose) {
-        GreenLogger.log("Zeroing drive sensors!");
+        GreenLogger.log("Zeroing drive sensors using "+pose);
 
         actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
         resetEncoders();

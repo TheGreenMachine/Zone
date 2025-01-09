@@ -203,10 +203,14 @@ public class AutoModeManager {
     private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
         switch (mode) {
             case DRIVE_STRAIGHT:
+                robotState.isAutoDynamic = false;
                 return new DriveStraightMode();
             case AUTOPATH:
+                robotState.isAutoDynamic = false;
                 return new AutopathMode();
             case DYNAMIC_TRAJECTORY_ONLY:
+                robotState.isAutoDynamic = true;
+//                RobotState.dynamicAutoChanged = true;
                 return new TrajectoryOnlyAutoMode(robotState);
             default:
                 GreenLogger.log("Defaulting to drive straight mode");
