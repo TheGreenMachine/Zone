@@ -17,14 +17,14 @@ public class TrajectoryOnlyAutoMode extends AutoMode {
     private RobotState rs;
 
     public TrajectoryOnlyAutoMode(RobotState rs){
-        super(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmptyOriented(Rotation2d.fromDegrees(90)));
+        super(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty());
         this.rs = rs;
     }
 
     @Override
     protected void routine() throws AutoModeEndedException {
-        for(int i = 0; i < trajectoryActions.size(); i++) {
-            runAction(trajectoryActions.get(i));
+        for (TrajectoryAction trajectoryAction : trajectoryActions) {
+            runAction(trajectoryAction);
         }
     }
 

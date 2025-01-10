@@ -75,13 +75,14 @@ public class AutopathMode extends AutoMode{
         System.out.println("Time taken "+(System.nanoTime()-beforeTime)/1000000000);
 
         List<Rotation2d> autopathHeadings = new ArrayList<>();
-        double autopathTrajectoryTime = autopathTrajectory.getTotalTimeSeconds();
-        for(int i = 0; i < autopathTrajectory.getStates().size(); i++){
-            autopathHeadings.add(Rotation2d.fromDegrees(
-                    robotState.fieldToVehicle.getRotation().getDegrees() * ((autopathTrajectoryTime - autopathTrajectory.getStates().get(i).timeSeconds) / autopathTrajectoryTime) +
-                            90 * (autopathTrajectory.getStates().get(i).timeSeconds / autopathTrajectoryTime)
-            ));
-        }
+        autopathHeadings.add(Rotation2d.fromDegrees(90));
+//        double autopathTrajectoryTime = autopathTrajectory.getTotalTimeSeconds();
+//        for(int i = 0; i < autopathTrajectory.getStates().size(); i++){
+//            autopathHeadings.add(Rotation2d.fromDegrees(
+//                    robotState.fieldToVehicle.getRotation().getDegrees() * ((autopathTrajectoryTime - autopathTrajectory.getStates().get(i).timeSeconds) / autopathTrajectoryTime) +
+//                            90 * (autopathTrajectory.getStates().get(i).timeSeconds / autopathTrajectoryTime)
+//            ));
+//        }
 //        List<Rotation2d> autopathHeadings = List.of(
 //                Rotation2d.fromRadians(0),
 //                Rotation2d.fromRadians(0.3),

@@ -80,6 +80,8 @@ public class TrajectoryAction implements AutoAction {
      * @see Command
      */
     public TrajectoryAction(Trajectory trajectory, List<Rotation2d> headings) {
+//        System.out.println("Headings Input: "+headings);
+
         drive = Injector.get(Drive.Factory.class).getInstance();
         this.trajectory = trajectory;
         this.headings = headings;
