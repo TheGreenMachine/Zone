@@ -9,23 +9,29 @@ import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.auto.modes.AutoMode;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TrajectoryOnlyAutoMode extends AutoMode {
     private RobotState rs;
+    private ArrayList<TrajectoryAction> actions = new ArrayList<>();
 
     public TrajectoryOnlyAutoMode(RobotState rs){
-        super(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty());
+//        super(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty());
+        actions.addAll(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty());
         this.rs = rs;
     }
 
     @Override
     protected void routine() throws AutoModeEndedException {
-        for (TrajectoryAction trajectoryAction : trajectoryActions) {
-            runAction(trajectoryAction);
-        }
+//        runAction(trajectoryActions.get(0));
+        for(TrajectoryAction action : actions)
+            runAction(
+                new TrajectoryAction(action.getTrajectory(), action.getTrajectoryHeadings())
+            );
     }
 
     @Override
