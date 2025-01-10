@@ -108,19 +108,19 @@ public class AutoModeManager {
         // if auto has been changed, update selected auto mode + thread
         if (autoChanged || colorChanged || startPosChanged) {
             if (autoChanged) {
+                desiredAuto = selectedAuto;
                 GreenLogger.log(
                     "Auto changed from: " + desiredAuto + ", to: " + selectedAuto.name()
                 );
             }
             if (colorChanged) {
+                teamColor = selectedColor;
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
 
             autoMode = generateAutoMode(selectedAuto, selectedColor);
             autoModeThread = new Thread(autoMode::run);
         }
-        desiredAuto = selectedAuto;
-        teamColor = selectedColor;
         robotState.allianceColor = teamColor;
 
         //Legacy 2023 pathfinder code
@@ -131,6 +131,11 @@ public class AutoModeManager {
 //        }
 
         return autoChanged || colorChanged;
+    }
+
+    public void updateAutoMode(){
+        autoMode = generateAutoMode(autoModeChooser.getSelected(), getSelectedColor());
+        autoModeThread = new Thread(autoMode::run);
     }
 
     /**

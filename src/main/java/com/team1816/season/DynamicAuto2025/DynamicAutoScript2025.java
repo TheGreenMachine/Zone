@@ -1,6 +1,7 @@
 package com.team1816.season.DynamicAuto2025;
 
 import com.team1816.core.Robot;
+import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.actions.TrajectoryAction;
@@ -77,8 +78,10 @@ public class DynamicAutoScript2025 {
 
         autoTrajectoryActions = newAutoTrajectoryActions;
 
-        if(somethingChanged && robot.isDisabled())
+        if(somethingChanged && robot.isDisabled()) {
             RobotState.dynamicAutoChanged = true;
+            Injector.get(AutoModeManager.class).updateAutoMode();
+        }
     }
 
     public ArrayList<TrajectoryAction> getAutoTrajectoryActions(){
