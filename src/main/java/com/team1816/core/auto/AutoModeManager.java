@@ -50,9 +50,8 @@ public class AutoModeManager {
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
         sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
 
-        SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard
+        SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard=
 
-//        autoModeChooser.addOption("GETTYSBURG", DesiredAuto.RANGE_FOUR_SCORE);
         for (DesiredAuto desiredAuto : DesiredAuto.values()) {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
@@ -122,13 +121,6 @@ public class AutoModeManager {
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
-
-        //Legacy 2023 pathfinder code
-//                if (robotState.allianceColor == Color.BLUE) {
-//            robotState.pathFinder = new PathFinder(List.of(Constants.blueChargeStation));
-//        } else {
-//            robotState.pathFinder = new PathFinder(List.of(Constants.redChargeStation));
-//        }
 
         return autoChanged || colorChanged;
     }

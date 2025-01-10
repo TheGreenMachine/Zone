@@ -348,7 +348,6 @@ public class Robot extends TimedRobot {
         ledManager.indicateStatus(LedManager.RobotStatus.AUTONOMOUS);
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
-//        shooter.zeroMotor();
 
         //TODO add new subsystem inits here
 
@@ -382,7 +381,6 @@ public class Robot extends TimedRobot {
                             Rotation2d.fromDegrees(180)
             );
 
-//            shooter.zeroMotor();
         } catch (Throwable t) {
             faulted = true;
             throw t;
@@ -476,31 +474,7 @@ public class Robot extends TimedRobot {
                 }
             }
 
-            if (RobotBase.isReal()) {
-//                // logic for zeroing elevator
-//                if (lastButton != zeroingButton.get() && lastButton) { // will only be true when changing from false to true
-//                    if (zeroing == null) { // zeroing
-//                        faulted = false;
-//                        zeroing = true;
-//                        shooter.zeroSensors();
-//                        drive.resetPigeon(Rotation2d.fromDegrees(-90));
-//                    } else if (zeroing) { // ready
-//                        zeroing = false;
-//                        shooter.setBraking(true);
-//                    } else { // needs zeroing
-//                        zeroing = null;
-//                        shooter.setBraking(false);
-//
-//                        faulted = true;
-//                    }
-//                }
-//                lastButton = zeroingButton.get();
-//
-//                if (ledManager.getCurrentControlStatus() == LedManager.RobotStatus.ZEROING) {
-//                    // only keep looping through write if zeroing elevator cus we need to update its blinking
-//                    ledManager.writeToHardware();
-//                }
-            }
+            if (RobotBase.isReal()) {}
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
             boolean autoChanged = autoModeManager.update();
@@ -620,10 +594,5 @@ public class Robot extends TimedRobot {
      * Actions to perform periodically when the robot is in the test period
      */
     @Override
-    public void testPeriodic() {
-    }
-
-//    public void loopFunc(){
-//
-//    }
+    public void testPeriodic() {}
 }

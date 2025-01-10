@@ -69,7 +69,6 @@ public class DynamicAutoScript2025 {
             TrajectoryAction newTrajAction = null;
             if(newTraj != null) {
                 if (!newTraj.getStates().isEmpty()){
-//                System.out.println(newTraj.getStates());
                     newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), trajectoryActionChooser.getSelected().getRotation()));
                 }
                 newAutoTrajectoryActions.add(newTrajAction);
@@ -86,13 +85,6 @@ public class DynamicAutoScript2025 {
         }
     }
 
-    public ArrayList<TrajectoryAction> getAutoTrajectoryActions(){
-//        for(TrajectoryAction action : autoTrajectoryActions){
-//            System.out.println(action.getTrajectory());
-//        }
-        return autoTrajectoryActions;
-    }
-
     public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmpty(){
         ArrayList<TrajectoryAction> culledAutoTrajectoryActions = new ArrayList<>();
 
@@ -102,18 +94,6 @@ public class DynamicAutoScript2025 {
 
         return culledAutoTrajectoryActions;
     }
-
-//    public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmptyOriented(){
-//        ArrayList<TrajectoryAction> culledAutoTrajectoryActions = new ArrayList<>();
-//
-//        for(TrajectoryAction action : autoTrajectoryActions)
-//            if(action != null && !action.getTrajectory().getStates().isEmpty())
-//                culledAutoTrajectoryActions.add(new TrajectoryAction(new Trajectory(action.getTrajectory().getStates()), List.of(targetRotation)));
-//
-//        System.out.println(culledAutoTrajectoryActions.get(0).getTrajectoryHeadings());
-//
-//        return culledAutoTrajectoryActions;
-//    }
 
     public Pose2d getStartPos(){
         return startPos;

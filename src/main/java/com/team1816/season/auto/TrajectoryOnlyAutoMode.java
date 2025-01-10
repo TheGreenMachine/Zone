@@ -16,18 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrajectoryOnlyAutoMode extends AutoMode {
-    private RobotState rs;
     private ArrayList<TrajectoryAction> actions = new ArrayList<>();
 
     public TrajectoryOnlyAutoMode(RobotState rs){
-//        super(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty());
         actions.addAll(rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty());
-        this.rs = rs;
     }
 
     @Override
     protected void routine() throws AutoModeEndedException {
-//        runAction(trajectoryActions.get(0));
         for(TrajectoryAction action : actions)
             runAction(
                     action
