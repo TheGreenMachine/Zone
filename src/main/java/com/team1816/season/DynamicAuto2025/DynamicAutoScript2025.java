@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DynamicAutoScript2025 {
@@ -27,16 +28,16 @@ public class DynamicAutoScript2025 {
     private Robot robot = Injector.get(Robot.class);
 
     public DynamicAutoScript2025(int numOfTrajectoryActions){
-        startingPositionChooser.setDefaultOption("Position 1", new Pose2d(new Translation2d(8,3), new Rotation2d()));
-        startingPositionChooser.setDefaultOption("Position 2", new Pose2d(new Translation2d(10,4), new Rotation2d()));
+        startingPositionChooser.setDefaultOption("Position 1", new Pose2d(new Translation2d(8,3), Rotation2d.fromDegrees(45)));
+        startingPositionChooser.setDefaultOption("Position 2", new Pose2d(new Translation2d(10,4), Rotation2d.fromDegrees(-45)));
 
         for(int i = 0; i < numOfTrajectoryActions; i++)
             trajectoryActionChoosers.add(new SendableChooser<>());
 
-        addDefaultTrajectoryOption("somewhere", new Pose2d(new Translation2d(3,1), new Rotation2d()));
-        addTrajectoryOption("elsewhere", new Pose2d(new Translation2d(5,1), new Rotation2d()));
-        addTrajectoryOption("narnia", new Pose2d(new Translation2d(2,5), new Rotation2d()));
-        addTrajectoryOption("space", new Pose2d(new Translation2d(14,4), new Rotation2d()));
+        addDefaultTrajectoryOption("somewhere", new Pose2d(new Translation2d(3,1), Rotation2d.fromDegrees(90)));
+        addTrajectoryOption("elsewhere", new Pose2d(new Translation2d(5,1), Rotation2d.fromDegrees(-90)));
+        addTrajectoryOption("narnia", new Pose2d(new Translation2d(2,5), Rotation2d.fromDegrees(180)));
+        addTrajectoryOption("space", new Pose2d(new Translation2d(14,4), Rotation2d.fromDegrees(135)));
 
         for(SendableChooser<Pose2d> chooser : trajectoryActionChoosers)
             currentTrajectoryActionChoices.add(chooser.getSelected());
@@ -55,23 +56,24 @@ public class DynamicAutoScript2025 {
 
         ArrayList<TrajectoryAction> newAutoTrajectoryActions = new ArrayList<>();
         currentStartPos = startPos;
-        for(int i = 0; i < trajectoryActionChoosers.size(); i++) {
+        for (int i = 0; i < trajectoryActionChoosers.size(); i++) {
             SendableChooser<Pose2d> trajectoryActionChooser = trajectoryActionChoosers.get(i);
 
             Pose2d selected2 = trajectoryActionChooser.getSelected();
-            if(!currentTrajectoryActionChoices.get(i).equals(selected2)) {
-                currentTrajectoryActionChoices.set(i, trajectoryActionChooser.getSelected());
+            if (!currentTrajectoryActionChoices.get(i).equals(selected2)) {
+                currentTrajectoryActionChoices.set(i, selected2);
                 somethingChanged = true;
             }
 
             Trajectory newTraj = AutopathAlgorithm.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
-            TrajectoryAction newTrajAction;
-            assert newTraj != null;
-            if(newTraj.getStates().isEmpty())
-                newTrajAction = null;
-            else
-                newTrajAction = new TrajectoryAction(newTraj, List.of(Rotation2d.fromDegrees(0)));
-            newAutoTrajectoryActions.add(newTrajAction);
+            TrajectoryAction newTrajAction = null;
+            if(newTraj != null) {
+                if (!newTraj.getStates().isEmpty()){
+//                System.out.println(newTraj.getStates());
+                    newTrajAction = new TrajectoryAction(newTraj, List.of(trajectoryActionChooser.getSelected().getRotation()));
+                }
+                newAutoTrajectoryActions.add(newTrajAction);
+            }
 
             currentStartPos = trajectoryActionChooser.getSelected();
         }
@@ -98,18 +100,23 @@ public class DynamicAutoScript2025 {
             if(action != null && !action.getTrajectory().getStates().isEmpty())
                 culledAutoTrajectoryActions.add(action);
 
-        return culledAutoTrajectoryActions;
-    }
-
-    public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmptyOriented(Rotation2d targetRotation){
-        ArrayList<TrajectoryAction> culledAutoTrajectoryActions = new ArrayList<>();
-
-        for(TrajectoryAction action : autoTrajectoryActions)
-            if(action != null && !action.getTrajectory().getStates().isEmpty())
-                culledAutoTrajectoryActions.add(new TrajectoryAction(action.trajectory, List.of(targetRotation)));
+        for(TrajectoryAction action : culledAutoTrajectoryActions)
+            System.out.println("headings :"+action.getTrajectoryHeadings());
 
         return culledAutoTrajectoryActions;
     }
+
+//    public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmptyOriented(){
+//        ArrayList<TrajectoryAction> culledAutoTrajectoryActions = new ArrayList<>();
+//
+//        for(TrajectoryAction action : autoTrajectoryActions)
+//            if(action != null && !action.getTrajectory().getStates().isEmpty())
+//                culledAutoTrajectoryActions.add(new TrajectoryAction(new Trajectory(action.getTrajectory().getStates()), List.of(targetRotation)));
+//
+//        System.out.println(culledAutoTrajectoryActions.get(0).getTrajectoryHeadings());
+//
+//        return culledAutoTrajectoryActions;
+//    }
 
     public Pose2d getStartPos(){
         return startPos;

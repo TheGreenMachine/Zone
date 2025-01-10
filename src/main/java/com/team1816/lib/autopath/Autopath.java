@@ -265,9 +265,9 @@ public class Autopath {
 //            ));
 //        }
 
-        System.out.println(autopathHeadings.get(0));
-        System.out.println(autopathHeadings.get(autopathHeadings.size()-1));
-        System.out.println(autopathHeadings);
+//        System.out.println(autopathHeadings.get(0));
+//        System.out.println(autopathHeadings.get(autopathHeadings.size()-1));
+//        System.out.println(autopathHeadings);
 
         //Here's where your trajectory gets checked against the field
         System.out.println("And survey says: "+testTrajectory(autopathTrajectory));
