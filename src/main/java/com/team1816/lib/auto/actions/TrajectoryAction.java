@@ -112,8 +112,6 @@ public class TrajectoryAction implements AutoAction {
             PIDController xController = new PIDController(Constants.kPTranslational, 0, 0);
             PIDController yController = new PIDController(Constants.kPTranslational, 0, 0);
 
-            drive.startTrajectory(trajectory, headings);
-
             command =
                 new SwerveControllerCommand(
                     trajectory,
@@ -166,6 +164,7 @@ public class TrajectoryAction implements AutoAction {
         GreenLogger.log(
             "Starting trajectory! (Seconds = " + trajectory.getTotalTimeSeconds() + ")"
         );
+        drive.startTrajectory(trajectory, headings);
         command.initialize();
     }
 
