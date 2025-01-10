@@ -70,7 +70,7 @@ public class DynamicAutoScript2025 {
             if(newTraj != null) {
                 if (!newTraj.getStates().isEmpty()){
 //                System.out.println(newTraj.getStates());
-                    newTrajAction = new TrajectoryAction(newTraj, List.of(trajectoryActionChooser.getSelected().getRotation()));
+                    newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), trajectoryActionChooser.getSelected().getRotation()));
                 }
                 newAutoTrajectoryActions.add(newTrajAction);
             }
@@ -99,9 +99,6 @@ public class DynamicAutoScript2025 {
         for(TrajectoryAction action : autoTrajectoryActions)
             if(action != null && !action.getTrajectory().getStates().isEmpty())
                 culledAutoTrajectoryActions.add(action);
-
-        for(TrajectoryAction action : culledAutoTrajectoryActions)
-            System.out.println("headings :"+action.getTrajectoryHeadings());
 
         return culledAutoTrajectoryActions;
     }

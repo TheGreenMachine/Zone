@@ -514,8 +514,6 @@ public class Robot extends TimedRobot {
                     trajectoryStates.addAll(trajectoryActionStates);
                 }
 
-//                System.out.println(fullDynamicAutoPath);
-
                 robotState.field
                         .getObject("Trajectory")
                         .setTrajectory(
