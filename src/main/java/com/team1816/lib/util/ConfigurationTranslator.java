@@ -14,6 +14,8 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 
 import java.util.Arrays;
 
+import static com.revrobotics.spark.config.AlternateEncoderConfig.Type.kQuadrature;
+import static com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor.kNoSensor;
 import static com.team1816.lib.util.Util.closestTo;
 
 /**
@@ -80,27 +82,19 @@ public class ConfigurationTranslator {
         return remoteFeedbackDevice;
     }
 
-    /**
-     * Translates 1816 FeedbackDeviceType to REV SparkMaxRelativeEncoder.Type
-     *
-     * @see RelativeEncoder.Type
-     * @see FeedbackDeviceType
-     * @param deviceType The generalized device type
-     * @return The translated encoder type
-     */
-    public static SparkRelativeEncoder.Type toSparkRelativeEncoderType(FeedbackDeviceType deviceType) {
-        SparkRelativeEncoder.Type encoderType;
-        switch (deviceType) {
-            case QUADRATURE -> encoderType = SparkRelativeEncoder.Type.kQuadrature;
-            case HALL_SENSOR -> encoderType = SparkRelativeEncoder.Type.kHallSensor;
-            case NO_SENSOR -> encoderType = SparkRelativeEncoder.Type.kNoSensor;
-            default -> {
-                GreenLogger.log("Non-SparkMax encoder type " + deviceType + " cannot be applied to SparkMaxRelativeEncoder, defaulting to No sensor.");
-                encoderType = SparkRelativeEncoder.Type.kNoSensor;
-            }
-        }
-        return encoderType;
-    }
+// Commented out as Sparks are no longer supported as of 2025
+//
+//    /**
+//     * Translates 1816 FeedbackDeviceType to REV SparkMaxRelativeEncoder.Type
+//     *
+//     * @see RelativeEncoder.Type
+//     * @see FeedbackDeviceType
+//     * @param deviceType The generalized device type
+//     * @return The translated encoder type
+//     */
+//    public static SparkRelativeEncoder.Type toSparkRelativeEncoderType(FeedbackDeviceType deviceType) {
+//
+//    }
 
     /**
      * Translates 1816 GreenControlMode into CTRE ControlMode
@@ -131,23 +125,25 @@ public class ConfigurationTranslator {
         return CTREControlMode;
     }
 
-    public static SparkMax.ControlType toSparkMaxControlType(GreenControlMode controlMode) {
-        SparkMax.ControlType controlType;
-        switch (controlMode) {
-            case PERCENT_OUTPUT -> controlType = SparkMax.ControlType.kDutyCycle;
-            case VELOCITY_CONTROL -> controlType = SparkMax.ControlType.kVelocity;
-            case POSITION_CONTROL -> controlType = SparkMax.ControlType.kPosition;
-            case MOTION_PROFILE -> controlType = SparkMax.ControlType.kSmartMotion;
-            case CURRENT -> controlType = SparkMax.ControlType.kCurrent;
-            case VOLTAGE_CONTROL -> controlType = SparkMax.ControlType.kVoltage;
-            case SMART_VELOCITY -> controlType = SparkMax.ControlType.kSmartVelocity;
-            default -> {
-                GreenLogger.log("Motor Control Mode " + controlMode + " not applicable to SparkMax ControlType, defaulting to Percent-Output");
-                controlType = SparkMax.ControlType.kDutyCycle;
-            }
-        }
-        return controlType;
-    }
+// Commented out as Sparks are no longer supported as of 2025
+//
+//    public static SparkMax.ControlType toSparkMaxControlType(GreenControlMode controlMode) {
+//        SparkMax.ControlType controlType;
+//        switch (controlMode) {
+//            case PERCENT_OUTPUT -> controlType = SparkMax.ControlType.kDutyCycle;
+//            case VELOCITY_CONTROL -> controlType = SparkMax.ControlType.kVelocity;
+//            case POSITION_CONTROL -> controlType = SparkMax.ControlType.kPosition;
+//            case MOTION_PROFILE -> controlType = SparkMax.ControlType.kSmartMotion;
+//            case CURRENT -> controlType = SparkMax.ControlType.kCurrent;
+//            case VOLTAGE_CONTROL -> controlType = SparkMax.ControlType.kVoltage;
+//            case SMART_VELOCITY -> controlType = SparkMax.ControlType.kSmartVelocity;
+//            default -> {
+//                GreenLogger.log("Motor Control Mode " + controlMode + " not applicable to SparkMax ControlType, defaulting to Percent-Output");
+//                controlType = SparkMax.ControlType.kDutyCycle;
+//            }
+//        }
+//        return controlType;
+//    }
 
     /**
      * Translates CTRE ControlMode into 1816 GreenControlMode

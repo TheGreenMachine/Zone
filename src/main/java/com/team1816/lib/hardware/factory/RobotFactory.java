@@ -139,13 +139,14 @@ public class RobotFactory {
                             );
                     }
                     case SparkMax -> {
-                        motor =
-                            MotorFactory.createSpark(
-                                subsystem.motors.get(name).id,
-                                name,
-                                subsystem,
-                                pidConfigs
-                            );
+                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
+//                        motor =
+//                            MotorFactory.createSpark(
+//                                subsystem.motors.get(name).id,
+//                                name,
+//                                subsystem,
+//                                pidConfigs
+//                            );
                     }
                     case VictorSPX -> {
                         GreenLogger.log("Victors cannot be main!");
@@ -219,14 +220,15 @@ public class RobotFactory {
                             );
                     }
                     case SparkMax -> {
-                        MotorFactory.createFollowerSpark(
-                            subsystem.motors.get(name).id,
-                            name,
-                            subsystem,
-                            subsystem.pidConfig,
-                            main,
-                            opposeLeaderDirection
-                        );
+                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
+//                        MotorFactory.createFollowerSpark(
+//                            subsystem.motors.get(name).id,
+//                            name,
+//                            subsystem,
+//                            subsystem.pidConfig,
+//                            main,
+//                            opposeLeaderDirection
+//                        );
                     }
                     case VictorSPX -> {
                         followerMotor =

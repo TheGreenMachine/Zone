@@ -4,7 +4,7 @@ package com.team1816.lib.hardware.components.motor.configurations;
  * A general enum containing motor control modes
  *
  * @see com.ctre.phoenix.motorcontrol.ControlMode
- * @see com.revrobotics.CANSparkMax.ControlType
+ * @see com.revrobotics.spark.SparkMax.ControlType
  */
 public enum GreenControlMode {
     // Universal

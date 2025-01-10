@@ -417,7 +417,10 @@ public interface IGreenMotor {
         TalonFX, //Falcons and Krakens
         TalonSRX, //cims, bags, etc
         VictorSPX, //no idea what this actually controls, if we ever use these again the world is probably ending
+
+        @Deprecated(since = "Sparks are no longer supported as of 2025")
         SparkMax, //neo 550s
+
         GHOST //simulation
     }
 
