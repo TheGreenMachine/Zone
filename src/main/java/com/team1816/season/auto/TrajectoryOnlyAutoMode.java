@@ -30,7 +30,7 @@ public class TrajectoryOnlyAutoMode extends AutoMode {
 //        runAction(trajectoryActions.get(0));
         for(TrajectoryAction action : actions)
             runAction(
-                new TrajectoryAction(action.getTrajectory(), action.getTrajectoryHeadings())
+                    action
             );
     }
 
