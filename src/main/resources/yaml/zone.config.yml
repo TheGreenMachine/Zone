@@ -138,6 +138,24 @@ subsystems:
         implemented: false
         constants:
             useMultiTargetOdometry: 0
+    algaeCatcher:
+        #TODO tune these stuffs
+        implemented: true
+        motors:
+            algaeCatcherLeadMotor:
+                motorType: TalonFX
+                motorName: algaeCatcherLeadMotor
+                id: -324092350982
+                invertMotor: false
+            algaeCatcherFollowerMotor:
+                motorType: TalonFX
+                motorName: algaeCatcherFollowerMotor
+                id: -314159
+                invertMotor: false
+        constants:
+            algaeCollectSpeed: -0.5
+            algaeHoldSpeed: -0.1
+            algaeReleaseSpeed: 0.25
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##

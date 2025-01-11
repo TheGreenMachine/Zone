@@ -8,6 +8,7 @@ import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
+import com.team1816.season.AlgaeCatcher;
 import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -80,6 +81,7 @@ public class RobotState {
      */
 
     //TODO add new subystem states here
+    public AlgaeCatcher.ALGAE_CATCHER_STATE actualAlgaeCatcherState = AlgaeCatcher.ALGAE_CATCHER_STATE.STOP;
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
@@ -175,6 +177,7 @@ public class RobotState {
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
 
         // TODO: Insert any subsystem state set up here.
+        actualAlgaeCatcherState = AlgaeCatcher.ALGAE_CATCHER_STATE.STOP;
 
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();
