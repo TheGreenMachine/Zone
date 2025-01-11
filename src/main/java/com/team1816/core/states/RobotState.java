@@ -9,6 +9,7 @@ import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
+import com.team1816.season.subsystems.AlgaeArm;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -79,7 +80,7 @@ public class RobotState {
      * Orchestrator states
      */
 
-    //TODO add new subystem states here
+    public AlgaeArm.ALGAE_ARM_STATE actualAlgaeArmState = AlgaeArm.ALGAE_ARM_STATE.OFF;
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
@@ -174,7 +175,7 @@ public class RobotState {
         calculatedVehicleAccel = new ChassisSpeeds();
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
 
-        // TODO: Insert any subsystem state set up here.
+        actualAlgaeArmState = AlgaeArm.ALGAE_ARM_STATE.OFF;
 
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();

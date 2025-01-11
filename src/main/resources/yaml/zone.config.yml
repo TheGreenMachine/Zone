@@ -138,6 +138,22 @@ subsystems:
         implemented: false
         constants:
             useMultiTargetOdometry: 0
+    algaeArm:
+        implemented: true
+        motors:
+            algaeArmMotor:
+                motorType: TalonFX
+                motorName: algaeArmMotor
+                id: -1
+                invertMotor: false
+        pidConfig:
+            slot0:
+                kP: 0.0065
+                kI: 0
+                kD: 0.00005
+                kV: 0.00925
+        constants:
+            algaeArmMotorSpeed: 0.5
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##
