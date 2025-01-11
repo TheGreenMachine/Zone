@@ -80,8 +80,8 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         configs.CurrentLimits
                 .withSupplyCurrentLimit(configuration.currentLimit)
                 .withSupplyCurrentLimitEnable(configuration.enable)
-                .withSupplyCurrentThreshold(configuration.triggerThresholdCurrent)
-                .withSupplyTimeThreshold(configuration.triggerThresholdTime);
+                .withSupplyCurrentLowerLimit(configuration.triggerThresholdCurrent)
+                .withSupplyCurrentLowerTime(configuration.triggerThresholdTime);
         configurator.apply(configs, kLongCANTimeoutSeconds);
     }
 
@@ -90,8 +90,8 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         configs.CurrentLimits
                 .withSupplyCurrentLimit(current)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentThreshold(0)
-                .withSupplyTimeThreshold(0);
+                .withSupplyCurrentLowerLimit(0)
+                .withSupplyCurrentLowerTime(0);
         configurator.apply(configs, kLongCANTimeoutSeconds);
     }
 

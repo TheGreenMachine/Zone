@@ -2,10 +2,10 @@ package com.team1816.lib.hardware.factory;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.team1816.lib.hardware.MotorConfiguration;
@@ -200,7 +200,7 @@ public class MotorFactory {
         canCoder.getConfigurator().refresh(config);
         canCoder.getConfigurator().apply(
                 config.MagnetSensor
-                        .withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1)
+                        .withAbsoluteSensorDiscontinuityPoint(AbsoluteSensorRangeValue.Unsigned_0To1)
                         .withSensorDirection(invertCanCoder ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive)
                         .withMagnetOffset(offset),
                 kTimeoutMsLONG/1000.0
