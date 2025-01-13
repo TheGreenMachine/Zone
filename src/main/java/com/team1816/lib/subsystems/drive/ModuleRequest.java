@@ -20,4 +20,9 @@ public class ModuleRequest implements LegacySwerveRequest {
         }
         return StatusCode.OK;
     }
+
+    @Override
+    public StatusCode apply(LegacySwerveControlRequestParameters legacySwerveControlRequestParameters, LegacySwerveModule... legacySwerveModules) {
+        return null;
+    }
 }

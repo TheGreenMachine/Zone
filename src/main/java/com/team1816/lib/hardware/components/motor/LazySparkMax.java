@@ -98,6 +98,11 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
     }
 
     @Override
+    public void setInvertedMotor(boolean isInvertedMotor) {
+
+    }
+
+    @Override
     public void configOpenLoopRampRate(double secondsNeutralToFull) {
         throw new UnsupportedOperationException();
     }
@@ -167,6 +172,11 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
     @Override
     public double get_ClosedLoopOutput() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean getInvertedMotor() {
+        return false;
     }
 
     @Override
@@ -320,4 +330,5 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
     public void configControlFramePeriod(ControlFrame controlFrame, int periodms) {
         throw new UnsupportedOperationException();
     }
+
 }

@@ -31,6 +31,7 @@ import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
@@ -111,7 +112,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
     private DoubleArrayLogEntry inputLogger; //X, Y, Rotation - raw -1 to 1 from setTeleopInputs
     private StringLogEntry controlRequestLogger;
 
-    private final ArrayList<StatusSignal<Double>> motorTemperatures = new ArrayList<>();
+    private final ArrayList<StatusSignal<Temperature>> motorTemperatures = new ArrayList<>();//Changed from double to temperature
 
     private ArrayList<DoubleLogEntry> desiredModuleStatesLogger;
     private ArrayList<DoubleLogEntry> actualModuleStatesLogger;
