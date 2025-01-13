@@ -42,15 +42,27 @@ public class AutopathAlgorithm {
             return null;
         }
 
+        Rotation2d startDirection = Rotation2d.fromRadians(Math.atan2(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()));
+
+        double velocity = 0;
+        if(Autopath.robotState.robotChassis != null)
+            //projection formula
+            velocity =
+                ((Autopath.robotState.robotChassis.vxMetersPerSecond * (autopathTargetPosition.getX() - autopathStartPosition.getX()))
+                +(Autopath.robotState.robotChassis.vyMetersPerSecond * (autopathTargetPosition.getY() - autopathStartPosition.getY())))
+                /Math.pow(Math.hypot(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()), 2)
+                *Math.hypot(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX());
+
+
         TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
-        config.setStartVelocity(Autopath.robotState.robotVelocity);
-        config.setEndVelocity(Autopath.robotState.robotVelocity);
+        config.setStartVelocity(velocity);
+//        config.setEndVelocity(Autopath.robotState.robotVelocity);
 //        config.setEndVelocity(Math.min(Drive.kPathFollowingMaxVelMeters/2, 3));
 
         ArrayList<WaypointTreeNode> branches = new ArrayList<>();
         branches.add(
                 new WaypointTreeNode(
-                        new Pose2d(autopathStartPosition.getTranslation(), Rotation2d.fromRadians(Math.atan2(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()))),
+                        new Pose2d(autopathStartPosition.getTranslation(), startDirection),
                         new ArrayList<>(),
                         new Pose2d(autopathTargetPosition.getTranslation(), Rotation2d.fromRadians(Math.atan2(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()))),
                         config,

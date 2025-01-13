@@ -117,6 +117,7 @@ public class RobotState {
     public double robotVelocity = 0;
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
+    public ChassisSpeeds robotChassis;
 
     /**
      * DynamicAuto2025
@@ -130,7 +131,6 @@ public class RobotState {
      */
 
     public double[] gyroPos = new double[3];
-
     /**
      * Initializes RobotState and field
      */
