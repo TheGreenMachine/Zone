@@ -202,7 +202,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 actualModuleStatesLogger.add(new DoubleLogEntry(DataLogManager.getLog(),
                         "Drivetrain/Swerve/ActualModuleStates/" + moduleName +"/angleDegrees"));
 
-                motorTemperatures.add(motors[i].getDeviceTemp());//Needs double instead of temperature
+                motorTemperatures.add(motors[i].getDeviceTemp());
             }
 
             GreenLogger.addPeriodicLog(new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/DesiredSpeeds"), this::getDesiredSpeeds);

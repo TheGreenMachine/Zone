@@ -254,7 +254,7 @@ public class RobotFactory {
                 );
         }
         if (main != null) {
-            followerMotor.setInverted(main.getInverted());
+            followerMotor.setInvertedMotor(main.getInvertedMotor());
         }
         return followerMotor;
     }
