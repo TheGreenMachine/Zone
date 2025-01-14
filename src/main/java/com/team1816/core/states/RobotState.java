@@ -9,6 +9,7 @@ import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -80,7 +81,7 @@ public class RobotState {
      */
 
     //TODO add new subystem states here
-
+    public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.GROUND;
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
 
@@ -101,7 +102,7 @@ public class RobotState {
      * Autopathing state
      */
     public boolean autopathing = false;
-    public boolean printAutopathing = false;
+    public boolean printAutopathing = true;
     public boolean printAutopathFieldTest = false;
     public Trajectory autopathTrajectory = null;
     public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();
@@ -170,6 +171,7 @@ public class RobotState {
      * Resets all values stored in RobotState
      */
     public synchronized void resetAllStates() {
+        actualElevatorState = Elevator.ELEVATOR_STATE.GROUND;
         deltaVehicle = new ChassisSpeeds();
         calculatedVehicleAccel = new ChassisSpeeds();
         triAxialAcceleration = new Double[]{0d, 0d, 0d};

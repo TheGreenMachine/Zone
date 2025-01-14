@@ -138,6 +138,29 @@ subsystems:
         implemented: false
         constants:
             useMultiTargetOdometry: 0
+    elevator:
+        implemented: true
+        motors:
+            elevatorMotor:
+                motorType: TalonFX
+                motorName: elevatorMotor
+                id: 6
+                invertMotor: false
+            elevatorFollowMotor:
+                motorType: TalonFX
+                motorName: elevatorFollowMotor
+                id: 4
+                invertMotor: false
+                currentLimit: 20
+        pidConfig:
+            slot0:
+                kP: 0.043
+                Ki: 0
+                kD: 0.00001
+                kF: 0.0099
+        constants:
+            intakeSpeed: -0.75
+            outtakeSpeed: 0.3
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##
@@ -152,6 +175,11 @@ infrastructure:
     isPigeon2: true
 inputHandler: drivercentric # the default input handler
 constants:
+    elevatorGroundPosition: 1.0
+    elevatorL1Position: 1.0
+    elevatorL2Position: 1.0
+    elevatorL3Position: 1.0
+    elevatorL4Position: 1.0
     zeroingButton: 9 # channel of DIO port
     enableMusic: 0
     ## Drivetrain ##
