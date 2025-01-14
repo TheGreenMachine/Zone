@@ -109,6 +109,13 @@ subsystems:
                     allowableError: 5
         constants:
             ## Positional Configurations ##
+            elevatorGroundPosition: 0.1
+            elevatorL1Position: 0.1
+            elevatorL2Position: 0.1
+            elevatorL3Position: 0.1
+            elevatorL4Position: 0.1
+            deepCageHangerEthanPosition: 0.1
+            deepCageHangerLiaoPosition: 0.1
             openLoopRampRate: 0.1
             isSwerve: 1
             isCTRSwerve: 0 #TODO IF ALL ELSE FAILS
