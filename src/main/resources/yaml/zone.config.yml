@@ -150,6 +150,22 @@ subsystems:
             id: 4
             invertMotor: false
             currentLimit: 20
+    deepCageHanger:
+        deepCageHangerMotor:
+            motorType: TalonFX
+            motorName: deepCageHangerMotor
+            id: 10
+            invertMotor: false
+            currentLimit: 20
+            motionMagic:
+                expoKV: 0.035
+                expoKA: 0.065
+        deepCageHangerFollowMotor:
+            motorType: TalonFX
+            motorName: deepCageHangerFollowMotor
+            id: 4
+            invertMotor: false
+            currentLimit: 20
     camera:
         implemented: false
         constants:

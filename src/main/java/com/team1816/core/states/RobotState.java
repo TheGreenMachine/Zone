@@ -180,6 +180,8 @@ public class RobotState {
 
         // TODO: Insert any subsystem state set up here.
 
+        actualElevatorState = Elevator.ELEVATOR_STATE.GROUND;
+        actualDeepCageHangerState = DeepCageHanger.DEEPCAGEHANGER_STATE.ETHAN;
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();
         visibleTargets = new ArrayList<>();
