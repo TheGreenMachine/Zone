@@ -162,6 +162,22 @@ subsystems:
             algaeCollectSpeed: -0.5
             algaeHoldSpeed: -0.1
             algaeReleaseSpeed: 0.25
+    algaeArm:
+        implemented: true
+        motors:
+            algaeArmMotor:
+                motorType: TalonFX
+                motorName: algaeArmMotor
+                id: -1
+                invertMotor: false
+        pidConfig:
+            slot0:
+                kP: 0.0065
+                kI: 0
+                kD: 0.00005
+                kV: 0.00925
+        constants:
+            algaeArmMotorSpeed: 0.5
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##
