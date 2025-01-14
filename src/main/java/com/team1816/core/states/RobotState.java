@@ -9,6 +9,7 @@ import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
+import com.team1816.season.subsystems.DeepCageHanger;
 import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -85,6 +86,7 @@ public class RobotState {
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.GROUND;
+    public DeepCageHanger.DEEPCAGEHANGER_STATE actualDeepCageHangerState = DeepCageHanger.DEEPCAGEHANGER_STATE.ETHAN;
 
 
     public final Mechanism2d mechCanvas = new Mechanism2d(3, 3);
