@@ -9,7 +9,7 @@ import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.AlgaeCatcher;
-import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
+import com.team1816.season.dynamicAuto2025.DynamicAutoScript2025;
 import com.team1816.season.subsystems.AlgaeArm;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
