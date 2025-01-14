@@ -5,6 +5,7 @@ import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.actions.TrajectoryAction;
+import com.team1816.lib.auto.actions.WaitAction;
 import com.team1816.lib.autopath.AutopathAlgorithm;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -41,6 +42,8 @@ public class DynamicAutoScript2025 {
 
         for(SendableChooser<Pose2d> chooser : trajectoryActionChoosers)
             currentTrajectoryActionChoices.add(chooser.getSelected());
+
+        SmartDashboard.putNumber("dynamicAutoStartWaitTime", 0);
 
         addToSmartDashboard();
     }
@@ -97,6 +100,11 @@ public class DynamicAutoScript2025 {
 
     public Pose2d getStartPos(){
         return startPos;
+    }
+
+    public WaitAction getWaitTime(){
+       new WaitAction (SmartDashboard.getNumber("dynamicAutoStartWaitTime", 0));
+        return null;
     }
 
     private void addTrajectoryOption(String name, Pose2d traj){
