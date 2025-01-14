@@ -140,18 +140,24 @@ subsystems:
             useMultiTargetOdometry: 0
     algaeCatcher:
         #TODO tune these stuffs
-        implemented: true
+        implemented: false
         motors:
             algaeCatcherLeadMotor:
                 motorType: TalonFX
                 motorName: algaeCatcherLeadMotor
-                id: -324092350982
+                id: -324092
                 invertMotor: false
             algaeCatcherFollowerMotor:
                 motorType: TalonFX
                 motorName: algaeCatcherFollowerMotor
                 id: -314159
                 invertMotor: false
+        pidConfig:
+            slot0:
+                kP: 0.043
+                Ki: 0
+                kD: 0.00001
+                kF: 0.0099
         constants:
             algaeCollectSpeed: -0.5
             algaeHoldSpeed: -0.1
