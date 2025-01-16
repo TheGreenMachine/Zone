@@ -151,12 +151,6 @@ subsystems:
             motionMagic:
                 expoKV: 0.035
                 expoKA: 0.065
-        elevatorFollowMotor:
-            motorType: TalonFX
-            motorName: elevatorFollowMotor
-            id: 4
-            invertMotor: false
-            currentLimit: 20
     deepCageHanger:
         deepCageHangerMotor:
             motorType: TalonFX

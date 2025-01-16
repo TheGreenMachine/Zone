@@ -41,7 +41,6 @@ public class Elevator extends Subsystem {
      * Components
      */
     private final IGreenMotor elevatorMotor;
-    private final IGreenMotor elevatorFollowMotor;
 
     /**
      * States
@@ -69,7 +68,7 @@ public class Elevator extends Subsystem {
     private final double elevatorL3Position = factory.getConstant(NAME, "elevatorL3Position", 1.0);
     private final double elevatorL4Position = factory.getConstant(NAME, "elevatorL4Position", 1.0);
 
-    private final boolean opposeLeaderDirection = ((int) factory.getConstant(NAME, "invertFollowerMotor", 0)) == 1;
+//    private final boolean opposeLeaderDirection = ((int) factory.getConstant(NAME, "invertFollowerMotor", 0)) == 1;
 
     /**
      * Base constructor needed to instantiate a shooter
@@ -81,7 +80,6 @@ public class Elevator extends Subsystem {
     public Elevator(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
         elevatorMotor = factory.getMotor(NAME, "elevatorMotor");
-        elevatorFollowMotor = factory.getFollowerMotor(NAME, "elevatorFollowMotor", elevatorMotor, opposeLeaderDirection);
 
         elevatorMotor.selectPIDSlot(2);
 
