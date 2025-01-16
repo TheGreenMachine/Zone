@@ -13,16 +13,11 @@ public class ModuleRequest implements LegacySwerveRequest {
         return this;
     }
 
-    @Override
-    public StatusCode apply(LegacySwerveControlRequestParameters parameters, SwerveModule... modulesToApply) {
+    @Override//LegacySwerveModule may not be the right class: if there are no issues, delete comment
+    public StatusCode apply(LegacySwerveControlRequestParameters legacySwerveControlRequestParameters, LegacySwerveModule... modulesToApply) {
         for (int i = 0; i < 4; i++) {
             modulesToApply[i].apply(moduleStates[i], LegacySwerveModule.DriveRequestType.Velocity, LegacySwerveModule.SteerRequestType.MotionMagic);
         }
         return StatusCode.OK;
-    }
-
-    @Override
-    public StatusCode apply(LegacySwerveControlRequestParameters legacySwerveControlRequestParameters, LegacySwerveModule... legacySwerveModules) {
-        return null;
     }
 }
