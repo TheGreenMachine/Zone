@@ -107,7 +107,8 @@ public abstract class ParentDevice extends CtreJniWrapper {
     }
 
     public StatusCode optimizeBusUtilization(double timeoutSeconds) {
-        return StatusCode.valueOf(StatusSignalJNI.JNI_OptimizeUpdateFrequencies(this.deviceIdentifier.getNetwork(), this.deviceIdentifier.getDeviceHash(), timeoutSeconds));
+        return StatusCode.valueOf(StatusSignalJNI.JNI_OptimizeUpdateFrequencies(this.deviceIdentifier.getNetwork(), this.deviceIdentifier.getDeviceHash(), 100, timeoutSeconds));
+        //Optimized FreqHZ(var3) may be need to change
     }
 
     public static StatusCode optimizeBusUtilizationForAll(ParentDevice... devices) {
