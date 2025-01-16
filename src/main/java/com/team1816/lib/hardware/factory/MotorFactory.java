@@ -177,6 +177,7 @@ public class MotorFactory {
         return spark;
     }
 
+    @Deprecated(since = "Sparks are no longer supported as of 2025")
     public static IGreenMotor createFollowerSpark(
             int id,
             String name,
