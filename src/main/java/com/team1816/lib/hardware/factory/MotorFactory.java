@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.team1816.lib.hardware.MotorConfiguration;
@@ -43,6 +42,7 @@ public class MotorFactory {
     public static int VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW = 1;
     public static double OPEN_LOOP_RAMP_RATE = 0.0;
     public static double CLOSED_LOOP_RAMP_RATE = 0.0;
+
 
     // Create a CANTalon with the default (out of the box) configuration.
     public static IGreenMotor createDefaultTalon(
@@ -200,7 +200,7 @@ public class MotorFactory {
         canCoder.getConfigurator().refresh(config);
         canCoder.getConfigurator().apply(
                 config.MagnetSensor
-                        .withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1)
+                        .withAbsoluteSensorDiscontinuityPoint(1)
                         .withSensorDirection(invertCanCoder ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive)
                         .withMagnetOffset(offset),
                 kTimeoutMsLONG/1000.0
@@ -344,7 +344,7 @@ public class MotorFactory {
         if (invertMotor) {
             GreenLogger.log("        Inverting " + name + " with ID " + id);
         }
-        motor.setInverted(invertMotor);
+        motor.setInvertedMotor(invertMotor);
 
     }
 
