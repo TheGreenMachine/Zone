@@ -80,8 +80,8 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         configs.CurrentLimits
                 .withSupplyCurrentLimit(configuration.currentLimit)
                 .withSupplyCurrentLimitEnable(configuration.enable)
-                .withSupplyCurrentThreshold(configuration.triggerThresholdCurrent)
-                .withSupplyTimeThreshold(configuration.triggerThresholdTime);
+                .withSupplyCurrentLowerLimit(configuration.triggerThresholdCurrent)
+                .withSupplyCurrentLowerTime(configuration.triggerThresholdTime);
         configurator.apply(configs, kLongCANTimeoutSeconds);
     }
 
@@ -90,8 +90,8 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         configs.CurrentLimits
                 .withSupplyCurrentLimit(current)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentThreshold(0)
-                .withSupplyTimeThreshold(0);
+                .withSupplyCurrentLowerLimit(0)
+                .withSupplyCurrentLowerTime(0);
         configurator.apply(configs, kLongCANTimeoutSeconds);
     }
 
@@ -184,14 +184,14 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
     }
 
     @Override
-    public void setInverted(boolean isInverted) {
+    public void setInvertedMotor(boolean isInverted) {
         configurator.apply( //DON'T USE super.setInverted(), it doesn't refresh!
                 configs.MotorOutput.withInverted(isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive)
         );
     }
 
     @Override
-    public boolean getInverted() {
+    public boolean getInvertedMotor() {
         return super.getInverted();
     }
 

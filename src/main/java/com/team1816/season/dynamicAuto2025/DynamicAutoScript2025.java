@@ -1,4 +1,4 @@
-package com.team1816.season.dynamicAuto2025;
+package com.team1816.season.DynamicAuto2025;
 
 import com.team1816.core.Robot;
 import com.team1816.core.auto.AutoModeManager;
@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class DynamicAutoScript2025 {
     private SendableChooser<Pose2d> startingPositionChooser = new SendableChooser<>();

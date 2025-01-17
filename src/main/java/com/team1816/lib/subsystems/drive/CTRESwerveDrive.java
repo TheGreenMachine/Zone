@@ -3,11 +3,11 @@ package com.team1816.lib.subsystems.drive;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrain;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.lib.Infrastructure;
@@ -30,6 +30,7 @@ import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
@@ -44,7 +45,7 @@ import java.util.List;
 
 /**
  * A Class that implements CTRE's SwerveDriveTrain class
- * @see SwerveDrivetrain
+ * @see LegacySwerveDrivetrain
  */
 @Singleton
 public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
@@ -53,8 +54,8 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
     /**
      * Components
      */
-    private final SwerveDrivetrain train;
-    private SwerveModuleConstants[] swerveModules;
+    private final LegacySwerveDrivetrain train;
+    private LegacySwerveModuleConstants[] swerveModules;
     private TalonFX[] motors;
     private final AudioConfigs audioConfigs = MotorFactory.getAudioConfigs();
 
@@ -67,9 +68,9 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
     /**
      * Control
      */
-    private SwerveRequest request;
-    private SwerveRequest.FieldCentric fieldCentricRequest;
-    private SwerveRequest.SwerveDriveBrake brakeRequest;
+    private LegacySwerveRequest request;
+    private LegacySwerveRequest.FieldCentric fieldCentricRequest;
+    private LegacySwerveRequest.SwerveDriveBrake brakeRequest;
     private ModuleRequest autoRequest;
 
     /**
@@ -110,7 +111,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
     private DoubleArrayLogEntry inputLogger; //X, Y, Rotation - raw -1 to 1 from setTeleopInputs
     private StringLogEntry controlRequestLogger;
 
-    private final ArrayList<StatusSignal<Double>> motorTemperatures = new ArrayList<>();
+    private final ArrayList<StatusSignal<Temperature>> motorTemperatures = new ArrayList<>();//Changed from double to temperature
 
     private ArrayList<DoubleLogEntry> desiredModuleStatesLogger;
     private ArrayList<DoubleLogEntry> actualModuleStatesLogger;
@@ -125,7 +126,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
         super(lm, inf, rs);
 
         // Module Characterization
-        swerveModules = new SwerveModuleConstants[4];
+        swerveModules = new LegacySwerveModuleConstants[4];
 
         swerveModules[kFrontLeft] = factory.getCTRESwerveModule(NAME, "frontLeft");
         swerveModules[kFrontRight] = factory.getCTRESwerveModule(NAME, "frontRight");
@@ -133,26 +134,26 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
         swerveModules[kBackRight] = factory.getCTRESwerveModule(NAME, "backRight");
 
         // Drivetrain characterization
-        SwerveDrivetrainConstants constants = new SwerveDrivetrainConstants()
+        LegacySwerveDrivetrainConstants constants = new LegacySwerveDrivetrainConstants()
                 .withCANbusName(factory.getCanBusName())
                 .withPigeon2Id(factory.getPigeonID());
 
-        train = new SwerveDrivetrain(constants, swerveModules);
+        train = new LegacySwerveDrivetrain(constants, swerveModules);
         train.getDaqThread().setThreadPriority(99); // Making Odometry thread top Priority
 
         // Control Request Characterization
-        fieldCentricRequest = new SwerveRequest.FieldCentric()
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
-                .withSteerRequestType(SwerveModule.SteerRequestType.MotionMagic)
+        fieldCentricRequest = new LegacySwerveRequest.FieldCentric()
+                .withDriveRequestType(LegacySwerveModule.DriveRequestType.OpenLoopVoltage)
+                .withSteerRequestType(LegacySwerveModule.SteerRequestType.MotionMagic)
                 .withDeadband(driveDeadband * kMaxVelOpenLoopMeters)
                 .withRotationalDeadband(rotationalDeadband * kMaxAngularSpeed);
 
         autoRequest = new ModuleRequest()
                 .withModuleStates(new SwerveModuleState[4]);
 
-        brakeRequest = new SwerveRequest.SwerveDriveBrake()
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
-                .withSteerRequestType(SwerveModule.SteerRequestType.MotionMagic);
+        brakeRequest = new LegacySwerveRequest.SwerveDriveBrake()
+                .withDriveRequestType(LegacySwerveModule.DriveRequestType.OpenLoopVoltage)
+                .withSteerRequestType(LegacySwerveModule.SteerRequestType.MotionMagic);
 
         request = fieldCentricRequest;
 
@@ -354,7 +355,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
     @Override
     public void stop() {
-        train.setControl(new SwerveRequest.FieldCentric());
+        train.setControl(new LegacySwerveRequest.FieldCentric());
     }
 
     /**
@@ -514,11 +515,11 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
      */
 
     public double[] getDesiredSpeeds() {
-        if (request instanceof SwerveRequest.FieldCentric) {
+        if (request instanceof LegacySwerveRequest.FieldCentric) {
             return new double[]{
-                    ((SwerveRequest.FieldCentric) request).VelocityX,
-                    ((SwerveRequest.FieldCentric) request).VelocityY,
-                    ((SwerveRequest.FieldCentric) request).RotationalRate
+                    ((LegacySwerveRequest.FieldCentric) request).VelocityX,
+                    ((LegacySwerveRequest.FieldCentric) request).VelocityY,
+                    ((LegacySwerveRequest.FieldCentric) request).RotationalRate
             };
         } else if (request instanceof ModuleRequest) {
             ChassisSpeeds moduleSpeeds = swerveKinematics.toChassisSpeeds(((ModuleRequest) request).moduleStates);

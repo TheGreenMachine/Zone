@@ -9,33 +9,33 @@ driver:
       horizontal: rotation
   buttonpad:
     b: brakeMode
-    x: autopathingSpeaker #ampPivot
-    a: autopathingAmp
-    y: teleport
+    x: autopathingSpeaker
+    a:
+    y:
   axes:
     rightTrigger: turboMode
     leftTrigger: slowMode
   buttons:
     start: zeroPose
     back: hardZeroPose
-    leftBumper: shoot
-    rightBumper: rotateToPoint
+    leftBumper:
+    rightBumper:
   dpad:
-    up: snapToPickup
-    down: snapToScore
-    left: snapToBottomSpeaker
-    right: snapToTopSpeaker
+    up:
+    down:
+    left:
+    right:
 operator:
   controllerType: Xbox
   rumble: true
   buttonpad:
-    y: stopShooter
+    y:
 buttonboard:
-  upLeft: climbSlow
-  upRight: climbFast
-  up: climbPosition
-  center: ShuttleRev
-  left: zeroClimber
-  downLeft: toggleOverride
-  down: manualFeedingTransfer
+  upLeft:
+  upRight:
+  up:
+  center:
+  left:
+  downLeft:
+  down:
 demoMode: false

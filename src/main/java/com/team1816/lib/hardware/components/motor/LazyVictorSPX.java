@@ -53,6 +53,11 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
     }
 
     @Override
+    public void setInvertedMotor(boolean isInvertedMotor) {
+
+    }
+
+    @Override
     public void configCurrentLimit(SupplyCurrentLimitConfiguration configuration) {
         GreenLogger.log("Current Limits nonexistent for VictorSPX!!!");
     }
@@ -80,6 +85,11 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
     @Override
     public double get_ClosedLoopOutput() {
         return 0;
+    }
+
+    @Override
+    public boolean getInvertedMotor() {
+        return false;
     }
 
     @Override

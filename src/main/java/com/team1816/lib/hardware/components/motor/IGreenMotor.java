@@ -61,7 +61,7 @@ public interface IGreenMotor {
      * Gets if a motor controller is inverted
      * @return If the controller is inverted
      */
-    boolean getInverted();
+    boolean getInvertedMotor();
 
     /**
      * Gets the temperature of the motor controller
@@ -301,15 +301,15 @@ public interface IGreenMotor {
 
     /**
      * Sets if the sensor phase of a motor's encoder is inverted
-     * @param isInverted If the sensor phase should be inverted
+     * @param isInvertedMotor If the sensor phase should be inverted
      */
-    void setSensorPhase(boolean isInverted);
+    void setSensorPhase(boolean isInvertedMotor);
 
     /**
      * Sets if the motor controller is inverted
-     * @param isInverted If the motor should be inverted
+     * @param isInvertedMotor If the motor should be inverted
      */
-    void setInverted(boolean isInverted);
+    void setInvertedMotor(boolean isInvertedMotor);
 
     void config_NeutralDeadband(double deadbandPercent);
 
@@ -424,10 +424,7 @@ public interface IGreenMotor {
         TalonFX, //Falcons and Krakens
         TalonSRX, //cims, bags, etc
         VictorSPX, //no idea what this actually controls, if we ever use these again the world is probably ending
-
-        @Deprecated(since = "Sparks are no longer supported as of 2025")
         SparkMax, //neo 550s
-
         GHOST //simulation
     }
 

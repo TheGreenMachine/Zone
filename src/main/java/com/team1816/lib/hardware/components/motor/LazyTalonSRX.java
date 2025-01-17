@@ -60,6 +60,11 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
     }
 
     @Override
+    public boolean getInvertedMotor() {
+        return false;
+    }
+
+    @Override
     public void selectFeedbackSensor(FeedbackDeviceType deviceType) {
         selectFeedbackSensor(deviceType, 0);
     }
@@ -70,6 +75,11 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
                 closedLoopSlotID,
                 Constants.kCANTimeoutMs
         );
+    }
+
+    @Override
+    public void setInvertedMotor(boolean isInvertedMotor) {
+
     }
 
     @Override
