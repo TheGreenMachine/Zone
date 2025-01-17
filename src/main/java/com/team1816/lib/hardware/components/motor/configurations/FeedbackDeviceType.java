@@ -4,7 +4,7 @@ package com.team1816.lib.hardware.components.motor.configurations;
  * Enum containing all motor feedback device types
  *
  * @see com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice
- * @see com.revrobotics.spark.SparkRelativeEncoder.Type
+ * @see com.revrobotics.SparkRelativeEncoder.Type
  */
 public enum FeedbackDeviceType { // No enum inheritance :(
     // Near Universal

@@ -3,7 +3,7 @@ package com.team1816.lib.util;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.CANSparkMax;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -36,8 +36,8 @@ public class MotorUtil {
             return ((TalonFX) motor).getSupplyCurrent().getValueAsDouble();
         } else if (motor instanceof TalonSRX) {
             return ((TalonSRX) motor).getSupplyCurrent();
-        } else if (motor instanceof SparkMax) {
-            return ((SparkMax) motor).getOutputCurrent();
+        } else if (motor instanceof CANSparkMax) {
+            return ((CANSparkMax) motor).getOutputCurrent();
         }
         return 0;
     }

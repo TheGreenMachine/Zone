@@ -2,27 +2,43 @@ package com.team1816.lib.hardware.components.motor;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.revrobotics.*;
-import com.revrobotics.spark.SparkLowLevel;
-import com.revrobotics.spark.SparkMax;
 import com.team1816.lib.hardware.components.motor.configurations.*;
+import com.team1816.lib.util.ConfigurationTranslator;
 import com.team1816.lib.util.logUtil.GreenLogger;
 
+public class LazySparkMax extends CANSparkMax implements IGreenMotor {
+    private SparkPIDController pidController;
+    private RelativeEncoder encoder;
 
-/**
- * @deprecated Sparks are not supported as of 2025. Check
- * <a href="https://github.com/TheGreenMachine/Zen/blob/main/src/main/java/com/team1816/lib/hardware/components/motor/LazySparkMax.java">Zen's LazySparkMax code</a>
- * for original code.
- */
-@Deprecated(since = "Sparks are no longer supported as of 2025")
-public class LazySparkMax extends SparkMax implements IGreenMotor {
+    protected String name = "";
+    protected GreenControlMode currentControlMode = GreenControlMode.PERCENT_OUTPUT;
+    protected GreenControlMode lastControlMode = null;
+    protected double lastSet = Double.NaN;
+    protected int currentPIDSlot = 0;
+
+    protected SparkLimitSwitch forwardLimitSwitch, reverseLimitSwitch = null;
+
+    protected double peakOutputForward, peakOutputBackward = -0;
+
+    protected double voltageForCompensation = 0;
+    protected boolean voltageCompensationEnabled = false;
+
+    /**
+     * Create a new object to control a SPARK MAX motor Controller
+     *
+     * @param deviceNumber The device ID.
+     * @param motorName The name of the motor
+     */
     public LazySparkMax(int deviceNumber, String motorName) {
-        super(deviceNumber, SparkLowLevel.MotorType.kBrushed);
-        throw new UnsupportedOperationException();
+        super(deviceNumber, CANSparkLowLevel.MotorType.kBrushless);
+        pidController = super.getPIDController();
+        encoder = configureRelativeEncoder(FeedbackDeviceType.HALL_SENSOR);
+        name = motorName;
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return name;
     }
 
     @Override
@@ -32,51 +48,63 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void selectFeedbackSensor(FeedbackDeviceType deviceType) {
-        throw new UnsupportedOperationException();
+        encoder = configureRelativeEncoder(deviceType);
     }
 
     @Override
     public void selectFeedbackSensor(FeedbackDeviceType deviceType, int id) {
-        throw new UnsupportedOperationException();
+        selectFeedbackSensor(deviceType);
     }
 
     private RelativeEncoder configureRelativeEncoder(FeedbackDeviceType deviceType) {
-        throw new UnsupportedOperationException();
+        return super.getEncoder(
+            ConfigurationTranslator.toSparkRelativeEncoderType(deviceType),
+            42
+        );
     }
 
     @Override
     public void configCurrentLimit(SupplyCurrentLimitConfiguration configuration) {
-        throw new UnsupportedOperationException();
+        configCurrentLimit((int) configuration.currentLimit);
     }
 
     @Override
     public void configCurrentLimit(int current) {
-        throw new UnsupportedOperationException();
+        super.setSmartCurrentLimit(current);
     }
 
     @Override
     public void configStatorCurrentLimit(double current, boolean enable) {
-        throw new UnsupportedOperationException();
+        super.setSecondaryCurrentLimit(current);
     }
 
     @Override
     public void set(GreenControlMode controlMode, double demand) {
-        throw new UnsupportedOperationException();
+        currentControlMode = controlMode;
+        if (demand != lastSet || currentControlMode != lastControlMode) {
+            lastSet = demand;
+            lastControlMode = currentControlMode;
+            pidController.setReference(
+                demand,
+                ConfigurationTranslator.toSparkMaxControlType(controlMode),
+                currentPIDSlot
+            );
+        }
     }
 
     @Override
     public void configForwardLimitSwitch(boolean normallyOpen) {
-        throw new UnsupportedOperationException();
+        forwardLimitSwitch = super.getForwardLimitSwitch(normallyOpen ? SparkLimitSwitch.Type.kNormallyOpen : SparkLimitSwitch.Type.kNormallyClosed);
     }
 
     @Override
     public void configReverseLimitSwitch(boolean normallyOpen) {
-        throw new UnsupportedOperationException();
+        reverseLimitSwitch = super.getReverseLimitSwitch(normallyOpen ? SparkLimitSwitch.Type.kNormallyOpen : SparkLimitSwitch.Type.kNormallyClosed);
     }
 
     @Override
     public boolean isLimitSwitchClosed(LimitSwitchDirection direction) {
-        throw new UnsupportedOperationException();
+        return direction == LimitSwitchDirection.FORWARD ? forwardLimitSwitch.isPressed() : reverseLimitSwitch.isPressed();
     }
 
 
@@ -87,202 +115,221 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void setNeutralMode(NeutralMode neutralMode) {
-        throw new UnsupportedOperationException();
+        super.setIdleMode(neutralMode == NeutralMode.Brake ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast);
     }
 
     @Override
     public void setSensorPhase(boolean isInverted) {
         GreenLogger.log("Cannot invert sensor phase of a Spark in brushless mode");
         //If we ever have a spark controlling a brushed motor, the next line can be uncommented.
-        //encoder.setInverted(isInverted); // This is NOT the same as a call to super.getInverted().
+            //encoder.setInverted(isInverted); // This is NOT the same as a call to super.getInverted().
     }
 
     @Override
     public void configOpenLoopRampRate(double secondsNeutralToFull) {
-        throw new UnsupportedOperationException();
+        super.setOpenLoopRampRate(secondsNeutralToFull);
     }
 
     @Override
     public void configOpenLoopRampRate(double secondsNeutralToFull, int timeoutMs) {
-        throw new UnsupportedOperationException();
+        configOpenLoopRampRate(secondsNeutralToFull);
     }
 
     @Override
     public void configClosedLoopRampRate(double secondsNeutralToFull) {
-        throw new UnsupportedOperationException();
+        super.setClosedLoopRampRate(secondsNeutralToFull);
     }
 
     @Override
     public void config_PeakOutputForward(double percentOut) {
-        throw new UnsupportedOperationException();
+        peakOutputForward = percentOut;
+        pidController.setOutputRange(peakOutputBackward, peakOutputForward, currentPIDSlot);
     }
 
     @Override
     public void config_PeakOutputForward(double percentOut, int timeoutMs) {
-        throw new UnsupportedOperationException();
+        config_PeakOutputForward(percentOut);
     }
 
 
     @Override
     public void config_PeakOutputReverse(double percentOut) {
-        throw new UnsupportedOperationException();
+        //Use negative values for backwards range
+        peakOutputBackward = percentOut;
+        pidController.setOutputRange(peakOutputBackward, peakOutputForward, currentPIDSlot);
     }
 
     @Override
     public void config_PeakOutputReverse(double percentOut, int timeoutMs) {
-        throw new UnsupportedOperationException();
+        config_PeakOutputReverse(percentOut);
     }
 
+
+    /**
+     * @see <a href="https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces">Documentation</a>
+     */
     @Override
     public void config_NeutralDeadband(double deadbandPercent) {
-        throw new UnsupportedOperationException();
+        GreenLogger.log("Neutral deadband is only configurable through USB for Spark Max. Factory default is ±5%");
 
     }
 
     @Override
     public void enableClearPositionOnLimitF(boolean clearPosition, int timeoutMs) {
-        throw new UnsupportedOperationException();
+        //No functionality
     }
 
     @Override
     public void enableClearPositionOnLimitR(boolean clearPosition, int timeoutMs) {
-        throw new UnsupportedOperationException();
+        //No functionality
     }
 
     @Override
     public double getMotorOutputPercent() {
-        throw new UnsupportedOperationException();
+        return super.getAppliedOutput(); // We don't use get() because that is only supplied with set() and we skip over that for setReference()
     }
 
     @Override
     public double getMotorOutputVoltage() {
-        throw new UnsupportedOperationException();
+        return getMotorOutputPercent() * getBusVoltage(); //hate this but it's literally how BaseMotorController does it
     }
 
     @Override
     public double get_SupplyCurrent() {
-        throw new UnsupportedOperationException();
+        return super.getOutputCurrent();
     }
 
     @Override
     public double get_ClosedLoopOutput() {
-        throw new UnsupportedOperationException();
+        return 0;
     }
 
     @Override
     public double getSensorPosition() {
-        throw new UnsupportedOperationException();
+        return encoder.getPosition();
     }
 
     @Override
     public double getSensorVelocity() {
-        throw new UnsupportedOperationException();
+        return encoder.getVelocity();
     }
 
     @Override
     public void setSensorPosition(double sensorPosition) {
-        throw new UnsupportedOperationException();
+        encoder.setPosition(sensorPosition);
     }
 
     @Override
     public void setSensorPosition(double sensorPosition, int timeoutMs) {
-        throw new UnsupportedOperationException();
+        setSensorPosition(sensorPosition);
     }
 
     @Override
     public void enableLimitSwitches(boolean isEnabled) {
-        throw new UnsupportedOperationException();
+        //WHY DO LIMIT SWITCHES HAVE A TOGGLE PARAMETER BUT VOLTAGE COMPENSATION DOESNT
+        if (forwardLimitSwitch == null || reverseLimitSwitch == null) {
+            configForwardLimitSwitch(true);
+            configReverseLimitSwitch(true);
+        }
+
+        forwardLimitSwitch.enableLimitSwitch(isEnabled);
+        reverseLimitSwitch.enableLimitSwitch(isEnabled);
     }
 
     @Override
     public void configForwardSoftLimit(double forwardSoftLimit) {
-        throw new UnsupportedOperationException();
+        //free me from this torture. why does this use a float when every other rev method uses doubles?
+        super.setSoftLimit(SoftLimitDirection.kForward, (float) forwardSoftLimit);
     }
 
     @Override
     public void configReverseSoftLimit(double reverseSoftLimit) {
-        throw new UnsupportedOperationException();
+        super.setSoftLimit(SoftLimitDirection.kReverse, (float) reverseSoftLimit);
     }
 
     @Override
     public void enableForwardSoftLimit(boolean isEnabled) {
-        throw new UnsupportedOperationException();
+        super.enableSoftLimit(SoftLimitDirection.kForward, isEnabled);
     }
 
     @Override
     public void enableReverseSoftLimit(boolean isEnabled) {
-        throw new UnsupportedOperationException();
+        super.enableSoftLimit(SoftLimitDirection.kReverse, isEnabled);
     }
 
     @Override
     public void enableSoftLimits(boolean isEnabled) {
-        throw new UnsupportedOperationException();
+        super.enableSoftLimit(SoftLimitDirection.kForward, isEnabled);
+        super.enableSoftLimit(SoftLimitDirection.kReverse, isEnabled);
     }
 
     @Override
     public void set_kP(int pidSlotID, double kP) {
-        throw new UnsupportedOperationException();
+        pidController.setP(kP, pidSlotID);
     }
 
     @Override
     public void set_kI(int pidSlotID, double kI) {
-        throw new UnsupportedOperationException();
+        pidController.setI(kI, pidSlotID);
     }
 
     @Override
     public void set_kD(int pidSlotID, double kD) {
-        throw new UnsupportedOperationException();
+        pidController.setD(kD, pidSlotID);
     }
 
     @Override
     public void set_kF(int pidSlotID, double kF) {
-        throw new UnsupportedOperationException();
+        pidController.setFF(kF, pidSlotID);
     }
 
     @Override
     public void selectPIDSlot(int pidSlotID) {
-        throw new UnsupportedOperationException();
+        currentPIDSlot = pidSlotID;
     }
 
     @Override
     public void set_iZone(int pidSlotID, double iZone) {
-        throw new UnsupportedOperationException();
+        pidController.setIZone(iZone, pidSlotID);
     }
 
     @Override
     public void configAllowableErrorClosedLoop(int pidSlotID, double allowableError) {
-        throw new UnsupportedOperationException();
+        GreenLogger.log("Allowable error is only configurable through USB for Spark Max.");
     }
 
     @Override
     public void setPeakOutputClosedLoop(int pidSlotID, double peakOutput) {
-        throw new UnsupportedOperationException();
+        pidController.setOutputRange(-peakOutput, peakOutput, pidSlotID);
     }
 
     @Override
     public double get_ClosedLoopError() {
         // This isn't worth implementing as of 2023-24 because we aren't using rev motors for driving or anything that needs that much precision.
         // If anyone in the future wants to take a stab at it go ahead:
-        //This is theoretically possible in a few ways
-        // The actual firmware implementation is here https://docs.revrobotics.com/sparkmax/operating-modes/closed-loop-control but error is not retrievable
-        //if we figured out what pv meant then we could calc it ourselves
-        // Could also reverse engineer the output from the PID equation but that could potentially be really slow
+            //This is theoretically possible in a few ways
+                // The actual firmware implementation is here https://docs.revrobotics.com/sparkmax/operating-modes/closed-loop-control but error is not retrievable
+                    //if we figured out what pv meant then we could calc it ourselves
+                // Could also reverse engineer the output from the PID equation but that could potentially be really slow
         return Double.NaN;
     }
 
     @Override
     public void setMotionProfileMaxVelocity(double maxVelocity) {
-        throw new UnsupportedOperationException();
+        pidController.setSmartMotionMaxVelocity(maxVelocity, currentPIDSlot);
     }
 
     @Override
     public void setMotionProfileMaxAcceleration(double maxAcceleration) {
-        throw new UnsupportedOperationException();
+        pidController.setSmartMotionMaxAccel(maxAcceleration, currentPIDSlot);
     }
 
     @Override
     public void configMotionCurve(MotionCurveType motionCurveType, int curveStrength) {
-        throw new UnsupportedOperationException();
+        pidController.setSmartMotionAccelStrategy(
+            motionCurveType == MotionCurveType.S_CURVE ? SparkPIDController.AccelStrategy.kSCurve : SparkPIDController.AccelStrategy.kTrapezoidal,
+            currentPIDSlot
+        );
     }
 
     @Override
@@ -293,22 +340,26 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public int getDeviceID() {
-        throw new UnsupportedOperationException();
+        return super.getDeviceId();
     }
 
     @Override
     public double getMotorOutputCurrent() {
-        throw new UnsupportedOperationException();
+        return super.getOutputCurrent();
     }
 
     @Override
     public GreenControlMode get_ControlMode() {
-        throw new UnsupportedOperationException();
+        return currentControlMode;
     }
 
     @Override
     public void follow(IGreenMotor leader, boolean opposeLeaderDirection) {
-        throw new UnsupportedOperationException();
+        if (leader instanceof LazySparkMax) {
+            super.follow((CANSparkMax) leader, opposeLeaderDirection);
+        } else {
+            super.follow(ExternalFollower.kFollowerPhoenix, leader.getDeviceID(), opposeLeaderDirection);
+        }
     }
 
     @Override
@@ -318,6 +369,6 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void configControlFramePeriod(ControlFrame controlFrame, int periodms) {
-        throw new UnsupportedOperationException();
+        super.setControlFramePeriodMs(periodms);
     }
 }

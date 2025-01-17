@@ -9,7 +9,7 @@ import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.AlgaeCatcher;
-import com.team1816.season.dynamicAuto2025.DynamicAutoScript2025;
+import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
 import com.team1816.season.subsystems.AlgaeArm;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -88,22 +88,10 @@ public class RobotState {
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
 
-
-    public final Mechanism2d mechCanvas = new Mechanism2d(3, 3);
-    public final MechanismRoot2d root = mechCanvas.getRoot("root", 2.25, 0);
-
-    public final MechanismLigament2d pivotStand = root.append(new MechanismLigament2d("stand", 2.5, 90));
-    public final double pivotBaseAngle = 150;
-    public final MechanismLigament2d pivotArm = pivotStand.append(new MechanismLigament2d("pivot", 2, pivotBaseAngle));
-
-    /**
-     * Functional pathing states
-     */
-    public PathFinder pathFinder = new PathFinder();
-
     /**
      * Autopathing state
      */
+
     public boolean autopathing = false;
     public boolean printAutopathing = false;
     public boolean printAutopathFieldTest = false;
@@ -286,8 +274,6 @@ public class RobotState {
             field.getObject("AutopathSuccessfulPoints").setPoses(autopathWaypointsSuccess);
             field.getObject("AutopathFailPoints").setPoses(autopathWaypointsFail);
         }
-
-        SmartDashboard.putData("Mech2d", mechCanvas);
 
         if (RobotBase.isSimulation()) {
             // TODO: Display any stats here
