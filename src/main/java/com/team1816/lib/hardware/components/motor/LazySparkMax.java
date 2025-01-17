@@ -245,6 +245,16 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
     }
 
     @Override
+    public void set_kA(int pidSlotID, double kS) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void set_kG(int pidSlotID, double kS) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void selectPIDSlot(int pidSlotID) {
         throw new UnsupportedOperationException();
     }

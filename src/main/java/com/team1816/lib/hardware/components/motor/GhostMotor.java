@@ -371,6 +371,16 @@ public class GhostMotor implements IGreenMotor {
     }
 
     @Override
+    public void set_kA(int pidSlotID, double kS) {
+
+    }
+
+    @Override
+    public void set_kG(int pidSlotID, double kS) {
+
+    }
+
+    @Override
     public void selectPIDSlot(int pidSlotID) {
 
     }

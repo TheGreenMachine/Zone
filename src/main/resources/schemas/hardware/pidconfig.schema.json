@@ -17,6 +17,12 @@
         "kS": {
             "type": "number"
         },
+        "kA": {
+            "type": "number"
+        },
+        "kG": {
+            "type": "number"
+        },
         "gravityType": {
             "type": "string"
         }

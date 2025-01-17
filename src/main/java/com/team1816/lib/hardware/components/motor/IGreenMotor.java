@@ -370,6 +370,20 @@ public interface IGreenMotor {
     void set_kS(int pidSlotID, double kS);
 
     /**
+     * Configures the kA of a PID slot
+     * @param pidSlotID The slot to configure
+     * @param kA The desired kA
+     */
+    void set_kA(int pidSlotID, double kA);
+
+    /**
+     * Configures the kA of a PID slot
+     * @param pidSlotID The slot to configure
+     * @param kG The desired kG
+     */
+    void set_kG(int pidSlotID, double kG);
+
+    /**
      * Selects which PID slot a motor is using
      *
      * @param pidSlotID The slot id

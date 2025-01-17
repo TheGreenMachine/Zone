@@ -394,6 +394,26 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         configurator.apply(configs);
     }
 
+    @Override
+    public void set_kA(int pidSlotID, double kA) {
+        switch (pidSlotID) {
+            case 0 -> configs.Slot0.withKA(kA);
+            case 1 -> configs.Slot1.withKA(kA);
+            case 2 -> configs.Slot2.withKA(kA);
+        }
+        configurator.apply(configs);
+    }
+
+    @Override
+    public void set_kG(int pidSlotID, double kG) {
+        switch (pidSlotID) {
+            case 0 -> configs.Slot0.withKG(kG);
+            case 1 -> configs.Slot1.withKG(kG);
+            case 2 -> configs.Slot2.withKG(kG);
+        }
+        configurator.apply(configs);
+    }
+
     public void set_GravityType(int pidSlotID, GravityTypeValue gravityType) {
         switch (pidSlotID) {
             case 0 -> configs.Slot0.withGravityType(gravityType);

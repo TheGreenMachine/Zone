@@ -5,6 +5,7 @@ import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.google.common.io.Resources;
 import com.google.inject.Singleton;
 import com.team1816.lib.hardware.*;
@@ -556,7 +557,10 @@ public class RobotFactory {
                 .withKI(configs.kI)
                 .withKD(configs.kD)
                 .withKV(configs.kV)
-                .withKS(configs.kS);
+                .withKS(configs.kS)
+                .withKA(configs.kA)
+                .withKG(configs.kG)
+                .withGravityType(GravityTypeValue.valueOf(configs.gravityType));
     }
 
     public PIDSlotConfiguration getPidSlotConfig(String subsystemName) {

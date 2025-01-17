@@ -263,6 +263,22 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
 
     }
 
+    /**
+     * Doesn't do anything
+     */
+    @Override
+    public void set_kA(int pidSlotID, double kA) {
+
+    }
+
+    /**
+     * Doesn't do anything
+     */
+    @Override
+    public void set_kG(int pidSlotID, double kG) {
+
+    }
+
     @Override
     public void selectPIDSlot(int pidSlotID) {
         super.selectProfileSlot(pidSlotID, 0);

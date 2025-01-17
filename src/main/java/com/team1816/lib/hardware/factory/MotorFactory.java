@@ -258,6 +258,8 @@ public class MotorFactory {
                         motor.set_kD(slotNum, slotConfig.kD != null ? slotConfig.kD : 0);
                         motor.set_kV(slotNum, slotConfig.kV != null ? slotConfig.kV : 0);
                         motor.set_kS(slotNum, slotConfig.kS != null ? slotConfig.kS : 0);
+                        motor.set_kA(slotNum, slotConfig.kA != null ? slotConfig.kA : 0);
+                        motor.set_kG(slotNum, slotConfig.kG != null ? slotConfig.kG : 0);
 
                         if (motor instanceof LazyTalonFX) {
                             ((LazyTalonFX) motor).set_GravityType(slotNum,
@@ -366,6 +368,11 @@ public class MotorFactory {
             if (pidConfiguration.kD != null) slotConfig.kD = pidConfiguration.kD;
             if (pidConfiguration.kV != null) slotConfig.kV = pidConfiguration.kV; // TODO should be kS notnull?
             if (pidConfiguration.kS != null) slotConfig.kS = pidConfiguration.kS;
+            if (pidConfiguration.kA != null) slotConfig.kA = pidConfiguration.kA;
+            if (pidConfiguration.kG != null) slotConfig.kG = pidConfiguration.kG;
+
+            if (pidConfiguration.gravityType != null)
+                slotConfig.GravityType = GravityTypeValue.valueOf(pidConfiguration.gravityType);
 
 //            if (pidConfiguration.iZone != null) slotConfig.integralZone = pidConfiguration.iZone;
 //            if (pidConfiguration.allowableError != null) slotConfig.allowableClosedloopError = pidConfiguration.allowableError;
