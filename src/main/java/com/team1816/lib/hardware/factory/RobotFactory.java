@@ -591,13 +591,7 @@ public class RobotFactory {
                 return null;
             } else {
                 // return a default config if not implemented
-                PIDSlotConfiguration pidSlotConfiguration = new PIDSlotConfiguration();
-                pidSlotConfiguration.kP = 0.0;
-                pidSlotConfiguration.kI = 0.0;
-                pidSlotConfiguration.kD = 0.0;
-                pidSlotConfiguration.kV = 0.0;
-                pidSlotConfiguration.kS = 0.0;
-                return pidSlotConfiguration;
+                return PIDUtil.createDefaultPIDSlotConfig();
             }
         }
     }

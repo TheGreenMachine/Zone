@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
+import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.LedManager;
@@ -566,12 +567,8 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
      */
     @Override
     public PIDSlotConfiguration getPIDConfig() {
-        PIDSlotConfiguration defaultPIDConfig = new PIDSlotConfiguration();
-        defaultPIDConfig.kP = 0.0;
-        defaultPIDConfig.kI = 0.0;
-        defaultPIDConfig.kD = 0.0;
-        defaultPIDConfig.kV = 0.0;
-        defaultPIDConfig.kS = 0.0;
+        PIDSlotConfiguration defaultPIDConfig = PIDUtil.createDefaultPIDSlotConfig();
+
         return (factory.getSubsystem(NAME).implemented)
             ? factory.getSubsystem(NAME).pidConfig.getOrDefault("slot0", defaultPIDConfig)
             : defaultPIDConfig;

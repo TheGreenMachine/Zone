@@ -6,6 +6,7 @@ import com.team1816.lib.Infrastructure;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.Symmetry;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
+import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.components.motor.LazyTalonFX;
 import com.team1816.lib.subsystems.LedManager;
 import com.team1816.lib.subsystems.PidProvider;
@@ -563,12 +564,8 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
      */
     @Override
     public PIDSlotConfiguration getPIDConfig() {
-        PIDSlotConfiguration defaultPIDConfig = new PIDSlotConfiguration();
-        defaultPIDConfig.kP = 0.0;
-        defaultPIDConfig.kI = 0.0;
-        defaultPIDConfig.kD = 0.0;
-        defaultPIDConfig.kV = 0.0;
-        defaultPIDConfig.kS = 0.0;
+        PIDSlotConfiguration defaultPIDConfig = PIDUtil.createDefaultPIDSlotConfig();
+
         return (factory.getSubsystem(NAME).implemented)
             ? factory
             .getSubsystem(NAME)

@@ -11,8 +11,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.lib.Infrastructure;
-import com.team1816.lib.auto.Color;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
+import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.components.gyro.Pigeon2Wrapper;
 import com.team1816.lib.hardware.factory.MotorFactory;
 import com.team1816.lib.subsystems.LedManager;
@@ -22,7 +22,6 @@ import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -547,12 +546,8 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
     @Override
     public PIDSlotConfiguration getPIDConfig() {
-        PIDSlotConfiguration defaultPIDConfig = new PIDSlotConfiguration();
-        defaultPIDConfig.kP = 0.0;
-        defaultPIDConfig.kI = 0.0;
-        defaultPIDConfig.kD = 0.0;
-        defaultPIDConfig.kV = 0.0;
-        defaultPIDConfig.kS = 0.0;
+        PIDSlotConfiguration defaultPIDConfig = PIDUtil.createDefaultPIDSlotConfig();
+
         return (factory.getSubsystem(NAME).implemented)
                 ? factory
                 .getSubsystem(NAME)
