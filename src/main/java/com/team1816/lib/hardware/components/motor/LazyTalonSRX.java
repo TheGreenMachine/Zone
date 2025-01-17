@@ -66,9 +66,9 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
 
     public void selectFeedbackSensor(FeedbackDeviceType deviceType, int closedLoopSlotID) {
         super.configSelectedFeedbackSensor(
-            ConfigurationTranslator.toTalonSRXFeedbackDevice(deviceType),
-            closedLoopSlotID,
-            Constants.kCANTimeoutMs
+                ConfigurationTranslator.toTalonSRXFeedbackDevice(deviceType),
+                closedLoopSlotID,
+                Constants.kCANTimeoutMs
         );
     }
 
@@ -80,14 +80,14 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
     @Override
     public void configCurrentLimit(int current) {
         super.configSupplyCurrentLimit(
-            new SupplyCurrentLimitConfiguration(true, current, 0, 0),
+                new SupplyCurrentLimitConfiguration(true, current, 0, 0),
                 Constants.kLongCANTimeoutMs
         );
     }
 
     @Override
     public void configStatorCurrentLimit(double current, boolean enable) {
-        
+
     }
 
     @Override
@@ -108,9 +108,9 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
     public void configForwardLimitSwitch(boolean normallyOpen) {
         LimitSwitchNormal openOrClosed = normallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed;
         super.configForwardLimitSwitchSource(
-            LimitSwitchSource.RemoteTalonSRX,
-            openOrClosed,
-            Constants.kCANTimeoutMs
+                LimitSwitchSource.RemoteTalonSRX,
+                openOrClosed,
+                Constants.kCANTimeoutMs
         );
     }
 
@@ -118,9 +118,9 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
     public void configReverseLimitSwitch(boolean normallyOpen) {
         LimitSwitchNormal openOrClosed = normallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed;
         super.configReverseLimitSwitchSource(
-            LimitSwitchSource.RemoteTalonSRX,
-            openOrClosed,
-            Constants.kCANTimeoutMs
+                LimitSwitchSource.RemoteTalonSRX,
+                openOrClosed,
+                Constants.kCANTimeoutMs
         );
     }
 
@@ -257,23 +257,21 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
     }
 
     @Override
-    public void set_kF(int pidSlotID, double kF) {
-        super.config_kF(pidSlotID, kF);
+    public void set_kV(int pidSlotID, double kV) {
+        super.config_kF(pidSlotID, kV);
+    }
+
+    /**
+     * Doesn't do anything
+     */
+    @Override
+    public void set_kS(int pidSlotID, double kS) {
+
     }
 
     @Override
     public void selectPIDSlot(int pidSlotID) {
         super.selectProfileSlot(pidSlotID, 0);
-    }
-
-    @Override
-    public void set_iZone(int pidSlotID, double iZone) {
-        super.config_IntegralZone(pidSlotID, iZone);
-    }
-
-    @Override
-    public void configAllowableErrorClosedLoop(int pidSlotID, double allowableError) {
-        super.configAllowableClosedloopError(pidSlotID, allowableError, Constants.kLongCANTimeoutMs);
     }
 
     @Override
@@ -290,6 +288,7 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
     public void setMotionProfileMaxAcceleration(double maxAcceleration) {
         super.configMotionAcceleration(maxAcceleration);
     }
+
     @Override
     public void configMotionCurve(MotionCurveType motionCurveType, int curveStrength) {
         if (curveStrength > 8) {
@@ -300,7 +299,7 @@ public class LazyTalonSRX extends TalonSRX implements IGreenMotor {
             curveStrength = 0;
         }
         super.configMotionSCurveStrength(
-            ConfigurationTranslator.toMotionCurveInt(motionCurveType, curveStrength)
+                ConfigurationTranslator.toMotionCurveInt(motionCurveType, curveStrength)
         );
     }
 

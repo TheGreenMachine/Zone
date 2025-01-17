@@ -46,9 +46,9 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
 
     public void selectFeedbackSensor(FeedbackDeviceType deviceType, int closedLoopSlotID) {
         super.configSelectedFeedbackSensor(
-            ConfigurationTranslator.toRemoteFeedbackDevice(deviceType),
-            closedLoopSlotID,
-            Constants.kCANTimeoutMs
+                ConfigurationTranslator.toRemoteFeedbackDevice(deviceType),
+                closedLoopSlotID,
+                Constants.kCANTimeoutMs
         );
     }
 
@@ -100,9 +100,9 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
     public void configForwardLimitSwitch(boolean normallyOpen) {
         LimitSwitchNormal openOrClosed = normallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed;
         super.configForwardLimitSwitchSource(
-            RemoteLimitSwitchSource.Deactivated,
-            openOrClosed,
-            Constants.kCANTimeoutMs
+                RemoteLimitSwitchSource.Deactivated,
+                openOrClosed,
+                Constants.kCANTimeoutMs
         );
     }
 
@@ -110,9 +110,9 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
     public void configReverseLimitSwitch(boolean normallyOpen) {
         LimitSwitchNormal openOrClosed = normallyOpen ? LimitSwitchNormal.NormallyOpen : LimitSwitchNormal.NormallyClosed;
         super.configReverseLimitSwitchSource(
-            RemoteLimitSwitchSource.Deactivated,
-            openOrClosed,
-            Constants.kCANTimeoutMs
+                RemoteLimitSwitchSource.Deactivated,
+                openOrClosed,
+                Constants.kCANTimeoutMs
         );
     }
 
@@ -251,23 +251,21 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
     }
 
     @Override
-    public void set_kF(int pidSlotID, double kF) {
+    public void set_kV(int pidSlotID, double kF) {
         super.config_kF(pidSlotID, kF);
+    }
+
+    /**
+     * Doesn't do anything
+     */
+    @Override
+    public void set_kS(int pidSlotID, double kS) {
+
     }
 
     @Override
     public void selectPIDSlot(int pidSlotID) {
         super.selectProfileSlot(pidSlotID, 0);
-    }
-
-    @Override
-    public void set_iZone(int pidSlotID, double iZone) {
-        super.config_IntegralZone(pidSlotID, iZone);
-    }
-
-    @Override
-    public void configAllowableErrorClosedLoop(int pidSlotID, double allowableError) {
-        super.configAllowableClosedloopError(pidSlotID, allowableError, Constants.kLongCANTimeoutMs);
     }
 
     @Override
@@ -295,7 +293,7 @@ public class LazyVictorSPX extends VictorSPX implements IGreenMotor {
             curveStrength = 0;
         }
         super.configMotionSCurveStrength(
-            ConfigurationTranslator.toMotionCurveInt(motionCurveType, curveStrength)
+                ConfigurationTranslator.toMotionCurveInt(motionCurveType, curveStrength)
         );
     }
 

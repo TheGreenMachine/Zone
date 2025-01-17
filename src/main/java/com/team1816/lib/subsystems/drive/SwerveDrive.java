@@ -567,7 +567,8 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         defaultPIDConfig.kP = 0.0;
         defaultPIDConfig.kI = 0.0;
         defaultPIDConfig.kD = 0.0;
-        defaultPIDConfig.kF = 0.0;
+        defaultPIDConfig.kV = 0.0;
+        defaultPIDConfig.kS = 0.0;
         return (factory.getSubsystem(NAME).implemented)
             ? factory
             .getSubsystem(NAME)

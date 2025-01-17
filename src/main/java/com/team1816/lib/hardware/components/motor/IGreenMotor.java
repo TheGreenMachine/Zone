@@ -356,11 +356,18 @@ public interface IGreenMotor {
     void set_kD(int pidSlotID, double kD);
 
     /**
-     * Configures the kF of a PID slot
+     * Configures the kV of a PID slot
      * @param pidSlotID The slot to configure
-     * @param kF The desired kF
+     * @param kV The desired kV
      */
-    void set_kF(int pidSlotID, double kF);
+    void set_kV(int pidSlotID, double kV);
+
+    /**
+     * Configures the kS of a PID slot
+     * @param pidSlotID The slot to configure
+     * @param kS The desired kS
+     */
+    void set_kS(int pidSlotID, double kS);
 
     /**
      * Selects which PID slot a motor is using
@@ -369,21 +376,7 @@ public interface IGreenMotor {
      */
     void selectPIDSlot(int pidSlotID);
 
-    /**
-     * Configures the integral zone for a PID slot
-     * @param pidSlotID The PID slot to configure
-     * @param iZone The desired integral zone
-     */
-    void set_iZone(int pidSlotID, double iZone);
-
     //Motion Miscellaneous
-
-    /**
-     * Configures the allowable error during closed-loop control for a PID slot
-     * @param pidSlotID The PID slot to configure
-     * @param allowableError The desired allowable error
-     */
-    void configAllowableErrorClosedLoop(int pidSlotID, double allowableError);
 
     /**
      * Configures the peak output during closed-loop control for a PID slot

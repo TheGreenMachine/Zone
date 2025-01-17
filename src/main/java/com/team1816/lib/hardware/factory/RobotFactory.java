@@ -555,7 +555,8 @@ public class RobotFactory {
                 .withKP(configs.kP)
                 .withKI(configs.kI)
                 .withKD(configs.kD)
-                .withKV(configs.kF);
+                .withKV(configs.kV)
+                .withKS(configs.kS);
     }
 
     public PIDSlotConfiguration getPidSlotConfig(String subsystemName) {
@@ -594,9 +595,8 @@ public class RobotFactory {
                 pidSlotConfiguration.kP = 0.0;
                 pidSlotConfiguration.kI = 0.0;
                 pidSlotConfiguration.kD = 0.0;
-                pidSlotConfiguration.kF = 0.0;
-                pidSlotConfiguration.iZone = 0;
-                pidSlotConfiguration.allowableError = 0.0;
+                pidSlotConfiguration.kV = 0.0;
+                pidSlotConfiguration.kS = 0.0;
                 return pidSlotConfiguration;
             }
         }

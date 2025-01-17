@@ -11,16 +11,13 @@
         "kD": {
             "type": "number"
         },
-        "kF": {
+        "kV": {
             "type": "number"
         },
-        "iZone": {
-            "type": "integer"
-        },
-        "allowableError": {
+        "kS": {
             "type": "number"
         },
-        "gravityType":{
+        "gravityType": {
             "type": "string"
         }
     }

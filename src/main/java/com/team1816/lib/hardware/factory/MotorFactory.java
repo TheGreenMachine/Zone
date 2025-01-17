@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -192,9 +193,9 @@ public class MotorFactory {
     }
 
     public static CANcoder createCanCoder(int canCoderID, String canBus, boolean invertCanCoder, double offset) {
-        CANcoder canCoder = new CANcoder(canCoderID, canBus) ;
+        CANcoder canCoder = new CANcoder(canCoderID, canBus);
         if (factory.getConstant("resetFactoryDefaults", 0) > 0) {
-            canCoder.getConfigurator().apply(new CANcoderConfiguration(), kTimeoutMs/1000.0);
+            canCoder.getConfigurator().apply(new CANcoderConfiguration(), kTimeoutMs / 1000.0);
         }
         CANcoderConfiguration config = new CANcoderConfiguration();
         canCoder.getConfigurator().refresh(config);
@@ -203,7 +204,7 @@ public class MotorFactory {
                         .withAbsoluteSensorRange(AbsoluteSensorRangeValue.Unsigned_0To1)
                         .withSensorDirection(invertCanCoder ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive)
                         .withMagnetOffset(offset),
-                kTimeoutMsLONG/1000.0
+                kTimeoutMsLONG / 1000.0
         );
 
         return canCoder;
@@ -240,10 +241,10 @@ public class MotorFactory {
 
             // CTRE exclusive configs
             if (isTalon && motor.get_MotorType() != IGreenMotor.MotorType.TalonFX) {
-                ((BaseMotorController)motor).configVelocityMeasurementWindow(VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW);
+                ((BaseMotorController) motor).configVelocityMeasurementWindow(VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW);
 
-                ((IMotorController)motor).configNominalOutputForward(0, kTimeoutMs);
-                ((IMotorController)motor).configNominalOutputReverse(0, kTimeoutMs);
+                ((IMotorController) motor).configNominalOutputForward(0, kTimeoutMs);
+                ((IMotorController) motor).configNominalOutputReverse(0, kTimeoutMs);
             }
         }
 
@@ -251,13 +252,12 @@ public class MotorFactory {
         if (pidConfigList != null) {
             pidConfigList.forEach(
                     (slot, slotConfig) -> {
-                        int slotNum = ((int)slot.charAt(4)) - 48; //Minus 48 because charAt processes as a char, and digit ASCII values are themselves + 48
+                        int slotNum = ((int) slot.charAt(4)) - 48; //Minus 48 because charAt processes as a char, and digit ASCII values are themselves + 48
                         motor.set_kP(slotNum, slotConfig.kP != null ? slotConfig.kP : 0);
                         motor.set_kI(slotNum, slotConfig.kI != null ? slotConfig.kI : 0);
                         motor.set_kD(slotNum, slotConfig.kD != null ? slotConfig.kD : 0);
-                        motor.set_kF(slotNum, slotConfig.kF != null ? slotConfig.kF : 0);
-                        motor.set_iZone(slotNum, slotConfig.iZone != null ? slotConfig.iZone : 0);
-                        motor.configAllowableErrorClosedLoop(slotNum, slotConfig.allowableError != null ? slotConfig.allowableError : 0);
+                        motor.set_kV(slotNum, slotConfig.kV != null ? slotConfig.kV : 0);
+                        motor.set_kS(slotNum, slotConfig.kS != null ? slotConfig.kS : 0);
 
                         if (motor instanceof LazyTalonFX) {
                             ((LazyTalonFX) motor).set_GravityType(slotNum,
@@ -276,7 +276,7 @@ public class MotorFactory {
         // Current limits
         motor.configCurrentLimit(
                 new SupplyCurrentLimitConfiguration(
-                        motorConfiguration.enableCurrentLimit != null ?  motorConfiguration.enableCurrentLimit : ENABLE_CURRENT_LIMIT,
+                        motorConfiguration.enableCurrentLimit != null ? motorConfiguration.enableCurrentLimit : ENABLE_CURRENT_LIMIT,
                         motorConfiguration.currentLimit != null ? motorConfiguration.currentLimit : 40, //Default 40
                         motorConfiguration.currentLimitThreshold != null ? motorConfiguration.currentLimitThreshold : 80, // Default 80
                         motorConfiguration.currentLimitTriggerTime != null ? motorConfiguration.currentLimitTriggerTime : 1 // Default 1
@@ -355,22 +355,23 @@ public class MotorFactory {
                 .withAllowMusicDurDisable(Constants.kMusicEnabled);
     }
 
-    private static SlotConfiguration toSlotConfiguration (
-                PIDSlotConfiguration pidConfiguration
-    ){
-            SlotConfiguration slotConfig = new SlotConfiguration();
-            if (pidConfiguration != null) {
-                if (pidConfiguration.kP != null) slotConfig.kP = pidConfiguration.kP;
-                if (pidConfiguration.kI != null) slotConfig.kI = pidConfiguration.kI;
-                if (pidConfiguration.kD != null) slotConfig.kD = pidConfiguration.kD;
-                if (pidConfiguration.kP != null) slotConfig.kF = pidConfiguration.kF; // TODO should be kF notnull?
-                if (pidConfiguration.iZone != null) slotConfig.integralZone =
-                        pidConfiguration.iZone;
-                if (
-                        pidConfiguration.allowableError != null
-                ) slotConfig.allowableClosedloopError = pidConfiguration.allowableError;
-            }
-            return slotConfig;
+    private static Slot0Configs toSlot0Config(
+            PIDSlotConfiguration pidConfiguration
+    ) {
+        Slot0Configs slotConfig = new Slot0Configs();
+
+        if (pidConfiguration != null) {
+            if (pidConfiguration.kP != null) slotConfig.kP = pidConfiguration.kP;
+            if (pidConfiguration.kI != null) slotConfig.kI = pidConfiguration.kI;
+            if (pidConfiguration.kD != null) slotConfig.kD = pidConfiguration.kD;
+            if (pidConfiguration.kV != null) slotConfig.kV = pidConfiguration.kV; // TODO should be kS notnull?
+            if (pidConfiguration.kS != null) slotConfig.kS = pidConfiguration.kS;
+
+//            if (pidConfiguration.iZone != null) slotConfig.integralZone = pidConfiguration.iZone;
+//            if (pidConfiguration.allowableError != null) slotConfig.allowableClosedloopError = pidConfiguration.allowableError;
+
         }
+        return slotConfig;
+    }
 }
 

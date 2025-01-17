@@ -104,10 +104,10 @@ public class SwerveModule implements ISwerveModule {
 
         azimuthMotor.setNeutralMode(NeutralMode.Brake);
 
-        azimuthMotor.configAllowableErrorClosedLoop(
-                0,
-                mModuleConfig.azimuthPid.allowableError
-        );
+//        azimuthMotor.configAllowableErrorClosedLoop(
+//                0,
+//                mModuleConfig.azimuthPid.allowableError
+//        );
 
         allowableError = 5; // TODO this is a dummy value for checkSystem
         drivePosition = 0;
