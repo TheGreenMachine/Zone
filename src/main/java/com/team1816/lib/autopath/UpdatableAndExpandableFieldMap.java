@@ -78,7 +78,7 @@ public class UpdatableAndExpandableFieldMap {
 
                     expandedMap.drawPixel(i, j);
 
-                    double newExpansionWidth = expansionWidth;
+                    double newExpansionWidth = expansionWidth + 0.70710678118;
 
                     //Don't ask me why it's this number, for some reason it makes the program work
                     if(expansionWidth <= 1.57)
@@ -123,26 +123,26 @@ public class UpdatableAndExpandableFieldMap {
 
         expandedMap.addOtherMap(getExpandedObstaclesMap(map, expansionWidth));
 
-        for(int i = 0; i < expansionWidth; i++){
+        for(int i = 0; i <= expansionWidth; i++){
             for(int i2 = 0; i2 < map.getMapY(); i2++){
                 expandedMap.drawPixel(i, i2);
             }
         }
 
-        for(int i = map.getMapX()-(int)expansionWidth; i < map.getMapX(); i++){
+        for(int i = map.getMapX()-1; i >= map.getMapX()-expansionWidth; i--){
             for(int i2 = 0; i2 < map.getMapY(); i2++){
                 expandedMap.drawPixel(i, i2);
             }
         }
 
-        for(int i = 0; i < expansionWidth; i++){
-            for(int i2 = (int)expansionWidth; i2 < map.getMapX()-(int)expansionWidth; i2++){
+        for(int i = 0; i <= expansionWidth; i++){
+            for(int i2 = 0; i2 < map.getMapX(); i2++){
                 expandedMap.drawPixel(i2, i);
             }
         }
 
-        for(int i = map.getMapY()-(int)expansionWidth; i < map.getMapY(); i++){
-            for(int i2 = (int)expansionWidth; i2 < map.getMapX()-(int)expansionWidth; i2++){
+        for(int i = map.getMapY()-1; i >= map.getMapY()-expansionWidth; i--){
+            for(int i2 = 0; i2 < map.getMapX(); i2++){
                 expandedMap.drawPixel(i2, i);
             }
         }
