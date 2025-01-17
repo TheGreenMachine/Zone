@@ -198,12 +198,12 @@ public class GhostMotor implements IGreenMotor {
     }
 
     @Override
-    public void setInverted(boolean isInverted) {
+    public void setInvertedMotor(boolean isInverted) {
 
     }
 
     @Override
-    public boolean getInverted() {
+    public boolean getInvertedMotor() {
         return false;
     }
 

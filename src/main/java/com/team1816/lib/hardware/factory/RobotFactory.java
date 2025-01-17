@@ -4,7 +4,7 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
 import com.google.common.io.Resources;
 import com.google.inject.Singleton;
 import com.team1816.lib.hardware.*;
@@ -252,12 +252,12 @@ public class RobotFactory {
                 );
         }
         if (main != null) {
-            followerMotor.setInverted(main.getInverted());
+            followerMotor.setInvertedMotor(main.getInvertedMotor());
         }
         return followerMotor;
     }
 
-    public SwerveModuleConstants getCTRESwerveModule(String subsystemName, String name) {
+    public LegacySwerveModuleConstants getCTRESwerveModule(String subsystemName, String name) {
         var subsystem = getSubsystem(subsystemName);
         ModuleConfiguration module = subsystem.swerveModules.modules.get(name);
 
@@ -281,13 +281,13 @@ public class RobotFactory {
 
         double driveGearRatio = getConstant("drivetrain", "driveGearRatio", 6.12);
 
-        var moduleConfig = new SwerveModuleConstants()
+        var moduleConfig = new LegacySwerveModuleConstants()
                 // General Drivetrain
                 .withSpeedAt12VoltsMps(
                         DriveConversions.canonicalRotationsToMeters(module.constants.get("freeSpin12VRPS"), driveGearRatio))
                 .withFeedbackSource(usingPhoenixPro
-                        ? SwerveModuleConstants.SteerFeedbackType.FusedCANcoder
-                        : SwerveModuleConstants.SteerFeedbackType.RemoteCANcoder)
+                        ? LegacySwerveModuleConstants.SteerFeedbackType.FusedCANcoder
+                        : LegacySwerveModuleConstants.SteerFeedbackType.RemoteCANcoder)
                 // CANCoder
                 .withCANcoderId(canCoder)
                 .withCANcoderOffset(module.constants.get("encoderOffset"))
@@ -297,14 +297,14 @@ public class RobotFactory {
                 .withLocationX(moduleXDist) //IMPORTANT: IF THIS IS NOT A SQUARE SWERVEDRIVE, THESE MUST BE DIFFERENT.
                 .withLocationY(moduleYDist)
                 // Drive Motor
-                .withDriveMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType.Voltage)
+                .withDriveMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
                 .withDriveMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Drive))
                 .withDriveMotorId(driveMotor.id)
                 .withSlipCurrent(150) //TODO 120?
                 .withDriveMotorGearRatio(driveGearRatio)
                 .withDriveMotorInverted(driveMotor.invertMotor)
                 // Azimuth Motor
-                .withSteerMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType.Voltage)
+                .withSteerMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
                 .withSteerMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Azimuth))
                 .withSteerMotorId(azimuthMotor.id)
                 .withSteerMotorGearRatio(getConstant("drivetrain", "azimuthGearRatio", 12.8))

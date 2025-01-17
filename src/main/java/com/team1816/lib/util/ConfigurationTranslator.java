@@ -220,8 +220,8 @@ public class ConfigurationTranslator {
         return new SupplyCurrentLimitConfiguration(
                 currentLimitsConfigs.SupplyCurrentLimitEnable,
                 currentLimitsConfigs.SupplyCurrentLimit,
-                currentLimitsConfigs.SupplyCurrentThreshold,
-                currentLimitsConfigs.SupplyTimeThreshold
+                currentLimitsConfigs.SupplyCurrentLowerLimit,
+                currentLimitsConfigs.SupplyCurrentLowerTime
         );
     }
 

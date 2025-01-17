@@ -126,6 +126,11 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     }
 
     @Override
+    public void setInvertedMotor(boolean isInvertedMotor) {
+
+    }
+
+    @Override
     public void configOpenLoopRampRate(double secondsNeutralToFull) {
         super.setOpenLoopRampRate(secondsNeutralToFull);
     }
@@ -202,6 +207,11 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     @Override
     public double get_ClosedLoopOutput() {
         return 0;
+    }
+
+    @Override
+    public boolean getInvertedMotor() {
+        return false;
     }
 
     @Override
@@ -371,4 +381,5 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     public void configControlFramePeriod(ControlFrame controlFrame, int periodms) {
         super.setControlFramePeriodMs(periodms);
     }
+
 }

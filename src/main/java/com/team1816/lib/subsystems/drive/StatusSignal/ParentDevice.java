@@ -107,7 +107,8 @@ public abstract class ParentDevice extends CtreJniWrapper {
     }
 
     public StatusCode optimizeBusUtilization(double timeoutSeconds) {
-        return StatusCode.valueOf(StatusSignalJNI.JNI_OptimizeUpdateFrequencies(this.deviceIdentifier.getNetwork(), this.deviceIdentifier.getDeviceHash(), timeoutSeconds));
+        return StatusCode.valueOf(StatusSignalJNI.JNI_OptimizeUpdateFrequencies(this.deviceIdentifier.getNetwork(), this.deviceIdentifier.getDeviceHash(), 100, timeoutSeconds));
+        //Optimized FreqHZ(var3) may be need to change
     }
 
     public static StatusCode optimizeBusUtilizationForAll(ParentDevice... devices) {
@@ -134,7 +135,7 @@ public abstract class ParentDevice extends CtreJniWrapper {
             this.reportIfTooOld();
             if (!this._versionStatus.isOK() && this._compliancy.getStatus().isOK()) {
                 this._controlReq = _emptyControl;
-                _emptyControl.sendRequest(this.deviceIdentifier.network, this.deviceIdentifier.deviceHash, true);
+                _emptyControl.sendRequest(this.deviceIdentifier.network, this.deviceIdentifier.deviceHash);
                 status = this._versionStatus;
             } else {
                 boolean cancelOtherRequests = false;
@@ -143,7 +144,7 @@ public abstract class ParentDevice extends CtreJniWrapper {
                 }
 
                 this._controlReq = request;
-                status = this._controlReq.sendRequest(this.deviceIdentifier.network, this.deviceIdentifier.deviceHash, cancelOtherRequests);
+                status = this._controlReq.sendRequest(this.deviceIdentifier.network, this.deviceIdentifier.deviceHash);
             }
         } finally {
             this._controlReqLck.unlock();
