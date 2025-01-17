@@ -374,12 +374,42 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
     }
 
     @Override
-    public void set_kF(int pidSlotID, double kF) {
+    public void set_kV(int pidSlotID, double kV) {
         // KF renamed to kV in phoenix 6
         switch (pidSlotID) {
-            case 0 -> configs.Slot0.withKV(kF);
-            case 1 -> configs.Slot1.withKV(kF);
-            case 2 -> configs.Slot2.withKV(kF);
+            case 0 -> configs.Slot0.withKV(kV);
+            case 1 -> configs.Slot1.withKV(kV);
+            case 2 -> configs.Slot2.withKV(kV);
+        }
+        configurator.apply(configs);
+    }
+
+    @Override
+    public void set_kS(int pidSlotID, double kS) {
+        switch (pidSlotID) {
+            case 0 -> configs.Slot0.withKS(kS);
+            case 1 -> configs.Slot1.withKS(kS);
+            case 2 -> configs.Slot2.withKS(kS);
+        }
+        configurator.apply(configs);
+    }
+
+    @Override
+    public void set_kA(int pidSlotID, double kA) {
+        switch (pidSlotID) {
+            case 0 -> configs.Slot0.withKA(kA);
+            case 1 -> configs.Slot1.withKA(kA);
+            case 2 -> configs.Slot2.withKA(kA);
+        }
+        configurator.apply(configs);
+    }
+
+    @Override
+    public void set_kG(int pidSlotID, double kG) {
+        switch (pidSlotID) {
+            case 0 -> configs.Slot0.withKG(kG);
+            case 1 -> configs.Slot1.withKG(kG);
+            case 2 -> configs.Slot2.withKG(kG);
         }
         configurator.apply(configs);
     }
@@ -410,16 +440,6 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         position.withSlot(pidSlotID);
         motionMagic.withSlot(pidSlotID);
         motionMagicExpo.withSlot(pidSlotID);
-    }
-
-    @Override
-    public void set_iZone(int pidSlotID, double iZone) {
-        // Removed in phoenix 6
-    }
-
-    @Override
-    public void configAllowableErrorClosedLoop(int pidSlotID, double allowableError) {
-        // Currently unavailable in phoenix 6
     }
 
     @Override

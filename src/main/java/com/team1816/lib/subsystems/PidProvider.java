@@ -10,11 +10,14 @@ public interface PidProvider {
 
     default String pidToString() {
         return String.format(
-            "kP = %f, kI = %f, kD = %f, kF = %f",
-            getPIDConfig().kP,
-            getPIDConfig().kI,
-            getPIDConfig().kD,
-            getPIDConfig().kF
+                "kP = %f, kI = %f, kD = %f, kV = %f, kS = %f, kA = %f kG = %f",
+                getPIDConfig().kP,
+                getPIDConfig().kI,
+                getPIDConfig().kD,
+                getPIDConfig().kV,
+                getPIDConfig().kS,
+                getPIDConfig().kA,
+                getPIDConfig().kG
         );
     }
 }

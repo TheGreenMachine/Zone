@@ -4,7 +4,8 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.google.common.io.Resources;
 import com.google.inject.Singleton;
 import com.team1816.lib.hardware.*;
@@ -139,13 +140,14 @@ public class RobotFactory {
                             );
                     }
                     case SparkMax -> {
-                        motor =
-                            MotorFactory.createSpark(
-                                subsystem.motors.get(name).id,
-                                name,
-                                subsystem,
-                                pidConfigs
-                            );
+                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
+//                        motor =
+//                            MotorFactory.createSpark(
+//                                subsystem.motors.get(name).id,
+//                                name,
+//                                subsystem,
+//                                pidConfigs
+//                            );
                     }
                     case VictorSPX -> {
                         GreenLogger.log("Victors cannot be main!");
@@ -219,14 +221,15 @@ public class RobotFactory {
                             );
                     }
                     case SparkMax -> {
-                        MotorFactory.createFollowerSpark(
-                            subsystem.motors.get(name).id,
-                            name,
-                            subsystem,
-                            subsystem.pidConfig,
-                            main,
-                            opposeLeaderDirection
-                        );
+                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
+//                        MotorFactory.createFollowerSpark(
+//                            subsystem.motors.get(name).id,
+//                            name,
+//                            subsystem,
+//                            subsystem.pidConfig,
+//                            main,
+//                            opposeLeaderDirection
+//                        );
                     }
                     case VictorSPX -> {
                         followerMotor =
@@ -252,12 +255,12 @@ public class RobotFactory {
                 );
         }
         if (main != null) {
-            followerMotor.setInvertedMotor(main.getInvertedMotor());
+            followerMotor.setInverted(main.getInverted());
         }
         return followerMotor;
     }
 
-    public LegacySwerveModuleConstants getCTRESwerveModule(String subsystemName, String name) {
+    public SwerveModuleConstants getCTRESwerveModule(String subsystemName, String name) {
         var subsystem = getSubsystem(subsystemName);
         ModuleConfiguration module = subsystem.swerveModules.modules.get(name);
 
@@ -281,13 +284,13 @@ public class RobotFactory {
 
         double driveGearRatio = getConstant("drivetrain", "driveGearRatio", 6.12);
 
-        var moduleConfig = new LegacySwerveModuleConstants()
+        var moduleConfig = new SwerveModuleConstants()
                 // General Drivetrain
                 .withSpeedAt12VoltsMps(
                         DriveConversions.canonicalRotationsToMeters(module.constants.get("freeSpin12VRPS"), driveGearRatio))
                 .withFeedbackSource(usingPhoenixPro
-                        ? LegacySwerveModuleConstants.SteerFeedbackType.FusedCANcoder
-                        : LegacySwerveModuleConstants.SteerFeedbackType.RemoteCANcoder)
+                        ? SwerveModuleConstants.SteerFeedbackType.FusedCANcoder
+                        : SwerveModuleConstants.SteerFeedbackType.RemoteCANcoder)
                 // CANCoder
                 .withCANcoderId(canCoder)
                 .withCANcoderOffset(module.constants.get("encoderOffset"))
@@ -297,14 +300,14 @@ public class RobotFactory {
                 .withLocationX(moduleXDist) //IMPORTANT: IF THIS IS NOT A SQUARE SWERVEDRIVE, THESE MUST BE DIFFERENT.
                 .withLocationY(moduleYDist)
                 // Drive Motor
-                .withDriveMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
+                .withDriveMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType.Voltage)
                 .withDriveMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Drive))
                 .withDriveMotorId(driveMotor.id)
                 .withSlipCurrent(150) //TODO 120?
                 .withDriveMotorGearRatio(driveGearRatio)
                 .withDriveMotorInverted(driveMotor.invertMotor)
                 // Azimuth Motor
-                .withSteerMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
+                .withSteerMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType.Voltage)
                 .withSteerMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Azimuth))
                 .withSteerMotorId(azimuthMotor.id)
                 .withSteerMotorGearRatio(getConstant("drivetrain", "azimuthGearRatio", 12.8))
@@ -553,7 +556,11 @@ public class RobotFactory {
                 .withKP(configs.kP)
                 .withKI(configs.kI)
                 .withKD(configs.kD)
-                .withKV(configs.kF);
+                .withKV(configs.kV)
+                .withKS(configs.kS)
+                .withKA(configs.kA)
+                .withKG(configs.kG)
+                .withGravityType(GravityTypeValue.valueOf(configs.gravityType));
     }
 
     public PIDSlotConfiguration getPidSlotConfig(String subsystemName) {
@@ -588,14 +595,7 @@ public class RobotFactory {
                 return null;
             } else {
                 // return a default config if not implemented
-                PIDSlotConfiguration pidSlotConfiguration = new PIDSlotConfiguration();
-                pidSlotConfiguration.kP = 0.0;
-                pidSlotConfiguration.kI = 0.0;
-                pidSlotConfiguration.kD = 0.0;
-                pidSlotConfiguration.kF = 0.0;
-                pidSlotConfiguration.iZone = 0;
-                pidSlotConfiguration.allowableError = 0.0;
-                return pidSlotConfiguration;
+                return PIDUtil.createDefaultPIDSlotConfig();
             }
         }
     }

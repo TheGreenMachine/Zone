@@ -2,6 +2,7 @@ package com.team1816;
 
 import com.team1816.lib.Injector;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
+import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.SubsystemConfig;
 import com.team1816.lib.hardware.components.gyro.IPigeonIMU;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
@@ -35,13 +36,7 @@ public class TestUtil {
         var config = new SubsystemConfig();
         config.implemented = false;
         when(mockFactory.getSubsystem(anyString())).thenReturn(config);
-        var slotConfig = new PIDSlotConfiguration();
-        slotConfig.kD = 0d;
-        slotConfig.kP = 0d;
-        slotConfig.kI = 0d;
-        slotConfig.kF = 0d;
-        slotConfig.allowableError = 100d;
-        slotConfig.iZone = 1;
+        var slotConfig = PIDUtil.createDefaultPIDSlotConfig();
         when(mockFactory.getPidSlotConfig(anyString())).thenReturn(slotConfig);
         var sm = mock(SwerveModule.class);
         when(sm.getActualState()).thenReturn(new SwerveModuleState());

@@ -289,23 +289,28 @@ public class LazySparkMax extends CANSparkMax implements IGreenMotor {
     }
 
     @Override
-    public void set_kF(int pidSlotID, double kF) {
-        pidController.setFF(kF, pidSlotID);
+    public void set_kV(int pidSlotID, double kV) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void set_kS(int pidSlotID, double kS) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void set_kA(int pidSlotID, double kS) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void set_kG(int pidSlotID, double kS) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void selectPIDSlot(int pidSlotID) {
-        currentPIDSlot = pidSlotID;
-    }
-
-    @Override
-    public void set_iZone(int pidSlotID, double iZone) {
-        pidController.setIZone(iZone, pidSlotID);
-    }
-
-    @Override
-    public void configAllowableErrorClosedLoop(int pidSlotID, double allowableError) {
-        GreenLogger.log("Allowable error is only configurable through USB for Spark Max.");
+        throw new UnsupportedOperationException();
     }
 
     @Override
