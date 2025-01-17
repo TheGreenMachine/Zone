@@ -4,7 +4,7 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.google.common.io.Resources;
 import com.google.inject.Singleton;
@@ -55,18 +55,18 @@ public class RobotFactory {
         if (robotName == null) {
             robotName = "default";
             DriverStation.reportWarning(
-                "ROBOT_NAME environment variable not defined, falling back to default.config.yml!",
-                false
+                    "ROBOT_NAME environment variable not defined, falling back to default.config.yml!",
+                    false
             );
         }
         System.out.println("Loading Config for " + robotName);
         try {
             config =
-                YamlConfig.loadFrom(
-                    this.getClass()
-                        .getClassLoader()
-                        .getResourceAsStream("yaml/" + robotName + ".config.yml")
-                );
+                    YamlConfig.loadFrom(
+                            this.getClass()
+                                    .getClassLoader()
+                                    .getResourceAsStream("yaml/" + robotName + ".config.yml")
+                    );
         } catch (Exception e) {
             DriverStation.reportError("Yaml Config error!", e.getStackTrace());
         }
@@ -101,10 +101,10 @@ public class RobotFactory {
     }
 
     public IGreenMotor getMotor(
-        String subsystemName,
-        String name,
-        Map<String, PIDSlotConfiguration> pidConfigs,
-        int remoteSensorId
+            String subsystemName,
+            String name,
+            Map<String, PIDSlotConfiguration> pidConfigs,
+            int remoteSensorId
     ) {
 
         IGreenMotor motor = null;
@@ -117,27 +117,27 @@ public class RobotFactory {
                 switch (subsystem.motors.get(name).motorType) {
                     case TalonFX -> {
                         motor =
-                            MotorFactory.createDefaultTalon(
-                                subsystem.motors.get(name).id,
-                                name,
-                                true,
-                                subsystem,
-                                pidConfigs,
-                                remoteSensorId,
-                                config.infrastructure.canBusName
-                            );
+                                MotorFactory.createDefaultTalon(
+                                        subsystem.motors.get(name).id,
+                                        name,
+                                        true,
+                                        subsystem,
+                                        pidConfigs,
+                                        remoteSensorId,
+                                        config.infrastructure.canBusName
+                                );
                     }
                     case TalonSRX -> {
                         motor =
-                            MotorFactory.createDefaultTalon(
-                                subsystem.motors.get(name).id,
-                                name,
-                                false,
-                                subsystem,
-                                pidConfigs,
-                                remoteSensorId,
-                                config.infrastructure.canBusName
-                            );
+                                MotorFactory.createDefaultTalon(
+                                        subsystem.motors.get(name).id,
+                                        name,
+                                        false,
+                                        subsystem,
+                                        pidConfigs,
+                                        remoteSensorId,
+                                        config.infrastructure.canBusName
+                                );
                     }
                     case SparkMax -> {
                         GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
@@ -161,18 +161,18 @@ public class RobotFactory {
         if (motor == null) {
             reportGhostWarning("Motor", subsystemName, name);
             motor =
-                MotorFactory.createGhostMotor(
-                        (int) (getConstant(subsystemName, "maxVelOpenLoop", 1, false)),
-                    0,
-                    name,
-                    subsystem
-                );
+                    MotorFactory.createGhostMotor(
+                            (int) (getConstant(subsystemName, "maxVelOpenLoop", 1, false)),
+                            0,
+                            name,
+                            subsystem
+                    );
         } else {
             GreenLogger.log(
-                "Created " +
-                    motor.getClass().getSimpleName() +
-                    " id:" +
-                    motor.getDeviceID()
+                    "Created " +
+                            motor.getClass().getSimpleName() +
+                            " id:" +
+                            motor.getDeviceID()
             );
         }
 
@@ -184,10 +184,10 @@ public class RobotFactory {
     }
 
     public IGreenMotor getFollowerMotor(
-        String subsystemName,
-        String name,
-        IGreenMotor main,
-        boolean opposeLeaderDirection
+            String subsystemName,
+            String name,
+            IGreenMotor main,
+            boolean opposeLeaderDirection
     ) {
         IGreenMotor followerMotor = null;
         var subsystem = getSubsystem(subsystemName);
@@ -196,29 +196,29 @@ public class RobotFactory {
                 switch(subsystem.motors.get(name).motorType) {
                     case TalonFX -> {
                         followerMotor =
-                            MotorFactory.createFollowerTalon(
-                                subsystem.motors.get(name).id,
-                                name,
-                                true,
-                                main,
-                                subsystem,
-                                subsystem.pidConfig,
-                                config.infrastructure.canBusName,
-                                opposeLeaderDirection
-                            );
+                                MotorFactory.createFollowerTalon(
+                                        subsystem.motors.get(name).id,
+                                        name,
+                                        true,
+                                        main,
+                                        subsystem,
+                                        subsystem.pidConfig,
+                                        config.infrastructure.canBusName,
+                                        opposeLeaderDirection
+                                );
                     }
                     case TalonSRX -> {
                         followerMotor =
-                            MotorFactory.createFollowerTalon(
-                                subsystem.motors.get(name).id,
-                                name,
-                                false,
-                                main,
-                                subsystem,
-                                subsystem.pidConfig,
-                                config.infrastructure.canBusName,
-                                opposeLeaderDirection
-                            );
+                                MotorFactory.createFollowerTalon(
+                                        subsystem.motors.get(name).id,
+                                        name,
+                                        false,
+                                        main,
+                                        subsystem,
+                                        subsystem.pidConfig,
+                                        config.infrastructure.canBusName,
+                                        opposeLeaderDirection
+                                );
                     }
                     case SparkMax -> {
                         GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
@@ -233,13 +233,13 @@ public class RobotFactory {
                     }
                     case VictorSPX -> {
                         followerMotor =
-                            MotorFactory.createFollowerVictor(
-                                subsystem.motors.get(name).id,
-                                name,
-                                main,
-                                subsystem,
-                                subsystem.pidConfig
-                            );
+                                MotorFactory.createFollowerVictor(
+                                        subsystem.motors.get(name).id,
+                                        name,
+                                        main,
+                                        subsystem,
+                                        subsystem.pidConfig
+                                );
                     }
                 }
             }
@@ -247,20 +247,20 @@ public class RobotFactory {
         if (followerMotor == null) {
             if (subsystem.implemented) reportGhostWarning("Motor", subsystemName, name);
             followerMotor =
-                MotorFactory.createGhostMotor(
-                    (int) getConstant(subsystemName, "maxVelOpenLoop", 1),
-                    0,
-                    name,
-                    subsystem
-                );
+                    MotorFactory.createGhostMotor(
+                            (int) getConstant(subsystemName, "maxVelOpenLoop", 1),
+                            0,
+                            name,
+                            subsystem
+                    );
         }
         if (main != null) {
-            followerMotor.setInverted(main.getInverted());
+            followerMotor.setInvertedMotor(main.getInvertedMotor());
         }
         return followerMotor;
     }
 
-    public SwerveModuleConstants getCTRESwerveModule(String subsystemName, String name) {
+    public LegacySwerveModuleConstants getCTRESwerveModule(String subsystemName, String name) {
         var subsystem = getSubsystem(subsystemName);
         ModuleConfiguration module = subsystem.swerveModules.modules.get(name);
 
@@ -284,13 +284,13 @@ public class RobotFactory {
 
         double driveGearRatio = getConstant("drivetrain", "driveGearRatio", 6.12);
 
-        var moduleConfig = new SwerveModuleConstants()
+        var moduleConfig = new LegacySwerveModuleConstants()
                 // General Drivetrain
                 .withSpeedAt12VoltsMps(
                         DriveConversions.canonicalRotationsToMeters(module.constants.get("freeSpin12VRPS"), driveGearRatio))
                 .withFeedbackSource(usingPhoenixPro
-                        ? SwerveModuleConstants.SteerFeedbackType.FusedCANcoder
-                        : SwerveModuleConstants.SteerFeedbackType.RemoteCANcoder)
+                        ? LegacySwerveModuleConstants.SteerFeedbackType.FusedCANcoder
+                        : LegacySwerveModuleConstants.SteerFeedbackType.RemoteCANcoder)
                 // CANCoder
                 .withCANcoderId(canCoder)
                 .withCANcoderOffset(module.constants.get("encoderOffset"))
@@ -300,14 +300,14 @@ public class RobotFactory {
                 .withLocationX(moduleXDist) //IMPORTANT: IF THIS IS NOT A SQUARE SWERVEDRIVE, THESE MUST BE DIFFERENT.
                 .withLocationY(moduleYDist)
                 // Drive Motor
-                .withDriveMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType.Voltage)
+                .withDriveMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
                 .withDriveMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Drive))
                 .withDriveMotorId(driveMotor.id)
                 .withSlipCurrent(150) //TODO 120?
                 .withDriveMotorGearRatio(driveGearRatio)
                 .withDriveMotorInverted(driveMotor.invertMotor)
                 // Azimuth Motor
-                .withSteerMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType.Voltage)
+                .withSteerMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
                 .withSteerMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Azimuth))
                 .withSteerMotorId(azimuthMotor.id)
                 .withSteerMotorGearRatio(getConstant("drivetrain", "azimuthGearRatio", 12.8))
@@ -324,8 +324,8 @@ public class RobotFactory {
         ModuleConfiguration module = subsystem.swerveModules.modules.get(name);
         if (module == null) {
             DriverStation.reportError(
-                "No swerve module with name " + name + " subsystem " + subsystemName,
-                true
+                    "No swerve module with name " + name + " subsystem " + subsystemName,
+                    true
             );
             return null;
         }
@@ -334,7 +334,7 @@ public class RobotFactory {
         moduleConfig.moduleName = name;
         moduleConfig.azimuthMotorName = module.azimuth; // getAzimuth and drive give ID I think - not the module name (ex: leftRear)
         moduleConfig.azimuthPid =
-            getPidSlotConfig(subsystemName, "slot0", PIDConfig.Azimuth);
+                getPidSlotConfig(subsystemName, "slot0", PIDConfig.Azimuth);
         moduleConfig.driveMotorName = module.drive;
         moduleConfig.drivePid = getPidSlotConfig(subsystemName, "slot0", PIDConfig.Drive);
         moduleConfig.azimuthEncoderHomeOffset = module.constants.get("encoderOffset");
@@ -349,18 +349,18 @@ public class RobotFactory {
         var module = subsystem.swerveModules.modules.get(name);
         CANcoder canCoder = null;
         if (
-            module != null &&
-                module.canCoder != null &&
-                subsystem.canCoders.get(module.canCoder) >= 0
+                module != null &&
+                        module.canCoder != null &&
+                        subsystem.canCoders.get(module.canCoder) >= 0
         ) {
             canCoder =
-                MotorFactory.createCanCoder(
-                    subsystem.canCoders.get(module.canCoder),
-                    config.infrastructure.canBusName,
-                    subsystem.canCoders.get(subsystem.invertCanCoder) != null &&
-                        subsystem.invertCanCoder.contains(module.canCoder),
-                        0
-                );
+                    MotorFactory.createCanCoder(
+                            subsystem.canCoders.get(module.canCoder),
+                            config.infrastructure.canBusName,
+                            subsystem.canCoders.get(subsystem.invertCanCoder) != null &&
+                                    subsystem.invertCanCoder.contains(module.canCoder),
+                            0
+                    );
         }
 
         // purposefully return null so that swerve modules default to quad encoders
@@ -375,8 +375,8 @@ public class RobotFactory {
         if (subsystem.canCoders.containsKey(canCoderName) && id >= 0) {
             canCoder =
                     MotorFactory.createCanCoder(
-                        id,
-                        config.infrastructure.canBusName,
+                            id,
+                            config.infrastructure.canBusName,
                             false, //Keeping this one false because "inverting" in phoenix 6 seriously messes it up,
                             offset
                     );
@@ -391,11 +391,11 @@ public class RobotFactory {
         if (subsystem.implemented) {
             if (isHardwareValid(subsystem.solenoids, name) && isPcmEnabled()) {
                 return new SolenoidImpl(
-                    config.infrastructure.pcmId,
-                    config.infrastructure.pcmIsRev
-                        ? PneumaticsModuleType.REVPH
-                        : PneumaticsModuleType.CTREPCM,
-                    subsystem.solenoids.get(name)
+                        config.infrastructure.pcmId,
+                        config.infrastructure.pcmIsRev
+                                ? PneumaticsModuleType.REVPH
+                                : PneumaticsModuleType.CTREPCM,
+                        subsystem.solenoids.get(name)
                 );
             }
             reportGhostWarning("Solenoid", subsystemName, name);
@@ -408,19 +408,19 @@ public class RobotFactory {
         var subsystem = getSubsystem(subsystemName);
         if (getSubsystem(subsystemName).doubleSolenoids != null) {
             DoubleSolenoidConfig solenoidConfig = getSubsystem(subsystemName)
-                .doubleSolenoids.get(name);
+                    .doubleSolenoids.get(name);
             if (
-                subsystem.implemented &&
-                    solenoidConfig != null &&
-                    isHardwareValid(solenoidConfig.forward) &&
-                    isHardwareValid(solenoidConfig.reverse) &&
-                    isPcmEnabled()
+                    subsystem.implemented &&
+                            solenoidConfig != null &&
+                            isHardwareValid(solenoidConfig.forward) &&
+                            isHardwareValid(solenoidConfig.reverse) &&
+                            isPcmEnabled()
             ) {
                 return new DoubleSolenoidImpl(
-                    config.infrastructure.pcmId,
-                    PneumaticsModuleType.REVPH,
-                    solenoidConfig.forward,
-                    solenoidConfig.reverse
+                        config.infrastructure.pcmId,
+                        PneumaticsModuleType.REVPH,
+                        solenoidConfig.forward,
+                        solenoidConfig.reverse
                 );
             }
         }
@@ -436,10 +436,10 @@ public class RobotFactory {
                 ledManager = new CanifierImpl(subsystem.canifier);
             } else if (isHardwareValid(subsystem.candle)) {
                 ledManager =
-                    new CANdleImpl(
-                        subsystem.candle,
-                        config.infrastructure.canBusName
-                    );
+                        new CANdleImpl(
+                                subsystem.candle,
+                                config.infrastructure.canBusName
+                        );
             }
             if (ledManager != null) {
                 ledManager.configFactoryDefault();
@@ -458,8 +458,8 @@ public class RobotFactory {
     public ICompressor getCompressor() {
         if (isPcmEnabled() && config.infrastructure.compressorEnabled) {
             PneumaticsModuleType pcmType = config.infrastructure.pcmIsRev
-                ? PneumaticsModuleType.REVPH
-                : PneumaticsModuleType.CTREPCM;
+                    ? PneumaticsModuleType.REVPH
+                    : PneumaticsModuleType.CTREPCM;
             return new CompressorImpl(getPcmId(), pcmType);
         }
         reportGhostWarning("Compressor", "ROOT", "on PCM ID " + getPcmId()); // root?
@@ -522,26 +522,26 @@ public class RobotFactory {
     }
 
     public double getConstant(
-        String subsystemName,
-        String name,
-        double defaultVal,
-        boolean showWarning
+            String subsystemName,
+            String name,
+            double defaultVal,
+            boolean showWarning
     ) {
         if (!getSubsystem(subsystemName).implemented) {
             return defaultVal;
         }
         if (
-            getSubsystem(subsystemName).constants == null ||
-                !getSubsystem(subsystemName).constants.containsKey(name)
+                getSubsystem(subsystemName).constants == null ||
+                        !getSubsystem(subsystemName).constants.containsKey(name)
         ) {
             if (showWarning) {
                 DriverStation.reportWarning(
-                    "Yaml: subsystem \"" +
-                        subsystemName +
-                        "\" constant \"" +
-                        name +
-                        "\" missing",
-                    defaultVal == 0
+                        "Yaml: subsystem \"" +
+                                subsystemName +
+                                "\" constant \"" +
+                                name +
+                                "\" missing",
+                        defaultVal == 0
                 );
             }
             return defaultVal;
@@ -572,9 +572,9 @@ public class RobotFactory {
     }
 
     public PIDSlotConfiguration getPidSlotConfig(
-        String subsystemName,
-        String slot,
-        PIDConfig configType
+            String subsystemName,
+            String slot,
+            PIDConfig configType
     ) {
         var subsystem = getSubsystem(subsystemName);
         Map<String, PIDSlotConfiguration> config = null;
@@ -589,8 +589,8 @@ public class RobotFactory {
         else {
             if (subsystem.implemented) {
                 DriverStation.reportError(
-                    "pidConfig missing for " + subsystemName + " " + slot,
-                    true
+                        "pidConfig missing for " + subsystemName + " " + slot,
+                        true
                 );
                 return null;
             } else {
@@ -602,10 +602,10 @@ public class RobotFactory {
 
     public PowerDistribution getPd() {
         return new PowerDistribution(
-            config.infrastructure.pdId,
-            config.infrastructure.pdIsRev
-                ? PowerDistribution.ModuleType.kRev
-                : PowerDistribution.ModuleType.kCTRE
+                config.infrastructure.pdId,
+                config.infrastructure.pdIsRev
+                        ? PowerDistribution.ModuleType.kRev
+                        : PowerDistribution.ModuleType.kCTRE
         );
     }
 
@@ -664,18 +664,18 @@ public class RobotFactory {
     }
 
     private void reportGhostWarning(
-        String type,
-        String subsystemName,
-        String componentName
+            String type,
+            String subsystemName,
+            String componentName
     ) {
         GreenLogger.log(
-            "  " +
-                type +
-                " \"" +
-                componentName +
-                "\" invalid in Yaml for subsystem \"" +
-                subsystemName +
-                "\", using ghost!"
+                "  " +
+                        type +
+                        " \"" +
+                        componentName +
+                        "\" invalid in Yaml for subsystem \"" +
+                        subsystemName +
+                        "\", using ghost!"
         );
     }
 
