@@ -11,6 +11,8 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class AlgaeCatcher extends Subsystem {
     /**
@@ -23,6 +25,16 @@ public class AlgaeCatcher extends Subsystem {
      */
     private final IGreenMotor leadMotor;
     private final IGreenMotor followerMotor;
+    private final IGreenMotor positionMotor;
+
+    /**
+     * Constants
+     */
+    private static final double neutralPosition = factory.getConstant(NAME,"neutralPosition",1.0);
+    private static final double intakePosition = factory.getConstant(NAME,"intakePosition",1.0);
+    private static final double holdPosition = factory.getConstant(NAME,"holdPosition",1.0);
+    private static final double outtakePosition = factory.getConstant(NAME,"outtakePosition",1.0);
+
 
     /**
      * Properties
@@ -40,10 +52,15 @@ public class AlgaeCatcher extends Subsystem {
      * States
      */
     private ALGAE_CATCHER_STATE desiredState = ALGAE_CATCHER_STATE.STOP;
+    private POSITION_STATE desiredPositionState = POSITION_STATE.STOW;
     private double actualAlgaeCatcherPower = 0;
     private double desiredAlgaeCatcherPower = 0;
     private double algaeCatcherCurrentDraw = 0;
     private boolean outputsChanged = false;
+    private boolean positionOutputsChanged = false;
+    private double desiredPosition = 0;
+    private double actualPosition = 0;
+    private double actualPositionDegrees = 0;
 
     /**
      * Base parameters needed to instantiate a subsystem
@@ -56,6 +73,7 @@ public class AlgaeCatcher extends Subsystem {
         super(NAME, inf, rs);
         leadMotor = factory.getMotor(NAME, "algaeCatcherLeadMotor");
         followerMotor = factory.getMotor(NAME, "algaeCatcherFollowerMotor");
+        positionMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
 
         followerMotor.follow(leadMotor, true);
 
@@ -64,6 +82,8 @@ public class AlgaeCatcher extends Subsystem {
         algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", 0.25);
 
         SmartDashboard.putBoolean("AlgaeCollector", leadMotor.getMotorTemperature() < 55);
+
+        positionMotor.selectPIDSlot(0);
 
         if (Constants.kLoggingRobot) {
 
@@ -83,6 +103,15 @@ public class AlgaeCatcher extends Subsystem {
         outputsChanged = true;
     }
 
+    /**
+     * Sets the desired state of the position
+     *
+     * @param desiredPositionState POSITION_STATE
+     */
+    public void setDesiredPositionState(POSITION_STATE desiredPositionState) {
+        this.desiredPositionState = desiredPositionState;
+        positionOutputsChanged = true;
+    }
     /**
      * Reads actual outputs from intake motor
      *
@@ -130,6 +159,23 @@ public class AlgaeCatcher extends Subsystem {
             }
             leadMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredAlgaeCatcherPower);
         }
+        if(positionOutputsChanged) {
+            positionOutputsChanged = false;
+            switch (desiredPositionState){
+                case STOW -> {
+                    desiredPosition = neutralPosition;
+                }
+                case INTAKE -> {
+                    desiredPosition = intakePosition;
+                }
+                case HOLD -> {
+                    desiredPosition = holdPosition;
+                }
+                case OUTTAKE -> {
+                    desiredPosition = outtakePosition;
+                }
+            }
+        }
     }
 
     @Override
@@ -176,6 +222,12 @@ public class AlgaeCatcher extends Subsystem {
      */
     public enum ALGAE_CATCHER_STATE {
         STOP,
+        INTAKE,
+        HOLD,
+        OUTTAKE
+    }
+    public enum POSITION_STATE {
+        STOW,
         INTAKE,
         HOLD,
         OUTTAKE
