@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AutopathAlgorithm {
     static double autopathMaxCalcMilli = 200;
-    static double autopathBuffer = 7.5;
+    static double autopathBuffer = 10;
 
     public static Trajectory calculateAutopath(Pose2d autopathTargetPosition, boolean addBeginningOrReturnNull, boolean addEndingOrReturnNull){
         return calculateAutopath(Autopath.getTransformedAutopathTranslations(Autopath.robotState.fieldToVehicle), Autopath.getTransformedAutopathTranslations(autopathTargetPosition), addBeginningOrReturnNull, addEndingOrReturnNull);

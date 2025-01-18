@@ -70,10 +70,6 @@ public class DynamicAutoScript2025 {
             startPos = startingPositionChooser.getSelected();
         }
 
-        ArrayList<TrajectoryAction> newAutoTrajectoryActions = new ArrayList<>(autoTrajectoryActions);
-        currentStartPos = startPos;
-
-
         for (int i = 0; i < trajectoryActionChoosers.size(); i++) {
             SendableChooser<Autopath.TransformedAutopathTranslations> trajectoryActionChooser = trajectoryActionChoosers.get(i);
 
@@ -81,6 +77,15 @@ public class DynamicAutoScript2025 {
             if (!currentTrajectoryActionChoices.get(i).equals(selected2)) {
                 currentTrajectoryActionChoices.set(i, selected2);
                 somethingChanged = true;
+            }
+        }
+
+        if(somethingChanged) {
+            ArrayList<TrajectoryAction> newAutoTrajectoryActions = new ArrayList<>();
+            currentStartPos = startPos;
+
+            for (int i = 0; i < trajectoryActionChoosers.size(); i++) {
+                SendableChooser<Autopath.TransformedAutopathTranslations> trajectoryActionChooser = trajectoryActionChoosers.get(i);
 
                 //TODO add method to actually use these correctly(maybe now as of commit on 1/18/2025)
                 Trajectory newTraj = AutopathAlgorithm.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected().biggerRadiusPose, true, true);
@@ -89,15 +94,16 @@ public class DynamicAutoScript2025 {
                     if (!newTraj.getStates().isEmpty()) {
                         newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), trajectoryActionChooser.getSelected().getRotation()));
                     }
-                    newAutoTrajectoryActions.set(i, newTrajAction);
+                    newAutoTrajectoryActions.add(newTrajAction);
                 }
 
                 currentStartPos = trajectoryActionChooser.getSelected().biggerRadiusPose;
             }
+
+            autoTrajectoryActions = newAutoTrajectoryActions;
         }
 
         if(somethingChanged && robot.isDisabled()) {
-            autoTrajectoryActions = newAutoTrajectoryActions;
             RobotState.dynamicAutoChanged = true;
             Injector.get(AutoModeManager.class).updateAutoMode();
         }
