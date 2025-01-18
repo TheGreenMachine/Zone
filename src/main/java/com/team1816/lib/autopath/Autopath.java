@@ -391,7 +391,7 @@ public class Autopath {
 
             squareSideLength += 2;
         }
-        if(newPoseX != stableFieldMap.getMapX()+1+originalPoseX || newPoseY != stableFieldMap.getMapY()+1+originalPoseY)
+        if(newPoseX != stableFieldMap.getMapX()+1+originalPoseX && newPoseY != stableFieldMap.getMapY()+1+originalPoseY)
             smallerRadiusPose = new Translation2d(newPoseX/100., newPoseY/100.);
 
         squareSideLength = 1;
@@ -434,7 +434,7 @@ public class Autopath {
 
             squareSideLength += 2;
         }
-        if(newPoseX != stableFieldMap.getMapX()+1+originalPoseX || newPoseY != stableFieldMap.getMapY()+1+originalPoseY)
+        if(newPoseX != stableFieldMap.getMapX()+1+originalPoseX && newPoseY != stableFieldMap.getMapY()+1+originalPoseY)
             biggerRadiusPose = new Translation2d(newPoseX/100. + 10*Math.cos(Math.atan2(newPoseY-originalPoseY, newPoseX-originalPoseX))/100., newPoseY/100. + 10*Math.sin(Math.atan2(newPoseY-originalPoseY, newPoseX-originalPoseX))/100.);
 
 

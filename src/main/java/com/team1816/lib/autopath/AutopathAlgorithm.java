@@ -286,14 +286,6 @@ public class AutopathAlgorithm {
 //            }
         }
 
-        Autopath.robotState.autopathTrajectory = branches.isEmpty() ? null : branches.get(0).getTrajectory();
-        Autopath.robotState.autopathTrajectoryChanged = true;
-
-        if(!branches.isEmpty())
-            Autopath.robotState.autopathInputWaypoints = new ArrayList<>(branches.get(0).waypoints.stream()
-                .map(b -> new Pose2d(b, new Rotation2d()))
-                .toList());
-
         WaypointTreeNode returnedTrajectoryWaypointTreeNode = branches.isEmpty() ? null : branches.get(0);
         Trajectory returnedTrajectory = returnedTrajectoryWaypointTreeNode == null ? null : returnedTrajectoryWaypointTreeNode.getTrajectory();
 
@@ -327,6 +319,14 @@ public class AutopathAlgorithm {
                 ));
             }
         }
+
+        Autopath.robotState.autopathTrajectory = returnedTrajectory;
+        Autopath.robotState.autopathTrajectoryChanged = true;
+
+        if(!branches.isEmpty())
+            Autopath.robotState.autopathInputWaypoints = new ArrayList<>(branches.get(0).waypoints.stream()
+                    .map(b -> new Pose2d(b, new Rotation2d()))
+                    .toList());
 
         return returnedTrajectory;
     }

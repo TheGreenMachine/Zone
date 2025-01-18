@@ -102,7 +102,7 @@ public class RobotState {
      * Autopathing state
      */
     public boolean autopathing = false;
-    public boolean printAutopathing = true;
+    public boolean printAutopathing = false;
     public boolean printAutopathFieldTest = false;
     public Trajectory autopathTrajectory = null;
     public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();

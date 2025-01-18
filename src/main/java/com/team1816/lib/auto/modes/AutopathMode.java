@@ -29,13 +29,13 @@ public class AutopathMode extends AutoMode{
         Autopath.robotState.autopathWaypointsSuccess.clear();
         Autopath.robotState.autopathWaypointsFail.clear();
 
-//        int i3 = 0;
-//        long totalTime = 0;
-//        long highestTime = -1;
-//        Autopath.robotState.printAutopathFieldTest = true;
-//        for(double i = 16.51; i >= 0; i-=16.51/200.){
-//            double lastTime = 0;
-//            for(double i2 = 0; i2 <= 8.21; i2+=8.21/100.){
+        int i3 = 0;
+        long totalTime = 0;
+        long highestTime = -1;
+        Autopath.robotState.printAutopathFieldTest = true;
+        for(double i = 17.55; i >= 0; i-=17.55/50.){
+            double lastTime = 0;
+            for(double i2 = 0; i2 <= 8.05; i2+=8.05/25.){
 //                if(lastTime < 25) {
 //                    try {
 //                        Thread.sleep((long) (25 - lastTime));
@@ -43,30 +43,30 @@ public class AutopathMode extends AutoMode{
 //                        throw new RuntimeException(e);
 //                    }
 //                }
-//
-//                long holdStartTime = System.nanoTime()/1000000;
-//                try{
-//                    i3++;
-//                    Trajectory test = AutopathAlgorithm.calculateAutopath(new Pose2d(startTranslation, new Rotation2d()), new Pose2d(new Translation2d(i, i2), new Rotation2d(0)));
-////                    Trajectory test = AutopathAlgorithm.calculateAutopath(new Pose2d(new Translation2d(i, i2), new Rotation2d(0)), new Pose2d(startTranslation, new Rotation2d()));
-//                    if(test != null && test.getStates().size() > 1)
-//                        Autopath.robotState.autopathWaypointsSuccess.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
-//                    else
-//                        Autopath.robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
-//                } catch (SplineParameterizer.MalformedSplineException |
-//                         TrajectoryParameterizer.TrajectoryGenerationException e){
-//                    Autopath.robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
-//                }
-//                long holdEndTime = System.nanoTime()/1000000;
-//                totalTime += holdEndTime-holdStartTime;
-//                if(holdEndTime-holdStartTime > highestTime)
-//                    highestTime = holdEndTime-holdStartTime;
-//                lastTime = holdEndTime-holdStartTime;
-//                System.out.println(highestTime + ", " + totalTime/i3);
-////                11661, 25 both
-////                1383, 7 backwards
-//            }
-//        }
+
+                long holdStartTime = System.nanoTime()/1000000;
+                try{
+                    i3++;
+                    Trajectory test = AutopathAlgorithm.calculateAutopath(new Pose2d(startTranslation, new Rotation2d()), new Pose2d(new Translation2d(i, i2), new Rotation2d(0)), false, false);
+//                    Trajectory test = AutopathAlgorithm.calculateAutopath(new Pose2d(new Translation2d(i, i2), new Rotation2d(0)), new Pose2d(startTranslation, new Rotation2d()));
+                    if(test != null && test.getStates().size() > 1)
+                        Autopath.robotState.autopathWaypointsSuccess.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
+                    else
+                        Autopath.robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
+                } catch (SplineParameterizer.MalformedSplineException |
+                         TrajectoryParameterizer.TrajectoryGenerationException e){
+                    Autopath.robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
+                }
+                long holdEndTime = System.nanoTime()/1000000;
+                totalTime += holdEndTime-holdStartTime;
+                if(holdEndTime-holdStartTime > highestTime)
+                    highestTime = holdEndTime-holdStartTime;
+                lastTime = holdEndTime-holdStartTime;
+                System.out.println(highestTime + ", " + totalTime/i3);
+//                11661, 25 both
+//                1383, 7 backwards
+            }
+        }
 
         autopathTrajectory = AutopathAlgorithm.calculateAutopath(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(90)), true, true);
 //        autopathTrajectory = AutopathAlgorithm.calculateAutopath(new Pose2d(new Translation2d(1.3, 1.25), new Rotation2d(0)));
