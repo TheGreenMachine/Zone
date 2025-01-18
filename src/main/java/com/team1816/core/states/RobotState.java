@@ -123,7 +123,7 @@ public class RobotState {
     /**
      * DynamicAuto2025
      */
-    public DynamicAutoScript2025 dynamicAutoScript2025 = new DynamicAutoScript2025(3);
+    public DynamicAutoScript2025 dynamicAutoScript2025;
     public static boolean dynamicAutoChanged = false;
     public boolean isAutoDynamic = false;
 
@@ -224,12 +224,12 @@ public class RobotState {
         field.setRobotPose(fieldToVehicle);
 
         if (printAutopathing) {
-            if (Autopath.fieldMap != null && Autopath.fieldMap.outputToSmartDashboardChanged) {
+            if (Autopath.fieldMapBiggerExpansionRadius != null && Autopath.fieldMapBiggerExpansionRadius.outputToSmartDashboardChanged) {
                 ArrayList<Pose2d> obstaclesExpanded = new ArrayList<>();
 
-                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-                        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
+                for (int i = 0; i < Autopath.fieldMapBiggerExpansionRadius.getCurrentMap().getMapX(); i++) {
+                    for (int i2 = 0; i2 < Autopath.fieldMapBiggerExpansionRadius.getCurrentMap().getMapY(); i2++) {
+                        if (Autopath.fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
                             obstaclesExpanded.add(new Pose2d(new Translation2d(i * .01, i2 * .01), new Rotation2d()));
                         }
                     }
@@ -239,9 +239,9 @@ public class RobotState {
 
                 ArrayList<Pose2d> obstacles = new ArrayList<>();
 
-                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-                        if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
+                for (int i = 0; i < Autopath.fieldMapBiggerExpansionRadius.getCurrentMap().getMapX(); i++) {
+                    for (int i2 = 0; i2 < Autopath.fieldMapBiggerExpansionRadius.getCurrentMap().getMapY(); i2++) {
+                        if (Autopath.fieldMapBiggerExpansionRadius.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
                             obstacles.add(new Pose2d(new Translation2d(i * .01, i2 * .01), new Rotation2d()));
                         }
                     }
@@ -249,7 +249,7 @@ public class RobotState {
 
                 field.getObject("Obstacles").setPoses(obstacles);
 
-                Autopath.fieldMap.outputToSmartDashboardChanged = false;
+                Autopath.fieldMapBiggerExpansionRadius.outputToSmartDashboardChanged = false;
             }
 
             if(autopathTrajectoryPossibilitiesChanged) {

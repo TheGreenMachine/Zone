@@ -1,32 +1,20 @@
 package com.team1816.lib.autopath;
 
-import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
-import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.AutoAction;
-import com.team1816.lib.auto.actions.SeriesAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
-import com.team1816.lib.auto.actions.WaitAction;
-import com.team1816.lib.auto.paths.PathUtil;
-import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.DriverStation;
 import jakarta.inject.Singleton;
-import org.apache.commons.math3.Field;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 
-import java.lang.reflect.Array;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public class Autopath {
@@ -39,7 +27,8 @@ public class Autopath {
 
     private static FieldMap stableFieldMap = new FieldMap(1755, 805);
 
-    public static UpdatableAndExpandableFieldMap fieldMap;
+    public static UpdatableAndExpandableFieldMap fieldMapBiggerExpansionRadius;
+    public static UpdatableAndExpandableFieldMap fieldMapSmallerExpansionRadius;
 
     private Pose2d autopathStartPosition = null;
 
@@ -67,7 +56,8 @@ public class Autopath {
         stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{0, 0, 150}, true);
         stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{805, 805, 655}, true);
 
-        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 50);
+        fieldMapBiggerExpansionRadius = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 50);
+        fieldMapSmallerExpansionRadius = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 35.3553390593);
     }
 
     /**
@@ -85,7 +75,7 @@ public class Autopath {
         for(int t = 1; t*.02 < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
 //            if(Bresenham.drawLine(fieldMap.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100), false))
-            if(fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(currentState.getX()*100), (int)(currentState.getY()*100)))
+            if(fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap((int)(currentState.getX()*100), (int)(currentState.getY()*100)))
                 return false;
 
             prevState = currentState;
@@ -99,7 +89,7 @@ public class Autopath {
 
         for(int t = 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100));
+            Translation2d result = Bresenham.lineReturnCollision(fieldMapBiggerExpansionRadius.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100));
 
             if(result != null)
                 return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
@@ -121,7 +111,7 @@ public class Autopath {
 
             int[] result =
                     Bresenham.lineReturnCollisionInverted(
-                            fieldMap.getCurrentMap(),
+                            fieldMapBiggerExpansionRadius.getCurrentMap(),
                             (int)(prevState.getX()*100),
                             (int)(prevState.getY()*100),
                             (int)(currentState.getX()*100),
@@ -145,7 +135,7 @@ public class Autopath {
 
         for(int t = (int)(trajectory.getTotalTimeSeconds()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) - 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond > 0; t--){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100));
+            Translation2d result = Bresenham.lineReturnCollision(fieldMapBiggerExpansionRadius.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100));
 
             if(result != null)
                 return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
@@ -167,7 +157,7 @@ public class Autopath {
 
             int[] result =
                     Bresenham.lineReturnCollisionInverted(
-                            fieldMap.getCurrentMap(),
+                            fieldMapBiggerExpansionRadius.getCurrentMap(),
                             (int)(prevState.getX()*100),
                             (int)(prevState.getY()*100),
                             (int)(currentState.getX()*100),
@@ -237,7 +227,7 @@ public class Autopath {
         robotState.autopathBeforeTime = (double) System.nanoTime() /1000000;
         double beforeTime = robotState.autopathBeforeTime;
 
-        autopathTrajectory = AutopathAlgorithm.calculateAutopath(autopathTargetPosition);
+        autopathTrajectory = AutopathAlgorithm.calculateAutopath(autopathTargetPosition, true, true);
 
         if(autopathTrajectory == null){
             robotState.autopathing = false;
@@ -346,6 +336,107 @@ public class Autopath {
         action.done();
     }
 
+    /**
+     * Returns an actually usable version of a pose, right now(jan 2025) only used for dynamic auto
+     * @return
+     */
+    public static TransformedAutopathTranslations getTransformedAutopathTranslations(Pose2d originalPose){
+        int originalPoseX = (int)originalPose.getX()*100;
+        int originalPoseY = (int)originalPose.getY()*100;
+        Translation2d smallerRadiusPose = null;
+        Translation2d biggerRadiusPose = null;
+
+        int squareSideLength = 1;
+        int newPoseX = stableFieldMap.getMapX()+1;
+        int newPoseY = stableFieldMap.getMapY()+1;
+        while(Math.hypot(newPoseX, newPoseY) > (squareSideLength-1)/2){
+            for(int i = 0; i < squareSideLength; i++){
+                //if you wanna figure out what this does uhhh no have fun
+                int transformValue1 = i;
+                int transformValue2 = (squareSideLength-1)/2;
+
+                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX + transformValue1, originalPoseY + transformValue2)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX + transformValue1, originalPoseY + transformValue2)) {
+                        newPoseX = originalPoseX + transformValue1;
+                        newPoseY = originalPoseY + transformValue2;
+                    }
+                }
+
+                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX - transformValue1, originalPoseY - transformValue2)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX - transformValue1, originalPoseY - transformValue2)) {
+                        newPoseX = originalPoseX - transformValue1;
+                        newPoseY = originalPoseY - transformValue2;
+                    }
+                }
+
+                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX + transformValue2, originalPoseY + transformValue1)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX + transformValue2, originalPoseY + transformValue1)) {
+                        newPoseX = originalPoseX + transformValue2;
+                        newPoseY = originalPoseY + transformValue1;
+                    }
+                }
+
+                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX - transformValue2, originalPoseY - transformValue1)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX - transformValue2, originalPoseY - transformValue1)) {
+                        newPoseX = originalPoseX - transformValue2;
+                        newPoseY = originalPoseY - transformValue1;
+                    }
+                }
+            }
+
+            squareSideLength += 2;
+        }
+        if(newPoseX != stableFieldMap.getMapX()+1 || newPoseY != stableFieldMap.getMapY()+1)
+            smallerRadiusPose = new Translation2d(newPoseX/100., newPoseY/100.);
+
+        squareSideLength = 1;
+        newPoseX = stableFieldMap.getMapX()+1;
+        newPoseY = stableFieldMap.getMapY()+1;
+        while(Math.hypot(newPoseX, newPoseY) > (squareSideLength-1)/2){
+            for(int i = 0; i < squareSideLength; i++){
+                //if you wanna figure out what this does uhhh no have fun
+                int transformValue1 = i;
+                int transformValue2 = (squareSideLength-1)/2;
+
+                if(!fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX + transformValue1, originalPoseY + transformValue2)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX + transformValue1, originalPoseY + transformValue2)) {
+                        newPoseX = originalPoseX + transformValue1;
+                        newPoseY = originalPoseY + transformValue2;
+                    }
+                }
+
+                if(!fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX - transformValue1, originalPoseY - transformValue2)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX - transformValue1, originalPoseY - transformValue2)) {
+                        newPoseX = originalPoseX - transformValue1;
+                        newPoseY = originalPoseY - transformValue2;
+                    }
+                }
+
+                if(!fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX + transformValue2, originalPoseY + transformValue1)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX + transformValue2, originalPoseY + transformValue1)) {
+                        newPoseX = originalPoseX + transformValue2;
+                        newPoseY = originalPoseY + transformValue1;
+                    }
+                }
+
+                if(!fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX - transformValue2, originalPoseY - transformValue1)){
+                    if(Math.hypot(newPoseX, newPoseY) > Math.hypot(originalPoseX - transformValue2, originalPoseY - transformValue1)) {
+                        newPoseX = originalPoseX - transformValue2;
+                        newPoseY = originalPoseY - transformValue1;
+                    }
+                }
+            }
+
+            squareSideLength += 2;
+        }
+        if(newPoseX != stableFieldMap.getMapX()+1 || newPoseY != stableFieldMap.getMapY()+1)
+            biggerRadiusPose = new Translation2d(newPoseX/100., newPoseY/100.);
+
+
+        System.out.println(originalPose.getTranslation()+""+ smallerRadiusPose + biggerRadiusPose);
+        return new TransformedAutopathTranslations(originalPose.getTranslation(), smallerRadiusPose, biggerRadiusPose, originalPose.getRotation());
+    }
+
     public static class TimestampTranslation2d{
         private double timestamp;
         private Translation2d translation2d;
@@ -369,6 +460,22 @@ public class Autopath {
 
         public void setTranslation2d(Translation2d translation2d) {
             this.translation2d = translation2d;
+        }
+    }
+
+    public static class TransformedAutopathTranslations {
+        public Pose2d originalPose;
+        public Pose2d smallerRadiusPose;
+        public Pose2d biggerRadiusPose;
+
+        public TransformedAutopathTranslations(Translation2d originalPose, Translation2d smallerRadiusPose, Translation2d biggerRadiusPose, Rotation2d rotation){
+            this.originalPose = new Pose2d(originalPose, rotation);
+            this.smallerRadiusPose = new Pose2d(smallerRadiusPose, rotation);
+            this.biggerRadiusPose = new Pose2d(biggerRadiusPose, rotation);
+        }
+
+        public Rotation2d getRotation(){
+            return originalPose.getRotation();
         }
     }
 }

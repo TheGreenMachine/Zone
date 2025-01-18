@@ -1,6 +1,5 @@
 package com.team1816.lib.autopath;
 
-import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.subsystems.drive.Drive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,11 +16,22 @@ public class AutopathAlgorithm {
     static double autopathMaxCalcMilli = 200;
     static double autopathBuffer = 7.5;
 
-    public static Trajectory calculateAutopath(Pose2d autopathTargetPosition){
-        return calculateAutopath(Autopath.robotState.fieldToVehicle, autopathTargetPosition);
+    public static Trajectory calculateAutopath(Pose2d autopathTargetPosition, boolean addBeginningOrReturnNull, boolean addEndingOrReturnNull){
+        return calculateAutopath(Autopath.getTransformedAutopathTranslations(Autopath.robotState.fieldToVehicle), Autopath.getTransformedAutopathTranslations(autopathTargetPosition), addBeginningOrReturnNull, addEndingOrReturnNull);
     }
 
-    public static Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition){
+    public static Trajectory calculateAutopath(Autopath.TransformedAutopathTranslations autopathTargetPositions, boolean addBeginningOrReturnNull, boolean addEndingOrReturnNull){
+        return calculateAutopath(Autopath.getTransformedAutopathTranslations(Autopath.robotState.fieldToVehicle), autopathTargetPositions, addBeginningOrReturnNull, addEndingOrReturnNull);
+    }
+
+    public static Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition, boolean addBeginningOrReturnNull, boolean addEndingOrReturnNull){
+        return calculateAutopath(Autopath.getTransformedAutopathTranslations(autopathStartPosition), Autopath.getTransformedAutopathTranslations(autopathTargetPosition), addBeginningOrReturnNull, addEndingOrReturnNull);
+    }
+
+    public static Trajectory calculateAutopath(Autopath.TransformedAutopathTranslations autopathStartPositions, Autopath.TransformedAutopathTranslations autopathTargetPositions, boolean addBeginningOrReturnNull, boolean addEndingOrReturnNull){
+        Pose2d autopathStartPosition = autopathStartPositions.biggerRadiusPose;
+        Pose2d autopathTargetPosition = autopathTargetPositions.biggerRadiusPose;
+
         if(autopathStartPosition.equals(autopathTargetPosition))
             return new Trajectory();
         Autopath.robotState.autopathWaypoints.clear();
@@ -31,12 +41,12 @@ public class AutopathAlgorithm {
 
         long startTime = System.nanoTime()/1000000;
 
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathTargetPosition.getX()*100), (int)(autopathTargetPosition.getY()*100))) {
+        if(!addEndingOrReturnNull && Autopath.fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathTargetPosition.getX()*100), (int)(autopathTargetPosition.getY()*100))) {
             if(Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
         }
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathStartPosition.getX()*100), (int)(autopathStartPosition.getY()*100))) {
+        if(!addBeginningOrReturnNull && Autopath.fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathStartPosition.getX()*100), (int)(autopathStartPosition.getY()*100))) {
             if(Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
@@ -64,7 +74,7 @@ public class AutopathAlgorithm {
                 new WaypointTreeNode(
                         new Pose2d(autopathStartPosition.getTranslation(), startDirection),
                         new ArrayList<>(),
-                        new Pose2d(autopathTargetPosition.getTranslation(), Rotation2d.fromRadians(Math.atan2(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()))),
+                        new Pose2d(autopathTargetPosition.getTranslation(), startDirection),
                         config,
                         new ArrayList<>(),
                         false
@@ -284,7 +294,41 @@ public class AutopathAlgorithm {
                 .map(b -> new Pose2d(b, new Rotation2d()))
                 .toList());
 
-        return branches.isEmpty() ? null : branches.get(0).getTrajectory();
+        WaypointTreeNode returnedTrajectoryWaypointTreeNode = branches.isEmpty() ? null : branches.get(0);
+        Trajectory returnedTrajectory = returnedTrajectoryWaypointTreeNode == null ? null : returnedTrajectoryWaypointTreeNode.getTrajectory();
+
+        if(returnedTrajectoryWaypointTreeNode != null) {
+            TrajectoryConfig addedConfig = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
+
+            if (addBeginningOrReturnNull && !autopathStartPositions.biggerRadiusPose.equals(autopathStartPositions.originalPose)) {
+                returnedTrajectory = TrajectoryGenerator.generateTrajectory(
+                        returnedTrajectoryWaypointTreeNode.getStartPos(),
+                        returnedTrajectoryWaypointTreeNode.getWaypoints(),
+                        returnedTrajectoryWaypointTreeNode.getEndPos(),
+                        addedConfig
+                );
+
+                Rotation2d addedBeginningDirection = Rotation2d.fromRadians(Math.atan2(autopathStartPositions.biggerRadiusPose.getY() - autopathStartPositions.smallerRadiusPose.getY(), autopathStartPositions.biggerRadiusPose.getX() - autopathStartPositions.smallerRadiusPose.getX()));
+                returnedTrajectory = TrajectoryGenerator.generateTrajectory(
+                        new Pose2d(autopathStartPositions.smallerRadiusPose.getTranslation(), addedBeginningDirection),
+                        new ArrayList<>(),
+                        new Pose2d(autopathStartPositions.biggerRadiusPose.getTranslation(), addedBeginningDirection),
+                        addedConfig
+                ).concatenate(returnedTrajectory);
+            }
+
+            if(addEndingOrReturnNull && !autopathTargetPositions.biggerRadiusPose.equals(autopathTargetPositions.originalPose)){
+                Rotation2d addedEndingDirection = Rotation2d.fromRadians(Math.atan2(autopathTargetPositions.smallerRadiusPose.getY() - autopathTargetPositions.biggerRadiusPose.getY(), autopathTargetPositions.smallerRadiusPose.getX() - autopathTargetPositions.biggerRadiusPose.getX()));
+                returnedTrajectory = returnedTrajectory.concatenate(TrajectoryGenerator.generateTrajectory(
+                        new Pose2d(autopathTargetPositions.biggerRadiusPose.getTranslation(), addedEndingDirection),
+                        new ArrayList<>(),
+                        new Pose2d(autopathTargetPositions.smallerRadiusPose.getTranslation(), addedEndingDirection),
+                        addedConfig
+                ));
+            }
+        }
+
+        return returnedTrajectory;
     }
 
     private static void addNewWaypoint(double[] newWaypoint, List<Translation2d> waypoints, Pose2d startPos, Pose2d endPos, TrajectoryConfig config){
@@ -366,7 +410,7 @@ public class AutopathAlgorithm {
                 if (makeNegative)
                     collisionPoint =
                             Bresenham.drawPerpLineMinusOnePixelNegative(
-                                    Autopath.fieldMap.getCurrentMap(),
+                                    Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                     startNewCollision[0],
                                     startNewCollision[1],
                                     endNewCollision[0],
@@ -375,7 +419,7 @@ public class AutopathAlgorithm {
                 else
                     collisionPoint =
                             Bresenham.drawPerpLineMinusOnePixelPositive(
-                                    Autopath.fieldMap.getCurrentMap(),
+                                    Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                     startNewCollision[0],
                                     startNewCollision[1],
                                     endNewCollision[0],
@@ -389,7 +433,7 @@ public class AutopathAlgorithm {
 
                 int[] possibleStartNewCollision =
                         Bresenham.lineReturnCollisionInverted(
-                                Autopath.fieldMap.getCurrentMap(),
+                                Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
                                 collisionPoint[0] - (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
@@ -398,7 +442,7 @@ public class AutopathAlgorithm {
                         );
                 int[] possibleEndNewCollision =
                         Bresenham.lineReturnCollisionInverted(
-                                Autopath.fieldMap.getCurrentMap(),
+                                Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
                                 collisionPoint[0] + (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
@@ -471,7 +515,7 @@ public class AutopathAlgorithm {
                 if (makeNegative)
                     collisionPoint =
                             Bresenham.drawPerpLineMinusOnePixelNegative(
-                                    Autopath.fieldMap.getCurrentMap(),
+                                    Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                     startNewCollision[0],
                                     startNewCollision[1],
                                     endNewCollision[0],
@@ -480,7 +524,7 @@ public class AutopathAlgorithm {
                 else
                     collisionPoint =
                             Bresenham.drawPerpLineMinusOnePixelPositive(
-                                    Autopath.fieldMap.getCurrentMap(),
+                                    Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                     startNewCollision[0],
                                     startNewCollision[1],
                                     endNewCollision[0],
@@ -494,7 +538,7 @@ public class AutopathAlgorithm {
 
                 int[] possibleStartNewCollision =
                         Bresenham.lineReturnCollisionInverted(
-                                Autopath.fieldMap.getCurrentMap(),
+                                Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
                                 collisionPoint[0] - (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
@@ -503,7 +547,7 @@ public class AutopathAlgorithm {
                         );
                 int[] possibleEndNewCollision =
                         Bresenham.lineReturnCollisionInverted(
-                                Autopath.fieldMap.getCurrentMap(),
+                                Autopath.fieldMapBiggerExpansionRadius.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
                                 collisionPoint[0] + (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
@@ -565,7 +609,9 @@ public class AutopathAlgorithm {
     }
 
     static class WaypointTreeNode {
+        private final Pose2d startPos;
         private final ArrayList<Translation2d> waypoints;
+        private final Pose2d endPos;
         private final ArrayList<Boolean> pathTrace;
         private final Trajectory trajectory;
         private final double trajectoryTime;
@@ -574,7 +620,9 @@ public class AutopathAlgorithm {
         private final boolean boundaryPathBranch;
 
         WaypointTreeNode(Pose2d startPos, ArrayList<Translation2d> waypoints, Pose2d endPos, TrajectoryConfig config, ArrayList<Boolean> pathTrace, boolean boundaryPathBranch) {
+            this.startPos = startPos;
             this.waypoints = (ArrayList<Translation2d>) waypoints.clone();
+            this.endPos = endPos;
             this.pathTrace = (ArrayList<Boolean>) pathTrace.clone();
             trajectory = TrajectoryGenerator.generateTrajectory(
                     startPos,
@@ -627,6 +675,14 @@ public class AutopathAlgorithm {
 
         public boolean isBoundaryPathBranch() {
             return boundaryPathBranch;
+        }
+
+        public Pose2d getStartPos() {
+            return startPos;
+        }
+
+        public Pose2d getEndPos() {
+            return endPos;
         }
     }
 }

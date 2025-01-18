@@ -22,6 +22,7 @@ import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.core.states.RobotState;
+import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
 import edu.wpi.first.hal.DriverStationJNI;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -181,6 +182,8 @@ public class Robot extends TimedRobot {
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
             autopather = Injector.get(Autopath.class);
+
+            robotState.dynamicAutoScript2025 = new DynamicAutoScript2025(3);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -488,11 +491,12 @@ public class Robot extends TimedRobot {
                     trajectoryStates.addAll(trajectoryActionStates);
                 }
 
-                robotState.field
-                        .getObject("Trajectory")
-                        .setTrajectory(
-                                new Trajectory(trajectoryStates)
-                        );
+                if(!trajectoryStates.isEmpty())
+                    robotState.field
+                            .getObject("Trajectory")
+                            .setTrajectory(
+                                    new Trajectory(trajectoryStates)
+                            );
 
                 RobotState.dynamicAutoChanged = false;
             } else if(!robotState.isAutoDynamic && autoChanged) {
