@@ -344,59 +344,15 @@ public class Autopath {
         int originalPoseX = (int)originalPose.getX()*100;
         int originalPoseY = (int)originalPose.getY()*100;
 
-        if(!fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX, originalPoseY)){
-            return new TransformedAutopathTranslations(originalPose.getTranslation(), originalPose.getTranslation(), originalPose.getTranslation(), originalPose.getRotation());
+        if(!fieldMapBiggerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX, originalPoseY) || fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX, originalPoseY)){
+            return new TransformedAutopathTranslations(originalPose.getTranslation(), originalPose.getTranslation(), originalPose.getRotation());
         }
 
-        Translation2d smallerRadiusPose = null;
         Translation2d biggerRadiusPose = null;
 
         int squareSideLength = 1;
         int newPoseX = stableFieldMap.getMapX()+1+originalPoseX;
         int newPoseY = stableFieldMap.getMapY()+1+originalPoseY;
-        while(Math.hypot(newPoseX-originalPoseX, newPoseY-originalPoseY) > (squareSideLength-1)/2){
-            for(int i = -(squareSideLength-1)/2; i <= (squareSideLength-1)/2; i++){
-                //if you wanna figure out what this does uhhh no have fun
-                int transformValue1 = i;
-                int transformValue2 = (squareSideLength-1)/2;
-
-                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX + transformValue1, originalPoseY + transformValue2)){
-                    if(Math.hypot(newPoseX-originalPoseX, newPoseY-originalPoseY) > Math.hypot(originalPoseX + transformValue1, originalPoseY + transformValue2)) {
-                        newPoseX = originalPoseX + transformValue1;
-                        newPoseY = originalPoseY + transformValue2;
-                    }
-                }
-
-                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX - transformValue1, originalPoseY - transformValue2)){
-                    if(Math.hypot(newPoseX-originalPoseX, newPoseY-originalPoseY) > Math.hypot(originalPoseX - transformValue1, originalPoseY - transformValue2)) {
-                        newPoseX = originalPoseX - transformValue1;
-                        newPoseY = originalPoseY - transformValue2;
-                    }
-                }
-
-                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX + transformValue2, originalPoseY + transformValue1)){
-                    if(Math.hypot(newPoseX-originalPoseX, newPoseY-originalPoseY) > Math.hypot(originalPoseX + transformValue2, originalPoseY + transformValue1)) {
-                        newPoseX = originalPoseX + transformValue2;
-                        newPoseY = originalPoseY + transformValue1;
-                    }
-                }
-
-                if(!fieldMapSmallerExpansionRadius.getCurrentMap().checkPixelHasObjectOrOffMap(originalPoseX - transformValue2, originalPoseY - transformValue1)){
-                    if(Math.hypot(newPoseX-originalPoseX, newPoseY-originalPoseY) > Math.hypot(originalPoseX - transformValue2, originalPoseY - transformValue1)) {
-                        newPoseX = originalPoseX - transformValue2;
-                        newPoseY = originalPoseY - transformValue1;
-                    }
-                }
-            }
-
-            squareSideLength += 2;
-        }
-        if(newPoseX != stableFieldMap.getMapX()+1+originalPoseX && newPoseY != stableFieldMap.getMapY()+1+originalPoseY)
-            smallerRadiusPose = new Translation2d(newPoseX/100., newPoseY/100.);
-
-        squareSideLength = 1;
-        newPoseX = stableFieldMap.getMapX()+1+originalPoseX;
-        newPoseY = stableFieldMap.getMapY()+1+originalPoseY;
         while(Math.hypot(newPoseX-originalPoseX, newPoseY-originalPoseY) > (squareSideLength-1)/2){
             for(int i = -(squareSideLength-1)/2; i <= (squareSideLength-1)/2; i++){
                 //if you wanna figure out what this does uhhh no have fun
@@ -438,8 +394,8 @@ public class Autopath {
             biggerRadiusPose = new Translation2d(newPoseX/100. + 10*Math.cos(Math.atan2(newPoseY-originalPoseY, newPoseX-originalPoseX))/100., newPoseY/100. + 10*Math.sin(Math.atan2(newPoseY-originalPoseY, newPoseX-originalPoseX))/100.);
 
 
-        System.out.println(originalPose.getTranslation()+""+ smallerRadiusPose + biggerRadiusPose);
-        return new TransformedAutopathTranslations(originalPose.getTranslation(), smallerRadiusPose, biggerRadiusPose, originalPose.getRotation());
+        System.out.println(originalPose.getTranslation()+""+biggerRadiusPose);
+        return new TransformedAutopathTranslations(originalPose.getTranslation(), biggerRadiusPose, originalPose.getRotation());
     }
 
     public static class TimestampTranslation2d{
@@ -470,12 +426,10 @@ public class Autopath {
 
     public static class TransformedAutopathTranslations {
         public Pose2d originalPose;
-        public Pose2d smallerRadiusPose;
         public Pose2d biggerRadiusPose;
 
-        public TransformedAutopathTranslations(Translation2d originalPose, Translation2d smallerRadiusPose, Translation2d biggerRadiusPose, Rotation2d rotation){
+        public TransformedAutopathTranslations(Translation2d originalPose, Translation2d biggerRadiusPose, Rotation2d rotation){
             this.originalPose = new Pose2d(originalPose, rotation);
-            this.smallerRadiusPose = new Pose2d(smallerRadiusPose, rotation);
             this.biggerRadiusPose = new Pose2d(biggerRadiusPose, rotation);
         }
 

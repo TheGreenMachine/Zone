@@ -33,9 +33,9 @@ public class AutopathMode extends AutoMode{
         long totalTime = 0;
         long highestTime = -1;
         Autopath.robotState.printAutopathFieldTest = true;
-        for(double i = 17.55; i >= 0; i-=17.55/50.){
+        for(double i = 17.55; i >= 0; i-=17.55/200.){
             double lastTime = 0;
-            for(double i2 = 0; i2 <= 8.05; i2+=8.05/25.){
+            for(double i2 = 0; i2 <= 8.05; i2+=8.05/100.){
 //                if(lastTime < 25) {
 //                    try {
 //                        Thread.sleep((long) (25 - lastTime));

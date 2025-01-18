@@ -300,9 +300,9 @@ public class AutopathAlgorithm {
                         addedConfig
                 );
 
-                Rotation2d addedBeginningDirection = Rotation2d.fromRadians(Math.atan2(autopathStartPositions.biggerRadiusPose.getY() - autopathStartPositions.smallerRadiusPose.getY(), autopathStartPositions.biggerRadiusPose.getX() - autopathStartPositions.smallerRadiusPose.getX()));
+                Rotation2d addedBeginningDirection = Rotation2d.fromRadians(Math.atan2(autopathStartPositions.biggerRadiusPose.getY() - autopathStartPositions.originalPose.getY(), autopathStartPositions.biggerRadiusPose.getX() - autopathStartPositions.originalPose.getX()));
                 returnedTrajectory = TrajectoryGenerator.generateTrajectory(
-                        new Pose2d(autopathStartPositions.smallerRadiusPose.getTranslation(), addedBeginningDirection),
+                        new Pose2d(autopathStartPositions.originalPose.getTranslation(), addedBeginningDirection),
                         new ArrayList<>(),
                         new Pose2d(autopathStartPositions.biggerRadiusPose.getTranslation(), addedBeginningDirection),
                         addedConfig
@@ -310,11 +310,11 @@ public class AutopathAlgorithm {
             }
 
             if(addEndingOrReturnNull && !autopathTargetPositions.biggerRadiusPose.equals(autopathTargetPositions.originalPose)){
-                Rotation2d addedEndingDirection = Rotation2d.fromRadians(Math.atan2(autopathTargetPositions.smallerRadiusPose.getY() - autopathTargetPositions.biggerRadiusPose.getY(), autopathTargetPositions.smallerRadiusPose.getX() - autopathTargetPositions.biggerRadiusPose.getX()));
+                Rotation2d addedEndingDirection = Rotation2d.fromRadians(Math.atan2(autopathTargetPositions.originalPose.getY() - autopathTargetPositions.biggerRadiusPose.getY(), autopathTargetPositions.originalPose.getX() - autopathTargetPositions.biggerRadiusPose.getX()));
                 returnedTrajectory = returnedTrajectory.concatenate(TrajectoryGenerator.generateTrajectory(
                         new Pose2d(autopathTargetPositions.biggerRadiusPose.getTranslation(), addedEndingDirection),
                         new ArrayList<>(),
-                        new Pose2d(autopathTargetPositions.smallerRadiusPose.getTranslation(), addedEndingDirection),
+                        new Pose2d(autopathTargetPositions.originalPose.getTranslation(), addedEndingDirection),
                         addedConfig
                 ));
             }
