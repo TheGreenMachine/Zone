@@ -14,8 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AutopathAlgorithm {
-    static double autopathMaxCalcMilli = 200;
-    static double autopathBuffer = 7.5;
+    static double autopathMaxCalcMilli = 5.555;
+    static double autopathBuffer = 3;
+    static long startTime = 0;
+    static long totalTime = 0;
+    static int totalTries = 0;
 
     public static Trajectory calculateAutopath(Pose2d autopathTargetPosition){
         return calculateAutopath(Autopath.robotState.fieldToVehicle, autopathTargetPosition);
@@ -29,7 +32,7 @@ public class AutopathAlgorithm {
         Autopath.robotState.autopathCollisionStarts.clear();
         Autopath.robotState.autopathCollisionEnds.clear();
 
-        long startTime = System.nanoTime()/1000000;
+        startTime = System.nanoTime()/1000000;
 
         if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathTargetPosition.getX()*100), (int)(autopathTargetPosition.getY()*100))) {
             if(Autopath.robotState.autopathTrajectory != null)
@@ -74,6 +77,7 @@ public class AutopathAlgorithm {
         while(!branches.isEmpty() && !branches.get(0).trajectoryCheck){
             if(System.nanoTime()/1000000-startTime > autopathMaxCalcMilli)
                 return null;
+            long startTime2 = System.nanoTime();
             boolean foundWorkingPath;
             for(int i = 1; i < branches.size(); i++)
                 if(branches.get(i) == null) {
@@ -86,15 +90,17 @@ public class AutopathAlgorithm {
 
             int currentBranchIndex = 0;
 
-            Autopath.robotState.autopathTrajectoryPossibilities.clear();
-            if(!branches.get(currentBranchIndex).trajectoryCheck) {
+            if(Autopath.robotState.printAutopathing) {
+                Autopath.robotState.autopathTrajectoryPossibilities.clear();
+                if (!branches.get(currentBranchIndex).trajectoryCheck) {
 //                Autopath.robotState.autopathTrajectoryPossibilities.add(branches.get(currentBranchIndex).getTrajectory());
-                for(WaypointTreeNode node : branches){
-                    Autopath.robotState.autopathTrajectoryPossibilities.add(node.getTrajectory());
+                    for (WaypointTreeNode node : branches) {
+                        Autopath.robotState.autopathTrajectoryPossibilities.add(node.getTrajectory());
 
+                    }
                 }
+                Autopath.robotState.autopathTrajectoryPossibilitiesChanged = true;
             }
-            Autopath.robotState.autopathTrajectoryPossibilitiesChanged = true;
 
             ArrayList<Translation2d> waypoints = branches.get(currentBranchIndex).getWaypoints();
             Trajectory bestGuessTrajectory = branches.get(currentBranchIndex).getTrajectory();
@@ -192,6 +198,9 @@ public class AutopathAlgorithm {
 //                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(newWaypointNegative[0], newWaypointNegative[1]), new Rotation2d()));
 //            }
 
+            if(System.nanoTime()/1000000-startTime > autopathMaxCalcMilli)
+                return null;
+
             int[] tempNewWaypointPositiveLast = getWaypointLast(bestGuessTrajectory, false);
             if(tempNewWaypointPositiveLast != null) {
                 double[] newWaypointPositive = new double[]{tempNewWaypointPositiveLast[0] / 100., tempNewWaypointPositiveLast[1] / 100.};
@@ -274,6 +283,10 @@ public class AutopathAlgorithm {
 //
 //                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(newWaypointPositive[0], newWaypointPositive[1]), new Rotation2d()));
 //            }
+            totalTime += System.nanoTime()-startTime2;
+            totalTries++;
+
+            System.out.println("time taken: "+((System.nanoTime()-startTime2)/1000000)+", average: "+(totalTime/totalTries/1000000));
         }
 
         Autopath.robotState.autopathTrajectory = branches.isEmpty() ? null : branches.get(0).getTrajectory();
@@ -287,6 +300,7 @@ public class AutopathAlgorithm {
         return branches.isEmpty() ? null : branches.get(0).getTrajectory();
     }
 
+    //TODO if we ever need to optimize pathing, then optimize this, it's just a class to determine where in the order of waypoints would the new one be added, the slowdown is from generating so many trajectories using the TrajectoryGenerator, there should be ways around using it but I'm to lazy for now(1/20/2025)
     private static void addNewWaypoint(double[] newWaypoint, List<Translation2d> waypoints, Pose2d startPos, Pose2d endPos, TrajectoryConfig config){
         int waypointsBeforeSize = waypoints.size();
         Translation2d newFirstWaypoint = new Translation2d(newWaypoint[0], newWaypoint[1]);
@@ -476,7 +490,7 @@ public class AutopathAlgorithm {
                                     startNewCollision[1],
                                     endNewCollision[0],
                                     endNewCollision[1]
-                            ); //TODO fix the fact that im only perping "negatively"
+                            );
                 else
                     collisionPoint =
                             Bresenham.drawPerpLineMinusOnePixelPositive(
@@ -485,7 +499,7 @@ public class AutopathAlgorithm {
                                     startNewCollision[1],
                                     endNewCollision[0],
                                     endNewCollision[1]
-                            ); //TODO fix the fact that im only perping "negatively"
+                            );
 
                 if (collisionPoint == null)
                     return null;
