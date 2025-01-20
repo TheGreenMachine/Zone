@@ -301,6 +301,8 @@ public class Robot extends TimedRobot {
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
 
+            SmartDashboard.putNumber("Autopath Waypoint Buffer", 10);
+
         } catch (Throwable t) {
             faulted = true;
             throw t;
