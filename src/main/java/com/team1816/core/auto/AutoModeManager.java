@@ -5,10 +5,10 @@ import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
-import com.team1816.lib.auto.modes.AutopathMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.season.auto.TrajectoryOnlyAutoMode;
+import com.team1816.season.auto.modes.TestAllDynamicPointsAutoMode;
+import com.team1816.season.auto.modes.TrajectoryOnlyAutoMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -187,7 +187,9 @@ public class AutoModeManager {
 
 //        AUTOPATH,
 
-        DYNAMIC_TRAJECTORY_ONLY
+        DYNAMIC_TRAJECTORY_ONLY,
+
+        TEST_DYNAMIC_PATHS
         }
 
 
@@ -210,6 +212,8 @@ public class AutoModeManager {
                 robotState.isAutoDynamic = true;
                 RobotState.dynamicAutoChanged = true;
                 return new TrajectoryOnlyAutoMode(robotState);
+            case TEST_DYNAMIC_PATHS:
+                return new TestAllDynamicPointsAutoMode();
             default:
                 GreenLogger.log("Defaulting to drive straight mode");
                 return new DriveStraightMode();

@@ -1,4 +1,4 @@
-package com.team1816.season.DynamicAuto2025;
+package com.team1816.season.auto;
 
 import com.team1816.core.Robot;
 import com.team1816.core.auto.AutoModeManager;
@@ -15,21 +15,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
 
 public class DynamicAutoScript2025 {
     private SendableChooser<Pose2d> startingPositionChooser = new SendableChooser<>();
-    private Pose2d startPos = new Pose2d(new Translation2d(2,1), new Rotation2d());
+    private Pose2d startPos = new Pose2d(new Translation2d(7.55,7.31), Rotation2d.fromDegrees(180));
     private Pose2d currentStartPos = startPos;
     private ArrayList<SendableChooser<Pose2d>> trajectoryActionChoosers = new ArrayList<>();
     private ArrayList<Pose2d> currentTrajectoryActionChoices = new ArrayList<>();
     private ArrayList<TrajectoryAction> autoTrajectoryActions = new ArrayList<>();
+    private HashMap<String, Pose2d> allDynamicPoints = new HashMap<>();
 
     private Robot robot = Injector.get(Robot.class);
 
     public DynamicAutoScript2025(int numOfTrajectoryActions){
-        startingPositionChooser.setDefaultOption("Position 1", new Pose2d(new Translation2d(8,3), Rotation2d.fromDegrees(45)));
-        startingPositionChooser.setDefaultOption("Position 2", new Pose2d(new Translation2d(10,4), Rotation2d.fromDegrees(-45)));
+        addDefaultStartPosOption("Start Top", new Pose2d(new Translation2d(7.55,7.31), Rotation2d.fromDegrees(180)));
+        addStartPosOption("Start Mid", new Pose2d(new Translation2d(7.55,4.2), Rotation2d.fromDegrees(180)));
+        addStartPosOption("Start Bot", new Pose2d(new Translation2d(7.55,.74), Rotation2d.fromDegrees(180)));
 
         for(int i = 0; i < numOfTrajectoryActions; i++)
             trajectoryActionChoosers.add(new SendableChooser<>());
@@ -99,6 +101,10 @@ public class DynamicAutoScript2025 {
         }
     }
 
+    public HashMap<String, Pose2d> getAllDynamicPoints(){
+        return allDynamicPoints;
+    }
+
     public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmpty(){
         ArrayList<TrajectoryAction> culledAutoTrajectoryActions = new ArrayList<>();
 
@@ -113,12 +119,24 @@ public class DynamicAutoScript2025 {
         return startPos;
     }
 
+    private void addStartPosOption(String name, Pose2d traj){
+        allDynamicPoints.put(name, traj);
+        startingPositionChooser.addOption(name, traj);
+    }
+
+    private void addDefaultStartPosOption(String name, Pose2d traj){
+        allDynamicPoints.put(name, traj);
+        startingPositionChooser.setDefaultOption(name, traj);
+    }
+
     private void addTrajectoryOption(String name, Pose2d traj){
+        allDynamicPoints.put(name, traj);
         for(SendableChooser<Pose2d> action : trajectoryActionChoosers)
             action.addOption(name, traj);
     }
 
     private void addDefaultTrajectoryOption(String name, Pose2d traj){
+        allDynamicPoints.put(name, traj);
         for(SendableChooser<Pose2d> action : trajectoryActionChoosers)
             action.setDefaultOption(name, traj);
     }

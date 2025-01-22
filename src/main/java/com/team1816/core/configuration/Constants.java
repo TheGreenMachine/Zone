@@ -56,8 +56,8 @@ public class Constants {
      * Field characterization
      */
     public static final Symmetry fieldSymmetry = Symmetry.AXIS;
-    public static final double fieldCenterY = 8.211 / 2.0; //FIXME
-    public static final double fieldCenterX = 16.542 / 2.0; //FIXME
+    public static final double fieldCenterY = 8.05 / 2.0; //FIXME
+    public static final double fieldCenterX = 17.55 / 2.0; //FIXME
     public static final Pose2d fieldCenterPose = new Pose2d(
         fieldCenterX,
         fieldCenterY,

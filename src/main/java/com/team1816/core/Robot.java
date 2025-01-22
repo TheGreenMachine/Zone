@@ -8,6 +8,7 @@ import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.autopath.Autopath;
+import com.team1816.lib.autopath.AutopathAlgorithm;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.*;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
@@ -327,6 +328,8 @@ public class Robot extends TimedRobot {
                 autoModeManager.reset();
             }
 
+            AutopathAlgorithm.autopathMaxCalcMilli = 1000;
+
             subsystemManager.stop();
 
             robotState.resetAllStates();
@@ -356,6 +359,8 @@ public class Robot extends TimedRobot {
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
 
+        AutopathAlgorithm.autopathMaxCalcMilli = 5;
+
         autoStart = Timer.getFPGATimestamp();
         enabledLoop.start();
     }
@@ -373,6 +378,8 @@ public class Robot extends TimedRobot {
             ledManager.indicateStatus(LedManager.RobotStatus.ENABLED);
 
             infrastructure.startCompressor();
+
+            AutopathAlgorithm.autopathMaxCalcMilli = 5;
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();

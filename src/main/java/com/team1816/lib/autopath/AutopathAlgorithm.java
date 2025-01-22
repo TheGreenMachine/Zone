@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AutopathAlgorithm {
-    static double autopathMaxCalcMilli = 5;
+    public static double autopathMaxCalcMilli = 5;
     static double autopathBuffer = 5;
     static long startTime = 0;
 //    static long totalTime = 0;
