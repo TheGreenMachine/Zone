@@ -37,7 +37,7 @@ public class Autopath {
 
     private Pose2d autopathTargetPosition = new Pose2d(0,0,new Rotation2d(0));
 
-    private static FieldMap stableFieldMap = new FieldMap(1651, 821);
+    private static FieldMap stableFieldMap = new FieldMap(1755, 805);
 
     public static UpdatableAndExpandableFieldMap fieldMap;
 
@@ -58,25 +58,16 @@ public class Autopath {
     public Autopath() {
         robotState = Injector.get(RobotState.class);
 
-//        Ethan's Code
-        stableFieldMap.drawPolygon(new int[]{0, 0, 175}, new int[]{0, 125, 0}, true);
-        stableFieldMap.drawPolygon(new int[]{1651, 1651, 1476}, new int[]{0, 125, 0}, true);
+//        Noah is the best
+        stableFieldMap.drawPolygon(new int[]{368, 449, 530, 530, 449, 368}, new int[]{353, 310, 353, 453, 495, 453}, true);
+        stableFieldMap.drawPolygon(new int[]{1225, 1306, 1387, 1387, 1306, 1225}, new int[]{353, 310, 353, 453, 495, 453}, true);
+        stableFieldMap.drawPolygon(new int[]{850, 850, 910, 910}, new int[]{420, 390, 390, 420}, true);
+        stableFieldMap.drawPolygon(new int[]{0, 170, 0}, new int[]{0, 0, 150}, true);
+        stableFieldMap.drawPolygon(new int[]{0, 170, 0}, new int[]{805, 805, 655}, true);
+        stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{0, 0, 150}, true);
+        stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{805, 805, 655}, true);
 
-//        Nora's Code
-        stableFieldMap.drawPolygon(new int[]{0, 0, 100, 100}, new int[]{450, 650, 600, 500}, true);
-        stableFieldMap.drawPolygon(new int[]{1651, 1651, 1551, 1551}, new int[]{450, 650, 600, 500}, true);
-
-//        Noah's Code
-        stableFieldMap.drawPolygon(new int[]{310, 310, 370, 370}, new int[]{380, 440, 440, 380}, true);
-        stableFieldMap.drawPolygon(new int[]{520, 550, 600, 570}, new int[]{290, 240, 270, 320}, true);
-        stableFieldMap.drawPolygon(new int[]{520, 550, 600, 570}, new int[]{531, 581, 551, 501}, true);
-
-//        John Jerney's Code
-        stableFieldMap.drawPolygon(new int[]{1651-310, 1651-310, 1651-370, 1651-370}, new int[]{380, 440, 440, 380}, true);
-        stableFieldMap.drawPolygon(new int[]{1651-520, 1651-550, 1651-600, 1651-570}, new int[]{290, 240, 270, 320}, true);
-        stableFieldMap.drawPolygon(new int[]{1651-520, 1651-550, 1651-600, 1651-570}, new int[]{531, 581, 551, 501}, true);
-
-        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 50);
+        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), /*59.26969039916799*/50);
     }
 
     /**

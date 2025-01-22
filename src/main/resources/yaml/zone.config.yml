@@ -141,32 +141,6 @@ subsystems:
             rotationalDeadband: 0.1
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
-    elevator:
-        elevatorMotor:
-            motorType: TalonFX
-            motorName: elevatorMotor
-            id: 10
-            invertMotor: false
-            currentLimit: 20
-            motionMagic:
-                expoKV: 0.035
-                expoKA: 0.065
-    deepCageHanger:
-        deepCageHangerMotor:
-            motorType: TalonFX
-            motorName: deepCageHangerMotor
-            id: 10
-            invertMotor: false
-            currentLimit: 20
-            motionMagic:
-                expoKV: 0.035
-                expoKA: 0.065
-        deepCageHangerFollowMotor:
-            motorType: TalonFX
-            motorName: deepCageHangerFollowMotor
-            id: 4
-            invertMotor: false
-            currentLimit: 20
     camera:
         implemented: false
         constants:
@@ -211,6 +185,32 @@ subsystems:
                 kV: 0.00925
         constants:
             algaeArmMotorSpeed: 0.5
+    elevator:
+      elevatorMotor:
+        motorType: TalonFX
+        motorName: elevatorMotor
+        id: 10
+        invertMotor: false
+        currentLimit: 20
+        motionMagic:
+          expoKV: 0.035
+          expoKA: 0.065
+    deepCageHanger:
+      deepCageHangerMotor:
+        motorType: TalonFX
+        motorName: deepCageHangerMotor
+        id: 10
+        invertMotor: false
+        currentLimit: 20
+        motionMagic:
+          expoKV: 0.035
+          expoKA: 0.065
+      deepCageHangerFollowMotor:
+        motorType: TalonFX
+        motorName: deepCageHangerFollowMotor
+        id: 4
+        invertMotor: false
+        currentLimit: 20
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##

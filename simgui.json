@@ -84,6 +84,9 @@
       "/SmartDashboard/DTrajectoryAction 0": "String Chooser",
       "/SmartDashboard/DTrajectoryAction 1": "String Chooser",
       "/SmartDashboard/DTrajectoryAction 2": "String Chooser",
+      "/SmartDashboard/DTrajectoryAction 3": "String Chooser",
+      "/SmartDashboard/DTrajectoryAction 4": "String Chooser",
+      "/SmartDashboard/DTrajectoryAction 5": "String Chooser",
       "/SmartDashboard/Demo Mode": "String Chooser",
       "/SmartDashboard/Dynamic Start": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
@@ -135,6 +138,21 @@
         }
       },
       "/SmartDashboard/DTrajectoryAction 2": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/DTrajectoryAction 3": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/DTrajectoryAction 4": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/DTrajectoryAction 5": {
         "window": {
           "visible": true
         }
@@ -256,9 +274,9 @@
             255.0
           ],
           "arrowWeight": 2.0,
-          "length": 0.8889999985694885,
-          "weight": 2.0,
-          "width": 0.8889999985694885
+          "length": 0.8381999731063843,
+          "weight": 1.0,
+          "width": 0.8381999731063843
         },
         "StartCollisionPoints": {
           "arrows": false,

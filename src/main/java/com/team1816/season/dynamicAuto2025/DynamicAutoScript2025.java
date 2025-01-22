@@ -34,10 +34,24 @@ public class DynamicAutoScript2025 {
         for(int i = 0; i < numOfTrajectoryActions; i++)
             trajectoryActionChoosers.add(new SendableChooser<>());
 
-        addDefaultTrajectoryOption("somewhere", new Pose2d(new Translation2d(3,1), Rotation2d.fromDegrees(90)));
-        addTrajectoryOption("elsewhere", new Pose2d(new Translation2d(5,1), Rotation2d.fromDegrees(-90)));
-        addTrajectoryOption("narnia", new Pose2d(new Translation2d(2,5), Rotation2d.fromDegrees(180)));
-        addTrajectoryOption("space", new Pose2d(new Translation2d(14,4), Rotation2d.fromDegrees(135)));
+        addDefaultTrajectoryOption("Hex 1 Blue", new Pose2d(new Translation2d(5.203654,5.259367), Rotation2d.fromDegrees(240)));
+        addTrajectoryOption("Hex 2 Blue", new Pose2d(new Translation2d(5.857232,4.049038), Rotation2d.fromDegrees(180)));
+        addTrajectoryOption("Hex 3 Blue", new Pose2d(new Translation2d(5.155241,2.814502), Rotation2d.fromDegrees(120)));
+        addTrajectoryOption("Hex 4 Blue", new Pose2d(new Translation2d(3.751259,2.838709), Rotation2d.fromDegrees(60)));
+        addTrajectoryOption("Hex 5 Blue", new Pose2d(new Translation2d(3.049268, 4.097451), Rotation2d.fromDegrees(0)));
+        addTrajectoryOption("Hex 6 Blue", new Pose2d(new Translation2d(3.799672, 5.210954), Rotation2d.fromDegrees(300)));
+        addTrajectoryOption("HP Top Blue", new Pose2d(new Translation2d(1.185360, 6.857003), Rotation2d.fromDegrees(130)));
+        addTrajectoryOption("HP Bot Blue", new Pose2d(new Translation2d(1.233773, 1.265280), Rotation2d.fromDegrees(230)));
+        addTrajectoryOption("Hex 1 Red", new Pose2d(new Translation2d(13.675961, 5.307781), Rotation2d.fromDegrees(240)));
+        addTrajectoryOption("Hex 2 Red", new Pose2d(new Translation2d(14.426365, 4.097451), Rotation2d.fromDegrees(180)));
+        addTrajectoryOption("Hex 3 Red", new Pose2d(new Translation2d(13.748580, 2.814502), Rotation2d.fromDegrees(120)));
+        addTrajectoryOption("Hex 4 Red", new Pose2d(new Translation2d(12.368805, 2.838709), Rotation2d.fromDegrees(60)));
+        addTrajectoryOption("Hex 5 Red", new Pose2d(new Translation2d(11.618401, 4.049038), Rotation2d.fromDegrees(0)));
+        addTrajectoryOption("Hex 6 Red", new Pose2d(new Translation2d(12.344598, 5.307781), Rotation2d.fromDegrees(300)));
+        addTrajectoryOption("HP Top Red", new Pose2d(new Translation2d(16.266066, 6.881209), Rotation2d.fromDegrees(50)));
+        addTrajectoryOption("HP Bot Red", new Pose2d(new Translation2d(16.241859, 1.192661), Rotation2d.fromDegrees(310)));
+
+
 
         for(SendableChooser<Pose2d> chooser : trajectoryActionChoosers)
             currentTrajectoryActionChoices.add(chooser.getSelected());
