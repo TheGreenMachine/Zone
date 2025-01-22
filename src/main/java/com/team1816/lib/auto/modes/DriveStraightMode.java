@@ -16,10 +16,10 @@ public class DriveStraightMode extends AutoMode {
     protected void routine() throws AutoModeEndedException {
         GreenLogger.log("Running Drive Straight Mode");
         runAction(new WaitAction(.5));
-        runAction(new TrajectoryAction(new DriveStraightPath()));
+        runAction(new DriveOpenLoopAction(2, .25));
     }
 
     public Pose2d getInitialPose() {
-        return new Pose2d(2.6,5.5, robotState.allianceColor == Color.BLUE ? Rotation2d.fromDegrees(0) : Rotation2d.fromDegrees(180));
+        return new Pose2d(0,0, robotState.allianceColor == Color.BLUE ? Rotation2d.fromDegrees(0) : Rotation2d.fromDegrees(180));
     }
 }
