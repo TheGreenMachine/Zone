@@ -1,4 +1,4 @@
-package com.team1816.season;
+package com.team1816.season.subsystems;
 
 import com.google.inject.Inject;
 import com.team1816.core.configuration.Constants;
@@ -11,8 +11,6 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class AlgaeCatcher extends Subsystem {
     /**
