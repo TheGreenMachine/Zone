@@ -185,7 +185,7 @@ public class AutoModeManager {
     enum DesiredAuto {
         DRIVE_STRAIGHT,
 
-        AUTOPATH,
+//        AUTOPATH,
 
         DYNAMIC_TRAJECTORY_ONLY
         }
@@ -203,9 +203,9 @@ public class AutoModeManager {
             case DRIVE_STRAIGHT:
                 robotState.isAutoDynamic = false;
                 return new DriveStraightMode();
-            case AUTOPATH:
-                robotState.isAutoDynamic = false;
-                return new AutopathMode();
+//            case AUTOPATH:
+//                robotState.isAutoDynamic = false;
+//                return new AutopathMode();
             case DYNAMIC_TRAJECTORY_ONLY:
                 robotState.isAutoDynamic = true;
                 RobotState.dynamicAutoChanged = true;
