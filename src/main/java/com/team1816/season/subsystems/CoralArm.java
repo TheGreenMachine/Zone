@@ -1,5 +1,7 @@
 package com.team1816.season.subsystems;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
@@ -20,11 +22,12 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * and intake wheels to either intake, outtake, or hold a piece of coral for outtake on the end of
  * the arm.
  */
+@Singleton
 public class CoralArm extends Subsystem {
     /**
      * Name
      */
-    private static final String NAME = "coral_arm";
+    private static final String NAME = "coralArm";
 
     /**
      * Components
@@ -37,14 +40,14 @@ public class CoralArm extends Subsystem {
     /**
      * States
      */
-    private PIVOT_STATE desiredPivotState;
-    private INTAKE_STATE desiredIntakeState;
+    private PIVOT_STATE desiredPivotState = PIVOT_STATE.REST;
+    private INTAKE_STATE desiredIntakeState = INTAKE_STATE.REST;
 
-    private boolean desiredPivotStateChanged;
-    private boolean desiredIntakeStateChanged;
+    private boolean desiredPivotStateChanged =  false;
+    private boolean desiredIntakeStateChanged = false;
 
-    private double actualPivotVelocity;
-    private double actualIntakeVelocity;
+    private double actualPivotVelocity = 0;
+    private double actualIntakeVelocity = 0;
 
     private double pivotCurrentDraw;
     private double intakeCurrentDraw;
@@ -73,7 +76,7 @@ public class CoralArm extends Subsystem {
 
     private BooleanLogEntry beamBreakLogger;
 
-
+    @Inject
     public CoralArm(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
 
@@ -84,6 +87,9 @@ public class CoralArm extends Subsystem {
         pivotMotor.selectPIDSlot(2);
 
         coralSensor = new DigitalInput((int) factory.getConstant(NAME, "coralSensorChannel", -1));
+
+        super.desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/desiredPivotPosition");
+        super.actStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/actualPivotPosition");
 
         if (Constants.kLoggingRobot) {
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/Pivot/actualRollerVelocity"), pivotMotor::getSensorVelocity);
