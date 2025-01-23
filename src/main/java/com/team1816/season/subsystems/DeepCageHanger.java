@@ -34,7 +34,7 @@ public class DeepCageHanger extends Subsystem {
     /**
      * Name
      */
-    private static final String NAME = "elevator";
+    private static final String NAME = "ethan";
 
 
     /**
