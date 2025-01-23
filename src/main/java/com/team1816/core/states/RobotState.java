@@ -126,6 +126,8 @@ public class RobotState {
      */
 
     public double[] gyroPos = new double[3];
+    public boolean pneumaticOn;
+
     /**
      * Initializes RobotState and field
      */
