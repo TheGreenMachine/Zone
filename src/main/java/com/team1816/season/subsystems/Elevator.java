@@ -1,32 +1,16 @@
 package com.team1816.season.subsystems;
 
-import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
-import com.team1816.lib.hardware.components.motor.LazyTalonFX;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
-import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.util.datalog.BooleanLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-
-import java.util.Optional;
 
 @Singleton
 public class Elevator extends Subsystem {
@@ -46,7 +30,7 @@ public class Elevator extends Subsystem {
      * States
      */
 
-    private ELEVATOR_STATE desiredElevatorState = ELEVATOR_STATE.GROUND;
+    private ELEVATOR_STATE desiredElevatorState = ELEVATOR_STATE.REST;
 
     private boolean elevatorOutputsChanged = false;
 
@@ -62,7 +46,8 @@ public class Elevator extends Subsystem {
      * Constants
      */
 
-    private final double elevatorGroundPosition = factory.getConstant(NAME, "elevatorGroundPosition", 1.0);
+    private final double elevatorRestPosition = factory.getConstant(NAME, "elevatorRestPosition", 1.0);
+    private final double elevatorFeederPosition = factory.getConstant(NAME, "elevatorFeederPosition", 1.0);
     private final double elevatorL1Position = factory.getConstant(NAME, "elevatorL1Position", 1.0);
     private final double elevatorL2Position = factory.getConstant(NAME, "elevatorL2Position", 1.0);
     private final double elevatorL3Position = factory.getConstant(NAME, "elevatorL3Position", 1.0);
@@ -137,8 +122,11 @@ public class Elevator extends Subsystem {
         if (elevatorOutputsChanged) {
             elevatorOutputsChanged = false;
             switch (desiredElevatorState) {
-                case GROUND -> {
-                    desiredElevatorPosition = elevatorGroundPosition;
+                case REST -> {
+                    desiredElevatorPosition = elevatorRestPosition;
+                }
+                case FEEDER -> {
+                    desiredElevatorPosition = elevatorFeederPosition;
                 }
                 case L1 -> {
                     desiredElevatorPosition = elevatorL1Position;
@@ -194,7 +182,8 @@ public class Elevator extends Subsystem {
      * Elevator enum
      */
     public enum ELEVATOR_STATE {
-        GROUND,
+        REST,
+        FEEDER,
         L1,
         L2,
         L3,

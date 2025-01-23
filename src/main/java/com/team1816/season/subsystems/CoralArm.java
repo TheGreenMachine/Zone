@@ -57,11 +57,14 @@ public class CoralArm extends Subsystem {
      */
     private final double intakeSpeed = factory.getConstant(NAME, "intakeSpeed", .7);
     private final double outtakeSpeed = factory.getConstant(NAME, "outtakeSpeed", .7);
+    private final double holdSpeed = factory.getConstant(NAME, "holdSpeed", 0);
 
     private final double l1Position = factory.getConstant(NAME, "coralArmL1Position", 1.0);
     private final double l2Position = factory.getConstant(NAME, "coralArmL2Position", 1.0);
     private final double l3Position = factory.getConstant(NAME, "coralArmL3Position", 1.0);
     private final double l4Position = factory.getConstant(NAME, "coralArmL4Position", 1.0);
+    private final double feederPosition = factory.getConstant(NAME, "coralArmFeederPosition", 1.0);
+    private final double restPosition = factory.getConstant(NAME, "coralArmRestPosition", 1.0);
 
     /**
      * Logging
@@ -101,6 +104,11 @@ public class CoralArm extends Subsystem {
     public void setDesiredIntakeState(INTAKE_STATE desiredIntakeState) {
         this.desiredIntakeState = desiredIntakeState;
         desiredIntakeStateChanged = true;
+    }
+
+    public void setDesiredState(PIVOT_STATE desiredPivotState, INTAKE_STATE desiredIntakeState){
+        setDesiredPivotState(desiredPivotState);
+        setDesiredIntakeState(desiredIntakeState);
     }
 
     public boolean isBeamBreakTriggered() {
@@ -143,7 +151,8 @@ public class CoralArm extends Subsystem {
             switch (desiredIntakeState) {
                 case INTAKE -> desiredIntakeVelocity = intakeSpeed;
                 case OUTTAKE -> desiredIntakeVelocity = outtakeSpeed;
-                case HOLD -> desiredIntakeVelocity = 0;
+                case HOLD -> desiredIntakeVelocity = holdSpeed;
+                case REST -> desiredIntakeVelocity = 0;
             }
 
             intakeMotor.set(GreenControlMode.VELOCITY_CONTROL, desiredIntakeVelocity);
@@ -179,6 +188,8 @@ public class CoralArm extends Subsystem {
             case L2 -> l2Position;
             case L3 -> l3Position;
             case L4 -> l4Position;
+            case FEEDER -> feederPosition;
+            case REST -> restPosition;
         };
     }
 
@@ -191,12 +202,13 @@ public class CoralArm extends Subsystem {
     }
 
     public enum PIVOT_STATE {
-        L1, L2, L3, L4
+        L1, L2, L3, L4, FEEDER, REST
     }
 
     public enum INTAKE_STATE {
         INTAKE,
         HOLD,
-        OUTTAKE
+        OUTTAKE,
+        REST
     }
 }

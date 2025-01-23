@@ -109,7 +109,8 @@ subsystems:
                     allowableError: 5
         constants:
             ## Positional Configurations ##
-            elevatorGroundPosition: 0.1
+            elevatorRestPosition: 0.1
+            elevatorFeederPosition: 0.1
             elevatorL1Position: 0.1
             elevatorL2Position: 0.1
             elevatorL3Position: 0.1
@@ -212,12 +213,16 @@ subsystems:
         constants: # TODO: all of these
             intakeSpeed: 1
             outtakeSpeed: -1
+            holdSpeed: 0
+
             coralSensorChannel: 0
 
             coralArmL1Position: 1
             coralArmL2Position: 2
             coralArmL3Position: 3
             coralArmL4Position: 4
+            coralFeederPosition: -1
+            coralRestPosition: -1
     elevator:
       elevatorMotor:
         motorType: TalonFX
