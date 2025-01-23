@@ -129,12 +129,12 @@ public class Pneumatic extends Subsystem {
      */
     static class Stage {
 
-        public final boolean topClamped;
+        public final boolean pneumaticOn;
 
         Stage(
-                boolean topClamped
+                boolean pneumaticOn
         ) {
-            this.topClamped = topClamped;
+            this.pneumaticOn = pneumaticOn;
         }
 
         Stage() {
