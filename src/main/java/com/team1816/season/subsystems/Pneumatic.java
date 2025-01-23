@@ -114,7 +114,7 @@ public class Pneumatic extends Subsystem {
     public void stop() {}
 
     /**
-     * Tests the subsystem
+     * Tests the subsystem``
      * @return true if tests passed
      */
     @Override
@@ -122,23 +122,8 @@ public class Pneumatic extends Subsystem {
         return true;
     }
 
-    /** Modes and Stages */
-
-    /**
-     * Base static class for climber stages
-     */
-    static class Stage {
-
-        public final boolean pneumaticOn;
-
-        Stage(
-                boolean pneumaticOn
-        ) {
-            this.pneumaticOn = pneumaticOn;
-        }
-
-        Stage() {
-            this(false);
-        }
+    public enum PNEUMATIC_STATE {
+        OFF,
+        ON
     }
 }

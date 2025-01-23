@@ -7,11 +7,8 @@ import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
-import com.team1816.season.subsystems.AlgaeCatcher;
+import com.team1816.season.subsystems.*;
 import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
-import com.team1816.season.subsystems.AlgaeArm;
-import com.team1816.season.subsystems.DeepCageHanger;
-import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -87,6 +84,7 @@ public class RobotState {
     public AlgaeArm.ALGAE_ARM_STATE actualAlgaeArmState = AlgaeArm.ALGAE_ARM_STATE.OFF;
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.GROUND;
     public DeepCageHanger.DEEPCAGEHANGER_STATE actualDeepCageHangerState = DeepCageHanger.DEEPCAGEHANGER_STATE.ETHAN;
+    public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
@@ -176,6 +174,7 @@ public class RobotState {
         actualAlgaeArmState = AlgaeArm.ALGAE_ARM_STATE.OFF;
         actualElevatorState = Elevator.ELEVATOR_STATE.GROUND;
         actualDeepCageHangerState = DeepCageHanger.DEEPCAGEHANGER_STATE.ETHAN;
+        actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();

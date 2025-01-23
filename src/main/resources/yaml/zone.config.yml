@@ -141,7 +141,7 @@ subsystems:
             rotationalDeadband: 0.1
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
-    climber:
+    pneumatic:
         implemented: true
         solenoids:
             pneumatic: 6
