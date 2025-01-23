@@ -185,6 +185,39 @@ subsystems:
                 kV: 0.00925
         constants:
             algaeArmMotorSpeed: 0.5
+    coralArm:
+        implemented: true
+        motors:
+            coralPivotMotor:
+                motorType: TalonFX
+                motorName: pivotMotor
+                id: -1
+                invertMotor: false
+            coralIntakeMotor:
+                motorType: SparkMax
+                motorName: intakeMotor
+                id: -1
+                invertMotor: false
+        pidConfig:
+            slot1:
+                kP: 0
+                kI: 0
+                kD: 0
+                kV: 0
+            slot2:
+                kP: 0
+                kI: 0
+                kD: 0
+                kV: 0
+        constants: # TODO: all of these
+            intakeSpeed: 1
+            outtakeSpeed: -1
+            coralSensorChannel: 0
+
+            coralArmL1Position: 1
+            coralArmL2Position: 2
+            coralArmL3Position: 3
+            coralArmL4Position: 4
     elevator:
       elevatorMotor:
         motorType: TalonFX
