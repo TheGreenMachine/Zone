@@ -141,6 +141,14 @@ subsystems:
             rotationalDeadband: 0.1
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
+    climber:
+        implemented: true
+        solenoids:
+            pneumatic: 6
+        constants:
+            unlockPos: 14400
+            startPos: 0
+            returnPos: 0
     camera:
         implemented: false
         constants:
