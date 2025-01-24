@@ -7,14 +7,14 @@ import com.team1816.season.subsystems.AlgaeArm;
 import com.team1816.season.subsystems.Pneumatic;
 
 public class PneumaticAction implements AutoAction {
+    private final Pneumatic.PNEUMATIC_STATE needsPneumatic;
     private RobotState robotState;
     private Pneumatic pneumatic;
-    private AlgaeArm.ALGAE_ARM_STATE desiredState;
 
-    public PneumaticAction(AlgaeArm.ALGAE_ARM_STATE desiredState) {
+    public PneumaticAction(Pneumatic.PNEUMATIC_STATE needsPneumatic) {
         this.robotState = Injector.get(RobotState.class);
         this.pneumatic = Injector.get(Pneumatic.class);
-//        this.desiredState = ;
+        this.needsPneumatic = needsPneumatic;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class PneumaticAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-//        return robotState.actualPneumaticState == ;
+        return robotState.actualPneumaticState == needsPneumatic;
     }
 
     @Override
