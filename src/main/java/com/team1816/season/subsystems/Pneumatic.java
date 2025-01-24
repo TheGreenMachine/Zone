@@ -18,7 +18,6 @@ public class Pneumatic extends Subsystem {
     /**
      * Components
      */
-    e;
     private final ISolenoid pneumatic;
 
     /**
