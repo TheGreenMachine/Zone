@@ -95,16 +95,6 @@ public class Elevator extends Subsystem {
      *
      * @param desiredElevatorState ELEVATOR_STATE
      */
-    public void setDesiredElevatorState(ELEVATOR_STATE desiredElevatorState) {
-        this.desiredElevatorState = desiredElevatorState;
-        elevatorOutputsChanged = true;
-    }
-
-    /**
-     * Sets the desired state of the elevator
-     *
-     * @param desiredElevatorState ELEVATOR_STATE
-     */
     public void setDesiredState(ELEVATOR_STATE desiredElevatorState) {
         this.desiredElevatorState = desiredElevatorState;
 

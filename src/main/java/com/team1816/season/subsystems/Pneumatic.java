@@ -1,24 +1,19 @@
 package com.team1816.season.subsystems;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.subsystems.Subsystem;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.components.pcm.ISolenoid;
-import com.team1816.lib.subsystems.Subsystem;
-import edu.wpi.first.wpilibj.Timer;
 
-/**
- * Subsystem that models a "windmill" style climber
- */
 @Singleton
 public class Pneumatic extends Subsystem {
-
     /**
      * Properties
      */
-    private static final String NAME = "climber";
+    private static final String NAME = "pneumatic";
 
     /**
      * Components
@@ -28,14 +23,24 @@ public class Pneumatic extends Subsystem {
     /**
      * State
      */
-    private boolean pneumaticOff;
-    private boolean needsPneumatic = false;
-    private boolean pneumaticOn = false;
+    private Pneumatic.PNEUMATIC_STATE desiredPneumaticState = PNEUMATIC_STATE.OFF;
+    private Pneumatic.PNEUMATIC_STATE actualPneumaticState = PNEUMATIC_STATE.OFF;
+
+    private boolean pneumaticOutputsChanged = false;
+
+    private double desiredPneumaticPosition = 0.0;
+    private double actualPneumaticPosition = 0.0;
 
     /**
-     * Instantiates a climber from base subsystem properties
-     * @param inf Infrastructure
-     * @param rs RobotState
+     * Constants
+     */
+    private final double pneumaticOn = factory.getConstant(NAME, "pneumaticOn", 1.0);
+    private final double pneumaticOff = factory.getConstant(NAME, "pneumaticOff", 0.0);
+
+    /**
+     * Instantiates a pneumatic
+     * @param inf  Infrastructure
+     * @param rs   RobotState
      */
     @Inject
     public Pneumatic(Infrastructure inf, RobotState rs) {
@@ -43,80 +48,57 @@ public class Pneumatic extends Subsystem {
         pneumatic = factory.getSolenoid(NAME, "pneumatic");
 
         PIDSlotConfiguration config = factory.getPidSlotConfig(NAME);
-
-        pneumaticOff = false;
     }
 
-    /**
-     * Unlocks the climber
-     */
-    public void unlock() {
-        System.out.println("Unlocking Climber!");
-        pneumaticOff = true;
+    public void setDesiredState(Pneumatic.PNEUMATIC_STATE desiredPneumaticState) {
+        this.desiredPneumaticState = desiredPneumaticState;
+        pneumaticOutputsChanged = true;
     }
 
-    /**
-     * Toggles the top clamp
-     */
-    public void setPneumatic() {
-        if (!pneumaticOff) {
-            System.out.println("Pneumatic On");
-            return;
+    public void changePneumatic() {
+        if (desiredPneumaticState == PNEUMATIC_STATE.OFF) {
+            desiredPneumaticState = PNEUMATIC_STATE.ON;
+        } else {
+            desiredPneumaticState = PNEUMATIC_STATE.OFF;
         }
-        pneumaticOn = !pneumaticOn;
-        needsPneumatic = true;
+        pneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON);
+        actualPneumaticState = desiredPneumaticState;
     }
 
-    /**
-     * Sets the top and bottom clamps based on desired states and order
-     * @param pneumaticOn boolean
-     */
-    private void setPneumatics(boolean pneumaticOn) {
-        if (needsPneumatic) {
-            needsPneumatic = false;
-            pneumatic.set(pneumaticOn);
-            System.out.println("setting climber clamps!");
-            Timer.delay(.25);
-        }
-    }
-
-    /** Periodic */
-
-    /**
-     * Reads from motor values and updates state
-     */
     @Override
-    public void readFromHardware() {}
+    public void readFromHardware() {
+        if (pneumatic.get()) {
+            actualPneumaticState = PNEUMATIC_STATE.ON;
+        } else {
+            actualPneumaticState = PNEUMATIC_STATE.OFF;
+        }
+    }
 
-    /**
-     * Writes outputs to the motor based on controlMode and desired state
-     */
     @Override
     public void writeToHardware() {
-        setPneumatics(robotState.pneumaticOn);
+        if (pneumaticOutputsChanged) {
+            pneumaticOutputsChanged = false;
+            switch (desiredPneumaticState) {
+                case ON -> {
+                    desiredPneumaticPosition = pneumaticOn;
+                }
+                case OFF -> {
+                    desiredPneumaticPosition = pneumaticOff;
+                }
+            }
+            pneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON);
+            actualPneumaticState = desiredPneumaticState;
+        }
     }
 
-    /** Config and Tests */
-
-    /**
-     * Zeroes the climber motor position
-     */
     @Override
     public void zeroSensors() {
-        pneumaticOff = false;
-        needsPneumatic = false;
+        desiredPneumaticState = PNEUMATIC_STATE.OFF;
     }
 
-    /**
-     * Functionality: nonexistent
-     */
     @Override
     public void stop() {}
 
-    /**
-     * Tests the subsystem``
-     * @return true if tests passed
-     */
     @Override
     public boolean testSubsystem() {
         return true;
