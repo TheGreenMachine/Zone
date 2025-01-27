@@ -17,7 +17,7 @@ public class PneumaticAction implements AutoAction {
 
     @Override
     public void start() {
-        pneumatic.setDesiredState(Pneumatic.PNEUMATIC_STATE.OFF);
+        pneumatic.changePneumatic();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class PneumaticAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return robotState.actualPneumaticState == Pneumatic.PNEUMATIC_STATE.OFF;
+        return robotState.actualPneumaticState == pneumatic.getDesiredState();
     }
 
     @Override

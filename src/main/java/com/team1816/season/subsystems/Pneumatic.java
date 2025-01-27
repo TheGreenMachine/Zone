@@ -28,9 +28,6 @@ public class Pneumatic extends Subsystem {
 
     private boolean pneumaticOutputsChanged = false;
 
-    private double desiredPneumaticPosition = 0.0;
-    private double actualPneumaticPosition = 0.0;
-
     /**
      * Constants
      */
@@ -50,6 +47,10 @@ public class Pneumatic extends Subsystem {
         PIDSlotConfiguration config = factory.getPidSlotConfig(NAME);
     }
 
+    public PNEUMATIC_STATE getDesiredState() {
+        return desiredPneumaticState;
+    }
+
     public void setDesiredState(Pneumatic.PNEUMATIC_STATE desiredPneumaticState) {
         this.desiredPneumaticState = desiredPneumaticState;
         pneumaticOutputsChanged = true;
@@ -57,9 +58,9 @@ public class Pneumatic extends Subsystem {
 
     public void changePneumatic() {
         if (desiredPneumaticState == PNEUMATIC_STATE.OFF) {
-            desiredPneumaticState = PNEUMATIC_STATE.ON;
+            setDesiredState(PNEUMATIC_STATE.ON);
         } else {
-            desiredPneumaticState = PNEUMATIC_STATE.OFF;
+            setDesiredState(PNEUMATIC_STATE.OFF);
         }
         pneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON);
         actualPneumaticState = desiredPneumaticState;
@@ -78,14 +79,6 @@ public class Pneumatic extends Subsystem {
     public void writeToHardware() {
         if (pneumaticOutputsChanged) {
             pneumaticOutputsChanged = false;
-            switch (desiredPneumaticState) {
-                case ON -> {
-                    desiredPneumaticPosition = pneumaticOn;
-                }
-                case OFF -> {
-                    desiredPneumaticPosition = pneumaticOff;
-                }
-            }
             pneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON);
             actualPneumaticState = desiredPneumaticState;
         }
