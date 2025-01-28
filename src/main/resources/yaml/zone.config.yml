@@ -109,11 +109,6 @@ subsystems:
                     allowableError: 5
         constants:
             ## Positional Configurations ##
-            elevatorGroundPosition: 0.1
-            elevatorL1Position: 0.1
-            elevatorL2Position: 0.1
-            elevatorL3Position: 0.1
-            elevatorL4Position: 0.1
             deepCageHangerEthanPosition: 0.1
             deepCageHangerLiaoPosition: 0.1
             openLoopRampRate: 0.1
@@ -147,16 +142,21 @@ subsystems:
             useMultiTargetOdometry: 0
     algaeCatcher:
         #TODO tune these stuffs
-        implemented: false
+        implemented: true
         motors:
             algaeCatcherLeadMotor:
                 motorType: TalonFX
-                motorName: algaeCatcherLeadMotor
+                motorName: leadMotor
                 id: -324092
                 invertMotor: false
             algaeCatcherFollowerMotor:
                 motorType: TalonFX
-                motorName: algaeCatcherFollowerMotor
+                motorName: followerMotor
+                id: -314159
+                invertMotor: false
+            algaeCatcherPositionMotor:
+                motorType: TalonFX
+                motorName: positionMotor
                 id: -314159
                 invertMotor: false
         pidConfig:
@@ -169,33 +169,68 @@ subsystems:
             algaeCollectSpeed: -0.5
             algaeHoldSpeed: -0.1
             algaeReleaseSpeed: 0.25
-    algaeArm:
+
+            neutralPosition: 1
+            intakePosition: 1
+            holdPosition: 1
+            outtakePosition: 1
+    coralArm:
         implemented: true
         motors:
-            algaeArmMotor:
+            coralPivotMotor:
                 motorType: TalonFX
-                motorName: algaeArmMotor
+                motorName: pivotMotor
+                id: -1
+                invertMotor: false
+            coralIntakeMotor:
+                motorType: SparkMax
+                motorName: intakeMotor
                 id: -1
                 invertMotor: false
         pidConfig:
-            slot0:
-                kP: 0.0065
+            slot1:
+                kP: 0
                 kI: 0
-                kD: 0.00005
-                kV: 0.00925
-        constants:
-            algaeArmMotorSpeed: 0.5
+                kD: 0
+                kV: 0
+            slot2:
+                kP: 0
+                kI: 0
+                kD: 0
+                kV: 0
+        constants: # TODO: all of these
+            intakeSpeed: 1
+            outtakeSpeed: -1
+            holdSpeed: 0
+
+            coralSensorChannel: 0
+
+            coralArmL1Position: 1
+            coralArmL2Position: 2
+            coralArmL3Position: 3
+            coralArmL4Position: 4
+            coralArmFeederPosition: -1
+            coralArmRestPosition: -1
     elevator:
-      elevatorMotor:
-        motorType: TalonFX
-        motorName: elevatorMotor
-        id: 10
-        invertMotor: false
-        currentLimit: 20
-        motionMagic:
-          expoKV: 0.035
-          expoKA: 0.065
-    deepCageHanger:
+        implemented: true
+        motors:
+            elevatorMotor:
+                motorType: TalonFX
+                motorName: elevatorMotor
+                id: 10
+                invertMotor: false
+                currentLimit: 20
+                motionMagic:
+                    expoKV: 0.035
+                    expoKA: 0.065
+        constants:
+            elevatorRestPosition: 0.1
+            elevatorFeederPosition: 0.1
+            elevatorL1Position: 0.1
+            elevatorL2Position: 0.1
+            elevatorL3Position: 0.1
+            elevatorL4Position: 0.1
+    ethan:
       deepCageHangerMotor:
         motorType: TalonFX
         motorName: deepCageHangerMotor

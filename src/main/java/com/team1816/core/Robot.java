@@ -6,7 +6,6 @@ import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.*;
@@ -22,17 +21,15 @@ import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.core.states.RobotState;
-import edu.wpi.first.hal.DriverStationJNI;
-import edu.wpi.first.hal.HAL;
+import com.team1816.season.subsystems.AlgaeCatcher;
+import com.team1816.season.subsystems.CoralArm;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.nio.file.Files;
@@ -75,6 +72,9 @@ public class Robot extends TimedRobot {
 
     //TODO add new subsystems here
     private Autopath autopather;
+    private Elevator elevator;
+    private CoralArm coralArm;
+    private AlgaeCatcher algaeCatcher;
 
     private LedManager ledManager;
     private Camera camera;
@@ -181,6 +181,9 @@ public class Robot extends TimedRobot {
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
             autopather = Injector.get(Autopath.class);
+            coralArm = Injector.get(CoralArm.class);
+            elevator = Injector.get(Elevator.class);
+            algaeCatcher = Injector.get(AlgaeCatcher.class);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -222,7 +225,7 @@ public class Robot extends TimedRobot {
 
             drive = (Injector.get(Drive.Factory.class)).getInstance();
 
-            subsystemManager.setSubsystems(drive, ledManager, camera);
+            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher);
 
             subsystemManager.registerEnabledLoops(enabledLoop);
             subsystemManager.registerDisabledLoops(disabledLoop);
@@ -352,6 +355,9 @@ public class Robot extends TimedRobot {
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
         //TODO add new subsystem inits here
+        elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
+        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP);
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.REST, CoralArm.INTAKE_STATE.REST);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();

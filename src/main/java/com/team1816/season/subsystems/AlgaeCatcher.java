@@ -1,6 +1,7 @@
 package com.team1816.season.subsystems;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
@@ -12,6 +13,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+@Singleton
 public class AlgaeCatcher extends Subsystem {
     /**
      * Name
