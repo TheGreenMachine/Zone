@@ -73,7 +73,7 @@ public class TopPlace2Automode extends AutoMode {
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST),
                                 new RotateSwerveAction(Rotation2d.fromDegrees(480)),
-                                new AlgaeCatcherAction()
+                                new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP, AlgaeCatcher.POSITION_STATE.STOW)
                         )
 
 
