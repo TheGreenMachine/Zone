@@ -8,6 +8,9 @@ import com.team1816.lib.hardware.components.motor.configurations.*;
 import com.team1816.lib.util.ConfigurationTranslator;
 import com.team1816.lib.util.logUtil.GreenLogger;
 
+import static com.revrobotics.spark.config.AlternateEncoderConfig.Type.kQuadrature;
+import static com.revrobotics.spark.config.LimitSwitchConfig.Type.kNormallyOpen;
+
 public class LazySparkMax extends SparkMax implements IGreenMotor {
     private final SparkMaxConfig sparkConfig;
     private RelativeEncoder encoder;
@@ -34,7 +37,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
      */
     public LazySparkMax(int deviceNumber, String motorName) {
         super(deviceNumber, SparkLowLevel.MotorType.kBrushless);
-        encoder = configureRelativeEncoder(FeedbackDeviceType.HALL_SENSOR);
+        encoder = super.getEncoder();
         name = motorName;
         sparkConfig = new SparkMaxConfig();
         currentPIDSlot = ClosedLoopSlot.kSlot0;
@@ -53,7 +56,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void selectFeedbackSensor(FeedbackDeviceType deviceType) {
-        encoder = configureRelativeEncoder(deviceType);
+//        encoder = configureRelativeEncoder(deviceType);
     }
 
     @Override
@@ -61,7 +64,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
         selectFeedbackSensor(deviceType);
     }
 
-    private RelativeEncoder configureRelativeEncoder(FeedbackDeviceType deviceType) { // TODO: figure this out
+    private RelativeEncoder configureRelativeEncoder(FeedbackDeviceType deviceType) { // hopefully this doesn't cause any problems
         return super.getEncoder();
 //        return super.getEncoder(
 //            ConfigurationTranslator.toSparkRelativeEncoderType(deviceType),
@@ -101,7 +104,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void configForwardLimitSwitch(boolean normallyOpen) {
-        limitSwitchConfig.forwardLimitSwitchType(normallyOpen ? LimitSwitchConfig.Type.kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
+        limitSwitchConfig.forwardLimitSwitchType(normallyOpen ? kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
         sparkConfig.apply(limitSwitchConfig);
         reconfigure();
         forwardLimitSwitch = super.getForwardLimitSwitch();
@@ -109,7 +112,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void configReverseLimitSwitch(boolean normallyOpen) {
-        limitSwitchConfig.reverseLimitSwitchType(normallyOpen ? LimitSwitchConfig.Type.kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
+        limitSwitchConfig.reverseLimitSwitchType(normallyOpen ? kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
         sparkConfig.apply(limitSwitchConfig);
         reconfigure();
         reverseLimitSwitch = super.getReverseLimitSwitch();

@@ -337,7 +337,7 @@ public class MotorFactory {
             }
 
         } else {
-            motor.selectFeedbackSensor(FeedbackDeviceType.HALL_SENSOR); // Only using hall sensors on sparks at the moment
+//            motor.selectFeedbackSensor(FeedbackDeviceType.HALL_SENSOR); // No longer using hall sensor
         }
 
         //Inversion last because other things might override?
