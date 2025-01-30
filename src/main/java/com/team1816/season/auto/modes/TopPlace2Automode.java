@@ -73,6 +73,7 @@ public class TopPlace2Automode extends AutoMode {
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST),
                                 new RotateSwerveAction(Rotation2d.fromDegrees(480)),
+                                new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.OUTTAKE, AlgaeCatcher.POSITION_STATE.ALGAEL2),
                                 new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP, AlgaeCatcher.POSITION_STATE.STOW)
                         )
 
@@ -82,6 +83,6 @@ public class TopPlace2Automode extends AutoMode {
 
     @Override
     public Pose2d getInitialPose() {
-        return robotState.dynamicAutoScript2025.getStartPos();
+        return trajectoryActions.get(0).getTrajectory().getInitialPose();
     }
 }

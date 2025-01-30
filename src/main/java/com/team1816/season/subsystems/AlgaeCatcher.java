@@ -30,11 +30,12 @@ public class AlgaeCatcher extends Subsystem {
     /**
      * Constants
      */
-    private static final double neutralPosition = factory.getConstant(NAME,"neutralPosition",1.0);
+    private static final double stowPosition = factory.getConstant(NAME,"stowPosition",1.0);
     private static final double intakePosition = factory.getConstant(NAME,"intakePosition",1.0);
     private static final double holdPosition = factory.getConstant(NAME,"holdPosition",1.0);
     private static final double outtakePosition = factory.getConstant(NAME,"outtakePosition",1.0);
-
+    private static final double algael2Position = factory.getConstant(NAME,"algael2Position",1.0);
+    private static final double algael3Position = factory.getConstant(NAME,"algael3Position",1.0);
 
     /**
      * Properties
@@ -163,7 +164,7 @@ public class AlgaeCatcher extends Subsystem {
             positionOutputsChanged = false;
             switch (desiredPositionState){
                 case STOW -> {
-                    desiredPosition = neutralPosition;
+                    desiredPosition = stowPosition;
                 }
                 case INTAKE -> {
                     desiredPosition = intakePosition;
@@ -173,6 +174,12 @@ public class AlgaeCatcher extends Subsystem {
                 }
                 case OUTTAKE -> {
                     desiredPosition = outtakePosition;
+                }
+                case ALGAEL2 -> {
+                    desiredPosition = algael2Position;
+                }
+                case ALGAEL3 -> {
+                    desiredPosition = algael3Position;
                 }
             }
         }
@@ -230,6 +237,8 @@ public class AlgaeCatcher extends Subsystem {
         STOW,
         INTAKE,
         HOLD,
-        OUTTAKE
+        OUTTAKE,
+        ALGAEL2,
+        ALGAEL3
     }
 }
