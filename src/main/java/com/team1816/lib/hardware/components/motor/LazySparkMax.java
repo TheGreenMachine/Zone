@@ -8,7 +8,6 @@ import com.team1816.lib.hardware.components.motor.configurations.*;
 import com.team1816.lib.util.ConfigurationTranslator;
 import com.team1816.lib.util.logUtil.GreenLogger;
 
-import static com.revrobotics.spark.config.AlternateEncoderConfig.Type.kQuadrature;
 import static com.revrobotics.spark.config.LimitSwitchConfig.Type.kNormallyOpen;
 
 public class LazySparkMax extends SparkMax implements IGreenMotor {
