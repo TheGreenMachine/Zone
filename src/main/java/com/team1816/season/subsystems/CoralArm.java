@@ -43,7 +43,7 @@ public class CoralArm extends Subsystem {
     private PIVOT_STATE desiredPivotState = PIVOT_STATE.REST;
     private INTAKE_STATE desiredIntakeState = INTAKE_STATE.REST;
 
-    private boolean desiredPivotStateChanged =  false;
+    private boolean desiredPivotStateChanged = false;
     private boolean desiredIntakeStateChanged = false;
 
     private double actualPivotVelocity = 0;
@@ -112,7 +112,7 @@ public class CoralArm extends Subsystem {
         desiredIntakeStateChanged = true;
     }
 
-    public void setDesiredState(PIVOT_STATE desiredPivotState, INTAKE_STATE desiredIntakeState){
+    public void setDesiredState(PIVOT_STATE desiredPivotState, INTAKE_STATE desiredIntakeState) {
         setDesiredPivotState(desiredPivotState);
         setDesiredIntakeState(desiredIntakeState);
     }
@@ -137,7 +137,11 @@ public class CoralArm extends Subsystem {
 
         if (robotState.isBeamBreakTriggered != isBeamBreakTriggered()) {
             robotState.isBeamBreakTriggered = isBeamBreakTriggered();
-            desiredIntakeStateChanged = true;
+
+            if (robotState.isBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.INTAKE) {
+                desiredIntakeState = INTAKE_STATE.HOLD;
+                desiredIntakeStateChanged = true;
+            }
         }
 
         if (Constants.kLoggingRobot) {
@@ -180,7 +184,7 @@ public class CoralArm extends Subsystem {
 
     @Override
     public void stop() {
-        desiredIntakeState = INTAKE_STATE.HOLD;
+        desiredIntakeState = INTAKE_STATE.REST;
     }
 
     @Override
