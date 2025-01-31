@@ -7,6 +7,8 @@ import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
+import com.team1816.season.auto.modes.BottomPlace2Automode;
+import com.team1816.season.auto.modes.MiddlePlace2Automode;
 import com.team1816.season.auto.modes.TopPlace2Automode;
 import com.team1816.season.auto.modes.TrajectoryOnlyAutoMode;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -189,7 +191,11 @@ public class AutoModeManager {
 
         DYNAMIC_TRAJECTORY_ONLY,
 
-        TOP_PLACE_2_AUTOMODE
+        TOP_PLACE_2_AUTOMODE,
+
+        MIDDLE_PLACE_2_AUTOMODE,
+
+        BOTTOM_PLACE_2_AUTOMODE
         }
 
 
@@ -214,6 +220,10 @@ public class AutoModeManager {
                 return new TrajectoryOnlyAutoMode(robotState);
             case TOP_PLACE_2_AUTOMODE:
                 return new TopPlace2Automode();
+            case MIDDLE_PLACE_2_AUTOMODE:
+                return new MiddlePlace2Automode();
+            case BOTTOM_PLACE_2_AUTOMODE:
+                return new BottomPlace2Automode();
             default:
                 GreenLogger.log("Defaulting to drive straight mode");
                 return new DriveStraightMode();
