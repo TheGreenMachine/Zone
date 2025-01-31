@@ -5,7 +5,6 @@ import com.team1816.lib.Injector;
 import com.team1816.lib.auto.actions.AutoAction;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
-import com.team1816.season.subsystems.DeepCageHanger;
 
 public class CoralArmAction implements AutoAction {
     private RobotState robotState;

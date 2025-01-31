@@ -169,9 +169,6 @@ public class AlgaeCatcher extends Subsystem {
                 case INTAKE -> {
                     desiredPosition = intakePosition;
                 }
-                case HOLD -> {
-                    desiredPosition = holdPosition;
-                }
                 case OUTTAKE -> {
                     desiredPosition = outtakePosition;
                 }
@@ -236,7 +233,6 @@ public class AlgaeCatcher extends Subsystem {
     public enum POSITION_STATE {
         STOW,
         INTAKE,
-        HOLD,
         OUTTAKE,
         ALGAEL2,
         ALGAEL3

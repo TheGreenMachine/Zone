@@ -9,7 +9,7 @@ driver:
       horizontal: rotation
   buttonpad:
     b: brakeMode
-    x: autopathingSpeaker
+    x:
     a:
     y:
   axes:
