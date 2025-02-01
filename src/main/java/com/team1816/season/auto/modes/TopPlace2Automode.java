@@ -4,9 +4,7 @@ import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.actions.*;
 import com.team1816.lib.auto.modes.AutoMode;
-import com.team1816.season.auto.actions.AlgaeCatcherAction;
-import com.team1816.season.auto.actions.CoralArmAction;
-import com.team1816.season.auto.actions.ElevatorAction;
+import com.team1816.season.auto.actions.*;
 import com.team1816.season.auto.path.FarFeederToSideSix;
 import com.team1816.season.auto.path.FarProcessorToSideOne;
 import com.team1816.season.auto.path.SideOneToFarFeeder;
@@ -48,7 +46,7 @@ public class TopPlace2Automode extends AutoMode {
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.L4),
                                 new CoralArmAction(CoralArm.INTAKE_STATE.HOLD, CoralArm.PIVOT_STATE.L4)
                         ),
-                        new CoralArmAction(CoralArm.INTAKE_STATE.OUTTAKE, CoralArm.PIVOT_STATE.L4),
+                        new PlaceCoralSeriesAction(),
                         new ParallelAction(
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST)
@@ -68,7 +66,7 @@ public class TopPlace2Automode extends AutoMode {
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.L1),
                                 new CoralArmAction(CoralArm.INTAKE_STATE.HOLD, CoralArm.PIVOT_STATE.L1)
                         ),
-                        new CoralArmAction(CoralArm.INTAKE_STATE.OUTTAKE, CoralArm.PIVOT_STATE.L1),
+                        new PlaceCoralSeriesAction(),
                         new ParallelAction(
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST),

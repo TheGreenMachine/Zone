@@ -7,7 +7,6 @@ import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -133,12 +132,12 @@ public class Elevator extends Subsystem {
                     desiredElevatorPosition = elevatorL4Position;
                 }
             }
-            elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 1.5, 35));
+            elevatorMotor.set(GreenControlMode.POSITION_CONTROL, desiredElevatorPosition);
         }
     }
 
-    public double getActualPivotPosition () {
-        return elevatorMotor.getSensorPosition();
+    public boolean isElevatorInRange(){
+        return Math.abs(elevatorMotor.getSensorPosition() - desiredElevatorPosition) < 5;
     }
 
     @Override

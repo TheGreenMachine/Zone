@@ -192,10 +192,14 @@ public class CoralArm extends Subsystem {
             desiredPivotStateChanged = false;
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
-            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, desiredPivotPosition);
+            pivotMotor.set(GreenControlMode.POSITION_CONTROL, desiredPivotPosition);
 
 //            System.out.println(pivotMotor.getSensorPosition()+" "+desiredPivotPosition);
         }
+    }
+
+    public boolean isCoralArmPivotInRange(){
+        return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 5;
     }
 
     @Override

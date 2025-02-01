@@ -28,7 +28,7 @@ public class ElevatorAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return robotState.actualElevatorState == desiredState;
+        return elevator.isElevatorInRange();
     }
 
     @Override

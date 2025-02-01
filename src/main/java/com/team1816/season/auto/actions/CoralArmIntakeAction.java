@@ -6,22 +6,19 @@ import com.team1816.lib.auto.actions.AutoAction;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 
-public class CoralArmAction implements AutoAction {
+public class CoralArmIntakeAction implements AutoAction {
     private RobotState robotState;
     private CoralArm coralArm;
     private CoralArm.INTAKE_STATE desiredIntakeState;
-    private CoralArm.PIVOT_STATE desiredPivotState;
 
-    public CoralArmAction(CoralArm.INTAKE_STATE desiredIntakeState, CoralArm.PIVOT_STATE desiredPivotState) {
+    public CoralArmIntakeAction(CoralArm.INTAKE_STATE desiredIntakeState) {
         this.robotState = Injector.get(RobotState.class);
         this.coralArm = Injector.get(CoralArm.class);
         this.desiredIntakeState = desiredIntakeState;
-        this.desiredPivotState = desiredPivotState;
     }
     @Override
     public void start() {
         coralArm.setDesiredIntakeState(desiredIntakeState);
-        coralArm.setDesiredPivotState(desiredPivotState);
     }
 
     @Override
@@ -31,7 +28,7 @@ public class CoralArmAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return  robotState.actualIntakeState == desiredIntakeState && coralArm.isCoralArmPivotInRange();
+        return  robotState.actualIntakeState == desiredIntakeState;
     }
 
     @Override
