@@ -31,7 +31,7 @@ public class AlgaeCatcherAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return  robotState.actualAlgaeCatcherState == desiredCatcherState && robotState.actualPositionState == desiredPositionState;
+        return algaeCatcher.isAlgaeCatcherPivotInRange() && algaeCatcher.isAlgaeCatcherIntakeInRange();
     }
 
     @Override

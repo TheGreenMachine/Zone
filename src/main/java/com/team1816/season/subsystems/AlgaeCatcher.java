@@ -183,6 +183,14 @@ public class AlgaeCatcher extends Subsystem {
         }
     }
 
+    public boolean isAlgaeCatcherPivotInRange(){
+        return Math.abs(positionMotor.getSensorPosition() - desiredPosition) < 5;
+    }
+
+    public boolean isAlgaeCatcherIntakeInRange(){
+        return Math.abs(leadMotor.getSensorVelocity() - desiredAlgaeCatcherPower) < 5;
+    }
+
     @Override
     public void zeroSensors() {
         //No implementation
