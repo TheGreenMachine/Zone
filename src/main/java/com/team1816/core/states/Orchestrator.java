@@ -206,8 +206,6 @@ public class Orchestrator {
      * @return
      */
     public void updatePoseWithVisionData() {
-        //We'll want a toggle for wether or not this method is called every loop, and then a separate call to it for autoaim eventually
-        //Kinda issue, idk what std dev we are supposed to use
         if (robotState.currentCamFind) {
             drive.updateOdometryWithVision(
                     robotState.currentVisionEstimatedPose.estimatedPose.toPose2d(),

@@ -17,11 +17,14 @@ import com.team1816.lib.util.team254.SwerveDriveSignal;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -93,7 +96,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
     /**
      * Odometry variables
      */
-    private final SwerveDriveOdometry swerveOdometry;
+    private final SwerveDriveOdometry simActualSwerveOdometry;
     private final SwerveDrivePoseEstimator swerveEstimator;
     private final SwerveDriveHelper swerveDriveHelper = new SwerveDriveHelper();
 
@@ -135,7 +138,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         actualModulePositions[kBackLeft] = new SwerveModulePosition();
         actualModulePositions[kBackRight] = new SwerveModulePosition();
 
-        swerveOdometry =
+        simActualSwerveOdometry =
             new SwerveDriveOdometry(
                 swerveKinematics,
                 Constants.EmptyRotation2d,
@@ -217,7 +220,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         }
         actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
 
-        swerveOdometry.update(actualHeading, actualModulePositions);
+        simActualSwerveOdometry.update(actualHeading, actualModulePositions);
         swerveEstimator.update(actualHeading, actualModulePositions);
 
         if (Constants.kLoggingDrivetrain) {
@@ -329,6 +332,10 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         }
     }
 
+    public void updateOdometryWithVision(Pose2d estimatedPose2D, double timestamp, Matrix<N3, N1> stdDevs) {
+        swerveEstimator.addVisionMeasurement(estimatedPose2D, timestamp, stdDevs);
+    }
+
     /**
      * Updates robotState based on values from odometry and sensor readings in readFromHardware
      *
@@ -336,7 +343,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
      */
     @Override
     public void updateRobotState() {
-        robotState.fieldToVehicle = swerveOdometry.getPoseMeters();
+        robotState.simActualFieldToVehicle = simActualSwerveOdometry.getPoseMeters();
         robotState.fieldToVehicle = swerveEstimator.getEstimatedPosition();
         robotState.driverRelativeFieldToVehicle = new Pose2d( // for inputs ONLY
             robotState.fieldToVehicle.getTranslation(),
@@ -363,7 +370,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         robotState.vehicleToFloorProximityCentimeters = infrastructure.getMaximumProximity();
 
         if (Constants.kLoggingDrivetrain) {
-            drivetrainPoseLogger.append(new double[]{robotState.fieldToVehicle.getX(), robotState.fieldToVehicle.getY(), robotState.fieldToVehicle.getRotation().getDegrees()});
+            drivetrainPoseLogger.append(robotState.fieldToVehicle);
             drivetrainChassisSpeedsLogger.append(new double[]{robotState.deltaVehicle.vxMetersPerSecond, robotState.deltaVehicle.vyMetersPerSecond, robotState.deltaVehicle.omegaRadiansPerSecond});
             gyroPitchLogger.append(pigeon.getPitchValue());
             gyroRollLogger.append(pigeon.getRollValue());
@@ -484,8 +491,6 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
     @Override
     public void resetOdometry(Pose2d pose) {
         actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
-        swerveOdometry.resetPosition(actualHeading, actualModulePositions, pose);
-        swerveOdometry.update(actualHeading, actualModulePositions);
         swerveEstimator.resetPosition(actualHeading, actualModulePositions, pose);
         swerveEstimator.update(actualHeading, actualModulePositions);
         updateRobotState();

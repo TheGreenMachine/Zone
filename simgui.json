@@ -161,15 +161,15 @@
         "April Tags": {
           "arrows": false,
           "color": [
-            0.800000011920929,
-            0.20000000298023224,
             1.0,
+            0.0,
+            0.0,
             255.0
           ],
-          "length": 0.05000000074505806,
+          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-green.png",
+          "length": 0.6000000238418579,
           "style": "Box/Image",
-          "weight": 2.5,
-          "width": 0.3499999940395355
+          "width": 0.5
         },
         "AutopathFailPoints": {
           "arrows": false,
@@ -234,9 +234,9 @@
         },
         "EstimatedRobot": {
           "arrowColor": [
-            0.5980392098426819,
-            0.5247501134872437,
-            0.5247501134872437,
+            0.0,
+            1.0,
+            0.0,
             55.0
           ],
           "arrowWeight": 0.20000000298023224,
@@ -268,15 +268,39 @@
         },
         "Robot": {
           "arrowColor": [
-            0.5980392098426819,
-            0.5247501134872437,
-            0.5247501134872437,
+            0.0,
+            1.0,
+            0.0,
             255.0
           ],
           "arrowWeight": 2.0,
-          "length": 0.8381999731063843,
-          "weight": 1.0,
-          "width": 0.8381999731063843
+          "color": [
+            1.0,
+            0.0,
+            0.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "weight": 3.0,
+          "width": 0.800000011920929
+        },
+        "SimActualRobotPosition": {
+          "arrowColor": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "arrowWeight": 2.0,
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "weight": 2.0,
+          "width": 0.800000011920929
         },
         "StartCollisionPoints": {
           "arrows": false,
@@ -324,6 +348,25 @@
           "arrowWeight": 3.0,
           "style": "Line"
         },
+        "vision": {
+          "arrowColor": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "arrowWeight": 2.0,
+          "color": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "selectable": false,
+          "weight": 2.0,
+          "width": 0.800000011920929
+        },
         "width": 17.54825210571289,
         "window": {
           "visible": true
@@ -351,23 +394,53 @@
         }
       },
       "/SmartDashboard/VisionSystemSim-SimVision/Sim Field": {
-        "apriltag": {
-          "arrows": false,
-          "color": [
-            225.94937133789063,
-            0.0,
-            255.0,
+        "Robot": {
+          "arrowColor": [
+            1.0,
+            1.0,
+            1.0,
             255.0
           ],
-          "length": 0.10000000149011612,
-          "style": "Box/Image"
+          "arrowWeight": 2.0,
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "weight": 2.0,
+          "width": 0.800000011920929
+        },
+        "apriltag": {
+          "arrows": false,
+          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-green.png",
+          "length": 0.6000000238418579,
+          "width": 0.5
         },
         "bottom": 1638,
         "builtin": "2025 Reefscape",
+        "cameras": {
+          "arrowColor": [
+            0.29411765933036804,
+            1.0,
+            0.9921568632125854,
+            255.0
+          ],
+          "arrowSize": 19,
+          "arrowWeight": 3.0,
+          "style": "Hidden",
+          "weight": 1.0
+        },
         "height": 8.051901817321777,
         "left": 534,
         "right": 3466,
         "top": 291,
+        "visibleTargetPoses": {
+          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-blue.png",
+          "length": 0.4000000059604645,
+          "width": 0.5
+        },
         "width": 17.54825210571289,
         "window": {
           "visible": true

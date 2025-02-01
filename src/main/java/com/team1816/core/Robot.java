@@ -1,6 +1,7 @@
 package com.team1816.core;
 
 import com.ctre.phoenix6.CANBus;
+import com.team1816.core.configuration.FieldConfig;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
@@ -26,6 +27,7 @@ import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -299,6 +301,14 @@ public class Robot extends TimedRobot {
                         autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
             );
 
+            //For testing only
+            inputHandler.listenAction(
+                    "testingOffsetPose",
+                    ActionState.PRESSED,
+                    () ->
+                            drive.resetOdometry(robotState.fieldToVehicle.plus(new Transform2d(new Translation2d(1.0, 1.0), new Rotation2d(0.17 * 2 * Math.PI))))
+            );
+
             /** Operator Commands */
 
 
@@ -440,6 +450,13 @@ public class Robot extends TimedRobot {
             Robot.robotDt = getLastRobotLoop();
             loopStart = Timer.getFPGATimestamp();
 
+            if (Constants.kUseVision) {
+                orchestrator.updatePoseWithVisionData();
+            }
+
+            if (RobotBase.isSimulation()) {
+                FieldConfig.field.getObject("SimActualRobotPosition").setPose(robotState.simActualFieldToVehicle);
+            }
 
             if (Constants.kLoggingRobot) {
                 looperLogger.append(looperDt);
@@ -548,12 +565,6 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         try {
-
-            if (Constants.kUseVision) {
-                if (robotState.currentCamFind) {
-                    orchestrator.updatePoseWithVisionData();
-                }
-            }
 
             if(Constants.kLoggingRobot) {
                 GreenLogger.updatePeriodicLogs();

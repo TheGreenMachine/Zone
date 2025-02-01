@@ -19,12 +19,16 @@ import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.lib.util.team254.SwerveDriveSignal;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -44,9 +48,10 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
     /**
      * Odometry
      */
-    private DifferentialDriveOdometry tankOdometry;
-    private static final DifferentialDriveKinematics tankKinematics = new DifferentialDriveKinematics(
-        kDriveWheelTrackWidthMeters
+    private final DifferentialDriveOdometry simActualTankOdometry;
+    private final DifferentialDrivePoseEstimator tankEstimator;
+    public static final DifferentialDriveKinematics tankKinematics = new DifferentialDriveKinematics(
+            kDriveWheelTrackWidthMeters
     );
     private final CheesyDriveHelper driveHelper = new CheesyDriveHelper();
     private final double tickRatioPerLoop = Constants.kLooperDt / .1d; // Convert Ticks/100MS into Ticks/Robot Loop
@@ -111,12 +116,14 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
 
         setOpenLoop(DriveSignal.NEUTRAL);
 
-        tankOdometry =
+        simActualTankOdometry =
             new DifferentialDriveOdometry(
                 getActualHeading(),
                 leftActualDistance,
                 rightActualDistance
             );
+
+        tankEstimator = robotState.tankEstimator;
 
         if (Constants.kLoggingDrivetrain) {
             desStatesLogger = new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/Tank/DesStates");
@@ -187,7 +194,8 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
         }
         actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
 
-        tankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
+        simActualTankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
+        tankEstimator.update(actualHeading, leftActualDistance, rightActualDistance);
 
         if (Constants.kLoggingDrivetrain) {
             ((DoubleArrayLogEntry) desStatesLogger).append(new double[]{leftVelDemand, rightVelDemand});
@@ -257,14 +265,18 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
      */
     @Override
     public void resetOdometry(Pose2d pose) {
-        tankOdometry.resetPosition(
+        tankEstimator.resetPosition(
             getActualHeading(),
             leftActualDistance,
             rightActualDistance,
             pose
         );
-        tankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
+        tankEstimator.update(actualHeading, leftActualDistance, rightActualDistance);
         updateRobotState();
+    }
+
+    public void updateOdometryWithVision(Pose2d estimatedPose2D, double timestamp, Matrix<N3, N1> stdDevs) {
+        tankEstimator.addVisionMeasurement(estimatedPose2D, timestamp, stdDevs);
     }
 
     /**
@@ -274,7 +286,8 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
      */
     @Override
     public void updateRobotState() {
-        robotState.fieldToVehicle = tankOdometry.getPoseMeters();
+        robotState.simActualFieldToVehicle = simActualTankOdometry.getPoseMeters();
+        robotState.fieldToVehicle = tankEstimator.getEstimatedPosition();
 
         var cs = new ChassisSpeeds(
             chassisSpeed.vxMetersPerSecond,
@@ -294,7 +307,7 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
         robotState.vehicleToFloorProximityCentimeters = infrastructure.getMaximumProximity();
 
         if (Constants.kLoggingDrivetrain) {
-            drivetrainPoseLogger.append(new double[]{robotState.fieldToVehicle.getX(), robotState.fieldToVehicle.getY(), robotState.fieldToVehicle.getRotation().getRadians()});
+            drivetrainPoseLogger.append(robotState.fieldToVehicle);
             drivetrainChassisSpeedsLogger.append(new double[]{robotState.deltaVehicle.vxMetersPerSecond, robotState.deltaVehicle.vyMetersPerSecond, robotState.deltaVehicle.omegaRadiansPerSecond});
             gyroPitchLogger.append(pigeon.getPitchValue());
             gyroRollLogger.append(pigeon.getRollValue());

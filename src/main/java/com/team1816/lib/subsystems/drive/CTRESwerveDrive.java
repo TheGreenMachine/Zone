@@ -417,7 +417,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
             robotState.drivetrainTemp = motorTemperatures.get(0).getValueAsDouble();
 
-            drivetrainPoseLogger.append(new double[]{robotState.fieldToVehicle.getX(), robotState.fieldToVehicle.getY(), robotState.fieldToVehicle.getRotation().getDegrees()});
+            drivetrainPoseLogger.append(robotState.fieldToVehicle);
             drivetrainChassisSpeedsLogger.append(new double[]{robotState.deltaVehicle.vxMetersPerSecond, robotState.deltaVehicle.vyMetersPerSecond, robotState.deltaVehicle.omegaRadiansPerSecond});
 
             controlRequestLogger.append(request.getClass().getSimpleName());

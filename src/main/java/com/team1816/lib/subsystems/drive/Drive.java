@@ -27,6 +27,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StructLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -202,7 +203,7 @@ public abstract class Drive
     /**
      * Logging
      */
-    protected DoubleArrayLogEntry drivetrainPoseLogger;
+    protected StructLogEntry<Pose2d> drivetrainPoseLogger;
     protected DoubleArrayLogEntry drivetrainChassisSpeedsLogger;
     protected DoubleLogEntry gyroPitchLogger;
     protected DoubleLogEntry gyroRollLogger;
@@ -248,7 +249,7 @@ public abstract class Drive
         }
 
         if (Constants.kLoggingDrivetrain) {
-            drivetrainPoseLogger = new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/Pose");
+            drivetrainPoseLogger = StructLogEntry.create(DataLogManager.getLog(), "Drivetrain/Pose", Pose2d.struct);
             drivetrainChassisSpeedsLogger = new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/ChassisSpeeds");
             trajectoryDesiredPoseLogger = new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/DesiredTrajectoryPose");
         }

@@ -144,7 +144,7 @@ subsystems:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
     camera:
-        implemented: false
+        implemented: true
         constants:
             useMultiTargetOdometry: 0
     algaeCatcher:
@@ -279,7 +279,7 @@ constants:
     logDrivetrain: 1 # 0 or 1
     configStatusFrames: 0 # 0 or 1
     ## General ##
-    usingVision: 0
+    usingVision: 1
     teleopFieldCentric: 1 # 0 or 1
     kLooperDt: .025 # seconds
     isProLicensed: 0
