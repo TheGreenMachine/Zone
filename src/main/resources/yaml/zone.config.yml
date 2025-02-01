@@ -177,7 +177,7 @@ subsystems:
             algaeHoldSpeed: -0.1
             algaeReleaseSpeed: 0.25
 
-            algaeSensorChannel: 0
+            algaeSensorChannel: 1
 
             stowPosition: 1
             intakePosition: 1
