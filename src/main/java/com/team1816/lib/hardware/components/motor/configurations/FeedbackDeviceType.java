@@ -4,7 +4,6 @@ package com.team1816.lib.hardware.components.motor.configurations;
  * Enum containing all motor feedback device types
  *
  * @see com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice
- * @see com.revrobotics.SparkRelativeEncoder.Type
  */
 public enum FeedbackDeviceType { // No enum inheritance :(
     // Near Universal
@@ -29,8 +28,8 @@ public enum FeedbackDeviceType { // No enum inheritance :(
     RELATIVE_MAG_ENCODER,
 
     // TalonSRX & SparkMax
-    QUADRATURE,
+    QUADRATURE
 
     // SparkMax
-    HALL_SENSOR
+//    HALL_SENSOR
 }
