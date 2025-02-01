@@ -196,10 +196,10 @@ public class AlgaeCatcher extends Subsystem {
                 case OUTTAKE -> {
                     desiredPosition = outtakePosition;
                 }
-                case ALGAEL2 -> {
+                case ALGAE1 -> {
                     desiredPosition = algael2Position;
                 }
-                case ALGAEL3 -> {
+                case ALGAE2 -> {
                     desiredPosition = algael3Position;
                 }
             }
@@ -267,7 +267,7 @@ public class AlgaeCatcher extends Subsystem {
         STOW,
         INTAKE,
         OUTTAKE,
-        ALGAEL2,
-        ALGAEL3
+        ALGAE1,
+        ALGAE2
     }
 }
