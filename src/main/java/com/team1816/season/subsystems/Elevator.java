@@ -164,9 +164,8 @@ public class Elevator extends Subsystem {
      *
      * @return desired elevator state
      */
-    public ELEVATOR_STATE getDesiredElevatorState() {
-        return desiredElevatorState;
-    }
+    public ELEVATOR_STATE getDesiredElevatorState() {return desiredElevatorState;}
+    public ELEVATOR_STATE getDesisetredElevatorState() {return desiredElevatorState;}
 
     /**
      * Elevator enum
