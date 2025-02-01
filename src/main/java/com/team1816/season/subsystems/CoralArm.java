@@ -128,6 +128,9 @@ public class CoralArm extends Subsystem {
     }
 
     public boolean isBeamBreakTriggered() {
+        if(RobotBase.isSimulation())
+            return true;
+
         return !coralSensor.get();
     }
 
@@ -140,6 +143,10 @@ public class CoralArm extends Subsystem {
 
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
+
+        if (robotState.actualIntakeState != desiredIntakeState) {
+            robotState.actualIntakeState = desiredIntakeState;
+        }
 
         if (robotState.actualPivotState != desiredPivotState) {
             robotState.actualPivotState = desiredPivotState;
@@ -187,7 +194,7 @@ public class CoralArm extends Subsystem {
             desiredPivotPosition = getPivotPosition(desiredPivotState);
             pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, desiredPivotPosition);
 
-            System.out.println(pivotMotor.getSensorPosition()+" "+desiredPivotPosition);
+//            System.out.println(pivotMotor.getSensorPosition()+" "+desiredPivotPosition);
         }
     }
 
