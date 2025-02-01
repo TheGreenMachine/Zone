@@ -89,6 +89,7 @@
       "/SmartDashboard/DTrajectoryAction 5": "String Chooser",
       "/SmartDashboard/Demo Mode": "String Chooser",
       "/SmartDashboard/Dynamic Start": "String Chooser",
+      "/SmartDashboard/Elevator+CoralArm": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/First collected note": "String Chooser",
       "/SmartDashboard/First shooting position": "String Chooser",
@@ -153,6 +154,11 @@
         }
       },
       "/SmartDashboard/DTrajectoryAction 5": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Elevator+CoralArm": {
         "window": {
           "visible": true
         }
@@ -329,11 +335,6 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Mech2d": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Robot color": {
         "window": {
           "visible": true
@@ -421,6 +422,9 @@
     "special": true
   },
   "NetworkTables Info": {
+    "Server": {
+      "open": true
+    },
     "visible": true
   }
 }

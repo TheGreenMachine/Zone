@@ -8,10 +8,10 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    b: brakeMode
-    x:
-    a:
-    y:
+    a: pivotElevatorAndCoralL1
+    b: pivotElevatorAndCoralL2
+    x: pivotElevatorAndCoralL3
+    y: pivotElevatorAndCoralFeeder
   axes:
     rightTrigger: turboMode
     leftTrigger: slowMode

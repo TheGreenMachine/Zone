@@ -40,7 +40,7 @@ public class Elevator extends Subsystem {
     private double actualElevatorPosition = 0;
     private double actualElevatorDegrees = 0;
 
-
+    private double elevatorMotorRotationsPerUnit = factory.getConstant(NAME, "elevatorMotorRotationsPerUnit", 1);
 
     /**
      * Constants
@@ -96,6 +96,8 @@ public class Elevator extends Subsystem {
         actualElevatorPosition = elevatorMotor.getSensorPosition();
 
         elevatorCurrentDraw = elevatorMotor.getMotorOutputCurrent();
+
+        robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
         if (robotState.actualElevatorState != desiredElevatorState) {
             robotState.actualElevatorState = desiredElevatorState;

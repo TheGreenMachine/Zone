@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
@@ -14,6 +15,7 @@ import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * A subsystem for the coral arm.
@@ -69,6 +71,8 @@ public class CoralArm extends Subsystem {
     private final double feederPosition = factory.getConstant(NAME, "coralArmFeederPosition", 1.0);
     private final double restPosition = factory.getConstant(NAME, "coralArmRestPosition", 1.0);
 
+    private final double motorRotationsPerDegree = factory.getConstant(NAME, "coralArmMotorRotationsPerDegree", 1);
+
     /**
      * Logging
      */
@@ -90,6 +94,12 @@ public class CoralArm extends Subsystem {
 
         super.desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/desiredPivotPosition");
         super.actStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/actualPivotPosition");
+
+        if (RobotBase.isSimulation()) {
+            pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
+            pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
+            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(240);
+        }
 
         if (Constants.kLoggingRobot) {
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/Pivot/actualRollerVelocity"), pivotMotor::getSensorVelocity);
@@ -169,11 +179,15 @@ public class CoralArm extends Subsystem {
             desiredIntakeVelocityLogger.append(desiredIntakeVelocity);
         }
 
+        robotState.coralMechArm.setAngle(robotState.coralMechArmBaseAngle + pivotMotor.getSensorPosition() / motorRotationsPerDegree);
+
         if (desiredPivotStateChanged) {
             desiredPivotStateChanged = false;
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
-            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 1.5, 35));
+            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, desiredPivotPosition);
+
+            System.out.println(pivotMotor.getSensorPosition()+" "+desiredPivotPosition);
         }
     }
 

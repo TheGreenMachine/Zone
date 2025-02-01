@@ -189,8 +189,12 @@ subsystems:
             coralPivotMotor:
                 motorType: TalonFX
                 motorName: pivotMotor
-                id: -1
+                id: 23
                 invertMotor: false
+                currentLimit: 20
+                motionMagic:
+                    expoKV: 0.035
+                    expoKA: 0.065
             coralIntakeMotor:
                 motorType: SparkMax
                 motorName: intakeMotor
@@ -198,12 +202,12 @@ subsystems:
                 invertMotor: false
         pidConfig:
             slot1:
-                kP: 0
+                kP: 10
                 kI: 0
                 kD: 0
                 kV: 0
             slot2:
-                kP: 0
+                kP: 10
                 kI: 0
                 kD: 0
                 kV: 0
@@ -214,12 +218,15 @@ subsystems:
 
             coralSensorChannel: 0
 
-            coralArmL1Position: 1
-            coralArmL2Position: 2
-            coralArmL3Position: 3
-            coralArmL4Position: 4
-            coralArmFeederPosition: -1
-            coralArmRestPosition: -1
+            coralArmL1Position: 10
+            coralArmL2Position: 20
+            coralArmL3Position: 30
+            coralArmL4Position: 40
+
+            coralArmFeederPosition: 50
+            coralArmRestPosition: 60
+
+            coralArmMotorRotationsPerDegree: 1
     elevator:
         implemented: true
         motors:
@@ -233,12 +240,14 @@ subsystems:
                     expoKV: 0.035
                     expoKA: 0.065
         constants:
-            elevatorRestPosition: 0.1
-            elevatorFeederPosition: 0.1
-            elevatorL1Position: 0.1
-            elevatorL2Position: 0.1
-            elevatorL3Position: 0.1
-            elevatorL4Position: 0.1
+            elevatorRestPosition: 0
+            elevatorFeederPosition: 1
+            elevatorL1Position: 2
+            elevatorL2Position: 2.5
+            elevatorL3Position: 3
+            elevatorL4Position: 3.5
+
+            elevatorMotorRotationsPerUnit: 1
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##

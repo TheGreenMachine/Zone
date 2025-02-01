@@ -8,7 +8,7 @@ import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.subsystems.*;
-import com.team1816.season.DynamicAuto2025.DynamicAutoScript2025;
+import com.team1816.season.auto.DynamicAutoScript2025;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -91,6 +91,13 @@ public class RobotState {
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
+
+    public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(3, 3);
+    public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 1, 0);
+
+    public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
+    public final double coralMechArmBaseAngle = 190;
+    public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", .7, coralMechArmBaseAngle));
 
     /**
      * Autopathing state
@@ -281,6 +288,8 @@ public class RobotState {
             field.getObject("AutopathSuccessfulPoints").setPoses(autopathWaypointsSuccess);
             field.getObject("AutopathFailPoints").setPoses(autopathWaypointsFail);
         }
+
+        SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
 
         if (RobotBase.isSimulation()) {
             // TODO: Display any stats here
