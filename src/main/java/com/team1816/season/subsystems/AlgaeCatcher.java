@@ -11,6 +11,8 @@ import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @Singleton
@@ -26,6 +28,8 @@ public class AlgaeCatcher extends Subsystem {
     private final IGreenMotor leadMotor;
     private final IGreenMotor followerMotor;
     private final IGreenMotor positionMotor;
+
+    private final DigitalInput algaeSensor;
 
     /**
      * Constants
@@ -78,6 +82,8 @@ public class AlgaeCatcher extends Subsystem {
 
         followerMotor.follow(leadMotor, true);
 
+        algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", -1));
+
         algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", -0.5);
         algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", -0.1);
         algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", 0.25);
@@ -112,6 +118,13 @@ public class AlgaeCatcher extends Subsystem {
     public void setDesiredPositionState(POSITION_STATE desiredPositionState) {
         this.desiredPositionState = desiredPositionState;
         positionOutputsChanged = true;
+    }
+
+    public boolean isBeamBreakTriggered() {
+        if(RobotBase.isSimulation())
+            return true;
+
+        return !algaeSensor.get();
     }
 
     /**
