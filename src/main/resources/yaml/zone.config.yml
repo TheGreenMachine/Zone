@@ -237,22 +237,6 @@ subsystems:
             elevatorL2Position: 0.1
             elevatorL3Position: 0.1
             elevatorL4Position: 0.1
-    ethan:
-      deepCageHangerMotor:
-        motorType: TalonFX
-        motorName: deepCageHangerMotor
-        id: 10
-        invertMotor: false
-        currentLimit: 20
-        motionMagic:
-          expoKV: 0.035
-          expoKA: 0.065
-      deepCageHangerFollowMotor:
-        motorType: TalonFX
-        motorName: deepCageHangerFollowMotor
-        id: 4
-        invertMotor: false
-        currentLimit: 20
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##

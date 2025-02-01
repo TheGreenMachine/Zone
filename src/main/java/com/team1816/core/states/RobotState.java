@@ -84,7 +84,6 @@ public class RobotState {
     public CoralArm.INTAKE_STATE actualIntakeState = CoralArm.INTAKE_STATE.INTAKE;
     public CoralArm.PIVOT_STATE actualPivotState = CoralArm.PIVOT_STATE.L1;
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.REST;
-    public DeepCageHanger.DEEPCAGEHANGER_STATE actualDeepCageHangerState = DeepCageHanger.DEEPCAGEHANGER_STATE.ETHAN;
     public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
     public boolean isBeamBreakTriggered = false;
@@ -174,7 +173,6 @@ public class RobotState {
         // TODO: Insert any subsystem state set up here.
         actualAlgaeCatcherState = AlgaeCatcher.ALGAE_CATCHER_STATE.STOP;
         actualElevatorState = Elevator.ELEVATOR_STATE.REST;
-        actualDeepCageHangerState = DeepCageHanger.DEEPCAGEHANGER_STATE.ETHAN;
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;
