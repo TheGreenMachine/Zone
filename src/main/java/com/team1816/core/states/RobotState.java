@@ -99,6 +99,13 @@ public class RobotState {
     public final double coralMechArmBaseAngle = 190;
     public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", .7, coralMechArmBaseAngle));
 
+    public final Mechanism2d algaeMech2d = new Mechanism2d(3,3);
+    public final MechanismRoot2d getAlgaeCatcherMech2dRoot = algaeMech2d.getRoot("root", 1, 0);
+
+    public final MechanismLigament2d algaeCatcherBase = getAlgaeCatcherMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
+    public final double algaeBaseAngle = 190;
+    public final MechanismLigament2d algaeCatcherPivot = algaeCatcherBase.append(new MechanismLigament2d("algaePivot", .7, algaeBaseAngle));
+
     /**
      * Autopathing state
      */
@@ -290,6 +297,7 @@ public class RobotState {
         }
 
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
+        SmartDashboard.putData("AlgaeCatcher", algaeMech2d);
 
         if (RobotBase.isSimulation()) {
             // TODO: Display any stats here

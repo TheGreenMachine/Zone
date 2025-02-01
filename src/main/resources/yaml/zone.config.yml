@@ -168,10 +168,10 @@ subsystems:
                 invertMotor: false
         pidConfig:
             slot0:
-                kP: 0.043
+                kP: 0
                 Ki: 0
-                kD: 0.00001
-                kV: 0.0099
+                kD: 0
+                kV: 0
         constants:
             algaeCollectSpeed: -0.5
             algaeHoldSpeed: -0.1
@@ -180,9 +180,9 @@ subsystems:
             stowPosition: 1
             intakePosition: 1
             holdPosition: 1
-            outtakePosition: 1
-            algael2Position: 1
-            algael3Position: 1
+            outtakePosition: 10
+            algael2Position: 30
+            algael3Position: 50
     coralArm:
         implemented: true
         motors:

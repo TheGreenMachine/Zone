@@ -5,12 +5,14 @@ import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @Singleton
@@ -36,6 +38,8 @@ public class AlgaeCatcher extends Subsystem {
     private static final double outtakePosition = factory.getConstant(NAME,"outtakePosition",1.0);
     private static final double algael2Position = factory.getConstant(NAME,"algael2Position",1.0);
     private static final double algael3Position = factory.getConstant(NAME,"algael3Position",1.0);
+
+    private final double algaeMotorRotationsPerDegree = factory.getConstant(NAME, "algaeMotorRotationsPerDegree", 1);
 
     /**
      * Properties
@@ -86,12 +90,19 @@ public class AlgaeCatcher extends Subsystem {
 
         positionMotor.selectPIDSlot(0);
 
+        if (RobotBase.isSimulation()) {
+            positionMotor.setMotionProfileMaxVelocity(12 / 0.05);
+            positionMotor.setMotionProfileMaxAcceleration(12 / 0.08);
+            ((GhostMotor) positionMotor).setMaxVelRotationsPerSec(240);
+        }
+
         if (Constants.kLoggingRobot) {
 
             desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/desiredAlgaeCatcherPower");
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/actualAlgaeCatcherPower"), leadMotor::getMotorOutputPercent);
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/algaeCatcherCurrentDraw"), leadMotor::getMotorOutputCurrent);
         }
+        algaeCatcherCurrentDrawLogger = new DoubleLogEntry(DataLogManager.getLog(), "AlgaeCatcher/Velocity/desiredAlgaeCurrent");
     }
 
     /**
@@ -145,22 +156,21 @@ public class AlgaeCatcher extends Subsystem {
     public void writeToHardware() {
         if (outputsChanged) {
             outputsChanged = false;
+            double desiredAlgaeCatcherPower = 0;
+
             switch (desiredState) {
-                case STOP -> {
-                    desiredAlgaeCatcherPower = 0;
-                }
-                case INTAKE -> {
-                    desiredAlgaeCatcherPower = algaeCollectSpeed;
-                }
-                case HOLD -> {
-                    desiredAlgaeCatcherPower = algaeHoldSpeed;
-                }
-                case OUTTAKE -> {
-                    desiredAlgaeCatcherPower = algaeReleaseSpeed;
-                }
+                case STOP -> {desiredAlgaeCatcherPower = 0;}
+                case INTAKE -> {desiredAlgaeCatcherPower = algaeCollectSpeed;}
+                case HOLD -> {desiredAlgaeCatcherPower = algaeHoldSpeed;}
+                case OUTTAKE -> {desiredAlgaeCatcherPower = algaeReleaseSpeed;}
             }
-            leadMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredAlgaeCatcherPower);
+
+            leadMotor.set(GreenControlMode.VELOCITY_CONTROL, desiredAlgaeCatcherPower);
+            algaeCatcherCurrentDrawLogger.append(desiredAlgaeCatcherPower);
         }
+
+        robotState.algaeCatcherPivot.setAngle(robotState.algaeBaseAngle + positionMotor.getSensorPosition() / algaeMotorRotationsPerDegree);
+
         if(positionOutputsChanged) {
             positionOutputsChanged = false;
             switch (desiredPositionState){
@@ -180,6 +190,7 @@ public class AlgaeCatcher extends Subsystem {
                     desiredPosition = algael3Position;
                 }
             }
+            positionMotor.set(GreenControlMode.POSITION_CONTROL, desiredPosition);
         }
     }
 
