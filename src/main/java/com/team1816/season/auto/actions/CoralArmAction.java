@@ -31,7 +31,7 @@ public class CoralArmAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return  robotState.actualIntakeState == desiredIntakeState && coralArm.isCoralArmPivotInRange();
+        return coralArm.isCoralArmIntakeInRange() && coralArm.isCoralArmPivotInRange();
     }
 
     @Override

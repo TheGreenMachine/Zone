@@ -54,6 +54,8 @@ public class CoralArm extends Subsystem {
     private double pivotCurrentDraw;
     private double intakeCurrentDraw;
 
+    double desiredIntakeVelocity = 0;
+
     private double desiredPivotPosition = 0;
     private double actualPivotPosition = 0;
 
@@ -173,7 +175,6 @@ public class CoralArm extends Subsystem {
     public void writeToHardware() {
         if (desiredIntakeStateChanged) {
             desiredIntakeStateChanged = false;
-            double desiredIntakeVelocity = 0;
 
             switch (desiredIntakeState) {
                 case INTAKE -> desiredIntakeVelocity = intakeSpeed;
@@ -200,6 +201,10 @@ public class CoralArm extends Subsystem {
 
     public boolean isCoralArmPivotInRange(){
         return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 5;
+    }
+
+    public boolean isCoralArmIntakeInRange(){
+        return Math.abs(intakeMotor.getSensorVelocity() - desiredIntakeVelocity) < 5;
     }
 
     @Override

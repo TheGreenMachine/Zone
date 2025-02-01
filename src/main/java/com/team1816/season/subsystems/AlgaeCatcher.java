@@ -113,6 +113,7 @@ public class AlgaeCatcher extends Subsystem {
         this.desiredPositionState = desiredPositionState;
         positionOutputsChanged = true;
     }
+
     /**
      * Reads actual outputs from intake motor
      *

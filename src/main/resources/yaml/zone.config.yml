@@ -212,8 +212,8 @@ subsystems:
                 kD: 0
                 kV: 0
         constants: # TODO: all of these
-            intakeSpeed: 1
-            outtakeSpeed: -1
+            intakeSpeed: 20
+            outtakeSpeed: -20
             holdSpeed: 0
 
             coralSensorChannel: 0
