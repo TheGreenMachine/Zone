@@ -1,19 +1,12 @@
-package com.team1816.season.auto;
+package com.team1816.season.auto.modes;
 
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.AutoModeEndedException;
-import com.team1816.lib.auto.actions.AutoAction;
-import com.team1816.lib.auto.actions.ParallelAction;
-import com.team1816.lib.auto.actions.SeriesAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.auto.modes.AutoMode;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TrajectoryOnlyAutoMode extends AutoMode {
     private ArrayList<TrajectoryAction> actions = new ArrayList<>();

@@ -177,10 +177,12 @@ subsystems:
             algaeHoldSpeed: -0.1
             algaeReleaseSpeed: 0.25
 
-            neutralPosition: 1
+            stowPosition: 1
             intakePosition: 1
             holdPosition: 1
             outtakePosition: 1
+            algael2Position: 1
+            algael3Position: 1
     coralArm:
         implemented: true
         motors:

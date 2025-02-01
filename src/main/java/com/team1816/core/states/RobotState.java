@@ -81,6 +81,7 @@ public class RobotState {
 
     //TODO add new subystem states here
     public AlgaeCatcher.ALGAE_CATCHER_STATE actualAlgaeCatcherState = AlgaeCatcher.ALGAE_CATCHER_STATE.STOP;
+    public AlgaeCatcher.POSITION_STATE actualPositionState = AlgaeCatcher.POSITION_STATE.STOW;
     public CoralArm.INTAKE_STATE actualIntakeState = CoralArm.INTAKE_STATE.INTAKE;
     public CoralArm.PIVOT_STATE actualPivotState = CoralArm.PIVOT_STATE.L1;
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.REST;
@@ -172,6 +173,7 @@ public class RobotState {
 
         // TODO: Insert any subsystem state set up here.
         actualAlgaeCatcherState = AlgaeCatcher.ALGAE_CATCHER_STATE.STOP;
+        actualPositionState = AlgaeCatcher.POSITION_STATE.STOW;
         actualElevatorState = Elevator.ELEVATOR_STATE.REST;
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
