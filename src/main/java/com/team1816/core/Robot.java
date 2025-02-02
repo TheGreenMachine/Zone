@@ -175,7 +175,7 @@ public class Robot extends TimedRobot {
             factory = Injector.get(RobotFactory.class);
             ledManager = Injector.get(LedManager.class);
             camera = Injector.get(Camera.class);
-            camera.setDriverMode(true);
+            camera.setDriverMode(0,false);
             robotState = Injector.get(RobotState.class);
             orchestrator = Injector.get(Orchestrator.class);
             infrastructure = Injector.get(Infrastructure.class);

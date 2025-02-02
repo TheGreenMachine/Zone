@@ -11,6 +11,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
+import java.util.List;
+
 /**
  * This class contains all constants pertinent to robot-specific aspects.
  * Only fields that are necessary and generalizable across systems belong in this class.
@@ -76,19 +78,13 @@ public class Constants {
     );
 
 
-    public static final double kCameraHeightMeters = 0.601; //FIXME
-
-    public static final Pose2d kCameraMountingOffset = new Pose2d( //FIXME
+    public static final List<Transform3d> kCameraMountingOffset3Ds = List.of(
+        new Transform3d( //FIXME
             -0.369,
             0,
-            Rotation2d.fromRadians(Math.PI)
-    );
-
-    public static final Transform3d kCameraMountingOffset3D = new Transform3d( //FIXME
-            -0.369,
-            0,
-            Constants.kCameraHeightMeters,
+            0.601,
             new Rotation3d(Math.PI,-0.44,Math.PI)
+        )
     );
 
     /**

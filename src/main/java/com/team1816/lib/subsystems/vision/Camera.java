@@ -24,8 +24,10 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
-import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Camera extends Subsystem{
@@ -33,97 +35,96 @@ public class Camera extends Subsystem{
      * Properties
      */
     private static final String NAME = "camera";
-    private static final String CAM = "Arducam_OV9281_USB_Camera (1)";
+    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera (1)");
     public static final AprilTagFieldLayout kTagLayout =
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-    private static final Transform3d robotToCam = Constants.kCameraMountingOffset3D;
+    private static final List<Transform3d> robotToCams = Constants.kCameraMountingOffset3Ds;
 
     /**
      * Components
      */
     private VisionSystemSim visionSim;
-    private PhotonCamera cam;
-    private PhotonCameraSim cameraSim;
-    private final PhotonPoseEstimator photonEstimator;
+    private final List<PhotonCamera> cams = new ArrayList<>();
+    private final List<PhotonPoseEstimator> photonEstimators = new ArrayList<>();
 
     /**
      * Logging
      */
-    protected StructLogEntry<Pose2d> visionPoseLogger;
+    protected List<StructLogEntry<Pose2d>> visionPoseLoggers = new ArrayList<>();
 
     @Inject
     public Camera(Infrastructure inf, RobotState rs){
         super(NAME, inf, rs);
-        cam = new PhotonCamera(CAM);
-        cam.setDriverMode(false);
+        visionSim = new VisionSystemSim("SimVision");
+        visionSim.addAprilTags(kTagLayout);
+        for (int i = 0; i < CAMS.size(); i++) {
+            cams.add(new PhotonCamera(CAMS.get(i)));
 
-        if (RobotBase.isSimulation()) {
-            var cameraProp = new SimCameraProperties();
-            cameraProp.setCalibration(960, 720, Rotation2d.fromDegrees(90));
-            cameraProp.setCalibError(0.35, 0.10);
-            cameraProp.setFPS(15);
-            cameraProp.setAvgLatencyMs(50);
-            cameraProp.setLatencyStdDevMs(15);
-            cameraSim = new PhotonCameraSim(cam, cameraProp);
-            cameraSim.enableDrawWireframe(true);
-            visionSim = new VisionSystemSim("SimVision");
-            visionSim.addCamera(cameraSim, Constants.kCameraMountingOffset3D);
-            visionSim.addAprilTags(kTagLayout);
-        }
-        photonEstimator = new PhotonPoseEstimator(kTagLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, cam, robotToCam);
-        photonEstimator.setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
-        if (Constants.kLoggingRobot) {
-            visionPoseLogger = StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose", Pose2d.struct);
+            if (RobotBase.isSimulation()) {
+                var cameraProp = new SimCameraProperties();
+                cameraProp.setCalibration(960, 720, Rotation2d.fromDegrees(90));
+                cameraProp.setCalibError(0.35, 0.10);
+                cameraProp.setFPS(15);
+                cameraProp.setAvgLatencyMs(50);
+                cameraProp.setLatencyStdDevMs(15);
+                PhotonCameraSim cameraSim = new PhotonCameraSim(cams.get(i), cameraProp);
+                cameraSim.enableDrawWireframe(true);
+                visionSim.addCamera(cameraSim, robotToCams.get(i));
+            }
+            photonEstimators.add(new PhotonPoseEstimator(kTagLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCams.get(i)));
+            photonEstimators.get(i).setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+            if (Constants.kLoggingRobot) {
+                visionPoseLoggers.add(StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose" + i, Pose2d.struct));
+            }
         }
     }
 
-    public PhotonPipelineResult getLatestResult() {
-        return cam.getLatestResult();
-    }
-
-    public void setDriverMode(boolean driverMode){
-        cam.setDriverMode(driverMode);
+    public void setDriverMode(int camera, boolean driverMode){
+        cams.get(camera).setDriverMode(driverMode);
     }
 
     /**
-     * The latest estimated robot pose on the field from vision data. This may be empty. This should
-     * only be called once per loop.
-     *
-     * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
-     *     used for estimation.
+     * Updates the vision estimated positions from the cameras
      */
-    public boolean updateEstimatedGlobalPose() {
-        Optional<EstimatedRobotPose> visionEst = photonEstimator.update();
-        if(visionEst.isEmpty())
-            return false;
-
-        robotState.currentVisionEstimatedPose = visionEst.get();
-        double latestTimestamp = cam.getLatestResult().getTimestampSeconds();
-        boolean newResult = Math.abs(latestTimestamp - robotState.lastEstTimestamp) > 1e-5;
-
-        if (newResult) robotState.lastEstTimestamp = latestTimestamp;
-
-        return true;
+    public void updateVisionEstimatedPoses() {
+        robotState.visionEstimatedPoses.clear();
+        robotState.visionStdDevs.clear();
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        for (int i = 0; i < cams.size(); i++) {
+            for (var change : cams.get(i).getAllUnreadResults()) {
+                visionEst = photonEstimators.get(i).update(change);
+                int finalI = i;
+                visionEst.ifPresent(
+                        est -> {
+                            robotState.visionEstimatedPoses.add(est);
+                            robotState.visionStdDevs.add(getEstimationStdDevs(est, change.getTargets()));
+                            FieldConfig.field.getObject("vision" + finalI).setPose(est.estimatedPose.toPose2d());
+                            if (Constants.kLoggingDrivetrain) {
+                                visionPoseLoggers.get(finalI).append(est.estimatedPose.toPose2d());
+                            }
+                        });
+            }
+        }
     }
 
     /**
-     * The standard deviations of the estimated pose from {@link #updateEstimatedGlobalPose()}, for use
+     * The standard deviations of the estimated pose from {@link #updateVisionEstimatedPoses()}, for use
      * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}.
      * This should only be used when there are targets visible.
      *
      * @param estimatedPose The estimated pose to guess standard deviations for.
      */
-    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
+    public Matrix<N3, N1> getEstimationStdDevs(
+            EstimatedRobotPose estimatedPose, List<PhotonTrackedTarget> targets) {
         var estStdDevs = robotState.kSingleTagStdDevs;
-        var targets = getLatestResult().getTargets();
         int numTags = 0;
         double avgDist = 0;
         for (var tgt : targets) {
-            var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            var tagPose = kTagLayout.getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue;
             numTags++;
             avgDist +=
-                    tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+                    tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
         }
         if (numTags == 0) return estStdDevs;
         avgDist /= numTags;
@@ -142,18 +143,6 @@ public class Camera extends Subsystem{
         if (RobotBase.isSimulation()) {
             visionSim.update(robotState.simActualFieldToVehicle);
         }
-        if(this.isImplemented()) {
-            robotState.currentCamFind = updateEstimatedGlobalPose();
-        }
-
-        if (robotState.currentVisionEstimatedPose != null ) {
-            FieldConfig.field.getObject("vision").setPose(robotState.currentVisionEstimatedPose.estimatedPose.toPose2d());
-        }
-
-        if (Constants.kLoggingDrivetrain && robotState.currentVisionEstimatedPose != null) {
-            visionPoseLogger.append(robotState.currentVisionEstimatedPose.estimatedPose.toPose2d());
-        }
-
     }
 
     @Override

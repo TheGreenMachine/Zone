@@ -154,11 +154,10 @@ public class RobotState {
     /**
      * Vision Pose Stuff
      */
-    public double lastEstTimestamp = 0;
     public final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-    public EstimatedRobotPose currentVisionEstimatedPose;
-    public boolean currentCamFind;
+    public List<EstimatedRobotPose> visionEstimatedPoses = new ArrayList<>();
+    public List<Matrix<N3, N1>> visionStdDevs = new ArrayList<>();
 
     /**
      * Resets drivetrain position to a specified pose of drivetrain
@@ -197,16 +196,6 @@ public class RobotState {
         visibleTargets = new ArrayList<>();
         drivetrainTemp = 0;
         vehicleToFloorProximityCentimeters = 0;
-    }
-
-    /**
-     * Returns rotation of the camera with respect to the field
-     *
-     * @return Rotation2d
-     * @see Orchestrator#calculateSingleTargetTranslation(VisionPoint) ()
-     */
-    public Rotation2d getLatestFieldToCamera() {
-        return fieldToVehicle.getRotation().plus(Constants.kCameraMountingOffset.getRotation());
     }
 
     /**

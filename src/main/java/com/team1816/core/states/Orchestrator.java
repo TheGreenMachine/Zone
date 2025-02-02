@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -146,71 +147,16 @@ public class Orchestrator {
          */
     }
 
-    /** Superseded Odometry Handling */
-
     /**
-     * Calculates the absolute pose of the drivetrain based on a single target
-     *
-     * @param target VisionPoint
-     * @return Pose2d
-     * @see VisionPoint
-     */
-    public Pose2d calculateSingleTargetTranslation(VisionPoint target) {
-        if (FieldConfig.fiducialTargets.containsKey(target.id)) {
-            Pose2d targetPos = FieldConfig.fiducialTargets.get(target.id).toPose2d();
-            double X = target.getX(), Y = target.getY();
-
-            Translation2d cameraToTarget = new Translation2d(X, Y).rotateBy(robotState.getLatestFieldToCamera());
-            Translation2d robotToTarget = cameraToTarget.plus(
-                Constants.kCameraMountingOffset.getTranslation().rotateBy(
-                    robotState.fieldToVehicle.getRotation()
-                )
-            );
-            Translation2d targetToRobot = robotToTarget.unaryMinus();
-
-            Translation2d targetTranslation = targetToRobot.rotateBy(targetPos.getRotation());
-            Pose2d p = targetPos.plus(
-                new Transform2d(
-                    targetTranslation,
-                    targetPos.getRotation().rotateBy(Rotation2d.fromDegrees(180))
-                )
-            ); // inverse axis angle
-
-            GreenLogger.log("Updated Pose: " + p);
-            return p;
-        } else {
-            return robotState.fieldToVehicle;
-        }
-    }
-
-    /**
-     * Calculates the absolute pose of the drivetrain based on a single target using PhotonVision's library
-     *
-     * @param target VisionPoint
-     * @return Pose2d
-     * @see org.photonvision.targeting.PhotonTrackedTarget
-     */
-    public Pose2d photonCalculateSingleTargetTranslation(PhotonTrackedTarget target) {
-        Pose2d targetPos = new Pose2d(
-            FieldConfig.fiducialTargets.get(target.getFiducialId()).getX(),
-            FieldConfig.fiducialTargets.get(target.getFiducialId()).getY(),
-            new Rotation2d()
-        );
-        Translation2d targetTranslation = target.getBestCameraToTarget().getTranslation().toTranslation2d();
-        Transform2d targetTransform = new Transform2d(targetTranslation, robotState.getLatestFieldToCamera());
-        return PhotonUtils.estimateFieldToCamera(targetTransform, targetPos);
-    }
-
-    /**
-     *Theoretically updates the robot pose, returns true if updated, returns false if the camera couldn't find anything
-     * @return
+     *Updates the robot pose with vision data
      */
     public void updatePoseWithVisionData() {
-        if (robotState.currentCamFind) {
+        camera.updateVisionEstimatedPoses();
+        for (int i = 0; i < robotState.visionEstimatedPoses.size(); i++) {
             drive.updateOdometryWithVision(
-                    robotState.currentVisionEstimatedPose.estimatedPose.toPose2d(),
-                    robotState.currentVisionEstimatedPose.timestampSeconds,
-                    camera.getEstimationStdDevs(robotState.currentVisionEstimatedPose.estimatedPose.toPose2d())
+                    robotState.visionEstimatedPoses.get(0).estimatedPose.toPose2d(),
+                    robotState.visionEstimatedPoses.get(0).timestampSeconds,
+                    robotState.visionStdDevs.get(0)
             );
         }
     }
