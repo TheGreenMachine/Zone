@@ -1,32 +1,19 @@
 package com.team1816.lib.autopath;
 
-import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
-import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.AutoAction;
-import com.team1816.lib.auto.actions.SeriesAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
-import com.team1816.lib.auto.actions.WaitAction;
-import com.team1816.lib.auto.paths.PathUtil;
-import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.DriverStation;
 import jakarta.inject.Singleton;
-import org.apache.commons.math3.Field;
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 
-import java.lang.reflect.Array;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public class Autopath {
@@ -110,14 +97,10 @@ public class Autopath {
     }
 
     public static TimestampTranslation2d returnCollisionEnd(Trajectory trajectory, TimestampTranslation2d timestampTranslation2d){
-//        System.out.println("Testing position: "+timestampTranslation2d.getTranslation2d()+" at time: "+timestampTranslation2d.getTimestamp());
-
         Pose2d prevState = trajectory.sample(timestampTranslation2d.getTimestamp()).poseMeters;
 
         for(int t = (int)(timestampTranslation2d.getTimestamp()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) + 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-
-//            System.out.println("Testing line: "+prevState+" to: "+currentState);
 
             int[] result =
                     Bresenham.lineReturnCollisionInverted(
@@ -128,8 +111,6 @@ public class Autopath {
                             (int)(currentState.getY()*100),
                             true
                     );
-
-//            System.out.println(result);
 
             if(result != null)
                 return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, new Translation2d(result[0], result[1]));
@@ -156,14 +137,10 @@ public class Autopath {
     }
 
     public static TimestampTranslation2d returnCollisionEndLast(Trajectory trajectory, TimestampTranslation2d timestampTranslation2d){
-//        System.out.println("Testing position: "+timestampTranslation2d.getTranslation2d()+" at time: "+timestampTranslation2d.getTimestamp());
-
         Pose2d prevState = trajectory.sample(timestampTranslation2d.getTimestamp()).poseMeters;
 
         for(int t = (int)(timestampTranslation2d.getTimestamp()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) - 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond > 0; t--){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-
-//            System.out.println("Testing line: "+prevState+" to: "+currentState);
 
             int[] result =
                     Bresenham.lineReturnCollisionInverted(
@@ -174,8 +151,6 @@ public class Autopath {
                             (int)(currentState.getY()*100),
                             true
                     );
-
-//            System.out.println(result);
 
             if(result != null)
                 return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, new Translation2d(result[0], result[1]));
@@ -195,8 +170,6 @@ public class Autopath {
         this.autopathTargetPosition = autopathTargetPosition;
 
         System.out.println("You told me to do something!");
-
-//        start();
 
         try {
             routine();
@@ -255,10 +228,6 @@ public class Autopath {
 //                            autopathTargetPosition.getRotation().getDegrees() * autopathTrajectory.getStates().get(i).timeSeconds / autopathTrajectoryTime
 //            ));
 //        }
-
-//        System.out.println(autopathHeadings.get(0));
-//        System.out.println(autopathHeadings.get(autopathHeadings.size()-1));
-//        System.out.println(autopathHeadings);
 
         //Here's where your trajectory gets checked against the field
         System.out.println("And survey says: "+testTrajectory(autopathTrajectory));
