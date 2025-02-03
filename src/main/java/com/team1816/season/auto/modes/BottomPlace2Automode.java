@@ -1,6 +1,5 @@
 package com.team1816.season.auto.modes;
 
-import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.actions.*;
 import com.team1816.lib.auto.modes.AutoMode;
@@ -8,17 +7,13 @@ import com.team1816.season.auto.actions.AlgaeCatcherAction;
 import com.team1816.season.auto.actions.CoralArmAction;
 import com.team1816.season.auto.actions.ElevatorAction;
 import com.team1816.season.auto.actions.PlaceCoralSeriesAction;
-import com.team1816.season.auto.path.BottomToSideOne;
-import com.team1816.season.auto.path.FarFeederToSideSix;
-import com.team1816.season.auto.path.MiddleToSideOne;
-import com.team1816.season.auto.path.SideOneToFarFeeder;
+import com.team1816.season.auto.path.*;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BottomPlace2Automode extends AutoMode {
@@ -27,11 +22,15 @@ public class BottomPlace2Automode extends AutoMode {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new BottomToSideOne(robotState.allianceColor)
+                                new BottomToSideThree(robotState.allianceColor)
                         ), new TrajectoryAction(
-                                new SideOneToFarFeeder(robotState.allianceColor)
+                                new SideThreeToCloseFeeder(robotState.allianceColor)
                         ), new TrajectoryAction(
-                                new FarFeederToSideSix(robotState.allianceColor)
+                                new CloseFeederToSideFour(robotState.allianceColor)
+                        ), new TrajectoryAction(
+                                new SideFourOut(robotState.allianceColor)
+                        ), new TrajectoryAction(
+                                new SideFourIn(robotState.allianceColor)
                         )
                 )
         );
@@ -71,14 +70,14 @@ public class BottomPlace2Automode extends AutoMode {
                                 new CoralArmAction(CoralArm.INTAKE_STATE.HOLD, CoralArm.PIVOT_STATE.L1)
                         ),
                         new PlaceCoralSeriesAction(),
+                        trajectoryActions.get(3),
                         new ParallelAction(
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST),
-                                new RotateSwerveAction(Rotation2d.fromDegrees(480)),
+                                new RotateSwerveAction(Rotation2d.fromDegrees(240)),
                                 new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP, AlgaeCatcher.POSITION_STATE.STOW)
-                        )
-
-
+                        ),
+                        trajectoryActions.get(4)
                 ));
     }
 
