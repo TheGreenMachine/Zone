@@ -78,8 +78,8 @@ public class AlgaeCatcher extends Subsystem {
     @Inject
     public AlgaeCatcher(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
-        intakeMotor = factory.getMotor(NAME, "algaeCatcherIntakeMotor");
-        positionMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
+        intakeMotor = factory.getMotor(NAME, "intakeMotor");
+        positionMotor = factory.getMotor(NAME, "positionMotor");
 
 
         algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", -1));
@@ -90,7 +90,8 @@ public class AlgaeCatcher extends Subsystem {
 
         SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
-        positionMotor.selectPIDSlot(0);
+        intakeMotor.selectPIDSlot(0);
+        positionMotor.selectPIDSlot(1);
 
         if (RobotBase.isSimulation()) {
             positionMotor.setMotionProfileMaxVelocity(12 / 0.05);
@@ -191,6 +192,9 @@ public class AlgaeCatcher extends Subsystem {
                 case STOW -> {
                     desiredPosition = stowPosition;
                 }
+                case HOLD -> {
+                    desiredPosition = holdPosition;
+                }
                 case INTAKE -> {
                     desiredPosition = intakePosition;
                 }
@@ -266,6 +270,7 @@ public class AlgaeCatcher extends Subsystem {
     }
     public enum ALGAE_CATCHER_POSITION_STATE {
         STOW,
+        HOLD,
         INTAKE,
         OUTTAKE,
         ALGAE1,

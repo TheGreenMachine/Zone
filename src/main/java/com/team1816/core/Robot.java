@@ -357,8 +357,8 @@ public class Robot extends TimedRobot {
                     "pivotElevatorAndCoralRest",
                     ActionState.PRESSED,
                     () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.REST);
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
                     }
             );
 
@@ -462,9 +462,9 @@ public class Robot extends TimedRobot {
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
         //TODO add new subsystem inits here
-        elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
+        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
         algaeCatcher.setDesiredIntakeState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP);
-        coralArm.setDesiredState(CoralArm.PIVOT_STATE.REST, CoralArm.INTAKE_STATE.REST);
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();

@@ -63,7 +63,7 @@ public class Elevator extends Subsystem {
         super(NAME, inf, rs);
         elevatorMotor = factory.getMotor(NAME, "elevatorMotor");
 
-        elevatorMotor.selectPIDSlot(2);
+        elevatorMotor.selectPIDSlot(0);
 
         if (RobotBase.isSimulation()) {
             elevatorMotor.setMotionProfileMaxVelocity(12 / 0.05);
