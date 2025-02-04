@@ -5,9 +5,7 @@ import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.actions.*;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.season.auto.actions.*;
-import com.team1816.season.auto.path.FarFeederToSideSix;
-import com.team1816.season.auto.path.FarProcessorToSideOne;
-import com.team1816.season.auto.path.SideOneToFarFeeder;
+import com.team1816.season.auto.path.*;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
@@ -28,6 +26,10 @@ public class TopPlace2Automode extends AutoMode {
                                 new SideOneToFarFeeder(robotState.allianceColor)
                         ), new TrajectoryAction(
                                 new FarFeederToSideSix(robotState.allianceColor)
+                        ), new TrajectoryAction(
+                                new BackOutSideSix(robotState.allianceColor)
+                        ), new TrajectoryAction(
+                                new BackInSideSix(robotState.allianceColor)
                         )
                 )
         );
@@ -67,13 +69,15 @@ public class TopPlace2Automode extends AutoMode {
                                 new CoralArmAction(CoralArm.INTAKE_STATE.HOLD, CoralArm.PIVOT_STATE.L1)
                         ),
                         new PlaceCoralSeriesAction(),
+                        trajectoryActions.get(3),
                         new ParallelAction(
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST),
                                 new RotateSwerveAction(Rotation2d.fromDegrees(480)),
                                 new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.OUTTAKE, AlgaeCatcher.POSITION_STATE.ALGAEL2),
                                 new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP, AlgaeCatcher.POSITION_STATE.STOW)
-                        )
+                        ),
+                        trajectoryActions.get(4)
 
 
                         ));
