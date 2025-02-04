@@ -21,14 +21,11 @@ import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.core.states.RobotState;
-import com.team1816.season.auto.actions.ElevatorAction;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Pneumatic;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
@@ -317,7 +314,7 @@ public class Robot extends TimedRobot {
             inputHandler.listenActionPressAndRelease(
                     "intake/OuttakeAlgae",
                     (pressed) ->{
-                        algaeCatcher.setDesiredState((pressed && AlgaeCatcher.robotState.isBeamBreakTriggered) ? AlgaeCatcher.ALGAE_CATCHER_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_STATE.INTAKE);
+                        algaeCatcher.setDesiredState((pressed && AlgaeCatcher.robotState.isBeamBreakTriggered) ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE);
                     }
             );
             inputHandler.listenAction(
@@ -340,6 +337,15 @@ public class Robot extends TimedRobot {
             faulted = true;
             throw t;
         }
+
+        /*
+        Yo so
+        1. Make coral intake/outtake instead of seperate controls
+        2. Get rid of extranneous controls (the ones we won't use on the robot
+        3. Fix the algae intake/outtake control (I changed it so that it takes in an intake and position state because it previously couldn't take in a position state and that's really bad)
+        4. Map the buttons to the drivercentric.input_handler.yml as noted
+        5. Just once ur done give me a heads up, cause one of the thing I've gotta do is change the Algae_Catcher to have the position control be based on intake state and algaeSensor
+         */
 
         /*NEW SUBSYSTEM ACTIONS*/
         inputHandler.listenAction(
@@ -379,21 +385,21 @@ public class Robot extends TimedRobot {
                 "pivotAlgaeStow",
                 ActionState.PRESSED,
                 () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.STOW);
+                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.STOW);
                 }
         );
         inputHandler.listenAction(
                 "pivotAlgaeIntake",
                 ActionState.PRESSED,
                 () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.INTAKE);
+                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.INTAKE);
                 }
         );
         inputHandler.listenAction(
                 "pivotAlgaeOuttake",
                 ActionState.PRESSED,
                 () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.OUTTAKE);
+                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.OUTTAKE);
                 }
         );
         inputHandler.listenAction(
@@ -403,7 +409,7 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                     }
                     else{
-                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.ALGAE1);
+                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE1);
                     }
 
                 }
@@ -415,7 +421,7 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                     }
                     else{
-                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.ALGAE2);
+                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE2);
                     }
                 }
         );
@@ -466,7 +472,7 @@ public class Robot extends TimedRobot {
 
         //TODO add new subsystem inits here
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
-        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP);
+        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP);
         coralArm.setDesiredState(CoralArm.PIVOT_STATE.REST, CoralArm.INTAKE_STATE.REST);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);

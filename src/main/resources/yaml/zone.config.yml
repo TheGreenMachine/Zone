@@ -151,15 +151,10 @@ subsystems:
         #TODO tune these stuffs
         implemented: true
         motors:
-            algaeCatcherLeadMotor:
+            algaeCatcherIntakeMotor:
                 motorType: TalonFX
                 motorName: leadMotor
                 id: -324092
-                invertMotor: false
-            algaeCatcherFollowerMotor:
-                motorType: TalonFX
-                motorName: followerMotor
-                id: -314159
                 invertMotor: false
             algaeCatcherPositionMotor:
                 motorType: TalonFX
@@ -183,8 +178,8 @@ subsystems:
             intakePosition: 1
             holdPosition: 1
             outtakePosition: 10
-            algael2Position: 30
-            algael3Position: 50
+            algaeL2Position: 30
+            algaeL3Position: 50
     coralArm:
         implemented: true
         motors:
