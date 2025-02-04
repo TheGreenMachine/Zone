@@ -1,6 +1,5 @@
 package com.team1816.season.auto.modes;
 
-import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.actions.*;
 import com.team1816.lib.auto.modes.AutoMode;
@@ -17,7 +16,6 @@ import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MiddlePlace2Automode extends AutoMode {
@@ -74,7 +72,7 @@ public class MiddlePlace2Automode extends AutoMode {
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST),
                                 new RotateSwerveAction(Rotation2d.fromDegrees(480)),
-                                new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP, AlgaeCatcher.POSITION_STATE.STOW)
+                                new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.STOW)
                         )
 
 

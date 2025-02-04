@@ -20,8 +20,7 @@ public class CoralArmAction implements AutoAction {
     }
     @Override
     public void start() {
-        coralArm.setDesiredIntakeState(desiredIntakeState);
-        coralArm.setDesiredPivotState(desiredPivotState);
+        coralArm.setDesiredState(desiredPivotState, desiredIntakeState);
     }
 
     @Override

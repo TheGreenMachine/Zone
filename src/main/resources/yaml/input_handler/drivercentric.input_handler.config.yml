@@ -8,18 +8,18 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    a: pivotAlgaeIntake
-    b: pivotAlgaeOuttake
-    x: pivotAlgaeL2
-    y: pivotAlgaeL3
+    a: activationDeepHanger
+    b: intake/OuttakeAlgae
+    x: outtakeCoral
+    y:
   axes:
-    rightTrigger: turboMode
-    leftTrigger: slowMode
+    rightTrigger: pivotA1/L3
+    leftTrigger: pivotA2/L4
   buttons:
     start: zeroPose
     back: hardZeroPose
-    leftBumper:
-    rightBumper:
+    leftBumper: pivotElevatorAndCoralL2
+    rightBumper: pivotElevatorAndCoralL1
   dpad:
     up:
     down:
