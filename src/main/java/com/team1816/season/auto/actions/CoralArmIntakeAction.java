@@ -3,7 +3,6 @@ package com.team1816.season.auto.actions;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.actions.AutoAction;
-import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 
 public class CoralArmIntakeAction implements AutoAction {
@@ -28,7 +27,7 @@ public class CoralArmIntakeAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return  robotState.actualIntakeState == desiredIntakeState;
+        return  robotState.actualCoralArmIntakeState == desiredIntakeState;
     }
 
     @Override

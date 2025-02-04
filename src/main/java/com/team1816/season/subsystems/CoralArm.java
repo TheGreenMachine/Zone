@@ -144,12 +144,12 @@ public class CoralArm extends Subsystem {
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if (robotState.actualIntakeState != desiredIntakeState) {
-            robotState.actualIntakeState = desiredIntakeState;
+        if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
+            robotState.actualCoralArmIntakeState = desiredIntakeState;
         }
 
-        if (robotState.actualPivotState != desiredPivotState) {
-            robotState.actualPivotState = desiredPivotState;
+        if (robotState.actualCoralArmPivotState != desiredPivotState) {
+            robotState.actualCoralArmPivotState = desiredPivotState;
         }
 
         if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {

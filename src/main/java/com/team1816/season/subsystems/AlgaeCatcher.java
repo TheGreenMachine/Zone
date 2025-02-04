@@ -150,8 +150,8 @@ public class AlgaeCatcher extends Subsystem {
         actualAlgaeCatcherPower = intakeMotor.getMotorOutputPercent();
         algaeCatcherCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if (robotState.actualAlgaeCatcherState != desiredIntakeState) {
-            robotState.actualAlgaeCatcherState = desiredIntakeState;
+        if (robotState.actualAlgaeCatcherIntakeState != desiredIntakeState) {
+            robotState.actualAlgaeCatcherIntakeState = desiredIntakeState;
         }
 
         if (intakeMotor.getMotorTemperature() >= 55) {
