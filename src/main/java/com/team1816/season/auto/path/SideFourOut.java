@@ -15,7 +15,7 @@ public class SideFourOut extends AutoPath {
     protected List<Pose2d> getWaypoints() {
         return List.of(
                 new Pose2d(3.64, 2.74, Rotation2d.fromDegrees(37)),
-                new Pose2d(3.34, 2.54, Rotation2d.fromDegrees(37))
+                new Pose2d(3.64, 2.6, Rotation2d.fromDegrees(37))
         );
     }
 

@@ -10,7 +10,6 @@ import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
