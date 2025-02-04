@@ -81,7 +81,7 @@ public class AutoModeManager {
         autoMode = new DriveStraightMode();
         autoModeThread = new Thread(autoMode::run);
         desiredAuto = DesiredAuto.DRIVE_STRAIGHT;
-        teamColor = Color.RED;
+        teamColor = sideChooser.getSelected();
         robotState.allianceColor = teamColor;
     }
 
@@ -219,9 +219,9 @@ public class AutoModeManager {
                 RobotState.dynamicAutoChanged = true;
                 return new TrajectoryOnlyAutoMode(robotState);
             case MIDDLE_PLACE_2_AUTOMODE:
-                return new MiddlePlace2Automode();
+                return new MiddlePlace2Automode(color);
             case BOTTOM_PLACE_2_AUTOMODE:
-                return new BottomPlace2Automode();
+                return new BottomPlace2Automode(color);
             case TEST_DYNAMIC_PATHS:
                 return new TestAllDynamicPointsAutoMode();
             default:
