@@ -21,10 +21,17 @@ public class TestAllDynamicPointsAutoMode extends AutoMode {
         ArrayList<Map.Entry<String, Pose2d>> points = new ArrayList<>(robotState.dynamicAutoScript2025.getAllDynamicPoints().entrySet());
         for(Map.Entry<String, Pose2d> point1 : points){
             for(Map.Entry<String, Pose2d> point2 : points){
-                if(point1.getKey().equals(point2.getKey()))
+                if (point1.getKey().equals(point2.getKey()))
                     continue;
-                else if(AutopathAlgorithm.calculateAutopath(point1.getValue(), point2.getValue()) == null){
-                    failedPointNames.add("failed point: \""+point1.getKey()+"\" to point: \""+point2.getKey()+"\"");
+                else{
+                    try{
+                        AutopathAlgorithm.calculateAutopath(point1.getValue(), point2.getValue());
+                    } catch(Exception e){
+                        System.out.println(point1.getKey()+" to "+point2.getKey()+" threw an error");
+                        throw e;
+                    }
+                    if (AutopathAlgorithm.calculateAutopath(point1.getValue(), point2.getValue()) == null)
+                        failedPointNames.add("failed point: \"" + point1.getKey() + "\" to point: \"" + point2.getKey() + "\"");
                 }
             }
         }

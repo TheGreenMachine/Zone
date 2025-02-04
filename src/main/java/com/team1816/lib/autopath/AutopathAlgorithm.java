@@ -499,6 +499,9 @@ public class AutopathAlgorithm {
 
         Translation2d startToEndTranspose = endCollision.getTranslation2d().minus(startCollision.getTranslation2d());
 
+        if (startToEndTranspose.getX() == 0 && startToEndTranspose.getY() == 0)
+            return null;
+
         int[] newWaypoint;
 
         int[] startNewCollision = new int[]{(int) startCollision.getTranslation2d().getX(), (int) startCollision.getTranslation2d().getY()};

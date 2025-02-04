@@ -114,11 +114,6 @@
       "/SmartDashboard/VisionSystemSim-photonvision/Sim Field": "Field2d"
     },
     "windows": {
-      "/SmartDashboard/AlgaeCatcher": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Auto mode": {
         "window": {
           "visible": true
