@@ -9,6 +9,8 @@ import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.subsystems.*;
 import com.team1816.season.auto.DynamicAutoScript2025;
+import com.team1816.season.subsystems.AlgaeCatcher;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;

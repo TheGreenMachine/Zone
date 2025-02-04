@@ -10,6 +10,7 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.modes.BottomPlace2Automode;
 import com.team1816.season.auto.modes.MiddlePlace2Automode;
 import com.team1816.season.auto.modes.TrajectoryOnlyAutoMode;
+import com.team1816.season.auto.modes.TestAllDynamicPointsAutoMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -192,7 +193,9 @@ public class AutoModeManager {
 
         MIDDLE_PLACE_2_AUTOMODE,
 
-        BOTTOM_PLACE_2_AUTOMODE
+        BOTTOM_PLACE_2_AUTOMODE,
+
+        TEST_DYNAMIC_PATHS
         }
 
 
@@ -219,6 +222,8 @@ public class AutoModeManager {
                 return new MiddlePlace2Automode();
             case BOTTOM_PLACE_2_AUTOMODE:
                 return new BottomPlace2Automode();
+            case TEST_DYNAMIC_PATHS:
+                return new TestAllDynamicPointsAutoMode();
             default:
                 GreenLogger.log("Defaulting to drive straight mode");
                 return new DriveStraightMode();

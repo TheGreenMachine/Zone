@@ -40,6 +40,7 @@ public class Autopath {
     private static FieldMap stableFieldMap = new FieldMap(1755, 805);
 
     public static UpdatableAndExpandableFieldMap fieldMap;
+    public static UpdatableAndExpandableFieldMap fieldMapExpanded;
 
     private Pose2d autopathStartPosition = null;
 
@@ -67,7 +68,8 @@ public class Autopath {
         stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{0, 0, 150}, true);
         stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{805, 805, 655}, true);
 
-        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), /*59.26969039916799*/50);
+        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799);
+        fieldMapExpanded = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 65);
     }
 
     /**
