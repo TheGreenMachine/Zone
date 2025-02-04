@@ -1,6 +1,5 @@
 package com.team1816.lib.autopath;
 
-import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.subsystems.drive.Drive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -8,7 +7,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +23,7 @@ public class AutopathAlgorithm {
         return calculateAutopath(Autopath.robotState.fieldToVehicle, autopathTargetPosition);
     }
 
-    public static Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition){
+    public static Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition) {
 //        autopathBuffer = SmartDashboard.getNumber("Autopath Waypoint Buffer", 10);
 
         if(autopathStartPosition.equals(autopathTargetPosition))
@@ -302,7 +300,7 @@ public class AutopathAlgorithm {
                 .map(b -> new Pose2d(b, new Rotation2d()))
                 .toList());
 
-        return branches.isEmpty() ? null : branches.get(0).getTrajectory();
+        return branches.isEmpty() ? null : concatenateCorrectedPositions(branches.get(0).getTrajectory(), config);
     }
 
     //TODO if we ever need to optimize pathing, then optimize this, it's just a class to determine where in the order of waypoints would the new one be added, the slowdown is from generating so many trajectories using the TrajectoryGenerator, there should be ways around using it but I'm to lazy for now(1/20/2025)
@@ -612,6 +610,67 @@ public class AutopathAlgorithm {
                 branches.add(i, branch);
                 break;
             }
+    }
+
+    /**
+     * If a trajectory contains a start/end point in a position that is within an expanded boundary,
+     * this method prepends/appends points to the trajectory that allow the robot to access those
+     * invalid points.
+     *
+     * @param originalTrajectory The original pose.
+     * @return A {@link Pose2d} with the new pose if it exists, null if otherwise.
+     */
+    private static Trajectory concatenateCorrectedPositions(Trajectory originalTrajectory, TrajectoryConfig config) {
+        Trajectory newConcatenatedTrajectory = originalTrajectory;
+
+        // FIX BEGINNING
+        Pose2d startingPose = originalTrajectory.getStates().get(0).poseMeters;
+
+        // detect if in greater field map
+        if (Autopath.greaterFieldMap.getStableMapCheckPixelHasObjectOrOffMap((int) Math.round(startingPose.getX() * 100),
+                                                                             (int) Math.round(startingPose.getY() * 100))) {
+            Translation2d prependedTranslation = getNearestSafePoint(startingPose.getTranslation(), Autopath.greaterFieldMap);; // need method
+            Trajectory prependedTrajectory = TrajectoryGenerator.generateTrajectory(
+                    startingPose,
+                    List.of(prependedTranslation),
+                    originalTrajectory.getStates().get(1).poseMeters, // second node
+                    config
+            );
+
+            newConcatenatedTrajectory = prependedTrajectory.concatenate(newConcatenatedTrajectory);
+        }
+
+        // FIX ENDING
+        int lastIndex = originalTrajectory.getStates().size() - 1;
+        Pose2d endingPose = originalTrajectory.getStates().get(lastIndex).poseMeters;
+
+        // detect if in greater field map
+        if (Autopath.greaterFieldMap.getStableMapCheckPixelHasObjectOrOffMap((int) Math.round(endingPose.getX() * 100),
+                                                                             (int) Math.round(endingPose.getY() * 100))) {
+            Translation2d appendedTranslation = getNearestSafePoint(endingPose.getTranslation(), Autopath.greaterFieldMap); // need method
+            Trajectory appendedTrajectory = TrajectoryGenerator.generateTrajectory(
+                    originalTrajectory.getStates().get(lastIndex - 1).poseMeters,
+                    List.of(appendedTranslation),
+                    originalTrajectory.getStates().get(lastIndex).poseMeters, // second node
+                    config
+            );
+
+            newConcatenatedTrajectory = newConcatenatedTrajectory.concatenate(appendedTrajectory);
+        }
+
+        return newConcatenatedTrajectory;
+    }
+
+    /**
+     * Returns the nearest safe point in an updatable and expandable field map.
+     *
+     * @param translation2d The current translation 2D
+     * @param fieldMap The fieldMap being checked
+     *
+     * @return The nearest safe point to the translation2d param.
+     */
+    private static Translation2d getNearestSafePoint(Translation2d translation2d, UpdatableAndExpandableFieldMap fieldMap) { // TODO
+        return new Translation2d(translation2d.getX(), translation2d.getY());
     }
 
     static class WaypointTreeNode {
