@@ -39,8 +39,8 @@ public class MiddlePlace2Automode extends AutoMode {
         runAction(
                 new SeriesAction(
                         new ParallelAction(
-                                new CoralArmAction(CoralArm.INTAKE_STATE.INTAKE, CoralArm.PIVOT_STATE.REST),
-                                new ElevatorAction(Elevator.ELEVATOR_STATE.REST)
+                                new CoralArmAction(CoralArm.INTAKE_STATE.INTAKE, CoralArm.PIVOT_STATE.FEEDER),
+                                new ElevatorAction(Elevator.ELEVATOR_STATE.FEEDER)
                         ),
                         trajectoryActions.get(0),
                         new ParallelAction(
@@ -49,8 +49,8 @@ public class MiddlePlace2Automode extends AutoMode {
                         ),
                         new PlaceCoralSeriesAction(),
                         new ParallelAction(
-                                new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
-                                new ElevatorAction(Elevator.ELEVATOR_STATE.REST)
+                                new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.FEEDER),
+                                new ElevatorAction(Elevator.ELEVATOR_STATE.FEEDER)
                         ),
                         trajectoryActions.get(1),
                         new ParallelAction(
@@ -59,8 +59,8 @@ public class MiddlePlace2Automode extends AutoMode {
                         ),
                         new CoralArmAction(CoralArm.INTAKE_STATE.INTAKE, CoralArm.PIVOT_STATE.FEEDER),
                         new ParallelAction(
-                                new CoralArmAction(CoralArm.INTAKE_STATE.HOLD, CoralArm.PIVOT_STATE.REST),
-                                new ElevatorAction(Elevator.ELEVATOR_STATE.REST)
+                                new CoralArmAction(CoralArm.INTAKE_STATE.HOLD, CoralArm.PIVOT_STATE.FEEDER),
+                                new ElevatorAction(Elevator.ELEVATOR_STATE.FEEDER)
                         ),
                         trajectoryActions.get(2),
                         new ParallelAction(
@@ -69,8 +69,8 @@ public class MiddlePlace2Automode extends AutoMode {
                         ),
                         new PlaceCoralSeriesAction(),
                         new ParallelAction(
-                                new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
-                                new ElevatorAction(Elevator.ELEVATOR_STATE.REST),
+                                new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.FEEDER),
+                                new ElevatorAction(Elevator.ELEVATOR_STATE.FEEDER),
                                 new RotateSwerveAction(Rotation2d.fromDegrees(480)),
                                 new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.STOW)
                         )
