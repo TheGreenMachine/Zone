@@ -14,8 +14,8 @@ public class SideThreeToCloseFeeder extends AutoPath {
     @Override
     protected List<Pose2d> getWaypoints() {
         return List.of(
-                new Pose2d(5.28, 2.77, Rotation2d.fromDegrees(-155)),
-                new Pose2d(1.25, 1, Rotation2d.fromDegrees(-155))
+                new Pose2d(5.24, 2.86, Rotation2d.fromDegrees(-135)),
+                new Pose2d(1.25, 1, Rotation2d.fromDegrees(-175))
         );
     }
 
