@@ -75,7 +75,7 @@ public class BottomPlace2Automode extends AutoMode {
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.REST),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.REST),
                                 new RotateSwerveAction(Rotation2d.fromDegrees(240)),
-                                new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP, AlgaeCatcher.POSITION_STATE.STOW)
+                                new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_STATE.OUTTAKE, AlgaeCatcher.POSITION_STATE.ALGAEL2)
                         ),
                         trajectoryActions.get(4)
                 ));
