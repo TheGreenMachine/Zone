@@ -96,6 +96,10 @@ public class Elevator extends Subsystem {
 
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
+        if(!robotState.isCoralBeamBreakTriggered && robotState.actualIntakeState != CoralArm.INTAKE_STATE.OUTTAKE) {
+            desiredElevatorState = ELEVATOR_STATE.FEEDER;
+        }
+
         if (robotState.actualElevatorState != desiredElevatorState) {
             robotState.actualElevatorState = desiredElevatorState;
         }

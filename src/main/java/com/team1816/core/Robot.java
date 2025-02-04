@@ -303,7 +303,7 @@ public class Robot extends TimedRobot {
             inputHandler.listenActionPressAndRelease(
                     "intakeCoral",
                     (pressed) -> {
-                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
+                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
                     }
             );
             inputHandler.listenActionPressAndRelease(
@@ -315,7 +315,7 @@ public class Robot extends TimedRobot {
             inputHandler.listenActionPressAndRelease(
                     "intake/OuttakeAlgae",
                     (pressed) ->{
-                        algaeCatcher.setDesiredIntakeState((pressed && AlgaeCatcher.robotState.isBeamBreakTriggered) ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE);
+                        algaeCatcher.setDesiredIntakeState((pressed && AlgaeCatcher.robotState.isCoralBeamBreakTriggered) ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE);
                     }
             );
             inputHandler.listenAction(
@@ -379,7 +379,7 @@ public class Robot extends TimedRobot {
             inputHandler.listenAction(
                     "pivotA1/L3",
                     (pressed) -> {
-                        if(CoralArm.robotState.isBeamBreakTriggered){
+                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                         }
                         else{
@@ -391,7 +391,7 @@ public class Robot extends TimedRobot {
             inputHandler.listenAction(
                     "pivotA2/L4",
                     (pressed) -> {
-                        if(CoralArm.robotState.isBeamBreakTriggered){
+                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                         }
                         else{
