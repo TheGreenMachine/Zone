@@ -353,14 +353,6 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
                     }
             );
-            inputHandler.listenAction(
-                    "pivotElevatorAndCoralRest",
-                    ActionState.PRESSED,
-                    () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
-                    }
-            );
 
             inputHandler.listenAction(
                     "pivotAlgaeStow",
