@@ -1,6 +1,7 @@
 package com.team1816.season.auto.modes;
 
 import com.team1816.lib.auto.AutoModeEndedException;
+import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.*;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.season.auto.actions.AlgaeCatcherAction;
@@ -18,19 +19,19 @@ import java.util.List;
 
 public class MiddlePlace2Automode extends AutoMode {
 
-    public MiddlePlace2Automode() {
+    public MiddlePlace2Automode(Color color) {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new MiddleToSideThree(robotState.allianceColor)
+                                new MiddleToSideThree(color)
                         ), new TrajectoryAction(
-                                new SideThreeToCloseFeeder(robotState.allianceColor)
+                                new SideThreeToCloseFeeder(color)
                         ), new TrajectoryAction(
-                                new CloseFeederToSideFour(robotState.allianceColor)
+                                new CloseFeederToSideFour(color)
                         ), new TrajectoryAction(
-                                new SideFourOut(robotState.allianceColor)
+                                new SideFourOut(color)
                         ), new TrajectoryAction(
-                                new SideFourIn(robotState.allianceColor)
+                                new SideFourIn(color)
                         )
                 )
         );
@@ -74,7 +75,7 @@ public class MiddlePlace2Automode extends AutoMode {
                         new ParallelAction(
                                 new CoralArmAction(CoralArm.INTAKE_STATE.REST, CoralArm.PIVOT_STATE.FEEDER),
                                 new ElevatorAction(Elevator.ELEVATOR_STATE.FEEDER),
-                                new RotateSwerveAction(Rotation2d.fromDegrees(240)),
+                                new RotateSwerveAction(Rotation2d.fromDegrees(robotState.allianceColor == Color.BLUE ? 240 : 60)),
                                 new AlgaeCatcherAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.STOW)
                         ),
                         trajectoryActions.get(4)
