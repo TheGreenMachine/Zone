@@ -42,7 +42,7 @@ public class CoralArm extends Subsystem {
     /**
      * States
      */
-    private PIVOT_STATE desiredPivotState = PIVOT_STATE.REST;
+    private PIVOT_STATE desiredPivotState = PIVOT_STATE.FEEDER;
     private INTAKE_STATE desiredIntakeState = INTAKE_STATE.REST;
 
     private boolean desiredPivotStateChanged = false;
@@ -71,7 +71,6 @@ public class CoralArm extends Subsystem {
     private final double l3Position = factory.getConstant(NAME, "coralArmL3Position", 1.0);
     private final double l4Position = factory.getConstant(NAME, "coralArmL4Position", 1.0);
     private final double feederPosition = factory.getConstant(NAME, "coralArmFeederPosition", 1.0);
-    private final double restPosition = factory.getConstant(NAME, "coralArmRestPosition", 1.0);
 
     private final double motorRotationsPerDegree = factory.getConstant(NAME, "coralArmMotorRotationsPerDegree", 1);
 
@@ -194,8 +193,6 @@ public class CoralArm extends Subsystem {
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
             pivotMotor.set(GreenControlMode.POSITION_CONTROL, desiredPivotPosition);
-
-//            System.out.println(pivotMotor.getSensorPosition()+" "+desiredPivotPosition);
         }
     }
 
@@ -229,7 +226,6 @@ public class CoralArm extends Subsystem {
             case L3 -> l3Position;
             case L4 -> l4Position;
             case FEEDER -> feederPosition;
-            case REST -> restPosition;
         };
     }
 
@@ -242,7 +238,11 @@ public class CoralArm extends Subsystem {
     }
 
     public enum PIVOT_STATE {
-        L1, L2, L3, L4, FEEDER, REST
+        L1,
+        L2,
+        L3,
+        L4,
+        FEEDER
     }
 
     public enum INTAKE_STATE {
