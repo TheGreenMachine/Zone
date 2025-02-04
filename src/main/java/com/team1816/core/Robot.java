@@ -328,6 +328,86 @@ public class Robot extends TimedRobot {
 
             /** Operator Commands */
 
+            /*NEW SUBSYSTEM ACTIONS*/
+            inputHandler.listenAction(
+                    "pivotElevatorAndCoralL1",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotElevatorAndCoralL2",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotElevatorAndCoralFeeder",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotElevatorAndCoralRest",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.REST);
+                    }
+            );
+
+            inputHandler.listenAction(
+                    "pivotAlgaeStow",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.STOW);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotAlgaeIntake",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.INTAKE);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotAlgaeOuttake",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.OUTTAKE);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotA1/L3",
+                    (pressed) -> {
+                        if(CoralArm.robotState.isBeamBreakTriggered){
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
+                        }
+                        else{
+                            algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE1);
+                        }
+
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotA2/L4",
+                    (pressed) -> {
+                        if(CoralArm.robotState.isBeamBreakTriggered){
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
+                        }
+                        else{
+                            algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE2);
+                        }
+                    }
+            );
+
+
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
 
@@ -337,95 +417,6 @@ public class Robot extends TimedRobot {
             faulted = true;
             throw t;
         }
-
-        /*
-        Yo so
-        1. Make coral intake/outtake instead of seperate controls
-        2. Get rid of extranneous controls (the ones we won't use on the robot
-        3. Fix the algae intake/outtake control (I changed it so that it takes in an intake and position state because it previously couldn't take in a position state and that's really bad)
-        4. Map the buttons to the drivercentric.input_handler.yml as noted
-        5. Just once ur done give me a heads up, cause one of the thing I've gotta do is change the Algae_Catcher to have the position control be based on intake state and algaeSensor
-         */
-
-        /*NEW SUBSYSTEM ACTIONS*/
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralL1",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L1);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralL2",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralFeeder",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralRest",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.REST);
-                }
-        );
-
-        inputHandler.listenAction(
-                "pivotAlgaeStow",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.STOW);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotAlgaeIntake",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.INTAKE);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotAlgaeOuttake",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.OUTTAKE);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotA1/L3",
-                (pressed) -> {
-                    if(CoralArm.robotState.isBeamBreakTriggered){
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
-                    }
-                    else{
-                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE1);
-                    }
-
-                }
-        );
-        inputHandler.listenAction(
-                "pivotA2/L4",
-                (pressed) -> {
-                    if(CoralArm.robotState.isBeamBreakTriggered){
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
-                    }
-                    else{
-                        algaeCatcher.setDesiredPositionState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE2);
-                    }
-                }
-        );
-
     }
 
     /**

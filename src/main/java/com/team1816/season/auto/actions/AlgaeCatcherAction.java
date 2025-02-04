@@ -20,8 +20,6 @@ public class AlgaeCatcherAction implements AutoAction {
     @Override
     public void start() {
         algaeCatcher.setDesiredState(desiredCatcherState, desiredPositionState);
-        algaeCatcher.setDesiredPositionState(desiredPositionState);
-        algaeCatcher.setDesiredIntakeState(desiredCatcherState);
     }
 
     @Override
