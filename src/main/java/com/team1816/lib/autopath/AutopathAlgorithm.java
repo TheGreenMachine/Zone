@@ -619,7 +619,7 @@ public class AutopathAlgorithm {
      * invalid points.
      *
      * @param originalTrajectory The original pose.
-     * @return A {@link Pose2d} with the new pose if it exists, null if otherwise.
+     * @return A {@link Trajectory} with the new poses
      */
     private static Trajectory concatenateCorrectedPositions(Trajectory originalTrajectory, TrajectoryConfig config) {
         Trajectory newConcatenatedTrajectory = originalTrajectory;
@@ -633,7 +633,7 @@ public class AutopathAlgorithm {
                 startingCoordinatesCm[1])) {
             int[] updatedAppendedPoint = getClosestValidPoint(startingCoordinatesCm[0], startingCoordinatesCm[1], Autopath.greaterFieldMap.getCurrentMap());
             if (updatedAppendedPoint == null) {
-                GreenLogger.log("Updated appended (ending) point not found when concatenating to autopath trajectory!");
+                GreenLogger.log("Updated appended (starting) point not found when concatenating to autopath trajectory!");
             } else {
                 Translation2d appendedTranslation = new Translation2d(cmToMeters(updatedAppendedPoint[0]), updatedAppendedPoint[1]);
                 Trajectory appendedTrajectory = TrajectoryGenerator.generateTrajectory(
