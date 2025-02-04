@@ -1,6 +1,7 @@
 package com.team1816.lib.autopath;
 
 import com.team1816.lib.subsystems.drive.Drive;
+import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -623,54 +624,116 @@ public class AutopathAlgorithm {
     private static Trajectory concatenateCorrectedPositions(Trajectory originalTrajectory, TrajectoryConfig config) {
         Trajectory newConcatenatedTrajectory = originalTrajectory;
 
-        // FIX BEGINNING
+        // --  FIX BEGINNING  --
         Pose2d startingPose = originalTrajectory.getStates().get(0).poseMeters;
 
         // detect if in greater field map
-        if (Autopath.greaterFieldMap.getStableMapCheckPixelHasObjectOrOffMap((int) Math.round(startingPose.getX() * 100),
-                                                                             (int) Math.round(startingPose.getY() * 100))) {
-            Translation2d prependedTranslation = getNearestSafePoint(startingPose.getTranslation(), Autopath.greaterFieldMap);; // need method
-            Trajectory prependedTrajectory = TrajectoryGenerator.generateTrajectory(
-                    startingPose,
-                    List.of(prependedTranslation),
-                    originalTrajectory.getStates().get(1).poseMeters, // second node
-                    config
-            );
+        int[] startingCoordinatesCm = {metersToCm(startingPose.getX()), metersToCm(startingPose.getY())};
+        if (Autopath.greaterFieldMap.getStableMapCheckPixelHasObjectOrOffMap(startingCoordinatesCm[0],
+                startingCoordinatesCm[1])) {
+            int[] updatedAppendedPoint = getClosestValidPoint(startingCoordinatesCm[0], startingCoordinatesCm[1], Autopath.greaterFieldMap.getCurrentMap());
+            if (updatedAppendedPoint == null) {
+                GreenLogger.log("Updated appended (ending) point not found when concatenating to autopath trajectory!");
+            } else {
+                Translation2d appendedTranslation = new Translation2d(cmToMeters(updatedAppendedPoint[0]), updatedAppendedPoint[1]);
+                Trajectory appendedTrajectory = TrajectoryGenerator.generateTrajectory(
+                        originalTrajectory.getStates().get(0).poseMeters,
+                        List.of(appendedTranslation),
+                        originalTrajectory.getStates().get(1).poseMeters, // second node
+                        config
+                );
 
-            newConcatenatedTrajectory = prependedTrajectory.concatenate(newConcatenatedTrajectory);
+                newConcatenatedTrajectory = newConcatenatedTrajectory.concatenate(appendedTrajectory);
+            }
         }
 
-        // FIX ENDING
+        // --  FIX ENDING  --
         int lastIndex = originalTrajectory.getStates().size() - 1;
         Pose2d endingPose = originalTrajectory.getStates().get(lastIndex).poseMeters;
 
         // detect if in greater field map
-        if (Autopath.greaterFieldMap.getStableMapCheckPixelHasObjectOrOffMap((int) Math.round(endingPose.getX() * 100),
-                                                                             (int) Math.round(endingPose.getY() * 100))) {
-            Translation2d appendedTranslation = getNearestSafePoint(endingPose.getTranslation(), Autopath.greaterFieldMap); // need method
-            Trajectory appendedTrajectory = TrajectoryGenerator.generateTrajectory(
-                    originalTrajectory.getStates().get(lastIndex - 1).poseMeters,
-                    List.of(appendedTranslation),
-                    originalTrajectory.getStates().get(lastIndex).poseMeters, // second node
-                    config
-            );
+        int[] endingCoordinatesCm = {metersToCm(endingPose.getX()), metersToCm(endingPose.getY())};
+        if (Autopath.greaterFieldMap.getStableMapCheckPixelHasObjectOrOffMap(endingCoordinatesCm[0],
+                                                                             endingCoordinatesCm[1])) {
+            int[] updatedAppendedPoint = getClosestValidPoint(endingCoordinatesCm[0], endingCoordinatesCm[1], Autopath.greaterFieldMap.getCurrentMap());
+            if (updatedAppendedPoint == null) {
+                GreenLogger.log("Updated appended (ending) point not found when concatenating to autopath trajectory!");
+            } else {
+                Translation2d appendedTranslation = new Translation2d(cmToMeters(updatedAppendedPoint[0]), updatedAppendedPoint[1]);
+                Trajectory appendedTrajectory = TrajectoryGenerator.generateTrajectory(
+                        originalTrajectory.getStates().get(lastIndex - 1).poseMeters,
+                        List.of(appendedTranslation),
+                        originalTrajectory.getStates().get(lastIndex).poseMeters, // second node
+                        config
+                );
 
-            newConcatenatedTrajectory = newConcatenatedTrajectory.concatenate(appendedTrajectory);
+                newConcatenatedTrajectory = newConcatenatedTrajectory.concatenate(appendedTrajectory);
+            }
         }
 
         return newConcatenatedTrajectory;
     }
 
-    /**
-     * Returns the nearest safe point in an updatable and expandable field map.
-     *
-     * @param translation2d The current translation 2D
-     * @param fieldMap The fieldMap being checked
-     *
-     * @return The nearest safe point to the translation2d param.
-     */
-    private static Translation2d getNearestSafePoint(Translation2d translation2d, UpdatableAndExpandableFieldMap fieldMap) { // TODO
-        return new Translation2d(translation2d.getX(), translation2d.getY());
+    private static int[] getClosestValidPoint(int pointX, int pointY, FieldMap fieldMap){
+        int currentPointX = pointX + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
+        int currentPointY = pointY + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
+
+        for(int i = 0; i < Math.hypot(currentPointX, currentPointY)*Math.pow(2, 0.5); i++){
+            int checkPointX = pointX+i;
+            int checkPointY = pointY+i;
+
+            if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                currentPointX = checkPointX;
+                currentPointY = checkPointY;
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointX--;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointY--;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointX++;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointY++;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+        }
+
+        if(!fieldMap.checkPixelHasObjectOrOffMap(currentPointX, currentPointY))
+            return new int[]{currentPointX, currentPointY};
+        else {
+            System.out.println("AutopathAlgorithm has done a dumb in the getClosestValidPoint method and couldn't find a valid point");
+            return null;
+        }
+    }
+
+    private static double cmToMeters(int cm) {
+        return cm / 100.;
+    }
+
+    private static int metersToCm(double meters) {
+        return (int) Math.round(meters * 100.);
     }
 
     static class WaypointTreeNode {
