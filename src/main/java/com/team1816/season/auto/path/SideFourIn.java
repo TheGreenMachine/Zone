@@ -14,8 +14,9 @@ public class SideFourIn extends AutoPath {
     @Override
     protected List<Pose2d> getWaypoints() {
         return List.of(
-                new Pose2d(3.64, 2.6, Rotation2d.fromDegrees(37)),
-                new Pose2d(3.64, 2.74, Rotation2d.fromDegrees(37))
+                new Pose2d(3.32, 2.21, Rotation2d.fromDegrees(-303)),
+                new Pose2d(3.74, 2.87, Rotation2d.fromDegrees(-303))
+
         );
     }
 
