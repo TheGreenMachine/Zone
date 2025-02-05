@@ -78,8 +78,8 @@ public class AlgaeCatcher extends Subsystem {
     @Inject
     public AlgaeCatcher(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
-        intakeMotor = factory.getMotor(NAME, "intakeMotor");
-        positionMotor = factory.getMotor(NAME, "positionMotor");
+        intakeMotor = factory.getMotor(NAME, "algaeCatcherIntakeMotor");
+        positionMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
 
 
         algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", -1));
@@ -100,12 +100,11 @@ public class AlgaeCatcher extends Subsystem {
         }
 
         if (Constants.kLoggingRobot) {
-
+            algaeCatcherCurrentDrawLogger = new DoubleLogEntry(DataLogManager.getLog(), "AlgaeCatcher/Velocity/desiredAlgaeCurrent");
             desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/desiredAlgaeCatcherPower");
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/actualAlgaeCatcherPower"), intakeMotor::getMotorOutputPercent);
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/algaeCatcherCurrentDraw"), intakeMotor::getMotorOutputCurrent);
         }
-        algaeCatcherCurrentDrawLogger = new DoubleLogEntry(DataLogManager.getLog(), "AlgaeCatcher/Velocity/desiredAlgaeCurrent");
     }
 
     /**
