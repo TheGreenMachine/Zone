@@ -2,9 +2,12 @@ package com.team1816.season.auto;
 
 import com.team1816.core.Robot;
 import com.team1816.core.auto.AutoModeManager;
+import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
+import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
+import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.autopath.AutopathAlgorithm;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,6 +28,7 @@ public class DynamicAutoScript2025 {
     private ArrayList<Pose2d> currentTrajectoryActionChoices = new ArrayList<>();
     private ArrayList<TrajectoryAction> autoTrajectoryActions = new ArrayList<>();
     private HashMap<String, Pose2d> allDynamicPoints = new HashMap<>();
+    private Color color = Color.BLUE;
 
     private Robot robot = Injector.get(Robot.class);
 
@@ -36,24 +40,14 @@ public class DynamicAutoScript2025 {
         for(int i = 0; i < numOfTrajectoryActions; i++)
             trajectoryActionChoosers.add(new SendableChooser<>());
 
-        addDefaultTrajectoryOption("Hex 1 Blue", new Pose2d(new Translation2d(5.142950,5.338677), Rotation2d.fromDegrees(240)));
-        addTrajectoryOption("Hex 2 Blue", new Pose2d(new Translation2d(6.219579,4.049038), Rotation2d.fromDegrees(180)));
-        addTrajectoryOption("Hex 3 Blue", new Pose2d(new Translation2d(5.155241,2.586418), Rotation2d.fromDegrees(120)));
-        addTrajectoryOption("Hex 4 Blue", new Pose2d(new Translation2d(3.751259,2.586418), Rotation2d.fromDegrees(60)));
-        addTrajectoryOption("Hex 5 Blue", new Pose2d(new Translation2d(3.049268, 3.020218), Rotation2d.fromDegrees(0)));
-        addTrajectoryOption("Hex 6 Blue", new Pose2d(new Translation2d(3.799672, 5.406116), Rotation2d.fromDegrees(300)));
-        addTrajectoryOption("HP Top Blue", new Pose2d(new Translation2d(1.185360, 6.571952), Rotation2d.fromDegrees(130)));
-        addTrajectoryOption("HP Bot Blue", new Pose2d(new Translation2d(1.185360, 1.565280), Rotation2d.fromDegrees(230)));
-//        addTrajectoryOption("Hex 1 Red", new Pose2d(new Translation2d(13.675961, 5.307781), Rotation2d.fromDegrees(240)));
-//        addTrajectoryOption("Hex 2 Red", new Pose2d(new Translation2d(14.426365, 4.097451), Rotation2d.fromDegrees(180)));
-//        addTrajectoryOption("Hex 3 Red", new Pose2d(new Translation2d(13.748580, 2.814502), Rotation2d.fromDegrees(120)));
-//        addTrajectoryOption("Hex 4 Red", new Pose2d(new Translation2d(12.368805, 2.838709), Rotation2d.fromDegrees(60)));
-//        addTrajectoryOption("Hex 5 Red", new Pose2d(new Translation2d(11.618401, 4.049038), Rotation2d.fromDegrees(0)));
-//        addTrajectoryOption("Hex 6 Red", new Pose2d(new Translation2d(12.344598, 5.307781), Rotation2d.fromDegrees(300)));
-//        addTrajectoryOption("HP Top Red", new Pose2d(new Translation2d(16.266066, 6.881209), Rotation2d.fromDegrees(50)));
-//        addTrajectoryOption("HP Bot Red", new Pose2d(new Translation2d(16.241859, 1.192661), Rotation2d.fromDegrees(310)));
-
-
+        addDefaultTrajectoryOption("Hex 1", new Pose2d(new Translation2d(5.142950,5.338677), Rotation2d.fromDegrees(240)));
+        addTrajectoryOption("Hex 2", new Pose2d(new Translation2d(6.219579,4.049038), Rotation2d.fromDegrees(180)));
+        addTrajectoryOption("Hex 3", new Pose2d(new Translation2d(5.155241,2.586418), Rotation2d.fromDegrees(120)));
+        addTrajectoryOption("Hex 4", new Pose2d(new Translation2d(3.751259,2.586418), Rotation2d.fromDegrees(60)));
+        addTrajectoryOption("Hex 5", new Pose2d(new Translation2d(3.049268, 3.020218), Rotation2d.fromDegrees(0)));
+        addTrajectoryOption("Hex 6", new Pose2d(new Translation2d(3.799672, 5.406116), Rotation2d.fromDegrees(300)));
+        addTrajectoryOption("Feeder Top", new Pose2d(new Translation2d(1.185360, 6.571952), Rotation2d.fromDegrees(130)));
+        addTrajectoryOption("Feeder Bot", new Pose2d(new Translation2d(1.185360, 1.565280), Rotation2d.fromDegrees(230)));
 
         for(SendableChooser<Pose2d> chooser : trajectoryActionChoosers)
             currentTrajectoryActionChoices.add(chooser.getSelected());
@@ -63,11 +57,14 @@ public class DynamicAutoScript2025 {
 
     public void updateSendableChoosers(){
         boolean somethingChanged = false;
+        if(color != Autopath.robotState.allianceColor)
+            somethingChanged = true;
+        color = Autopath.robotState.allianceColor;
 
         Pose2d selected = startingPositionChooser.getSelected();
         if(!startPos.equals(selected)) {
             somethingChanged = true;
-            startPos = startingPositionChooser.getSelected();
+            startPos = selected;
         }
 
         ArrayList<TrajectoryAction> newAutoTrajectoryActions = new ArrayList<>();
@@ -81,14 +78,29 @@ public class DynamicAutoScript2025 {
                 somethingChanged = true;
             }
 
-            Trajectory newTraj = AutopathAlgorithm.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
-            TrajectoryAction newTrajAction = null;
-            if(newTraj != null) {
-                if (!newTraj.getStates().isEmpty()){
-                    newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), trajectoryActionChooser.getSelected().getRotation()));
+            if(color == Color.BLUE) {
+                Trajectory newTraj = AutopathAlgorithm.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
+                TrajectoryAction newTrajAction = null;
+                if (newTraj != null) {
+                    if (!newTraj.getStates().isEmpty()) {
+                        newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), trajectoryActionChooser.getSelected().getRotation()));
+                    }
+                    newAutoTrajectoryActions.add(newTrajAction);
                 }
-                newAutoTrajectoryActions.add(newTrajAction);
-            }
+            } else if(color == Color.RED) {
+                Pose2d redCurrentStartPos = new Pose2d(2 * Constants.fieldCenterX - currentStartPos.getX(), 2 * Constants.fieldCenterY - currentStartPos.getY(), Rotation2d.fromDegrees(180 + currentStartPos.getRotation().getDegrees()));
+                Pose2d targetPos = new Pose2d(2 * Constants.fieldCenterX - trajectoryActionChooser.getSelected().getX(), 2 * Constants.fieldCenterY - trajectoryActionChooser.getSelected().getY(), Rotation2d.fromDegrees(180 + trajectoryActionChooser.getSelected().getRotation().getDegrees()));
+
+                Trajectory newTraj = AutopathAlgorithm.calculateAutopath(redCurrentStartPos, targetPos);
+                TrajectoryAction newTrajAction = null;
+                if (newTraj != null) {
+                    if (!newTraj.getStates().isEmpty()) {
+                        newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), targetPos.getRotation()));
+                    }
+                    newAutoTrajectoryActions.add(newTrajAction);
+                }
+            } else
+                System.out.println("idk how the fuck you got me to print");
 
             currentStartPos = trajectoryActionChooser.getSelected();
         }
@@ -116,7 +128,10 @@ public class DynamicAutoScript2025 {
     }
 
     public Pose2d getStartPos(){
-        return startPos;
+        if(color == Color.BLUE)
+            return startPos;
+        else
+            return new Pose2d(2 * Constants.fieldCenterX - startPos.getX(), 2 * Constants.fieldCenterY - startPos.getY(), Rotation2d.fromDegrees(180 + startPos.getRotation().getDegrees()));
     }
 
     private void addStartPosOption(String name, Pose2d traj){

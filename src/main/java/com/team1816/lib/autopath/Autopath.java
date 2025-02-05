@@ -260,7 +260,7 @@ public class Autopath {
 //        System.out.println(autopathHeadings);
 
         //Here's where your trajectory gets checked against the field
-        System.out.println("And survey says: "+testTrajectory(autopathTrajectory));
+//        System.out.println("And survey says: "+testTrajectory(autopathTrajectory));
 
         autopathTrajectoryAction = new TrajectoryAction(autopathTrajectory, autopathHeadings);
 
