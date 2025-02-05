@@ -113,7 +113,7 @@ public class RobotState {
      */
 
     public boolean autopathing = false;
-    public boolean printAutopathing = false;
+    public boolean printAutopathing = true;
     public boolean printAutopathFieldTest = false;
     public Trajectory autopathTrajectory = null;
     public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();
@@ -245,7 +245,7 @@ public class RobotState {
                 for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
                     for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
                         if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
-                            obstaclesExpanded.add(new Pose2d(new Translation2d(i * .01, i2 * .01), new Rotation2d()));
+                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 / Autopath.mapResolution1DPerMeter), new Rotation2d()));
                         }
                     }
                 }
@@ -257,7 +257,7 @@ public class RobotState {
                 for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
                     for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
                         if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
-                            obstacles.add(new Pose2d(new Translation2d(i * .01, i2 * .01), new Rotation2d()));
+                            obstacles.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 /Autopath.mapResolution1DPerMeter), new Rotation2d()));
                         }
                     }
                 }

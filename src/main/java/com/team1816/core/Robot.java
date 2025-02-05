@@ -602,11 +602,16 @@ public class Robot extends TimedRobot {
                     trajectoryStates.addAll(trajectoryActionStates);
                 }
 
-                robotState.field
-                        .getObject("Trajectory")
-                        .setTrajectory(
-                                new Trajectory(trajectoryStates)
-                        );
+                if(trajectoryStates.isEmpty())
+                    robotState.field
+                            .getObject("Trajectory")
+                            .close();
+                else
+                    robotState.field
+                            .getObject("Trajectory")
+                            .setTrajectory(
+                                    new Trajectory(trajectoryStates)
+                            );
 
                 RobotState.dynamicAutoChanged = false;
             } else if(!robotState.isAutoDynamic && autoChanged) {

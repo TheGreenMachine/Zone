@@ -37,12 +37,12 @@ public class AutopathAlgorithm {
 
         startTime = System.nanoTime()/1000000;
 
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathTargetPosition.getX()*100), (int)(autopathTargetPosition.getY()*100))) {
+        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathTargetPosition.getX()*Autopath.mapResolution1DPerMeter), (int)(autopathTargetPosition.getY()*Autopath.mapResolution1DPerMeter))) {
             if(Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
         }
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathStartPosition.getX()*100), (int)(autopathStartPosition.getY()*100))) {
+        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathStartPosition.getX()*Autopath.mapResolution1DPerMeter), (int)(autopathStartPosition.getY()*Autopath.mapResolution1DPerMeter))) {
             if(Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
@@ -118,7 +118,7 @@ public class AutopathAlgorithm {
 
             int[] tempNewWaypointNegativeLast = getWaypointLast(bestGuessTrajectory, true);
             if(tempNewWaypointNegativeLast != null) {
-                double[] newWaypointNegative = new double[]{tempNewWaypointNegativeLast[0] / 100., tempNewWaypointNegativeLast[1] / 100.};
+                double[] newWaypointNegative = new double[]{tempNewWaypointNegativeLast[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointNegativeLast[1] / Autopath.mapResolution1DPerMeter};
                 ArrayList<Translation2d> newWaypointsNegative = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointNegative, newWaypointsNegative, autopathStartPosition, autopathTargetPosition, config);
                 addNewWaypointOptimizedMaybe(newWaypointNegative, newWaypointsNegative, autopathStartPosition, autopathTargetPosition);
@@ -162,7 +162,7 @@ public class AutopathAlgorithm {
 
 //            int[] tempNewWaypointNegative = getWaypoint(bestGuessTrajectory, true);
 //            if(tempNewWaypointNegative != null) {
-//                double[] newWaypointNegative = new double[]{tempNewWaypointNegative[0] / 100., tempNewWaypointNegative[1] / 100.};
+//                double[] newWaypointNegative = new double[]{tempNewWaypointNegative[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointNegative[1] / Autopath.mapResolution1DPerMeter};
 //                ArrayList<Translation2d> newWaypointsNegative = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointNegative, newWaypointsNegative, autopathStartPosition, autopathTargetPosition, config);
 //                ArrayList<Boolean> newPathTraceNegative = (ArrayList<Boolean>) baseBranch.getPathTrace().clone();
@@ -207,7 +207,7 @@ public class AutopathAlgorithm {
 
             int[] tempNewWaypointPositiveLast = getWaypointLast(bestGuessTrajectory, false);
             if(tempNewWaypointPositiveLast != null) {
-                double[] newWaypointPositive = new double[]{tempNewWaypointPositiveLast[0] / 100., tempNewWaypointPositiveLast[1] / 100.};
+                double[] newWaypointPositive = new double[]{tempNewWaypointPositiveLast[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointPositiveLast[1] / Autopath.mapResolution1DPerMeter};
                 ArrayList<Translation2d> newWaypointsPositive = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointPositive, newWaypointsPositive, autopathStartPosition, autopathTargetPosition, config);
                 addNewWaypointOptimizedMaybe(newWaypointPositive, newWaypointsPositive, autopathStartPosition, autopathTargetPosition);
@@ -250,7 +250,7 @@ public class AutopathAlgorithm {
 
 //            int[] tempNewWaypointPositive = getWaypoint(bestGuessTrajectory, false);
 //            if (tempNewWaypointPositive != null) {
-//                double[] newWaypointPositive = new double[]{tempNewWaypointPositive[0] / 100., tempNewWaypointPositive[1] / 100.};
+//                double[] newWaypointPositive = new double[]{tempNewWaypointPositive[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointPositive[1] / Autopath.mapResolution1DPerMeter};
 //                ArrayList<Translation2d> newWaypointsPositive = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointPositive, newWaypointsPositive, autopathStartPosition, autopathTargetPosition, config);
 //                ArrayList<Boolean> newPathTracePositive = (ArrayList<Boolean>) baseBranch.getPathTrace().clone();
@@ -435,7 +435,7 @@ public class AutopathAlgorithm {
                 if (collisionPoint == null)
                     return null;
 
-                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / 100., collisionPoint[1] / 100.), new Rotation2d()));
+                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / Autopath.mapResolution1DPerMeter, collisionPoint[1] / Autopath.mapResolution1DPerMeter), new Rotation2d()));
 
                 int[] possibleStartNewCollision =
                         Bresenham.lineReturnCollisionInverted(
@@ -543,7 +543,7 @@ public class AutopathAlgorithm {
                 if (collisionPoint == null)
                     return null;
 
-                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / 100., collisionPoint[1] / 100.), new Rotation2d()));
+                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / Autopath.mapResolution1DPerMeter, collisionPoint[1] / Autopath.mapResolution1DPerMeter), new Rotation2d()));
 
                 int[] possibleStartNewCollision =
                         Bresenham.lineReturnCollisionInverted(
