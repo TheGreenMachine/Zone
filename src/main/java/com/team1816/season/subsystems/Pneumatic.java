@@ -43,8 +43,6 @@ public class Pneumatic extends Subsystem {
     public Pneumatic(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
         pneumatic = factory.getSolenoid(NAME, "pneumatic");
-
-        PIDSlotConfiguration config = factory.getPidSlotConfig(NAME);
     }
 
     public PNEUMATIC_STATE getDesiredState() {

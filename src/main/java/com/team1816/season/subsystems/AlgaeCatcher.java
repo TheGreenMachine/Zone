@@ -100,12 +100,11 @@ public class AlgaeCatcher extends Subsystem {
         }
 
         if (Constants.kLoggingRobot) {
-
+            algaeCatcherCurrentDrawLogger = new DoubleLogEntry(DataLogManager.getLog(), "AlgaeCatcher/Velocity/desiredAlgaeCurrent");
             desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/desiredAlgaeCatcherPower");
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/actualAlgaeCatcherPower"), intakeMotor::getMotorOutputPercent);
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/algaeCatcherCurrentDraw"), intakeMotor::getMotorOutputCurrent);
         }
-        algaeCatcherCurrentDrawLogger = new DoubleLogEntry(DataLogManager.getLog(), "AlgaeCatcher/Velocity/desiredAlgaeCurrent");
     }
 
     /**

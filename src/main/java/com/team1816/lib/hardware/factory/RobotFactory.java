@@ -559,8 +559,7 @@ public class RobotFactory {
                 .withKV(configs.kV)
                 .withKS(configs.kS)
                 .withKA(configs.kA)
-                .withKG(configs.kG)
-                .withGravityType(GravityTypeValue.valueOf(configs.gravityType));
+                .withKG(configs.kG);
     }
 
     public PIDSlotConfiguration getPidSlotConfig(String subsystemName) {

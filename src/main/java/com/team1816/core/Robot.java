@@ -185,6 +185,7 @@ public class Robot extends TimedRobot {
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
+            pneumatic = Injector.get(Pneumatic.class);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -226,7 +227,7 @@ public class Robot extends TimedRobot {
 
             drive = (Injector.get(Drive.Factory.class)).getInstance();
 
-            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher);
+            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher, pneumatic);
 
             subsystemManager.registerEnabledLoops(enabledLoop);
             subsystemManager.registerDisabledLoops(disabledLoop);
@@ -378,8 +379,11 @@ public class Robot extends TimedRobot {
             );
             inputHandler.listenAction(
                     "pivotA1/L3",
-                    (pressed) -> {
+                    ActionState.PRESSED,
+                    () -> {
+                        System.out.println("hi i activated");
                         if(CoralArm.robotState.isCoralBeamBreakTriggered){
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                         }
                         else{
@@ -390,8 +394,10 @@ public class Robot extends TimedRobot {
             );
             inputHandler.listenAction(
                     "pivotA2/L4",
-                    (pressed) -> {
+                    ActionState.PRESSED,
+                    () -> {
                         if(CoralArm.robotState.isCoralBeamBreakTriggered){
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                         }
                         else{
@@ -483,6 +489,12 @@ public class Robot extends TimedRobot {
             ledManager.indicateStatus(LedManager.RobotStatus.ENABLED);
 
             infrastructure.startCompressor();
+
+            elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+            algaeCatcher.setDesiredIntakeState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP);
+            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+
+            drive.setControlState(Drive.ControlState.OPEN_LOOP);
 
             AutopathAlgorithm.autopathMaxCalcMilli = 5;
 
@@ -609,7 +621,7 @@ public class Robot extends TimedRobot {
                         );
 
                 RobotState.dynamicAutoChanged = false;
-            } else if(!robotState.isAutoDynamic && autoChanged) {
+            } else if(!robotState.isAutoDynamic) {
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
                 robotState.field
                         .getObject("Trajectory")
@@ -697,9 +709,9 @@ public class Robot extends TimedRobot {
             drive.rotationPeriodic();
         } else {
             drive.setTeleopInputs(
-                    -inputHandler.getActionAsDouble("throttle"),
-                    -inputHandler.getActionAsDouble("strafe"),
-                    -inputHandler.getActionAsDouble("rotation")
+                    robotState.throttleInput,
+                    robotState.strafeInput,
+                    robotState.rotationInput
             );
         }
     }
