@@ -145,14 +145,14 @@ subsystems:
     coralArm:
         implemented: true
         motors:
-            intakeMotor:
+            coralArmIntakeMotor:
                 motorType: SparkMax
-                motorName: intakeMotor
+                motorName: coralArmIntakeMotor
                 id: 12
                 invertMotor: false
-            pivotMotor:
+            coralArmPivotMotor:
                 motorType: TalonFX
-                motorName: pivotMotor
+                motorName: coralArmPivotMotor
                 id: 13
                 invertMotor: false
         pidConfig:
@@ -191,14 +191,14 @@ subsystems:
     algaeCatcher:
         implemented: true
         motors:
-            intakeMotor:
+            algaeCatcherIntakeMotor:
                 motorType: TalonFX
-                motorName: intakeMotor
+                motorName: algaeCatcherIntakeMotor
                 id: 14
                 invertMotor: false
-            positionMotor:
+            algaeCatcherPositionMotor:
                 motorType: TalonFX
-                motorName: positionMotor
+                motorName: algaeCatcherPositionMotor
                 id: 15
                 invertMotor: false
         pidConfig:

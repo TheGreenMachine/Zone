@@ -655,7 +655,7 @@ public class Robot extends TimedRobot {
                 .setTrajectory(autoModeManager.getSelectedAuto().getCurrentTrajectory());
 
         if(Constants.kLoggingRobot) {
-            GreenLogger.updatePeriodicLogs();
+//            GreenLogger.updatePeriodicLogs();
         }
 
     }
@@ -674,7 +674,7 @@ public class Robot extends TimedRobot {
             }
 
             if(Constants.kLoggingRobot) {
-                GreenLogger.updatePeriodicLogs();
+//                GreenLogger.updatePeriodicLogs();
             }
 
             manualControl();

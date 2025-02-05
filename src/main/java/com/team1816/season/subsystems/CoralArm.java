@@ -84,8 +84,8 @@ public class CoralArm extends Subsystem {
     public CoralArm(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
 
-        intakeMotor = factory.getMotor(NAME, "intakeMotor");
-        pivotMotor = factory.getMotor(NAME, "pivotMotor");
+        intakeMotor = factory.getMotor(NAME, "coralArmIntakeMotor");
+        pivotMotor = factory.getMotor(NAME, "coralArmPivotMotor");
 
         intakeMotor.selectPIDSlot(0);
         pivotMotor.selectPIDSlot(1);
