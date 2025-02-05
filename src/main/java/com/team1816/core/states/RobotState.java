@@ -113,7 +113,7 @@ public class RobotState {
      */
 
     public boolean autopathing = false;
-    public boolean printAutopathing = true;
+    public boolean printAutopathing = false;  //Change this one to see the obstacle boundaries
     public boolean printAutopathFieldTest = false;
     public Trajectory autopathTrajectory = null;
     public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();

@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
+import com.team1816.lib.auto.modes.DefaultMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.modes.BottomPlace2Automode;
@@ -58,8 +59,8 @@ public class AutoModeManager {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
         autoModeChooser.setDefaultOption(
-            DesiredAuto.DRIVE_STRAIGHT.name(),
-            DesiredAuto.DRIVE_STRAIGHT
+            DesiredAuto.DEFAULT.name(),
+            DesiredAuto.DEFAULT
         );
 
         SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
@@ -185,6 +186,8 @@ public class AutoModeManager {
      * Enum for AutoModes
      */
     enum DesiredAuto {
+        DEFAULT,
+
         DRIVE_STRAIGHT,
 
 //        AUTOPATH,
@@ -208,6 +211,9 @@ public class AutoModeManager {
      */
     private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
         switch (mode) {
+            case DEFAULT:
+                robotState.isAutoDynamic = false;
+                return new DefaultMode();
             case DRIVE_STRAIGHT:
                 robotState.isAutoDynamic = false;
                 return new DriveStraightMode();
@@ -219,14 +225,17 @@ public class AutoModeManager {
                 RobotState.dynamicAutoChanged = true;
                 return new TrajectoryOnlyAutoMode(robotState);
             case MIDDLE_PLACE_2_AUTOMODE:
+                robotState.isAutoDynamic = false;
                 return new MiddlePlace2Automode(color);
             case BOTTOM_PLACE_2_AUTOMODE:
+                robotState.isAutoDynamic = false;
                 return new BottomPlace2Automode(color);
             case TEST_DYNAMIC_PATHS:
                 return new TestAllDynamicPointsAutoMode();
             default:
-                GreenLogger.log("Defaulting to drive straight mode");
-                return new DriveStraightMode();
+                robotState.isAutoDynamic = false;
+                GreenLogger.log("Defaulting to DefaultMode");
+                return new DefaultMode();
         }
     }
 }
