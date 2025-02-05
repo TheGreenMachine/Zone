@@ -152,11 +152,26 @@ public class CoralArm extends Subsystem {
             robotState.actualCoralArmPivotState = desiredPivotState;
         }
 
+        if(desiredIntakeState == INTAKE_STATE.REST && !robotState.isCoralBeamBreakTriggered){
+            desiredIntakeState = INTAKE_STATE.INTAKE;
+            desiredIntakeStateChanged = true;
+        }
+
         if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
             robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
 
             if (robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.INTAKE) {
                 desiredIntakeState = INTAKE_STATE.HOLD;
+                desiredIntakeStateChanged = true;
+            }
+
+            if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.HOLD){
+                desiredIntakeState = INTAKE_STATE.INTAKE;
+                desiredIntakeStateChanged = true;
+            }
+
+            if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState != INTAKE_STATE.OUTTAKE){
+                desiredPivotState = PIVOT_STATE.FEEDER;
                 desiredIntakeStateChanged = true;
             }
         }

@@ -59,12 +59,12 @@ public class AlgaeCatcher extends Subsystem {
      * States
      */
     private ALGAE_CATCHER_INTAKE_STATE desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.STOP;
-    private ALGAE_CATCHER_POSITION_STATE desiredPositionState = ALGAE_CATCHER_POSITION_STATE.STOW;
+    private ALGAE_CATCHER_POSITION_STATE desiredPivotState = ALGAE_CATCHER_POSITION_STATE.STOW;
     private double actualAlgaeCatcherPower = 0;
     private double desiredAlgaeCatcherPower = 0;
     private double algaeCatcherCurrentDraw = 0;
-    private boolean intakeOutputsChanged = false;
-    private boolean positionOutputsChanged = false;
+    private boolean desiredIntakeStateChanged = false;
+    private boolean desiredPivotStateChanged = false;
     private double desiredPosition = 0;
     private double actualPosition = 0;
     private double actualPositionDegrees = 0;
@@ -114,22 +114,22 @@ public class AlgaeCatcher extends Subsystem {
      */
     public void setDesiredState(ALGAE_CATCHER_INTAKE_STATE desiredIntakeState, ALGAE_CATCHER_POSITION_STATE desiredPositionState) {
         setDesiredIntakeState(desiredIntakeState);
-        setDesiredPositionState(desiredPositionState);
+        setDesiredPivotState(desiredPositionState);
     }
 
     /**
      * Sets the desired state of the position
      *
-     * @param desiredPositionState POSITION_STATE
+     * @param desiredPivotState POSITION_STATE
      */
-    public void setDesiredPositionState(ALGAE_CATCHER_POSITION_STATE desiredPositionState) {
-        this.desiredPositionState = desiredPositionState;
-        positionOutputsChanged = true;
+    public void setDesiredPivotState(ALGAE_CATCHER_POSITION_STATE desiredPivotState) {
+        this.desiredPivotState = desiredPivotState;
+        desiredPivotStateChanged = true;
     }
 
     public void setDesiredIntakeState(ALGAE_CATCHER_INTAKE_STATE desiredIntakeState) {
         this.desiredIntakeState = desiredIntakeState;
-        intakeOutputsChanged = true;
+        desiredIntakeStateChanged = true;
     }
 
     public boolean isBeamBreakTriggered() {
@@ -153,6 +153,34 @@ public class AlgaeCatcher extends Subsystem {
             robotState.actualAlgaeCatcherIntakeState = desiredIntakeState;
         }
 
+        if (robotState.isAlgaeBeamBreakTriggered != isBeamBreakTriggered()) {
+            robotState.isAlgaeBeamBreakTriggered = isBeamBreakTriggered();
+
+            if (robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
+                desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
+                desiredIntakeStateChanged = true;
+            }
+
+            if (!robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD) {
+                desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.INTAKE;
+                desiredIntakeStateChanged = true;
+            }
+        }
+
+        if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE){
+            desiredPivotState = ALGAE_CATCHER_POSITION_STATE.INTAKE;
+            desiredPivotStateChanged = true;
+        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD){
+            desiredPivotState = ALGAE_CATCHER_POSITION_STATE.HOLD;
+            desiredPivotStateChanged = true;
+        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.STOP){
+            desiredPivotState = ALGAE_CATCHER_POSITION_STATE.STOW;
+            desiredPivotStateChanged = true;
+        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE && desiredPivotState != ALGAE_CATCHER_POSITION_STATE.ALGAE1 && desiredPivotState != ALGAE_CATCHER_POSITION_STATE.ALGAE2){
+            desiredPivotState = ALGAE_CATCHER_POSITION_STATE.OUTTAKE;
+            desiredPivotStateChanged = true;
+        }
+
         if (intakeMotor.getMotorTemperature() >= 55) {
             SmartDashboard.putBoolean("Collector", false);
         }
@@ -168,8 +196,8 @@ public class AlgaeCatcher extends Subsystem {
      */
     @Override
     public void writeToHardware() {
-        if (intakeOutputsChanged) {
-            intakeOutputsChanged = false;
+        if (desiredIntakeStateChanged) {
+            desiredIntakeStateChanged = false;
             double desiredAlgaeCatcherPower = 0;
 
             switch (desiredIntakeState) {
@@ -185,9 +213,9 @@ public class AlgaeCatcher extends Subsystem {
 
         robotState.algaeCatcherPivot.setAngle(robotState.algaeBaseAngle + positionMotor.getSensorPosition() / algaeMotorRotationsPerDegree);
 
-        if(positionOutputsChanged) {
-            positionOutputsChanged = false;
-            switch (desiredPositionState){
+        if(desiredPivotStateChanged) {
+            desiredPivotStateChanged = false;
+            switch (desiredPivotState){
                 case STOW -> {
                     desiredPosition = stowPosition;
                 }

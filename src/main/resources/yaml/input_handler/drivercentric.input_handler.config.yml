@@ -16,8 +16,8 @@ driver:
     rightTrigger: pivotA1/L3
     leftTrigger: pivotA2/L4
   buttons:
-    start: zeroPose
-    back: hardZeroPose
+    start:
+    back: zeroPose
     leftBumper: pivotElevatorAndCoralL2
     rightBumper: pivotElevatorAndCoralL1
   dpad:
