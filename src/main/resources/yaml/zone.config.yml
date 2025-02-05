@@ -133,7 +133,7 @@ subsystems:
             isDemoMode: 0
             ## Swerve Characterization ##
             driveGearRatio: 1 # L2
-            azimuthGearRatio: 1w # MK4
+            azimuthGearRatio: 1 # MK4
             azimuthEncPPR: 0
             ## Control Configurations ##
             slowModeScalar: 0.4
