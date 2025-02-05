@@ -43,7 +43,6 @@ subsystems:
                 motorName: BLAz
                 id: 10
                 invertMotor: false
-
         canCoders:
             RREnc: 2
             FREnc: 5
@@ -119,7 +118,7 @@ subsystems:
             openLoopRampRate: 0.1
             isSwerve: 1
             isCTRSwerve: 1 #TODO IF ALL ELSE FAILS
-            wheelDiameter: -1 #inches
+            wheelDiameter: 3.81 #inches
             kTrackScrubFactor: 1.0
             ## Velocity Constraints ##
             maxRotVel: 0.8 # Pi radians/sec
@@ -132,8 +131,8 @@ subsystems:
             maxAccel: 2 # meters/s^2
             isDemoMode: 0
             ## Swerve Characterization ##
-            driveGearRatio: 1 # L2
-            azimuthGearRatio: 1 # MK4
+            driveGearRatio: 6.12 # L2
+            azimuthGearRatio: 12.8 # MK4
             azimuthEncPPR: 0
             ## Control Configurations ##
             slowModeScalar: 0.4
