@@ -6,6 +6,7 @@ import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.modes.AutopathMode;
 import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.autopath.AutopathAlgorithm;
 import com.team1816.lib.hardware.factory.RobotFactory;
@@ -409,8 +410,6 @@ public class Robot extends TimedRobot {
 
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
-
-            SmartDashboard.putNumber("Autopath Waypoint Buffer", 10);
 
         } catch (Throwable t) {
             faulted = true;
