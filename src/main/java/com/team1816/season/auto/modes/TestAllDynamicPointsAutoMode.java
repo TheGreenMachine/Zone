@@ -43,6 +43,10 @@ public class TestAllDynamicPointsAutoMode extends AutoMode {
             System.out.println(name);
         }
 
+        if(failedPointNames.isEmpty()){
+            System.out.println("EVERY DYNAMIC AUTO POINT WORKS !!!!!!!");
+        }
+
         runAction(new DriveOpenLoopAction(10, .25));
     }
 }

@@ -360,21 +360,21 @@ public class Robot extends TimedRobot {
                     "pivotAlgaeStow",
                     ActionState.PRESSED,
                     () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.STOW);
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
                     }
             );
             inputHandler.listenAction(
                     "pivotAlgaeIntake",
                     ActionState.PRESSED,
                     () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.INTAKE);
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
                     }
             );
             inputHandler.listenAction(
                     "pivotAlgaeOuttake",
                     ActionState.PRESSED,
                     () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.OUTTAKE);
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
                     }
             );
             inputHandler.listenAction(
@@ -387,7 +387,7 @@ public class Robot extends TimedRobot {
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                         }
                         else{
-                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE1);
+                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1);
                         }
 
                     }
@@ -401,7 +401,7 @@ public class Robot extends TimedRobot {
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                         }
                         else{
-                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_POSITION_STATE.ALGAE2);
+                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE2);
                         }
                     }
             );

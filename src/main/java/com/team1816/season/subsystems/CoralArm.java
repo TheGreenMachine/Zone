@@ -144,14 +144,6 @@ public class CoralArm extends Subsystem {
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
-            robotState.actualCoralArmIntakeState = desiredIntakeState;
-        }
-
-        if (robotState.actualCoralArmPivotState != desiredPivotState) {
-            robotState.actualCoralArmPivotState = desiredPivotState;
-        }
-
         if(desiredIntakeState == INTAKE_STATE.REST && !robotState.isCoralBeamBreakTriggered){
             desiredIntakeState = INTAKE_STATE.INTAKE;
             desiredIntakeStateChanged = true;
@@ -174,6 +166,14 @@ public class CoralArm extends Subsystem {
                 desiredPivotState = PIVOT_STATE.FEEDER;
                 desiredIntakeStateChanged = true;
             }
+        }
+
+        if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
+            robotState.actualCoralArmIntakeState = desiredIntakeState;
+        }
+
+        if (robotState.actualCoralArmPivotState != desiredPivotState) {
+            robotState.actualCoralArmPivotState = desiredPivotState;
         }
 
         if (Constants.kLoggingRobot) {
