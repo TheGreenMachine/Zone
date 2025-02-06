@@ -131,10 +131,6 @@ public class RobotState {
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
     public ChassisSpeeds robotChassis;
-    public int autopath1 = 0;
-    public int autopath2 = 0;
-    public int autopath3 = 0;
-    public int autopath4 = 0;
 
 
     /**

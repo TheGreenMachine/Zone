@@ -563,26 +563,18 @@ public class AutopathAlgorithm {
 
                 if (Arrays.equals(startNewCollision, endNewCollision)) {
                     newWaypoint = endNewCollision;
-                    Autopath.robotState.autopath1++;
                     break;
                 } else if (Arrays.equals(startNewCollision, possibleStartNewCollision) && Arrays.equals(endNewCollision, possibleEndNewCollision)) {
                     newWaypoint = endNewCollision;
-                    Autopath.robotState.autopath2++;
                     break;
                 } else if (checkCollisions(pastCollisionPointHashes, collisionPoint)) {
-                    newWaypoint = endNewCollision;
-                    Autopath.robotState.autopath3++;
-//                System.out.println("AAAAHHHHHHH AutopathAlgorithm NOT DOING GOOD");
+                    newWaypoint = endNewCollision;//                System.out.println("AAAAHHHHHHH AutopathAlgorithm NOT DOING GOOD");
                     break;
                 } //TODO if this ever actually triggers we need to revamp the system so that it...doesn't, this is basically just a botch solution to a really bad problem we may or may not have
                 //TODO UPDATE: well now its used a lot and works soooo...ig it's a feature???
                 else {
                     startNewCollision = possibleStartNewCollision;
-                    endNewCollision = possibleEndNewCollision;
-                    Autopath.robotState.autopath4++;
-                }
-                System.out.println(Autopath.robotState.autopath1+" "+Autopath.robotState.autopath2+" "+Autopath.robotState.autopath3+" "+Autopath.robotState.autopath4);
-
+                    endNewCollision = possibleEndNewCollision;}
                 pastCollisionPointHashes.add(Arrays.hashCode(collisionPoint));
             }
         } catch (NullPointerException e){
