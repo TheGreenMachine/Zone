@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
+import com.team1816.lib.auto.modes.AutopathMode;
 import com.team1816.lib.auto.modes.DefaultMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
@@ -187,7 +188,7 @@ public class AutoModeManager {
 
         DRIVE_STRAIGHT,
 
-//        AUTOPATH,
+        AUTOPATH,
 
         DYNAMIC_TRAJECTORY_ONLY,
 
@@ -218,9 +219,9 @@ public class AutoModeManager {
             case DRIVE_STRAIGHT:
                 robotState.isAutoDynamic = false;
                 return new DriveStraightMode();
-//            case AUTOPATH:
-//                robotState.isAutoDynamic = false;
-//                return new AutopathMode();
+            case AUTOPATH:
+                robotState.isAutoDynamic = false;
+                return new AutopathMode();
             case DYNAMIC_TRAJECTORY_ONLY:
                 robotState.isAutoDynamic = true;
                 RobotState.dynamicAutoChanged = true;

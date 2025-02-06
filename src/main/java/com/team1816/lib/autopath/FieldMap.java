@@ -3,12 +3,22 @@ import java.util.*;
 
 public class FieldMap {
     private BitSet[] fieldPixelMap;
+    private int mapY;
+    private int mapX;
 
     FieldMap(int mapLengthX, int mapWidthY){
+        this.mapY = mapWidthY;
+        this.mapX = mapLengthX;
         fieldPixelMap = new BitSet[mapWidthY];
 
-        for(int i = 0; i < fieldPixelMap.length; i++)
+        for(int i = 0; i < mapWidthY; i++)
             fieldPixelMap[i] = new BitSet(mapLengthX);
+
+        for(int i = 0; i < mapWidthY; i++)
+            for(int i2 = 0; i2 < mapLengthX; i2++) {
+                fieldPixelMap[i].set(i2);
+                fieldPixelMap[i].flip(i2);
+            }
     }
 
     public boolean checkPixelHasObject(double x, double y){
@@ -38,8 +48,7 @@ public class FieldMap {
     }
     public boolean drawPixel(int x, int y){
         try {
-            boolean heldBoolean = fieldPixelMap[y].get(x);
-            fieldPixelMap[y].set(x, true);
+            fieldPixelMap[y].set(x);
             return true;
         } catch(Exception IndexOutOfBoundsException){
             return false;
@@ -51,8 +60,8 @@ public class FieldMap {
     }
     public boolean removePixel(int x, int y){
         try {
-            boolean heldBoolean = fieldPixelMap[y].get(x);
-            fieldPixelMap[y].set(x, false);
+            fieldPixelMap[y].set(x);
+            fieldPixelMap[y].flip(x);
             return true;
         } catch(Exception IndexOutOfBoundsException){
             return false;
@@ -194,10 +203,10 @@ public class FieldMap {
     }
 
     public int getMapY(){
-        return fieldPixelMap.length;
+        return mapY;
     }
     public int getMapX(){
-        return fieldPixelMap[0].length();
+        return mapX;
     }
 
     public boolean mapSizeEqual(FieldMap otherMap){

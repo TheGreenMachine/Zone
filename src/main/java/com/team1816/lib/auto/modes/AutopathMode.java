@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.*;
 
 public class AutopathMode extends AutoMode{
-     Translation2d startTranslation = new Translation2d(/*2.6, 5.5*/3.751259,2.838709);
+     Translation2d startTranslation = new Translation2d(/*2.6, 5.5*/2.751259,1.838709);
 //    Translation2d startTranslation = new Translation2d(14, 4);
     //total avg: -0.15704970708570218 pos avg: 0.18805418060928844 ratio: 6.142624593037816
 
