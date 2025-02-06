@@ -1,14 +1,14 @@
 package com.team1816.lib.autopath;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class FieldMap {
-    private boolean[][] fieldPixelMap;
+    private BitSet[] fieldPixelMap;
 
     FieldMap(int mapLengthX, int mapWidthY){
-        fieldPixelMap = new boolean[mapWidthY][mapLengthX];
+        fieldPixelMap = new BitSet[mapWidthY];
+
+        for(int i = 0; i < fieldPixelMap.length; i++)
+            fieldPixelMap[i] = new BitSet(mapLengthX);
     }
 
     public boolean checkPixelHasObject(double x, double y){
@@ -16,7 +16,7 @@ public class FieldMap {
     }
     public boolean checkPixelHasObject(int x, int y){
         if(x >= 0 && x < this.getMapX() && y>= 0 && y < this.getMapY())
-            return fieldPixelMap[y][x];
+            return fieldPixelMap[y].get(x);
         return false;
     }
 
@@ -29,7 +29,7 @@ public class FieldMap {
 
     public boolean checkPixelHasObjectOrOffMap(int x, int y){
         if(x >= 0 && x < this.getMapX() && y>= 0 && y < this.getMapY())
-            return fieldPixelMap[y][x];
+            return fieldPixelMap[y].get(x);
         return true;
     }
 
@@ -38,8 +38,8 @@ public class FieldMap {
     }
     public boolean drawPixel(int x, int y){
         try {
-            boolean heldBoolean = fieldPixelMap[y][x];
-            fieldPixelMap[y][x] = true;
+            boolean heldBoolean = fieldPixelMap[y].get(x);
+            fieldPixelMap[y].set(x, true);
             return true;
         } catch(Exception IndexOutOfBoundsException){
             return false;
@@ -51,8 +51,8 @@ public class FieldMap {
     }
     public boolean removePixel(int x, int y){
         try {
-            boolean heldBoolean = fieldPixelMap[y][x];
-            fieldPixelMap[y][x] = false;
+            boolean heldBoolean = fieldPixelMap[y].get(x);
+            fieldPixelMap[y].set(x, false);
             return true;
         } catch(Exception IndexOutOfBoundsException){
             return false;
@@ -197,25 +197,29 @@ public class FieldMap {
         return fieldPixelMap.length;
     }
     public int getMapX(){
-        return fieldPixelMap[0].length;
+        return fieldPixelMap[0].length();
     }
 
     public boolean mapSizeEqual(FieldMap otherMap){
         return this.getMapX() == otherMap.getMapX() && this.getMapY() == otherMap.getMapY();
     }
 
-    public boolean[][] getBaseBoolMap() {
-        return fieldPixelMap;
-    }
-    public int[][] getBaseIntMap(){
-        int[][] intMap = new int[fieldPixelMap.length][fieldPixelMap[0].length];
-
-        for(int j = 0; j < fieldPixelMap[0].length; j++)
-            for(int i = 0; i < fieldPixelMap.length; i++)
-                intMap[i][j] = fieldPixelMap[i][j] ? 1 : 0;
-
-        return intMap;
-    }
+    /**
+     * Commented both these methods as they create dangerously huge array sizes w/ too much memory
+     * @return
+     */
+//    public boolean[][] getBaseBoolMap() {
+//        return fieldPixelMap;
+//    }
+//    public int[][] getBaseIntMap(){
+//        int[][] intMap = new int[fieldPixelMap.length][fieldPixelMap[0].length()];
+//
+//        for(int j = 0; j < fieldPixelMap[0].length(); j++)
+//            for(int i = 0; i < fieldPixelMap.length; i++)
+//                intMap[i][j] = fieldPixelMap[i].get(j) ? 1 : 0;
+//
+//        return intMap;
+//    }
 
     public FieldMap getCopy(){
         FieldMap mapCopy = new FieldMap(this.getMapX(), this.getMapY());
@@ -340,23 +344,23 @@ public class FieldMap {
         return Bresenham.drawPerpLine(this, startMinRadius, startPixelX, startPixelY, endPixelX, endPixelY);
     }
 
-    public String toString(){
-        int[][] intMap = getBaseIntMap();
-
-        StringBuilder stringReturn = new StringBuilder();
-
-        for(int j = intMap.length-1; j >= 0; j--) {
-            stringReturn.append(j > 9 ? j+" " : j+"  ");
-            for (int i = 0; i < intMap[0].length; i++)
-                stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]+"  ");
-            stringReturn.append("\n");
-        }
-
-        stringReturn.append("   ");
-        for(int i = 0; i < intMap[0].length; i++)
-            stringReturn.append(i > 9 ? i+" " : i+"  ");
-        stringReturn.append("\n");
-
-        return stringReturn.toString();
-    }
+//    public String toString(){
+//        int[][] intMap = getBaseIntMap();
+//
+//        StringBuilder stringReturn = new StringBuilder();
+//
+//        for(int j = intMap.length-1; j >= 0; j--) {
+//            stringReturn.append(j > 9 ? j+" " : j+"  ");
+//            for (int i = 0; i < intMap[0].length; i++)
+//                stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]+"  ");
+//            stringReturn.append("\n");
+//        }
+//
+//        stringReturn.append("   ");
+//        for(int i = 0; i < intMap[0].length; i++)
+//            stringReturn.append(i > 9 ? i+" " : i+"  ");
+//        stringReturn.append("\n");
+//
+//        return stringReturn.toString();
+//    }
 }
