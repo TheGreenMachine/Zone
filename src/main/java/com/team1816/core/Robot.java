@@ -381,7 +381,7 @@ public class Robot extends TimedRobot {
                     "pivotA1/L3",
                     ActionState.PRESSED,
                     () -> {
-                        System.out.println("hi i activated");
+                        System.out.println("hi i activated :3");
                         if(CoralArm.robotState.isCoralBeamBreakTriggered){
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
