@@ -77,7 +77,7 @@ subsystems:
                     azimuth: FLAz
                     canCoder: FLEnc
                     xCoord: 7.125
-                    yCoord: 11.8x75
+                    yCoord: 11.875
                     constants:
                         encoderOffset: 0.34228515625
                         couplingRatio: 3.576
