@@ -8,10 +8,7 @@ import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.lib.auto.modes.DefaultMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.season.auto.modes.BottomPlace2Automode;
-import com.team1816.season.auto.modes.MiddlePlace2Automode;
-import com.team1816.season.auto.modes.TrajectoryOnlyAutoMode;
-import com.team1816.season.auto.modes.TestAllDynamicPointsAutoMode;
+import com.team1816.season.auto.modes.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -194,7 +191,11 @@ public class AutoModeManager {
 
         DYNAMIC_TRAJECTORY_ONLY,
 
+        MIDDLE_PLACE_1_AUTOMODE,
+
         MIDDLE_PLACE_2_AUTOMODE,
+
+        BOTTOM_PLACE_1_AUTOMODE,
 
         BOTTOM_PLACE_2_AUTOMODE,
 
@@ -224,12 +225,18 @@ public class AutoModeManager {
                 robotState.isAutoDynamic = true;
                 RobotState.dynamicAutoChanged = true;
                 return new TrajectoryOnlyAutoMode(robotState);
+            case MIDDLE_PLACE_1_AUTOMODE:
+                robotState.isAutoDynamic = false;
+                return new MiddlePlace1AutoMode(color);
             case MIDDLE_PLACE_2_AUTOMODE:
                 robotState.isAutoDynamic = false;
-                return new MiddlePlace2Automode(color);
+                return new MiddlePlace2AutoMode(color);
+            case BOTTOM_PLACE_1_AUTOMODE:
+                robotState.isAutoDynamic = false;
+                return new BottomPlace1AutoMode(color);
             case BOTTOM_PLACE_2_AUTOMODE:
                 robotState.isAutoDynamic = false;
-                return new BottomPlace2Automode(color);
+                return new BottomPlace2AutoMode(color);
             case TEST_DYNAMIC_PATHS:
                 return new TestAllDynamicPointsAutoMode();
             default:

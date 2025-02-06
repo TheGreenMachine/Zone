@@ -14,9 +14,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 import java.util.List;
 
-public class MiddlePlace2Automode extends AutoMode {
+public class MiddlePlace2AutoMode extends AutoMode {
 
-    public MiddlePlace2Automode(Color color) {
+    public MiddlePlace2AutoMode(Color color) {
         super(
                 List.of(
                         new TrajectoryAction(
