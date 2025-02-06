@@ -136,7 +136,7 @@ public class RobotState {
     /**
      * DynamicAuto2025
      */
-    public DynamicAutoScript2025 dynamicAutoScript2025 = new DynamicAutoScript2025(6);
+    public DynamicAutoScript2025 dynamicAutoScript2025 = new DynamicAutoScript2025(6, 3);
     public static boolean dynamicAutoChanged = false;
     public boolean isAutoDynamic = false;
 

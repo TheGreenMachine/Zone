@@ -54,7 +54,8 @@ public class BottomPlace2AutoMode extends AutoMode {
                                 new AlgaeCatcherQuickAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1)
                         ),
                         trajectoryActions.get(4)
-                ));
+                )
+        );
     }
 
     @Override
