@@ -186,6 +186,7 @@ public class AutoModeManager {
         DRIVE_STRAIGHT,
 
         AUTOPATH,
+        TOP_PLACE_1_AUTOMODE,
 
         TOP_PLACE_2_AUTOMODE,
 
@@ -248,6 +249,12 @@ public class AutoModeManager {
             case DYNAMIC_PLACE_3:
                 robotState.isAutoDynamic = true;
                 return new DynamicPlace3(robotState);
+            case TOP_PLACE_1_AUTOMODE:
+                robotState.isAutoDynamic = false;
+                return  new TopPlace1AutoMode(color);
+            case TOP_PLACE_2_AUTOMODE:
+                robotState.isAutoDynamic = false;
+                return new TopPlace2AutoMode(color);
 //            case DYNAMIC_TRAJECTORY_ONLY:
 //                robotState.isAutoDynamic = true;
 //                RobotState.dynamicAutoChanged = true;
