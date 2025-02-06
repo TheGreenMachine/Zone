@@ -10,7 +10,6 @@ import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -42,7 +41,7 @@ public class CoralArm extends Subsystem {
     /**
      * States
      */
-    private PIVOT_STATE desiredPivotState = PIVOT_STATE.REST;
+    private PIVOT_STATE desiredPivotState = PIVOT_STATE.FEEDER;
     private INTAKE_STATE desiredIntakeState = INTAKE_STATE.REST;
 
     private boolean desiredPivotStateChanged = false;
@@ -71,7 +70,6 @@ public class CoralArm extends Subsystem {
     private final double l3Position = factory.getConstant(NAME, "coralArmL3Position", 1.0);
     private final double l4Position = factory.getConstant(NAME, "coralArmL4Position", 1.0);
     private final double feederPosition = factory.getConstant(NAME, "coralArmFeederPosition", 1.0);
-    private final double restPosition = factory.getConstant(NAME, "coralArmRestPosition", 1.0);
 
     private final double motorRotationsPerDegree = factory.getConstant(NAME, "coralArmMotorRotationsPerDegree", 1);
 
@@ -86,11 +84,11 @@ public class CoralArm extends Subsystem {
     public CoralArm(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
 
-        intakeMotor = factory.getMotor(NAME, "coralIntakeMotor");
-        pivotMotor = factory.getMotor(NAME, "coralPivotMotor");
+        intakeMotor = factory.getMotor(NAME, "coralArmIntakeMotor");
+        pivotMotor = factory.getMotor(NAME, "coralArmPivotMotor");
 
-        intakeMotor.selectPIDSlot(1);
-        pivotMotor.selectPIDSlot(2);
+        intakeMotor.selectPIDSlot(0);
+        pivotMotor.selectPIDSlot(1);
 
         coralSensor = new DigitalInput((int) factory.getConstant(NAME, "coralSensorChannel", -1));
 
@@ -146,21 +144,36 @@ public class CoralArm extends Subsystem {
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if (robotState.actualIntakeState != desiredIntakeState) {
-            robotState.actualIntakeState = desiredIntakeState;
+        if(desiredIntakeState == INTAKE_STATE.REST && !robotState.isCoralBeamBreakTriggered){
+            desiredIntakeState = INTAKE_STATE.INTAKE;
+            desiredIntakeStateChanged = true;
         }
 
-        if (robotState.actualPivotState != desiredPivotState) {
-            robotState.actualPivotState = desiredPivotState;
-        }
+        if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
+            robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
 
-        if (robotState.isBeamBreakTriggered != isBeamBreakTriggered()) {
-            robotState.isBeamBreakTriggered = isBeamBreakTriggered();
-
-            if (robotState.isBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.INTAKE) {
+            if (robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.INTAKE) {
                 desiredIntakeState = INTAKE_STATE.HOLD;
                 desiredIntakeStateChanged = true;
             }
+
+            if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.HOLD){
+                desiredIntakeState = INTAKE_STATE.INTAKE;
+                desiredIntakeStateChanged = true;
+            }
+
+            if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState != INTAKE_STATE.OUTTAKE){
+                desiredPivotState = PIVOT_STATE.FEEDER;
+                desiredIntakeStateChanged = true;
+            }
+        }
+
+        if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
+            robotState.actualCoralArmIntakeState = desiredIntakeState;
+        }
+
+        if (robotState.actualCoralArmPivotState != desiredPivotState) {
+            robotState.actualCoralArmPivotState = desiredPivotState;
         }
 
         if (Constants.kLoggingRobot) {
@@ -194,8 +207,6 @@ public class CoralArm extends Subsystem {
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
             pivotMotor.set(GreenControlMode.POSITION_CONTROL, desiredPivotPosition);
-
-//            System.out.println(pivotMotor.getSensorPosition()+" "+desiredPivotPosition);
         }
     }
 
@@ -229,7 +240,6 @@ public class CoralArm extends Subsystem {
             case L3 -> l3Position;
             case L4 -> l4Position;
             case FEEDER -> feederPosition;
-            case REST -> restPosition;
         };
     }
 
@@ -242,7 +252,11 @@ public class CoralArm extends Subsystem {
     }
 
     public enum PIVOT_STATE {
-        L1, L2, L3, L4, FEEDER, REST
+        L1,
+        L2,
+        L3,
+        L4,
+        FEEDER
     }
 
     public enum INTAKE_STATE {

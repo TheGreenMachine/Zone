@@ -7,6 +7,7 @@ import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.autopath.Autopath;
+import com.team1816.lib.autopath.AutopathAlgorithm;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.*;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
@@ -21,14 +22,11 @@ import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.core.states.RobotState;
-import com.team1816.season.auto.actions.ElevatorAction;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Pneumatic;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
@@ -187,6 +185,7 @@ public class Robot extends TimedRobot {
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
+            pneumatic = Injector.get(Pneumatic.class);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -228,7 +227,7 @@ public class Robot extends TimedRobot {
 
             drive = (Injector.get(Drive.Factory.class)).getInstance();
 
-            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher);
+            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher, pneumatic);
 
             subsystemManager.registerEnabledLoops(enabledLoop);
             subsystemManager.registerDisabledLoops(disabledLoop);
@@ -305,7 +304,7 @@ public class Robot extends TimedRobot {
             inputHandler.listenActionPressAndRelease(
                     "intakeCoral",
                     (pressed) -> {
-                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
+                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
                     }
             );
             inputHandler.listenActionPressAndRelease(
@@ -314,17 +313,10 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredIntakeState(pressed ? CoralArm.INTAKE_STATE.OUTTAKE : CoralArm.INTAKE_STATE.REST);
                     }
             );
-
             inputHandler.listenActionPressAndRelease(
-                    "intakeAlgae",
-                    (pressed) -> {
-                        algaeCatcher.setDesiredState(pressed ? AlgaeCatcher.ALGAE_CATCHER_STATE.INTAKE : AlgaeCatcher.ALGAE_CATCHER_STATE.HOLD);
-                    }
-            );
-            inputHandler.listenActionPressAndRelease(
-                    "outtakeAlgae",
-                    (pressed) -> {
-                        algaeCatcher.setDesiredState(pressed ? AlgaeCatcher.ALGAE_CATCHER_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_STATE.STOP);
+                    "intake/OuttakeAlgae",
+                    (pressed) ->{
+                        algaeCatcher.setDesiredIntakeState((pressed && AlgaeCatcher.robotState.isCoralBeamBreakTriggered) ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE);
                     }
             );
             inputHandler.listenAction(
@@ -338,6 +330,83 @@ public class Robot extends TimedRobot {
 
             /** Operator Commands */
 
+            /*NEW SUBSYSTEM ACTIONS*/
+            inputHandler.listenAction(
+                    "pivotElevatorAndCoralL1",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotElevatorAndCoralL2",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotElevatorAndCoralFeeder",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
+                    }
+            );
+
+            inputHandler.listenAction(
+                    "pivotAlgaeStow",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotAlgaeIntake",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotAlgaeOuttake",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotA1/L3",
+                    ActionState.PRESSED,
+                    () -> {
+                        System.out.println("hi i activated");
+                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
+                        }
+                        else{
+                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1);
+                        }
+
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotA2/L4",
+                    ActionState.PRESSED,
+                    () -> {
+                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
+                        }
+                        else{
+                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE2);
+                        }
+                    }
+            );
+
+
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
 
@@ -347,93 +416,6 @@ public class Robot extends TimedRobot {
             faulted = true;
             throw t;
         }
-
-        /*NEW SUBSYSTEM ACTIONS*/
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralL1",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L1);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralL2",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralL3",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralL4",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralFeeder",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotElevatorAndCoralRest",
-                ActionState.PRESSED,
-                () -> {
-                    elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
-                    coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.REST);
-                }
-        );
-
-        inputHandler.listenAction(
-                "pivotAlgaeStow",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.STOW);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotAlgaeIntake",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.INTAKE);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotAlgaeOuttake",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.OUTTAKE);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotAlgaeL2",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.ALGAEL2);
-                }
-        );
-        inputHandler.listenAction(
-                "pivotAlgaeL3",
-                ActionState.PRESSED,
-                () -> {
-                    algaeCatcher.setDesiredPositionState(AlgaeCatcher.POSITION_STATE.ALGAEL3);
-                }
-        );
-
     }
 
     /**
@@ -453,6 +435,8 @@ public class Robot extends TimedRobot {
             if (autoModeManager.getSelectedAuto() == null) {
                 autoModeManager.reset();
             }
+
+            AutopathAlgorithm.autopathMaxCalcMilli = 1000;
 
             subsystemManager.stop();
 
@@ -479,12 +463,14 @@ public class Robot extends TimedRobot {
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
         //TODO add new subsystem inits here
-        elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
-        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP);
-        coralArm.setDesiredState(CoralArm.PIVOT_STATE.REST, CoralArm.INTAKE_STATE.REST);
+        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+        algaeCatcher.setDesiredIntakeState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP);
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
+
+        AutopathAlgorithm.autopathMaxCalcMilli = 5;
 
         autoStart = Timer.getFPGATimestamp();
         enabledLoop.start();
@@ -503,6 +489,14 @@ public class Robot extends TimedRobot {
             ledManager.indicateStatus(LedManager.RobotStatus.ENABLED);
 
             infrastructure.startCompressor();
+
+            elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+            algaeCatcher.setDesiredIntakeState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP);
+            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+
+            drive.setControlState(Drive.ControlState.OPEN_LOOP);
+
+            AutopathAlgorithm.autopathMaxCalcMilli = 5;
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
@@ -620,14 +614,19 @@ public class Robot extends TimedRobot {
                     trajectoryStates.addAll(trajectoryActionStates);
                 }
 
-                robotState.field
-                        .getObject("Trajectory")
-                        .setTrajectory(
-                                new Trajectory(trajectoryStates)
-                        );
+                if(trajectoryStates.isEmpty())
+                    robotState.field
+                            .getObject("Trajectory")
+                            .close();
+                else
+                    robotState.field
+                            .getObject("Trajectory")
+                            .setTrajectory(
+                                    new Trajectory(trajectoryStates)
+                            );
 
                 RobotState.dynamicAutoChanged = false;
-            } else if(!robotState.isAutoDynamic && autoChanged) {
+            } else if(!robotState.isAutoDynamic) {
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
                 robotState.field
                         .getObject("Trajectory")
@@ -661,7 +660,7 @@ public class Robot extends TimedRobot {
                 .setTrajectory(autoModeManager.getSelectedAuto().getCurrentTrajectory());
 
         if(Constants.kLoggingRobot) {
-            GreenLogger.updatePeriodicLogs();
+//            GreenLogger.updatePeriodicLogs();
         }
 
     }
@@ -680,7 +679,7 @@ public class Robot extends TimedRobot {
             }
 
             if(Constants.kLoggingRobot) {
-                GreenLogger.updatePeriodicLogs();
+//                GreenLogger.updatePeriodicLogs();
             }
 
             manualControl();
@@ -715,9 +714,9 @@ public class Robot extends TimedRobot {
             drive.rotationPeriodic();
         } else {
             drive.setTeleopInputs(
-                    -inputHandler.getActionAsDouble("throttle"),
-                    -inputHandler.getActionAsDouble("strafe"),
-                    -inputHandler.getActionAsDouble("rotation")
+                    robotState.throttleInput,
+                    robotState.strafeInput,
+                    robotState.rotationInput
             );
         }
     }

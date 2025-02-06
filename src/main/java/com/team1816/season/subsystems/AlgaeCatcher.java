@@ -14,7 +14,6 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @Singleton
@@ -27,8 +26,7 @@ public class AlgaeCatcher extends Subsystem {
     /**
      * Components
      */
-    private final IGreenMotor leadMotor;
-    private final IGreenMotor followerMotor;
+    private final IGreenMotor intakeMotor;
     private final IGreenMotor positionMotor;
 
     private final DigitalInput algaeSensor;
@@ -40,8 +38,8 @@ public class AlgaeCatcher extends Subsystem {
     private static final double intakePosition = factory.getConstant(NAME,"intakePosition",1.0);
     private static final double holdPosition = factory.getConstant(NAME,"holdPosition",1.0);
     private static final double outtakePosition = factory.getConstant(NAME,"outtakePosition",1.0);
-    private static final double algael2Position = factory.getConstant(NAME,"algael2Position",1.0);
-    private static final double algael3Position = factory.getConstant(NAME,"algael3Position",1.0);
+    private static final double algaeL2Position = factory.getConstant(NAME,"algaeL2Position",1.0);
+    private static final double algaeL3Position = factory.getConstant(NAME,"algaeL3Position",1.0);
 
     private final double algaeMotorRotationsPerDegree = factory.getConstant(NAME, "algaeMotorRotationsPerDegree", 1);
 
@@ -60,13 +58,13 @@ public class AlgaeCatcher extends Subsystem {
     /**
      * States
      */
-    private ALGAE_CATCHER_STATE desiredState = ALGAE_CATCHER_STATE.STOP;
-    private POSITION_STATE desiredPositionState = POSITION_STATE.STOW;
-    private double actualAlgaeCatcherPower = 0;
+    private ALGAE_CATCHER_INTAKE_STATE desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.STOP;
+    private ALGAE_CATCHER_PIVOT_STATE desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.STOW;
+    private double actualAlgaeCatcherVelocity = 0;
     private double desiredAlgaeCatcherPower = 0;
     private double algaeCatcherCurrentDraw = 0;
-    private boolean outputsChanged = false;
-    private boolean positionOutputsChanged = false;
+    private boolean desiredIntakeStateChanged = false;
+    private boolean desiredPivotStateChanged = false;
     private double desiredPosition = 0;
     private double actualPosition = 0;
     private double actualPositionDegrees = 0;
@@ -80,11 +78,9 @@ public class AlgaeCatcher extends Subsystem {
     @Inject
     public AlgaeCatcher(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
-        leadMotor = factory.getMotor(NAME, "algaeCatcherLeadMotor");
-        followerMotor = factory.getMotor(NAME, "algaeCatcherFollowerMotor");
+        intakeMotor = factory.getMotor(NAME, "algaeCatcherIntakeMotor");
         positionMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
 
-        followerMotor.follow(leadMotor, true);
 
         algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", -1));
 
@@ -92,9 +88,10 @@ public class AlgaeCatcher extends Subsystem {
         algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", -0.1);
         algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", 0.25);
 
-        SmartDashboard.putBoolean("AlgaeCollector", leadMotor.getMotorTemperature() < 55);
+        SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
-        positionMotor.selectPIDSlot(0);
+        intakeMotor.selectPIDSlot(0);
+        positionMotor.selectPIDSlot(1);
 
         if (RobotBase.isSimulation()) {
             positionMotor.setMotionProfileMaxVelocity(12 / 0.05);
@@ -103,32 +100,36 @@ public class AlgaeCatcher extends Subsystem {
         }
 
         if (Constants.kLoggingRobot) {
-
+            algaeCatcherCurrentDrawLogger = new DoubleLogEntry(DataLogManager.getLog(), "AlgaeCatcher/Velocity/desiredAlgaeCurrent");
             desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/desiredAlgaeCatcherPower");
-            GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/actualAlgaeCatcherPower"), leadMotor::getMotorOutputPercent);
-            GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/algaeCatcherCurrentDraw"), leadMotor::getMotorOutputCurrent);
+            GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/actualAlgaeCatcherPower"), intakeMotor::getMotorOutputPercent);
+            GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Collector/algaeCatcherCurrentDraw"), intakeMotor::getMotorOutputCurrent);
         }
-        algaeCatcherCurrentDrawLogger = new DoubleLogEntry(DataLogManager.getLog(), "AlgaeCatcher/Velocity/desiredAlgaeCurrent");
     }
 
     /**
      * Sets the desired state of the collector
      *
-     * @param desiredState COLLECTOR_STATE
+     * @param desiredIntakeState COLLECTOR_STATE
      */
-    public void setDesiredState(ALGAE_CATCHER_STATE desiredState) {
-        this.desiredState = desiredState;
-        outputsChanged = true;
+    public void setDesiredState(ALGAE_CATCHER_INTAKE_STATE desiredIntakeState, ALGAE_CATCHER_PIVOT_STATE desiredPositionState) {
+        setDesiredIntakeState(desiredIntakeState);
+        setDesiredPivotState(desiredPositionState);
     }
 
     /**
      * Sets the desired state of the position
      *
-     * @param desiredPositionState POSITION_STATE
+     * @param desiredPivotState POSITION_STATE
      */
-    public void setDesiredPositionState(POSITION_STATE desiredPositionState) {
-        this.desiredPositionState = desiredPositionState;
-        positionOutputsChanged = true;
+    public void setDesiredPivotState(ALGAE_CATCHER_PIVOT_STATE desiredPivotState) {
+        this.desiredPivotState = desiredPivotState;
+        desiredPivotStateChanged = true;
+    }
+
+    public void setDesiredIntakeState(ALGAE_CATCHER_INTAKE_STATE desiredIntakeState) {
+        this.desiredIntakeState = desiredIntakeState;
+        desiredIntakeStateChanged = true;
     }
 
     public boolean isBeamBreakTriggered() {
@@ -145,14 +146,46 @@ public class AlgaeCatcher extends Subsystem {
      */
     @Override
     public void readFromHardware() {
-        actualAlgaeCatcherPower = leadMotor.getMotorOutputPercent();
-        algaeCatcherCurrentDraw = leadMotor.getMotorOutputCurrent();
+        actualAlgaeCatcherVelocity = intakeMotor.getMotorOutputPercent();
+        algaeCatcherCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if (robotState.actualAlgaeCatcherState != desiredState) {
-            robotState.actualAlgaeCatcherState = desiredState;
+        if (robotState.isAlgaeBeamBreakTriggered != isBeamBreakTriggered()) {
+            robotState.isAlgaeBeamBreakTriggered = isBeamBreakTriggered();
+
+            if (robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
+                desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
+                desiredIntakeStateChanged = true;
+            }
+
+            if (!robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD) {
+                desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.INTAKE;
+                desiredIntakeStateChanged = true;
+            }
         }
 
-        if (leadMotor.getMotorTemperature() >= 55) {
+        if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE){
+            desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.INTAKE;
+            desiredPivotStateChanged = true;
+        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD){
+            desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.HOLD;
+            desiredPivotStateChanged = true;
+        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.STOP){
+            desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.STOW;
+            desiredPivotStateChanged = true;
+        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.ALGAE1 && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.ALGAE2){
+            desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.OUTTAKE;
+            desiredPivotStateChanged = true;
+        }
+
+        if (robotState.actualAlgaeCatcherIntakeState != desiredIntakeState) {
+            robotState.actualAlgaeCatcherIntakeState = desiredIntakeState;
+        }
+
+        if (robotState.actualAlgaeCatcherPivotState != desiredPivotState) {
+            robotState.actualAlgaeCatcherPivotState = desiredPivotState;
+        }
+
+        if (intakeMotor.getMotorTemperature() >= 55) {
             SmartDashboard.putBoolean("Collector", false);
         }
         if (Constants.kLoggingRobot) {
@@ -167,28 +200,34 @@ public class AlgaeCatcher extends Subsystem {
      */
     @Override
     public void writeToHardware() {
-        if (outputsChanged) {
-            outputsChanged = false;
+        if (desiredIntakeStateChanged) {
+            desiredIntakeStateChanged = false;
             double desiredAlgaeCatcherPower = 0;
 
-            switch (desiredState) {
-                case STOP -> {desiredAlgaeCatcherPower = 0;}
-                case INTAKE -> {desiredAlgaeCatcherPower = algaeCollectSpeed;}
-                case HOLD -> {desiredAlgaeCatcherPower = algaeHoldSpeed;}
-                case OUTTAKE -> {desiredAlgaeCatcherPower = algaeReleaseSpeed;}
+            switch (desiredIntakeState) {
+                case STOP -> desiredAlgaeCatcherPower = 0;
+
+                case INTAKE -> desiredAlgaeCatcherPower = algaeCollectSpeed;
+
+                case HOLD -> desiredAlgaeCatcherPower = algaeHoldSpeed;
+
+                case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
             }
 
-            leadMotor.set(GreenControlMode.VELOCITY_CONTROL, desiredAlgaeCatcherPower);
+            intakeMotor.set(GreenControlMode.VELOCITY_CONTROL, desiredAlgaeCatcherPower);
             algaeCatcherCurrentDrawLogger.append(desiredAlgaeCatcherPower);
         }
 
         robotState.algaeCatcherPivot.setAngle(robotState.algaeBaseAngle + positionMotor.getSensorPosition() / algaeMotorRotationsPerDegree);
 
-        if(positionOutputsChanged) {
-            positionOutputsChanged = false;
-            switch (desiredPositionState){
+        if(desiredPivotStateChanged) {
+            desiredPivotStateChanged = false;
+            switch (desiredPivotState){
                 case STOW -> {
                     desiredPosition = stowPosition;
+                }
+                case HOLD -> {
+                    desiredPosition = holdPosition;
                 }
                 case INTAKE -> {
                     desiredPosition = intakePosition;
@@ -196,11 +235,11 @@ public class AlgaeCatcher extends Subsystem {
                 case OUTTAKE -> {
                     desiredPosition = outtakePosition;
                 }
-                case ALGAEL2 -> {
-                    desiredPosition = algael2Position;
+                case ALGAE1 -> {
+                    desiredPosition = algaeL2Position;
                 }
-                case ALGAEL3 -> {
-                    desiredPosition = algael3Position;
+                case ALGAE2 -> {
+                    desiredPosition = algaeL3Position;
                 }
             }
             positionMotor.set(GreenControlMode.POSITION_CONTROL, desiredPosition);
@@ -212,7 +251,7 @@ public class AlgaeCatcher extends Subsystem {
     }
 
     public boolean isAlgaeCatcherIntakeInRange(){
-        return Math.abs(leadMotor.getSensorVelocity() - desiredAlgaeCatcherPower) < 5;
+        return Math.abs(intakeMotor.getSensorVelocity() - desiredAlgaeCatcherPower) < 5;
     }
 
     @Override
@@ -222,7 +261,7 @@ public class AlgaeCatcher extends Subsystem {
 
     @Override
     public void stop() {
-        desiredState = ALGAE_CATCHER_STATE.STOP;
+        desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.STOP;
     }
 
     /**
@@ -241,8 +280,8 @@ public class AlgaeCatcher extends Subsystem {
      *
      * @return desired collector state
      */
-    public ALGAE_CATCHER_STATE getDesiredAlgaeCatcherState() {
-        return desiredState;
+    public ALGAE_CATCHER_INTAKE_STATE getDesiredAlgaeCatcherState() {
+        return desiredIntakeState;
     }
 
     /**
@@ -251,23 +290,24 @@ public class AlgaeCatcher extends Subsystem {
      * @return intake velocity
      */
     public double getAlgaeCatcherVelocity() {
-        return actualAlgaeCatcherPower;
+        return actualAlgaeCatcherVelocity;
     }
 
     /**
      * Base enum for collector
      */
-    public enum ALGAE_CATCHER_STATE {
+    public enum ALGAE_CATCHER_INTAKE_STATE {
         STOP,
         INTAKE,
         HOLD,
         OUTTAKE
     }
-    public enum POSITION_STATE {
+    public enum ALGAE_CATCHER_PIVOT_STATE {
         STOW,
+        HOLD,
         INTAKE,
         OUTTAKE,
-        ALGAEL2,
-        ALGAEL3
+        ALGAE1,
+        ALGAE2
     }
 }

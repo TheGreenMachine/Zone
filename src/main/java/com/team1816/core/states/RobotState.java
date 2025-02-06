@@ -9,6 +9,8 @@ import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.season.subsystems.*;
 import com.team1816.season.auto.DynamicAutoScript2025;
+import com.team1816.season.subsystems.AlgaeCatcher;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -80,14 +82,15 @@ public class RobotState {
      */
 
     //TODO add new subystem states here
-    public AlgaeCatcher.ALGAE_CATCHER_STATE actualAlgaeCatcherState = AlgaeCatcher.ALGAE_CATCHER_STATE.STOP;
-    public AlgaeCatcher.POSITION_STATE actualPositionState = AlgaeCatcher.POSITION_STATE.STOW;
-    public CoralArm.INTAKE_STATE actualIntakeState = CoralArm.INTAKE_STATE.INTAKE;
-    public CoralArm.PIVOT_STATE actualPivotState = CoralArm.PIVOT_STATE.L1;
-    public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.REST;
+    public AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE actualAlgaeCatcherIntakeState = AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP;
+    public AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE actualAlgaeCatcherPivotState = AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW;
+    public CoralArm.INTAKE_STATE actualCoralArmIntakeState = CoralArm.INTAKE_STATE.INTAKE;
+    public CoralArm.PIVOT_STATE actualCoralArmPivotState = CoralArm.PIVOT_STATE.FEEDER;
+    public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
     public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
-    public boolean isBeamBreakTriggered = false;
+    public boolean isCoralBeamBreakTriggered = false;
+    public boolean isAlgaeBeamBreakTriggered = false;
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
@@ -111,7 +114,7 @@ public class RobotState {
      */
 
     public boolean autopathing = false;
-    public boolean printAutopathing = false;
+    public boolean printAutopathing = false;  //Change this one to see the obstacle boundaries
     public boolean printAutopathFieldTest = false;
     public Trajectory autopathTrajectory = null;
     public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();
@@ -128,6 +131,7 @@ public class RobotState {
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
     public ChassisSpeeds robotChassis;
+
 
     /**
      * DynamicAuto2025
@@ -186,9 +190,9 @@ public class RobotState {
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
 
         // TODO: Insert any subsystem state set up here.
-        actualAlgaeCatcherState = AlgaeCatcher.ALGAE_CATCHER_STATE.STOP;
-        actualPositionState = AlgaeCatcher.POSITION_STATE.STOW;
-        actualElevatorState = Elevator.ELEVATOR_STATE.REST;
+        actualAlgaeCatcherIntakeState = AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP;
+        actualAlgaeCatcherPivotState = AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW;
+        actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;
@@ -243,7 +247,7 @@ public class RobotState {
                 for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
                     for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
                         if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
-                            obstaclesExpanded.add(new Pose2d(new Translation2d(i * .01, i2 * .01), new Rotation2d()));
+                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 / Autopath.mapResolution1DPerMeter), new Rotation2d()));
                         }
                     }
                 }
@@ -255,7 +259,7 @@ public class RobotState {
                 for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
                     for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
                         if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
-                            obstacles.add(new Pose2d(new Translation2d(i * .01, i2 * .01), new Rotation2d()));
+                            obstacles.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 /Autopath.mapResolution1DPerMeter), new Rotation2d()));
                         }
                     }
                 }

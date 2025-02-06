@@ -29,7 +29,7 @@ public class Elevator extends Subsystem {
      * States
      */
 
-    private ELEVATOR_STATE desiredElevatorState = ELEVATOR_STATE.REST;
+    private ELEVATOR_STATE desiredElevatorState = ELEVATOR_STATE.FEEDER;
 
     private boolean elevatorOutputsChanged = false;
 
@@ -37,7 +37,6 @@ public class Elevator extends Subsystem {
 
     private double desiredElevatorPosition = 0;
     private double actualElevatorPosition = 0;
-    private double actualElevatorDegrees = 0;
 
     private double elevatorMotorRotationsPerUnit = factory.getConstant(NAME, "elevatorMotorRotationsPerUnit", 1);
 
@@ -45,7 +44,6 @@ public class Elevator extends Subsystem {
      * Constants
      */
 
-    private final double elevatorRestPosition = factory.getConstant(NAME, "elevatorRestPosition", 1.0);
     private final double elevatorFeederPosition = factory.getConstant(NAME, "elevatorFeederPosition", 1.0);
     private final double elevatorL1Position = factory.getConstant(NAME, "elevatorL1Position", 1.0);
     private final double elevatorL2Position = factory.getConstant(NAME, "elevatorL2Position", 1.0);
@@ -65,7 +63,7 @@ public class Elevator extends Subsystem {
         super(NAME, inf, rs);
         elevatorMotor = factory.getMotor(NAME, "elevatorMotor");
 
-        elevatorMotor.selectPIDSlot(2);
+        elevatorMotor.selectPIDSlot(0);
 
         if (RobotBase.isSimulation()) {
             elevatorMotor.setMotionProfileMaxVelocity(12 / 0.05);
@@ -98,6 +96,10 @@ public class Elevator extends Subsystem {
 
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
+        if(!robotState.isCoralBeamBreakTriggered && robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE) {
+            desiredElevatorState = ELEVATOR_STATE.FEEDER;
+        }
+
         if (robotState.actualElevatorState != desiredElevatorState) {
             robotState.actualElevatorState = desiredElevatorState;
         }
@@ -113,9 +115,6 @@ public class Elevator extends Subsystem {
         if (elevatorOutputsChanged) {
             elevatorOutputsChanged = false;
             switch (desiredElevatorState) {
-                case REST -> {
-                    desiredElevatorPosition = elevatorRestPosition;
-                }
                 case FEEDER -> {
                     desiredElevatorPosition = elevatorFeederPosition;
                 }
@@ -172,7 +171,6 @@ public class Elevator extends Subsystem {
      * Elevator enum
      */
     public enum ELEVATOR_STATE {
-        REST,
         FEEDER,
         L1,
         L2,

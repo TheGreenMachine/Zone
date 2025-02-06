@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AutopathAlgorithm {
-    static double autopathMaxCalcMilli = 5;
-    static double autopathBuffer = 5;
+    public static double autopathMaxCalcMilli = 5;
+    static double autopathBuffer = 8;
     static long startTime = 0;
 //    static long totalTime = 0;
 //    static int totalTries = 0;
@@ -37,12 +37,12 @@ public class AutopathAlgorithm {
 
         startTime = System.nanoTime()/1000000;
 
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathTargetPosition.getX()*100), (int)(autopathTargetPosition.getY()*100))) {
+        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathTargetPosition.getX()*Autopath.mapResolution1DPerMeter), (int)(autopathTargetPosition.getY()*Autopath.mapResolution1DPerMeter))) {
             if(Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
         }
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathStartPosition.getX()*100), (int)(autopathStartPosition.getY()*100))) {
+        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(autopathStartPosition.getX()*Autopath.mapResolution1DPerMeter), (int)(autopathStartPosition.getY()*Autopath.mapResolution1DPerMeter))) {
             if(Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
@@ -118,7 +118,7 @@ public class AutopathAlgorithm {
 
             int[] tempNewWaypointNegativeLast = getWaypointLast(bestGuessTrajectory, true);
             if(tempNewWaypointNegativeLast != null) {
-                double[] newWaypointNegative = new double[]{tempNewWaypointNegativeLast[0] / 100., tempNewWaypointNegativeLast[1] / 100.};
+                double[] newWaypointNegative = new double[]{tempNewWaypointNegativeLast[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointNegativeLast[1] / Autopath.mapResolution1DPerMeter};
                 ArrayList<Translation2d> newWaypointsNegative = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointNegative, newWaypointsNegative, autopathStartPosition, autopathTargetPosition, config);
                 addNewWaypointOptimizedMaybe(newWaypointNegative, newWaypointsNegative, autopathStartPosition, autopathTargetPosition);
@@ -162,7 +162,7 @@ public class AutopathAlgorithm {
 
 //            int[] tempNewWaypointNegative = getWaypoint(bestGuessTrajectory, true);
 //            if(tempNewWaypointNegative != null) {
-//                double[] newWaypointNegative = new double[]{tempNewWaypointNegative[0] / 100., tempNewWaypointNegative[1] / 100.};
+//                double[] newWaypointNegative = new double[]{tempNewWaypointNegative[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointNegative[1] / Autopath.mapResolution1DPerMeter};
 //                ArrayList<Translation2d> newWaypointsNegative = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointNegative, newWaypointsNegative, autopathStartPosition, autopathTargetPosition, config);
 //                ArrayList<Boolean> newPathTraceNegative = (ArrayList<Boolean>) baseBranch.getPathTrace().clone();
@@ -207,7 +207,7 @@ public class AutopathAlgorithm {
 
             int[] tempNewWaypointPositiveLast = getWaypointLast(bestGuessTrajectory, false);
             if(tempNewWaypointPositiveLast != null) {
-                double[] newWaypointPositive = new double[]{tempNewWaypointPositiveLast[0] / 100., tempNewWaypointPositiveLast[1] / 100.};
+                double[] newWaypointPositive = new double[]{tempNewWaypointPositiveLast[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointPositiveLast[1] / Autopath.mapResolution1DPerMeter};
                 ArrayList<Translation2d> newWaypointsPositive = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointPositive, newWaypointsPositive, autopathStartPosition, autopathTargetPosition, config);
                 addNewWaypointOptimizedMaybe(newWaypointPositive, newWaypointsPositive, autopathStartPosition, autopathTargetPosition);
@@ -250,7 +250,7 @@ public class AutopathAlgorithm {
 
 //            int[] tempNewWaypointPositive = getWaypoint(bestGuessTrajectory, false);
 //            if (tempNewWaypointPositive != null) {
-//                double[] newWaypointPositive = new double[]{tempNewWaypointPositive[0] / 100., tempNewWaypointPositive[1] / 100.};
+//                double[] newWaypointPositive = new double[]{tempNewWaypointPositive[0] / Autopath.mapResolution1DPerMeter, tempNewWaypointPositive[1] / Autopath.mapResolution1DPerMeter};
 //                ArrayList<Translation2d> newWaypointsPositive = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointPositive, newWaypointsPositive, autopathStartPosition, autopathTargetPosition, config);
 //                ArrayList<Boolean> newPathTracePositive = (ArrayList<Boolean>) baseBranch.getPathTrace().clone();
@@ -391,8 +391,8 @@ public class AutopathAlgorithm {
         Autopath.TimestampTranslation2d startCollision = Autopath.returnCollisionStart(bestGuessTrajectory);
         Autopath.TimestampTranslation2d endCollision = Autopath.returnCollisionEnd(bestGuessTrajectory, startCollision);
 
-        Autopath.robotState.autopathCollisionStarts.add(new Pose2d(startCollision.getTranslation2d().times(.01), new Rotation2d()));
-        Autopath.robotState.autopathCollisionEnds.add(new Pose2d(endCollision.getTranslation2d().times(.01), new Rotation2d()));
+        Autopath.robotState.autopathCollisionStarts.add(new Pose2d(startCollision.getTranslation2d().times(1/Autopath.mapResolution1DPerMeter), new Rotation2d()));
+        Autopath.robotState.autopathCollisionEnds.add(new Pose2d(endCollision.getTranslation2d().times(1/Autopath.mapResolution1DPerMeter), new Rotation2d()));
 
         Translation2d startToEndTranspose = endCollision.getTranslation2d().minus(startCollision.getTranslation2d());
 
@@ -435,15 +435,15 @@ public class AutopathAlgorithm {
                 if (collisionPoint == null)
                     return null;
 
-                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / 100., collisionPoint[1] / 100.), new Rotation2d()));
+                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / Autopath.mapResolution1DPerMeter, collisionPoint[1] / Autopath.mapResolution1DPerMeter), new Rotation2d()));
 
                 int[] possibleStartNewCollision =
                         Bresenham.lineReturnCollisionInverted(
                                 Autopath.fieldMap.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
-                                collisionPoint[0] - (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
-                                collisionPoint[1] - (int) (startToEndTranspose.getY() * (2000 / startToEndTranspose.getNorm())),
+                                collisionPoint[0] - (int) (startToEndTranspose.getX() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
+                                collisionPoint[1] - (int) (startToEndTranspose.getY() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
                                 true
                         );
                 int[] possibleEndNewCollision =
@@ -451,8 +451,8 @@ public class AutopathAlgorithm {
                                 Autopath.fieldMap.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
-                                collisionPoint[0] + (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
-                                collisionPoint[1] + (int) (startToEndTranspose.getY() * (2000 / startToEndTranspose.getNorm())),
+                                collisionPoint[0] + (int) (startToEndTranspose.getX() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
+                                collisionPoint[1] + (int) (startToEndTranspose.getY() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
                                 true
                         );
 
@@ -472,7 +472,6 @@ public class AutopathAlgorithm {
                     startNewCollision = possibleStartNewCollision;
                     endNewCollision = possibleEndNewCollision;
                 }
-
                 pastCollisionPointHashes.add(Arrays.hashCode(collisionPoint));
             }
         } catch (NullPointerException e){
@@ -494,10 +493,13 @@ public class AutopathAlgorithm {
         Autopath.TimestampTranslation2d startCollision = Autopath.returnCollisionStartLast(bestGuessTrajectory);
         Autopath.TimestampTranslation2d endCollision = Autopath.returnCollisionEndLast(bestGuessTrajectory, startCollision);
 
-        Autopath.robotState.autopathCollisionStarts.add(new Pose2d(startCollision.getTranslation2d().times(.01), new Rotation2d()));
-        Autopath.robotState.autopathCollisionEnds.add(new Pose2d(endCollision.getTranslation2d().times(.01), new Rotation2d()));
+        Autopath.robotState.autopathCollisionStarts.add(new Pose2d(startCollision.getTranslation2d().times(1/Autopath.mapResolution1DPerMeter), new Rotation2d()));
+        Autopath.robotState.autopathCollisionEnds.add(new Pose2d(endCollision.getTranslation2d().times(1/Autopath.mapResolution1DPerMeter), new Rotation2d()));
 
         Translation2d startToEndTranspose = endCollision.getTranslation2d().minus(startCollision.getTranslation2d());
+
+        if (startToEndTranspose.getX() == 0 && startToEndTranspose.getY() == 0)
+            return null;
 
         int[] newWaypoint;
 
@@ -505,8 +507,6 @@ public class AutopathAlgorithm {
         int[] endNewCollision = new int[]{(int) endCollision.getTranslation2d().getX(), (int) endCollision.getTranslation2d().getY()};
 
         ArrayList<Integer> pastCollisionPointHashes = new ArrayList<>();
-
-        double buffer = 7.5;
 
         try {
             while (true) {
@@ -540,15 +540,15 @@ public class AutopathAlgorithm {
                 if (collisionPoint == null)
                     return null;
 
-                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / 100., collisionPoint[1] / 100.), new Rotation2d()));
+                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(collisionPoint[0] / Autopath.mapResolution1DPerMeter, collisionPoint[1] / Autopath.mapResolution1DPerMeter), new Rotation2d()));
 
                 int[] possibleStartNewCollision =
                         Bresenham.lineReturnCollisionInverted(
                                 Autopath.fieldMap.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
-                                collisionPoint[0] - (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
-                                collisionPoint[1] - (int) (startToEndTranspose.getY() * (2000 / startToEndTranspose.getNorm())),
+                                collisionPoint[0] - (int) (startToEndTranspose.getX() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
+                                collisionPoint[1] - (int) (startToEndTranspose.getY() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
                                 true
                         );
                 int[] possibleEndNewCollision =
@@ -556,8 +556,8 @@ public class AutopathAlgorithm {
                                 Autopath.fieldMap.getCurrentMap(),
                                 collisionPoint[0],
                                 collisionPoint[1],
-                                collisionPoint[0] + (int) (startToEndTranspose.getX() * (2000 / startToEndTranspose.getNorm())),
-                                collisionPoint[1] + (int) (startToEndTranspose.getY() * (2000 / startToEndTranspose.getNorm())),
+                                collisionPoint[0] + (int) (startToEndTranspose.getX() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
+                                collisionPoint[1] + (int) (startToEndTranspose.getY() * (Math.max(Autopath.fieldMap.getCurrentMap().getMapX(), Autopath.fieldMap.getCurrentMap().getMapY()) / startToEndTranspose.getNorm())),
                                 true
                         );
 
@@ -568,16 +568,13 @@ public class AutopathAlgorithm {
                     newWaypoint = endNewCollision;
                     break;
                 } else if (checkCollisions(pastCollisionPointHashes, collisionPoint)) {
-                    newWaypoint = endNewCollision;
-//                System.out.println("AAAAHHHHHHH AutopathAlgorithm NOT DOING GOOD");
+                    newWaypoint = endNewCollision;//                System.out.println("AAAAHHHHHHH AutopathAlgorithm NOT DOING GOOD");
                     break;
                 } //TODO if this ever actually triggers we need to revamp the system so that it...doesn't, this is basically just a botch solution to a really bad problem we may or may not have
                 //TODO UPDATE: well now its used a lot and works soooo...ig it's a feature???
                 else {
                     startNewCollision = possibleStartNewCollision;
-                    endNewCollision = possibleEndNewCollision;
-                }
-
+                    endNewCollision = possibleEndNewCollision;}
                 pastCollisionPointHashes.add(Arrays.hashCode(collisionPoint));
             }
         } catch (NullPointerException e){
@@ -585,11 +582,11 @@ public class AutopathAlgorithm {
         }
 
         if(makeNegative){
-            newWaypoint[0] -= (int)(buffer*Math.cos(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
-            newWaypoint[1] -= (int)(buffer*Math.sin(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
+            newWaypoint[0] -= (int)(autopathBuffer*Math.cos(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
+            newWaypoint[1] -= (int)(autopathBuffer*Math.sin(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
         } else{
-            newWaypoint[0] -= (int)(buffer*Math.cos(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
-            newWaypoint[1] -= (int)(buffer*Math.sin(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
+            newWaypoint[0] -= (int)(autopathBuffer*Math.cos(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
+            newWaypoint[1] -= (int)(autopathBuffer*Math.sin(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
         }
 
         return newWaypoint;
@@ -612,6 +609,60 @@ public class AutopathAlgorithm {
                 branches.add(i, branch);
                 break;
             }
+    }
+
+    private static int[] getClosestValidPoint(int pointX, int pointY, FieldMap fieldMap){
+        int currentPointX = pointX + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
+        int currentPointY = pointY + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
+
+        for(int i = 0; i < Math.hypot(currentPointX, currentPointY)*Math.pow(2, 0.5); i++){
+            int checkPointX = pointX+i;
+            int checkPointY = pointY+i;
+
+            if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                currentPointX = checkPointX;
+                currentPointY = checkPointY;
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointX--;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointY--;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointX++;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+
+            for(int i2 = 0; i2 < i; i2++){
+                checkPointY++;
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                    currentPointX = checkPointX;
+                    currentPointY = checkPointY;
+                }
+            }
+        }
+
+        if(!fieldMap.checkPixelHasObjectOrOffMap(currentPointX, currentPointY))
+            return new int[]{currentPointX, currentPointY};
+        else {
+            System.out.println("AutopathAlgorithm has done a dumb in the getClosestValidPoint method and couldn't find a valid point");
+            return null;
+        }
     }
 
     static class WaypointTreeNode {

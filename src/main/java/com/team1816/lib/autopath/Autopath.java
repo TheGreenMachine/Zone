@@ -37,15 +37,18 @@ public class Autopath {
 
     private Pose2d autopathTargetPosition = new Pose2d(0,0,new Rotation2d(0));
 
-    private static FieldMap stableFieldMap = new FieldMap(1755, 805);
+    private static FieldMap stableFieldMap = new FieldMap(1755/2, 805/2);
 
     public static UpdatableAndExpandableFieldMap fieldMap;
+    public static UpdatableAndExpandableFieldMap fieldMapExpanded;
 
     private Pose2d autopathStartPosition = null;
 
     private TrajectoryAction autopathTrajectoryAction;
 
-    static int autopathTrajectoryPathCheckPrecisionInTimesPerSecond = 50;
+    public static int autopathTrajectoryPathCheckPrecisionInTimesPerSecond = 50;
+
+    public static final double mapResolution1DPerMeter = 50;
 
     /**
      * State: if path needs to be stopped
@@ -59,15 +62,16 @@ public class Autopath {
         robotState = Injector.get(RobotState.class);
 
 //        Noah is the best
-        stableFieldMap.drawPolygon(new int[]{368, 449, 530, 530, 449, 368}, new int[]{353, 310, 353, 453, 495, 453}, true);
-        stableFieldMap.drawPolygon(new int[]{1225, 1306, 1387, 1387, 1306, 1225}, new int[]{353, 310, 353, 453, 495, 453}, true);
-        stableFieldMap.drawPolygon(new int[]{850, 850, 910, 910}, new int[]{420, 390, 390, 420}, true);
-        stableFieldMap.drawPolygon(new int[]{0, 170, 0}, new int[]{0, 0, 150}, true);
-        stableFieldMap.drawPolygon(new int[]{0, 170, 0}, new int[]{805, 805, 655}, true);
-        stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{0, 0, 150}, true);
-        stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{805, 805, 655}, true);
+        stableFieldMap.drawPolygon(new int[]{368/2, 449/2, 530/2, 530/2, 449/2, 368/2}, new int[]{353/2, 310/2, 353/2, 453/2, 495/2, 453/2}, true);
+        stableFieldMap.drawPolygon(new int[]{1225/2, 1306/2, 1387/2, 1387/2, 1306/2, 1225/2}, new int[]{353/2, 310/2, 353/2, 453/2, 495/2, 453/2}, true);
+        stableFieldMap.drawPolygon(new int[]{850/2, 850/2, 910/2, 910/2}, new int[]{420/2, 390/2, 390/2, 420/2}, true);
+        stableFieldMap.drawPolygon(new int[]{0/2, 170/2, 0/2}, new int[]{0/2, 0/2, 150/2}, true);
+        stableFieldMap.drawPolygon(new int[]{0/2, 170/2, 0/2}, new int[]{805/2, 805/2, 655/2}, true);
+        stableFieldMap.drawPolygon(new int[]{1755/2, 1585/2, 1755/2}, new int[]{0/2, 0/2, 150/2}, true);
+        stableFieldMap.drawPolygon(new int[]{1755/2, 1585/2, 1755/2}, new int[]{805/2, 805/2, 655/2}, true);
 
-        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), /*59.26969039916799*/50);
+        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799/2);
+        fieldMapExpanded = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 65/2);
     }
 
     /**
@@ -84,8 +88,7 @@ public class Autopath {
 
         for(int t = 1; t*.02 < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-//            if(Bresenham.drawLine(fieldMap.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100), false))
-            if(fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(currentState.getX()*100), (int)(currentState.getY()*100)))
+            if(fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter)))
                 return false;
 
             prevState = currentState;
@@ -99,7 +102,7 @@ public class Autopath {
 
         for(int t = 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100));
+            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*mapResolution1DPerMeter), (int)(prevState.getY()*mapResolution1DPerMeter), (int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter));
 
             if(result != null)
                 return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
@@ -110,26 +113,22 @@ public class Autopath {
     }
 
     public static TimestampTranslation2d returnCollisionEnd(Trajectory trajectory, TimestampTranslation2d timestampTranslation2d){
-//        System.out.println("Testing position: "+timestampTranslation2d.getTranslation2d()+" at time: "+timestampTranslation2d.getTimestamp());
 
         Pose2d prevState = trajectory.sample(timestampTranslation2d.getTimestamp()).poseMeters;
 
         for(int t = (int)(timestampTranslation2d.getTimestamp()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) + 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
 
-//            System.out.println("Testing line: "+prevState+" to: "+currentState);
 
             int[] result =
                     Bresenham.lineReturnCollisionInverted(
                             fieldMap.getCurrentMap(),
-                            (int)(prevState.getX()*100),
-                            (int)(prevState.getY()*100),
-                            (int)(currentState.getX()*100),
-                            (int)(currentState.getY()*100),
+                            (int)(prevState.getX()*mapResolution1DPerMeter),
+                            (int)(prevState.getY()*mapResolution1DPerMeter),
+                            (int)(currentState.getX()*mapResolution1DPerMeter),
+                            (int)(currentState.getY()*mapResolution1DPerMeter),
                             true
                     );
-
-//            System.out.println(result);
 
             if(result != null)
                 return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, new Translation2d(result[0], result[1]));
@@ -145,7 +144,7 @@ public class Autopath {
 
         for(int t = (int)(trajectory.getTotalTimeSeconds()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) - 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond > 0; t--){
             Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*100), (int)(prevState.getY()*100), (int)(currentState.getX()*100), (int)(currentState.getY()*100));
+            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*mapResolution1DPerMeter), (int)(prevState.getY()*mapResolution1DPerMeter), (int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter));
 
             if(result != null)
                 return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
@@ -168,10 +167,10 @@ public class Autopath {
             int[] result =
                     Bresenham.lineReturnCollisionInverted(
                             fieldMap.getCurrentMap(),
-                            (int)(prevState.getX()*100),
-                            (int)(prevState.getY()*100),
-                            (int)(currentState.getX()*100),
-                            (int)(currentState.getY()*100),
+                            (int)(prevState.getX()*mapResolution1DPerMeter),
+                            (int)(prevState.getY()*mapResolution1DPerMeter),
+                            (int)(currentState.getX()*mapResolution1DPerMeter),
+                            (int)(currentState.getY()*mapResolution1DPerMeter),
                             true
                     );
 
@@ -261,7 +260,7 @@ public class Autopath {
 //        System.out.println(autopathHeadings);
 
         //Here's where your trajectory gets checked against the field
-        System.out.println("And survey says: "+testTrajectory(autopathTrajectory));
+//        System.out.println("And survey says: "+testTrajectory(autopathTrajectory));
 
         autopathTrajectoryAction = new TrajectoryAction(autopathTrajectory, autopathHeadings);
 
