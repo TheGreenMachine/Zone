@@ -9,6 +9,8 @@ import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.autopath.AutopathAlgorithm;
+import com.team1816.season.subsystems.CoralArm;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,21 +23,28 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class DynamicAutoScript2025 {
+    private Color color = Color.BLUE;
+
+    private HashMap<String, Pose2d> allDynamicPoints = new HashMap<>();
+
     private SendableChooser<Pose2d> startingPositionChooser = new SendableChooser<>();
-    private Pose2d startPos = new Pose2d(new Translation2d(7.55,7.31), Rotation2d.fromDegrees(180));
-    private Pose2d currentStartPos = startPos;
+    private Pose2d startPos;
+
     private ArrayList<SendableChooser<Pose2d>> trajectoryActionChoosers = new ArrayList<>();
     private ArrayList<Pose2d> currentTrajectoryActionChoices = new ArrayList<>();
     private ArrayList<TrajectoryAction> autoTrajectoryActions = new ArrayList<>();
-    private HashMap<String, Pose2d> allDynamicPoints = new HashMap<>();
-    private Color color = Color.BLUE;
+
+    private ArrayList<SendableChooser<REEF_LEVEL>> coralPlacementChoosers = new ArrayList<>();
+    private ArrayList<REEF_LEVEL> currentCoralPlacementChoices = new ArrayList<>();
 
     private Robot robot = Injector.get(Robot.class);
 
-    public DynamicAutoScript2025(int numOfTrajectoryActions){
+    public DynamicAutoScript2025(int numOfTrajectoryActions, int numOfCoralPlacementActions){
         addDefaultStartPosOption("Start Top", new Pose2d(new Translation2d(7.55,7.31), Rotation2d.fromDegrees(180)));
         addStartPosOption("Start Mid", new Pose2d(new Translation2d(7.55,4.2), Rotation2d.fromDegrees(180)));
         addStartPosOption("Start Bot", new Pose2d(new Translation2d(7.55,.74), Rotation2d.fromDegrees(180)));
+
+        startPos = startingPositionChooser.getSelected();
 
         for(int i = 0; i < numOfTrajectoryActions; i++)
             trajectoryActionChoosers.add(new SendableChooser<>());
@@ -51,6 +60,17 @@ public class DynamicAutoScript2025 {
 
         for(SendableChooser<Pose2d> chooser : trajectoryActionChoosers)
             currentTrajectoryActionChoices.add(chooser.getSelected());
+
+        for(int i = 0; i < numOfCoralPlacementActions; i++)
+            coralPlacementChoosers.add(new SendableChooser<>());
+
+        addDefaultCoralPlacementOption("Reef L1", REEF_LEVEL.L1);
+        addCoralPlacementOption("Reef L2", REEF_LEVEL.L2);
+        addCoralPlacementOption("Reef L3", REEF_LEVEL.L3);
+        addCoralPlacementOption("Reef L4", REEF_LEVEL.L4);
+
+        for(SendableChooser<REEF_LEVEL> chooser: coralPlacementChoosers)
+            currentCoralPlacementChoices.add(chooser.getSelected());
 
         addToSmartDashboard();
     }
@@ -68,7 +88,7 @@ public class DynamicAutoScript2025 {
         }
 
         ArrayList<TrajectoryAction> newAutoTrajectoryActions = new ArrayList<>();
-        currentStartPos = startPos;
+        Pose2d currentStartPos = startPos;
         for (int i = 0; i < trajectoryActionChoosers.size(); i++) {
             SendableChooser<Pose2d> trajectoryActionChooser = trajectoryActionChoosers.get(i);
 
@@ -104,8 +124,13 @@ public class DynamicAutoScript2025 {
 
             currentStartPos = trajectoryActionChooser.getSelected();
         }
-
         autoTrajectoryActions = newAutoTrajectoryActions;
+
+        ArrayList<REEF_LEVEL> newCurrentCoralPlacementChoices = new ArrayList<>();
+        for (int i = 0; i < coralPlacementChoosers.size(); i++){
+            newCurrentCoralPlacementChoices.add(coralPlacementChoosers.get(i).getSelected());
+        }
+        currentCoralPlacementChoices = newCurrentCoralPlacementChoices;
 
         if(somethingChanged && robot.isDisabled()) {
             RobotState.dynamicAutoChanged = true;
@@ -115,6 +140,13 @@ public class DynamicAutoScript2025 {
 
     public HashMap<String, Pose2d> getAllDynamicPoints(){
         return allDynamicPoints;
+    }
+
+    public Pose2d getStartPos(){
+        if(color == Color.BLUE)
+            return startPos;
+        else
+            return new Pose2d(2 * Constants.fieldCenterX - startPos.getX(), 2 * Constants.fieldCenterY - startPos.getY(), Rotation2d.fromDegrees(180 + startPos.getRotation().getDegrees()));
     }
 
     public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmpty(){
@@ -127,21 +159,18 @@ public class DynamicAutoScript2025 {
         return culledAutoTrajectoryActions;
     }
 
-    public Pose2d getStartPos(){
-        if(color == Color.BLUE)
-            return startPos;
-        else
-            return new Pose2d(2 * Constants.fieldCenterX - startPos.getX(), 2 * Constants.fieldCenterY - startPos.getY(), Rotation2d.fromDegrees(180 + startPos.getRotation().getDegrees()));
+    public ArrayList<REEF_LEVEL> getCoralPlacements(){
+        return currentCoralPlacementChoices;
     }
 
-    private void addStartPosOption(String name, Pose2d traj){
-        allDynamicPoints.put(name, traj);
-        startingPositionChooser.addOption(name, traj);
+    private void addStartPosOption(String name, Pose2d pos){
+        allDynamicPoints.put(name, pos);
+        startingPositionChooser.addOption(name, pos);
     }
 
-    private void addDefaultStartPosOption(String name, Pose2d traj){
-        allDynamicPoints.put(name, traj);
-        startingPositionChooser.setDefaultOption(name, traj);
+    private void addDefaultStartPosOption(String name, Pose2d pos){
+        allDynamicPoints.put(name, pos);
+        startingPositionChooser.setDefaultOption(name, pos);
     }
 
     private void addTrajectoryOption(String name, Pose2d traj){
@@ -156,10 +185,71 @@ public class DynamicAutoScript2025 {
             action.setDefaultOption(name, traj);
     }
 
+    private void addCoralPlacementOption(String name, REEF_LEVEL state){
+        for(SendableChooser<REEF_LEVEL> chooser : coralPlacementChoosers)
+            chooser.addOption(name, state);
+    }
+
+    private void addDefaultCoralPlacementOption(String name, REEF_LEVEL state){
+        for(SendableChooser<REEF_LEVEL> chooser : coralPlacementChoosers)
+            chooser.setDefaultOption(name, state);
+    }
+
     private void addToSmartDashboard(){
         SmartDashboard.putData("DStartingPosition", startingPositionChooser);
 
         for(int i = 0; i < trajectoryActionChoosers.size(); i++)
             SmartDashboard.putData("DTrajectoryAction "+i, trajectoryActionChoosers.get(i));
+
+        for(int i = 0; i < coralPlacementChoosers.size(); i++)
+            SmartDashboard.putData("DCoralPlacement "+i, coralPlacementChoosers.get(i));
+    }
+
+    public enum REEF_LEVEL{
+        L1,
+
+        L2,
+
+        L3,
+
+        L4;
+
+        public Elevator.ELEVATOR_STATE getEquivalentElevatorState() {
+            switch (this) {
+                case L1 -> {
+                    return Elevator.ELEVATOR_STATE.L1;
+                }
+                case L2 -> {
+                    return Elevator.ELEVATOR_STATE.L2;
+                }
+                case L3 -> {
+                    return Elevator.ELEVATOR_STATE.L3;
+                }
+                case L4 -> {
+                    return Elevator.ELEVATOR_STATE.L4;
+                }
+            }
+
+            return null;
+        }
+
+        public CoralArm.PIVOT_STATE getEquivalentCoralArmPivotState() {
+            switch (this) {
+                case L1 -> {
+                    return CoralArm.PIVOT_STATE.L1;
+                }
+                case L2 -> {
+                    return CoralArm.PIVOT_STATE.L2;
+                }
+                case L3 -> {
+                    return CoralArm.PIVOT_STATE.L3;
+                }
+                case L4 -> {
+                    return CoralArm.PIVOT_STATE.L4;
+                }
+            }
+
+            return null;
+        }
     }
 }

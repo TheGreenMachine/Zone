@@ -190,8 +190,6 @@ public class AutoModeManager {
 
         AUTOPATH,
 
-        DYNAMIC_TRAJECTORY_ONLY,
-
         MIDDLE_PLACE_1_AUTOMODE,
 
         MIDDLE_PLACE_2_AUTOMODE,
@@ -200,7 +198,15 @@ public class AutoModeManager {
 
         BOTTOM_PLACE_2_AUTOMODE,
 
-        TEST_DYNAMIC_PATHS
+//        DYNAMIC_TRAJECTORY_ONLY,
+
+        DYNAMIC_PLACE_1,
+
+        DYNAMIC_PLACE_2,
+
+        DYNAMIC_PLACE_3
+
+//        TEST_DYNAMIC_PATHS
         }
 
 
@@ -222,10 +228,6 @@ public class AutoModeManager {
             case AUTOPATH:
                 robotState.isAutoDynamic = false;
                 return new AutopathMode();
-            case DYNAMIC_TRAJECTORY_ONLY:
-                robotState.isAutoDynamic = true;
-                RobotState.dynamicAutoChanged = true;
-                return new TrajectoryOnlyAutoMode(robotState);
             case MIDDLE_PLACE_1_AUTOMODE:
                 robotState.isAutoDynamic = false;
                 return new MiddlePlace1AutoMode(color);
@@ -238,10 +240,23 @@ public class AutoModeManager {
             case BOTTOM_PLACE_2_AUTOMODE:
                 robotState.isAutoDynamic = false;
                 return new BottomPlace2AutoMode(color);
-            case TEST_DYNAMIC_PATHS:
-                return new TestAllDynamicPointsAutoMode();
+            case DYNAMIC_PLACE_1:
+                robotState.isAutoDynamic = true;
+                return new DynamicPlace1(robotState);
+            case DYNAMIC_PLACE_2:
+                robotState.isAutoDynamic = true;
+                return new DynamicPlace2(robotState);
+            case DYNAMIC_PLACE_3:
+                robotState.isAutoDynamic = true;
+                return new DynamicPlace3(robotState);
+//            case DYNAMIC_TRAJECTORY_ONLY:
+//                robotState.isAutoDynamic = true;
+//                RobotState.dynamicAutoChanged = true;
+//                return new DynamicTrajectoryOnlyAutoMode(robotState);
+//            case TEST_DYNAMIC_PATHS:
+//                return new TestAllDynamicPointsAutoMode();
             default:
-                robotState.isAutoDynamic = false;
+            robotState.isAutoDynamic = false;
                 GreenLogger.log("Defaulting to DefaultMode");
                 return new DefaultMode();
         }

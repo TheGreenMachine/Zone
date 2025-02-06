@@ -36,7 +36,8 @@ public class BottomPlace1AutoMode extends AutoMode {
                         ),
                         trajectoryActions.get(0),
                         new PlaceCoralSeriesAction(Elevator.ELEVATOR_STATE.L4, CoralArm.PIVOT_STATE.L4, true)
-                ));
+                )
+        );
     }
 
     @Override
