@@ -1,14 +1,12 @@
 package com.team1816.lib.autopath;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class FieldMap {
     private boolean[][] fieldPixelMap;
 
     FieldMap(int mapLengthX, int mapWidthY){
         fieldPixelMap = new boolean[mapWidthY][mapLengthX];
+        BitSet bitSet = new BitSet(mapLengthX*mapWidthY);
     }
 
     public boolean checkPixelHasObject(double x, double y){

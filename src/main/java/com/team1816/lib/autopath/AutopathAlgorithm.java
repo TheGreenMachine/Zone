@@ -20,11 +20,13 @@ public class AutopathAlgorithm {
 //    static long totalTime = 0;
 //    static int totalTries = 0;
 
-    public static Trajectory calculateAutopath(Pose2d autopathTargetPosition){
+    public static Trajectory calculateAutopath(Pose2d autopathTargetPosition) {
         return calculateAutopath(Autopath.robotState.fieldToVehicle, autopathTargetPosition);
     }
 
     public static Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition) {
+//        System.out.println("EEEE");
+
         Pose2d safeStartPosition = autopathStartPosition;
         Pose2d safeTargetPosition = autopathTargetPosition;
 
@@ -32,56 +34,62 @@ public class AutopathAlgorithm {
         Trajectory appendedTrajectory = null;
 
         // create safe start position & trajectory if necessary
-//        int[] startPositionCm = {metersToCm(autopathStartPosition.getX()), metersToCm(autopathStartPosition.getY())};
-//        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObject(startPositionCm[0], startPositionCm[1])) {
-//            int[] pointCm = getClosestValidPoint(startPositionCm[0], startPositionCm[1], Autopath.greaterFieldMap.getCurrentMap());
-//            if (pointCm != null) {
-//                Translation2d loc = new Translation2d(cmToMeters(pointCm[0]), cmToMeters(pointCm[1]));
-//                Rotation2d rot = autopathStartPosition.getRotation(); // may need to replace
-//                safeStartPosition = new Pose2d(loc, rot);
-//
-//                TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
-//                config.setStartVelocity(project(autopathStartPosition, safeStartPosition));
-//
-//                prependedTrajectory = TrajectoryGenerator.generateTrajectory(autopathStartPosition, List.of(), safeStartPosition, config);
-//            } else {
-//                GreenLogger.log("As an error occurred in the nearest-point algorithm for the start point, returned an empty trajectory.");
-//                return new Trajectory();
-//            }
-//        }
-//
-//        // create safe end position & trajectory if necessary
-//        int[] targetPositionCm = {metersToCm(autopathTargetPosition.getX()), metersToCm(autopathTargetPosition.getY())};
-//        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObject(targetPositionCm[0], targetPositionCm[1])) {
-//            int[] pointCm = getClosestValidPoint(targetPositionCm[0], targetPositionCm[1], Autopath.greaterFieldMap.getCurrentMap());
-//
-//            if (pointCm != null) {
-//                Translation2d loc = new Translation2d(cmToMeters(pointCm[0]), cmToMeters(pointCm[1]));
-//                Rotation2d rot = autopathTargetPosition.getRotation(); // may need to replace
-//                safeTargetPosition = new Pose2d(loc, rot);
-//
-//                TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
-//                config.setStartVelocity(project(autopathTargetPosition, safeTargetPosition));
-//
-//                appendedTrajectory = TrajectoryGenerator.generateTrajectory(safeTargetPosition, List.of(), autopathTargetPosition, config);
-//            } else {
-//                GreenLogger.log("As an error occurred in the nearest-point algorithm for the target point, returned an empty trajectory.");
-//                return new Trajectory();
-//            }
-//        }
+        int[] startPositionCm = {metersToCm(autopathStartPosition.getX()), metersToCm(autopathStartPosition.getY())};
+        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObject(startPositionCm[0], startPositionCm[1])) {
+            int[] pointCm = getClosestValidPoint(startPositionCm[0], startPositionCm[1], Autopath.greaterFieldMap.getCurrentMap());
+            if (pointCm != null) {
+                Translation2d loc = new Translation2d(cmToMeters(pointCm[0]), cmToMeters(pointCm[1]));
+                Rotation2d rot = autopathStartPosition.getRotation(); // may need to replace
+                safeStartPosition = new Pose2d(loc, rot);
+
+                TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
+                config.setStartVelocity(project(autopathStartPosition, safeStartPosition));
+
+                prependedTrajectory = TrajectoryGenerator.generateTrajectory(autopathStartPosition, List.of(), safeStartPosition, config);
+            } else {
+                GreenLogger.log("As an error occurred in the nearest-point algorithm for the start point, returned an empty trajectory.");
+                return new Trajectory();
+            }
+        }
+
+        // create safe end position & trajectory if necessary
+        int[] targetPositionCm = {metersToCm(autopathTargetPosition.getX()), metersToCm(autopathTargetPosition.getY())};
+        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObject(targetPositionCm[0], targetPositionCm[1])) {
+            int[] pointCm = getClosestValidPoint(targetPositionCm[0], targetPositionCm[1], Autopath.greaterFieldMap.getCurrentMap());
+
+            if (pointCm != null) {
+                Translation2d loc = new Translation2d(cmToMeters(pointCm[0]), cmToMeters(pointCm[1]));
+                Rotation2d rot = autopathTargetPosition.getRotation(); // may need to replace
+                safeTargetPosition = new Pose2d(loc, rot);
+
+                TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
+                config.setStartVelocity(project(autopathTargetPosition, safeTargetPosition));
+
+                appendedTrajectory = TrajectoryGenerator.generateTrajectory(safeTargetPosition, List.of(), autopathTargetPosition, config);
+            } else {
+                GreenLogger.log("As an error occurred in the nearest-point algorithm for the target point, returned an empty trajectory.");
+                return new Trajectory();
+            }
+        }
 
         Trajectory result = calculateSafeAutopath(safeStartPosition, safeTargetPosition);
 
         if (prependedTrajectory != null) {
+            System.out.println("Prepend");
             result = prependedTrajectory.concatenate(result);
         }
 
         if (appendedTrajectory != null) {
+            System.out.println("Append");
             result = result.concatenate(appendedTrajectory);
         }
 
         Autopath.robotState.autopathTrajectory = result;
         Autopath.robotState.autopathTrajectoryChanged = true;
+
+        Autopath.robotState.autopathInputWaypoints = new ArrayList<>(
+                result.getStates().stream().map(s -> s.poseMeters).toList()
+        );
 
         return result;
     }
@@ -89,22 +97,22 @@ public class AutopathAlgorithm {
     public static Trajectory calculateSafeAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition) {
 //        autopathBuffer = SmartDashboard.getNumber("Autopath Waypoint Buffer", 10);
 
-        if(autopathStartPosition.equals(autopathTargetPosition))
+        if (autopathStartPosition.equals(autopathTargetPosition))
             return new Trajectory();
         Autopath.robotState.autopathWaypoints.clear();
         Autopath.robotState.autopathTrajectory = null;
         Autopath.robotState.autopathCollisionStarts.clear();
         Autopath.robotState.autopathCollisionEnds.clear();
 
-        startTime = System.nanoTime()/1000000;
+        startTime = System.nanoTime() / 1000000;
 
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(metersToCm(autopathTargetPosition.getX()), metersToCm(autopathTargetPosition.getY()))) {
-            if(Autopath.robotState.autopathTrajectory != null)
+        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(metersToCm(autopathTargetPosition.getX()), metersToCm(autopathTargetPosition.getY()))) {
+            if (Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
         }
-        if(Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(metersToCm(autopathStartPosition.getX()), metersToCm(autopathStartPosition.getY()))) {
-            if(Autopath.robotState.autopathTrajectory != null)
+        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(metersToCm(autopathStartPosition.getX()), metersToCm(autopathStartPosition.getY()))) {
+            if (Autopath.robotState.autopathTrajectory != null)
                 Autopath.robotState.autopathTrajectoryChanged = true;
             return null;
         }
@@ -112,7 +120,7 @@ public class AutopathAlgorithm {
         Rotation2d startDirection = Rotation2d.fromRadians(Math.atan2(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()));
 
         double velocity = 0;
-        if(Autopath.robotState.robotChassis != null)
+        if (Autopath.robotState.robotChassis != null)
             velocity = project(autopathStartPosition, autopathTargetPosition);
 
 
@@ -133,23 +141,23 @@ public class AutopathAlgorithm {
                 )
         );
 
-        while(!branches.isEmpty() && !branches.get(0).trajectoryCheck){
-            if(System.nanoTime()/1000000-startTime > autopathMaxCalcMilli)
+        while (!branches.isEmpty() && !branches.get(0).trajectoryCheck) {
+            if (System.nanoTime() / 1000000 - startTime > autopathMaxCalcMilli)
                 return null;
 //            long startTime2 = System.nanoTime();
             boolean foundWorkingPath;
-            for(int i = 1; i < branches.size(); i++)
-                if(branches.get(i) == null) {
+            for (int i = 1; i < branches.size(); i++)
+                if (branches.get(i) == null) {
                     branches.remove(i);
                     i--;
-                }else if(branches.get(i-1).trajectoryCheck) {
+                } else if (branches.get(i - 1).trajectoryCheck) {
                     branches.remove(i);
                     i--;
                 }
 
             int currentBranchIndex = 0;
 
-            if(Autopath.robotState.printAutopathing) {
+            if (Autopath.robotState.printAutopathing) {
                 Autopath.robotState.autopathTrajectoryPossibilities.clear();
                 if (!branches.get(currentBranchIndex).trajectoryCheck) {
 //                Autopath.robotState.autopathTrajectoryPossibilities.add(branches.get(currentBranchIndex).getTrajectory());
@@ -173,7 +181,7 @@ public class AutopathAlgorithm {
             WaypointTreeNode baseBranch = branches.remove(currentBranchIndex);
 
             int[] tempNewWaypointNegativeLast = getWaypointLast(bestGuessTrajectory, true);
-            if(tempNewWaypointNegativeLast != null) {
+            if (tempNewWaypointNegativeLast != null) {
                 double[] newWaypointNegative = new double[]{tempNewWaypointNegativeLast[0] / 100., tempNewWaypointNegativeLast[1] / 100.};
                 ArrayList<Translation2d> newWaypointsNegative = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointNegative, newWaypointsNegative, autopathStartPosition, autopathTargetPosition, config);
@@ -258,11 +266,11 @@ public class AutopathAlgorithm {
 //                Autopath.robotState.autopathWaypoints.add(new Pose2d(new Translation2d(newWaypointNegative[0], newWaypointNegative[1]), new Rotation2d()));
 //            }
 
-            if(System.nanoTime()/1000000-startTime > autopathMaxCalcMilli)
+            if (System.nanoTime() / 1000000 - startTime > autopathMaxCalcMilli)
                 return null;
 
             int[] tempNewWaypointPositiveLast = getWaypointLast(bestGuessTrajectory, false);
-            if(tempNewWaypointPositiveLast != null) {
+            if (tempNewWaypointPositiveLast != null) {
                 double[] newWaypointPositive = new double[]{tempNewWaypointPositiveLast[0] / 100., tempNewWaypointPositiveLast[1] / 100.};
                 ArrayList<Translation2d> newWaypointsPositive = (ArrayList<Translation2d>) waypoints.clone();
 //                addNewWaypoint(newWaypointPositive, newWaypointsPositive, autopathStartPosition, autopathTargetPosition, config);
@@ -350,32 +358,27 @@ public class AutopathAlgorithm {
 //            System.out.println("time taken: "+((System.nanoTime()-startTime2)/1000000)+", average: "+(totalTime/totalTries/1000000));
         }
 
-        if(!branches.isEmpty())
-            Autopath.robotState.autopathInputWaypoints = new ArrayList<>(branches.get(0).waypoints.stream()
-                .map(b -> new Pose2d(b, new Rotation2d()))
-                .toList());
-
         return branches.isEmpty() ? null : branches.get(0).getTrajectory();
     }
 
     //TODO if we ever need to optimize pathing, then optimize this, it's just a class to determine where in the order of waypoints would the new one be added, the slowdown is from generating so many trajectories using the TrajectoryGenerator, there should be ways around using it but I'm to lazy for now(1/20/2025)
-    private static void addNewWaypoint(double[] newWaypoint, List<Translation2d> waypoints, Pose2d startPos, Pose2d endPos, TrajectoryConfig config){
+    private static void addNewWaypoint(double[] newWaypoint, List<Translation2d> waypoints, Pose2d startPos, Pose2d endPos, TrajectoryConfig config) {
         int waypointsBeforeSize = waypoints.size();
         Translation2d newFirstWaypoint = new Translation2d(newWaypoint[0], newWaypoint[1]);
-        Translation2d newLastWaypoint = waypoints.size() > 0 ? waypoints.get(waypoints.size()-1) : new Translation2d(newWaypoint[0], newWaypoint[1]);
+        Translation2d newLastWaypoint = waypoints.size() > 0 ? waypoints.get(waypoints.size() - 1) : new Translation2d(newWaypoint[0], newWaypoint[1]);
         waypoints.add(0, new Translation2d(newWaypoint[0], newWaypoint[1]));
         double bestTime = TrajectoryGenerator.generateTrajectory(
-                new Pose2d(startPos.getTranslation(), Rotation2d.fromRadians(Math.atan2(newFirstWaypoint.getY()-startPos.getY(), newFirstWaypoint.getX()-startPos.getX()))),
+                new Pose2d(startPos.getTranslation(), Rotation2d.fromRadians(Math.atan2(newFirstWaypoint.getY() - startPos.getY(), newFirstWaypoint.getX() - startPos.getX()))),
                 waypoints,
-                new Pose2d(endPos.getTranslation(), Rotation2d.fromRadians(Math.atan2(endPos.getY()-newLastWaypoint.getY(), endPos.getX()-newLastWaypoint.getX()))),
+                new Pose2d(endPos.getTranslation(), Rotation2d.fromRadians(Math.atan2(endPos.getY() - newLastWaypoint.getY(), endPos.getX() - newLastWaypoint.getX()))),
                 config
         ).getTotalTimeSeconds();
         waypoints.remove(0);
         int bestIndex = 0;
 
-        for(int i = 0; i < waypoints.size(); i++){
+        for (int i = 0; i < waypoints.size(); i++) {
             newFirstWaypoint = waypoints.get(0);
-            newLastWaypoint = waypoints.get(waypoints.size()-1);
+            newLastWaypoint = waypoints.get(waypoints.size() - 1);
 
             double newTime;
 
@@ -400,18 +403,18 @@ public class AutopathAlgorithm {
                 waypoints.remove(i + 1);
             }
 
-                if (bestTime > newTime) {
-                    bestIndex = i + 1;
-                    bestTime = newTime;
-                }
+            if (bestTime > newTime) {
+                bestIndex = i + 1;
+                bestTime = newTime;
+            }
         }
 
         waypoints.add(bestIndex, new Translation2d(newWaypoint[0], newWaypoint[1]));
     }
 
-    private static void addNewWaypointOptimizedMaybe(double[] newWaypoint, List<Translation2d> waypoints, Pose2d startPos, Pose2d endPos){
+    private static void addNewWaypointOptimizedMaybe(double[] newWaypoint, List<Translation2d> waypoints, Pose2d startPos, Pose2d endPos) {
         Translation2d newWaypointTranslation = new Translation2d(newWaypoint[0], newWaypoint[1]);
-        if(waypoints.isEmpty()){
+        if (waypoints.isEmpty()) {
             waypoints.add(newWaypointTranslation);
             return;
         }
@@ -419,15 +422,15 @@ public class AutopathAlgorithm {
         int bestIndex = 0;
         double bestDistance = getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, startPos.getTranslation(), waypoints.get(0));
 
-        for(int i = 1; i <= waypoints.size(); i++){
-            if(i == waypoints.size()){
-                if(bestDistance > getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i-1), endPos.getTranslation())){
-                    bestDistance = getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i-1), endPos.getTranslation());
+        for (int i = 1; i <= waypoints.size(); i++) {
+            if (i == waypoints.size()) {
+                if (bestDistance > getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i - 1), endPos.getTranslation())) {
+                    bestDistance = getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i - 1), endPos.getTranslation());
                     bestIndex = waypoints.size();
                 }
-            } else{
-                if(bestDistance > getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i-1), waypoints.get(i))){
-                    bestDistance = getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i-1), waypoints.get(i));
+            } else {
+                if (bestDistance > getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i - 1), waypoints.get(i))) {
+                    bestDistance = getPathDistanceLossFromAddingNewWaypoint(newWaypointTranslation, waypoints.get(i - 1), waypoints.get(i));
                     bestIndex = i;
                 }
             }
@@ -436,7 +439,7 @@ public class AutopathAlgorithm {
         waypoints.add(bestIndex, newWaypointTranslation);
     }
 
-    private static double getPathDistanceLossFromAddingNewWaypoint(Translation2d newWaypoint, Translation2d waypoint, Translation2d consecutiveWaypoint){
+    private static double getPathDistanceLossFromAddingNewWaypoint(Translation2d newWaypoint, Translation2d waypoint, Translation2d consecutiveWaypoint) {
         return (newWaypoint.getDistance(waypoint) + newWaypoint.getDistance(consecutiveWaypoint)) - waypoint.getDistance(consecutiveWaypoint);
     }
 
@@ -528,16 +531,16 @@ public class AutopathAlgorithm {
 
                 pastCollisionPointHashes.add(Arrays.hashCode(collisionPoint));
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return null;
         }
 
-        if(makeNegative){
-            newWaypoint[0] -= (int)(autopathBuffer *Math.cos(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
-            newWaypoint[1] -= (int)(autopathBuffer *Math.sin(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
-        } else{
-            newWaypoint[0] -= (int)(autopathBuffer *Math.cos(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
-            newWaypoint[1] -= (int)(autopathBuffer *Math.sin(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
+        if (makeNegative) {
+            newWaypoint[0] -= (int) (autopathBuffer * Math.cos(startToEndTranspose.getAngle().getRadians() + (Math.PI / 2)));
+            newWaypoint[1] -= (int) (autopathBuffer * Math.sin(startToEndTranspose.getAngle().getRadians() + (Math.PI / 2)));
+        } else {
+            newWaypoint[0] -= (int) (autopathBuffer * Math.cos(startToEndTranspose.getAngle().getRadians() - (Math.PI / 2)));
+            newWaypoint[1] -= (int) (autopathBuffer * Math.sin(startToEndTranspose.getAngle().getRadians() - (Math.PI / 2)));
         }
 
         return newWaypoint;
@@ -633,30 +636,30 @@ public class AutopathAlgorithm {
 
                 pastCollisionPointHashes.add(Arrays.hashCode(collisionPoint));
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return null;
         }
 
-        if(makeNegative){
-            newWaypoint[0] -= (int)(buffer*Math.cos(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
-            newWaypoint[1] -= (int)(buffer*Math.sin(startToEndTranspose.getAngle().getRadians()+(Math.PI/2)));
-        } else{
-            newWaypoint[0] -= (int)(buffer*Math.cos(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
-            newWaypoint[1] -= (int)(buffer*Math.sin(startToEndTranspose.getAngle().getRadians()-(Math.PI/2)));
+        if (makeNegative) {
+            newWaypoint[0] -= (int) (buffer * Math.cos(startToEndTranspose.getAngle().getRadians() + (Math.PI / 2)));
+            newWaypoint[1] -= (int) (buffer * Math.sin(startToEndTranspose.getAngle().getRadians() + (Math.PI / 2)));
+        } else {
+            newWaypoint[0] -= (int) (buffer * Math.cos(startToEndTranspose.getAngle().getRadians() - (Math.PI / 2)));
+            newWaypoint[1] -= (int) (buffer * Math.sin(startToEndTranspose.getAngle().getRadians() - (Math.PI / 2)));
         }
 
         return newWaypoint;
     }
 
-    private static boolean checkCollisions(List<Integer> pastCollisionPointHashes, int[] collisionPoint){
+    private static boolean checkCollisions(List<Integer> pastCollisionPointHashes, int[] collisionPoint) {
         int collisionPointHash = Arrays.hashCode(collisionPoint);
-        for(int currentCollisionPointHash : pastCollisionPointHashes)
-            if(collisionPointHash == currentCollisionPointHash)
+        for (int currentCollisionPointHash : pastCollisionPointHashes)
+            if (collisionPointHash == currentCollisionPointHash)
                 return true;
         return false;
     }
 
-    private static void addBranch(List<WaypointTreeNode> branches, WaypointTreeNode branch){
+    private static void addBranch(List<WaypointTreeNode> branches, WaypointTreeNode branch) {
         for (int i = 0; i <= branches.size(); i++)
             if (i == branches.size()) {
                 branches.add(branch);
@@ -667,53 +670,53 @@ public class AutopathAlgorithm {
             }
     }
 
-    private static int[] getClosestValidPoint(int pointX, int pointY, FieldMap fieldMap){
+    private static int[] getClosestValidPoint(int pointX, int pointY, FieldMap fieldMap) {
         int currentPointX = pointX + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
         int currentPointY = pointY + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
 
-        for(int i = 0; i < Math.hypot(currentPointX, currentPointY)*Math.pow(2, 0.5); i++){
-            int checkPointX = pointX+i;
-            int checkPointY = pointY+i;
+        for (int i = 0; i < Math.hypot(currentPointX, currentPointY) * Math.pow(2, 0.5); i++) {
+            int checkPointX = pointX + i;
+            int checkPointY = pointY + i;
 
-            if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+            if (!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)) {
                 currentPointX = checkPointX;
                 currentPointY = checkPointY;
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for (int i2 = 0; i2 < i; i2++) {
                 checkPointX--;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if (!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)) {
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for (int i2 = 0; i2 < i; i2++) {
                 checkPointY--;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if (!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)) {
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for (int i2 = 0; i2 < i; i2++) {
                 checkPointX++;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if (!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)) {
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for (int i2 = 0; i2 < i; i2++) {
                 checkPointY++;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if (!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)) {
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
         }
 
-        if(!fieldMap.checkPixelHasObjectOrOffMap(currentPointX, currentPointY))
+        if (!fieldMap.checkPixelHasObjectOrOffMap(currentPointX, currentPointY))
             return new int[]{currentPointX, currentPointY};
         else {
             System.out.println("AutopathAlgorithm has done a dumb in the getClosestValidPoint method and couldn't find a valid point");
@@ -724,9 +727,9 @@ public class AutopathAlgorithm {
     // projection formula
     private static double project(Pose2d autopathStartPosition, Pose2d autopathTargetPosition) {
         return ((Autopath.robotState.robotChassis.vxMetersPerSecond * (autopathTargetPosition.getX() - autopathStartPosition.getX()))
-                +(Autopath.robotState.robotChassis.vyMetersPerSecond * (autopathTargetPosition.getY() - autopathStartPosition.getY())))
-                /Math.pow(Math.hypot(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()), 2)
-                *Math.hypot(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX());
+                + (Autopath.robotState.robotChassis.vyMetersPerSecond * (autopathTargetPosition.getY() - autopathStartPosition.getY())))
+                / Math.pow(Math.hypot(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX()), 2)
+                * Math.hypot(autopathTargetPosition.getY() - autopathStartPosition.getY(), autopathTargetPosition.getX() - autopathStartPosition.getX());
     }
 
     private static double cmToMeters(int cm) {
@@ -759,11 +762,11 @@ public class AutopathAlgorithm {
             trajectoryCheck = Autopath.testTrajectory(trajectory);
             this.boundaryPathBranch = boundaryPathBranch;
 
-            if(!pathTrace.isEmpty())
+            if (!pathTrace.isEmpty())
                 a:{
                     boolean b = pathTrace.get(0);
-                    for (boolean b2 : pathTrace){
-                        if(b != b2){
+                    for (boolean b2 : pathTrace) {
+                        if (b != b2) {
                             break a;
                         }
                     }

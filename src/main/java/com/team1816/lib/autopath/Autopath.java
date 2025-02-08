@@ -55,8 +55,8 @@ public class Autopath {
         stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{0, 0, 150}, true);
         stableFieldMap.drawPolygon(new int[]{1755, 1585, 1755}, new int[]{805, 805, 655}, true);
 
-        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799);
-        greaterFieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799 + 10);
+        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799 + 5);
+        greaterFieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799 + 2 + 5);
     }
 
     /**
@@ -66,8 +66,10 @@ public class Autopath {
      * @return
      */
     public static boolean testTrajectory(Trajectory trajectory){
-        if(trajectory == null)
+        if(trajectory == null) {
+            System.out.println("null rtrajectory");
             return false;
+        }
 
         Pose2d prevState = trajectory.sample(0).poseMeters;
 
