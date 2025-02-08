@@ -1,10 +1,11 @@
 package com.team1816.lib.auto.modes;
 
+import com.team1816.core.states.RobotState;
+import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.autopath.Autopath;
-import com.team1816.lib.autopath.AutopathAlgorithm;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,7 +20,15 @@ public class AutopathMode extends AutoMode{
     Translation2d startTranslation = new Translation2d(/*2.6, 5.5*/2.751259,1.838709);
 //    Translation2d startTranslation = new Translation2d(14, 4);
     //total avg: -0.15704970708570218 pos avg: 0.18805418060928844 ratio: 6.142624593037816
+    RobotState robotState;
+    Autopath autopather;
 
+    public AutopathMode(){
+        super();
+        
+        robotState = Injector.get(RobotState.class);
+        autopather = Injector.get(Autopath.class);
+    }
 
     @Override
     protected void routine() throws AutoModeEndedException {
@@ -33,13 +42,13 @@ public class AutopathMode extends AutoMode{
 
         double beforeTime = System.nanoTime();
 
-        Autopath.robotState.autopathWaypointsSuccess.clear();
-        Autopath.robotState.autopathWaypointsFail.clear();
+        robotState.autopathWaypointsSuccess.clear();
+        robotState.autopathWaypointsFail.clear();
 
         int i3 = 0;
         long totalTime = 0;
         long highestTime = -1;
-        Autopath.robotState.printAutopathFieldTest = true;
+        robotState.printAutopathFieldTest = true;
         for (double i = 17.55; i >= 0; i -= 17.55 / 200.) {
             double lastTime = 0;
             for (double i2 = 0; i2 <= 8.05; i2 += 8.05 / 100.) {
@@ -54,15 +63,15 @@ public class AutopathMode extends AutoMode{
                 long holdStartTime = System.nanoTime() / 1000;
                 try {
                     i3++;
-                    Trajectory test = AutopathAlgorithm.calculateAutopath(new Pose2d(startTranslation, new Rotation2d()), new Pose2d(new Translation2d(i, i2), new Rotation2d(0)));
+                    Trajectory test = autopather.calculateAutopath(new Pose2d(startTranslation, new Rotation2d()), new Pose2d(new Translation2d(i, i2), new Rotation2d(0)));
 //                    Trajectory test = AutopathAlgorithm.calculateAutopath(new Pose2d(new Translation2d(i, i2), new Rotation2d(0)), new Pose2d(startTranslation, new Rotation2d()));
                     if (test != null && test.getStates().size() > 1) {
-                        Autopath.robotState.autopathWaypointsSuccess.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
+                        robotState.autopathWaypointsSuccess.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
                     } else
-                        Autopath.robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
+                        robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
                 } catch (SplineParameterizer.MalformedSplineException |
                          TrajectoryParameterizer.TrajectoryGenerationException e) {
-                    Autopath.robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
+                    robotState.autopathWaypointsFail.add(new Pose2d(new Translation2d(i, i2), new Rotation2d()));
                 }
                 long holdEndTime = System.nanoTime() / 1000;
                 totalTime += holdEndTime - holdStartTime;
@@ -75,9 +84,9 @@ public class AutopathMode extends AutoMode{
             }
         }
 
-//            if(percentSuccess < (double) Autopath.robotState.autopathWaypointsSuccess.size() /(Autopath.robotState.autopathWaypointsSuccess.size()+Autopath.robotState.autopathWaypointsFail.size())){
+//            if(percentSuccess < (double) robotState.autopathWaypointsSuccess.size() /(robotState.autopathWaypointsSuccess.size()+robotState.autopathWaypointsFail.size())){
 //                bIndex = b;
-//                percentSuccess = (double) Autopath.robotState.autopathWaypointsSuccess.size() /(Autopath.robotState.autopathWaypointsSuccess.size()+Autopath.robotState.autopathWaypointsFail.size());
+//                percentSuccess = (double) robotState.autopathWaypointsSuccess.size() /(robotState.autopathWaypointsSuccess.size()+robotState.autopathWaypointsFail.size());
 //            }
 //
 //            System.out.println("Best Buffer Thus Far = "+bIndex+" With a percentage of "+percentSuccess);
@@ -85,7 +94,7 @@ public class AutopathMode extends AutoMode{
 //        for(int i = 0; i < 10; i++)
 //            System.out.println("Best Buffer = "+bIndex);
 
-        autopathTrajectory = AutopathAlgorithm.calculateAutopath(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(90)));
+        autopathTrajectory = autopather.calculateAutopath(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(90)));
 //        autopathTrajectory = AutopathAlgorithm.calculateAutopath(new Pose2d(new Translation2d(1.3, 1.25), new Rotation2d(0)));
 
 
@@ -119,7 +128,7 @@ public class AutopathMode extends AutoMode{
         System.out.println(autopathHeadings);
 
         //Here's where your trajectory gets checked against the field
-        System.out.println("And survey says: "+Autopath.testTrajectory(autopathTrajectory));
+        System.out.println("And survey says: "+autopather.testTrajectory(autopathTrajectory));
 
         TrajectoryAction autopathTrajectoryAction = new TrajectoryAction(autopathTrajectory, autopathHeadings);
 

@@ -9,7 +9,7 @@ import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.autopath.AutopathAlgorithm;
+import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.InputHandler;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     //TODO add new subsystems here
-//    private Autopath autopather;
+    private Autopath autopather;
     private Elevator elevator;
     private CoralArm coralArm;
     private AlgaeCatcher algaeCatcher;
@@ -179,7 +179,7 @@ public class Robot extends TimedRobot {
             subsystemManager = Injector.get(SubsystemLooper.class);
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
-//            autopather = Injector.get(Autopath.class);
+            autopather = Injector.get(Autopath.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
@@ -432,7 +432,7 @@ public class Robot extends TimedRobot {
                 autoModeManager.reset();
             }
 
-            AutopathAlgorithm.autopathMaxCalcMilli = 1000;
+            autopather.autopathMaxCalcMilli = 1000;
 
             subsystemManager.stop();
 
@@ -466,7 +466,7 @@ public class Robot extends TimedRobot {
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
 
-        AutopathAlgorithm.autopathMaxCalcMilli = 5;
+        autopather.autopathMaxCalcMilli = 5;
 
         autoStart = Timer.getFPGATimestamp();
         enabledLoop.start();
@@ -492,7 +492,7 @@ public class Robot extends TimedRobot {
 
             drive.setControlState(Drive.ControlState.OPEN_LOOP);
 
-            AutopathAlgorithm.autopathMaxCalcMilli = 5;
+            autopather.autopathMaxCalcMilli = 5;
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
