@@ -26,6 +26,9 @@ public class AutopathAlgorithm {
 
     public static Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition) {
 //        System.out.println("EEEE");
+        if (autopathStartPosition.equals(autopathTargetPosition)) {
+            return new Trajectory();
+        }
 
         Pose2d safeStartPosition = autopathStartPosition;
         Pose2d safeTargetPosition = autopathTargetPosition;
@@ -43,7 +46,10 @@ public class AutopathAlgorithm {
                 safeStartPosition = new Pose2d(loc, rot);
 
                 TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
-                config.setStartVelocity(project(autopathStartPosition, safeStartPosition));
+                double velocity = 0;
+                if (Autopath.robotState.robotChassis != null)
+                    velocity = project(autopathStartPosition, safeStartPosition);
+                config.setStartVelocity(velocity);
 
                 prependedTrajectory = TrajectoryGenerator.generateTrajectory(autopathStartPosition, List.of(), safeStartPosition, config);
             } else {
@@ -63,7 +69,10 @@ public class AutopathAlgorithm {
                 safeTargetPosition = new Pose2d(loc, rot);
 
                 TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
-                config.setStartVelocity(project(autopathTargetPosition, safeTargetPosition));
+                double velocity = 0;
+                if (Autopath.robotState.robotChassis != null)
+                    velocity = project(safeTargetPosition, autopathTargetPosition);
+                config.setStartVelocity(velocity);
 
                 appendedTrajectory = TrajectoryGenerator.generateTrajectory(safeTargetPosition, List.of(), autopathTargetPosition, config);
             } else {
@@ -90,6 +99,8 @@ public class AutopathAlgorithm {
         Autopath.robotState.autopathInputWaypoints = new ArrayList<>(
                 result.getStates().stream().map(s -> s.poseMeters).toList()
         );
+
+        System.out.println(result);
 
         return result;
     }
