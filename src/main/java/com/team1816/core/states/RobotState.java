@@ -2,7 +2,7 @@ package com.team1816.core.states;
 
 import com.google.inject.Singleton;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.autopath.Autopath;
+//import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.core.configuration.Constants;
@@ -240,49 +240,49 @@ public class RobotState {
     public synchronized void outputToSmartDashboard() {
         field.setRobotPose(fieldToVehicle);
 
-        if (printAutopathing) {
-            if (Autopath.fieldMap != null && Autopath.fieldMap.outputToSmartDashboardChanged) {
-                ArrayList<Pose2d> obstaclesExpanded = new ArrayList<>();
-
-                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-                        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
-                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 / Autopath.mapResolution1DPerMeter), new Rotation2d()));
-                        }
-                    }
-                }
-
-                field.getObject("ExpandedObstacles").setPoses(obstaclesExpanded);
-
-                ArrayList<Pose2d> obstacles = new ArrayList<>();
-
-                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-                        if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
-                            obstacles.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 /Autopath.mapResolution1DPerMeter), new Rotation2d()));
-                        }
-                    }
-                }
-
-                field.getObject("Obstacles").setPoses(obstacles);
-
-                Autopath.fieldMap.outputToSmartDashboardChanged = false;
-            }
-
-            if(autopathTrajectoryPossibilitiesChanged) {
-                for (int i = 0; i < autopathTrajectoryPossibilities.size(); i++) {
-                    if (autopathTrajectoryPossibilities.get(i) != null) {
-                        field.getObject("AutopathTrajectory: " + i).setTrajectory(autopathTrajectoryPossibilities.get(i));
-                    }
-                }
-                autopathMaxBranches = Math.max(autopathTrajectoryPossibilities.size(), autopathMaxBranches);
-                autopathTrajectoryPossibilitiesChanged = false;
-            }
-
-            field.getObject("StartCollisionPoints").setPoses(autopathCollisionStarts);
-            field.getObject("EndCollisionPoints").setPoses(autopathCollisionEnds);
-            field.getObject("AutopathWaypoints").setPoses(autopathWaypoints);
-        }
+//        if (printAutopathing) {
+//            if (Autopath.fieldMap != null && Autopath.fieldMap.outputToSmartDashboardChanged) {
+//                ArrayList<Pose2d> obstaclesExpanded = new ArrayList<>();
+//
+//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
+//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
+//                        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
+//                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 / Autopath.mapResolution1DPerMeter), new Rotation2d()));
+//                        }
+//                    }
+//                }
+//
+//                field.getObject("ExpandedObstacles").setPoses(obstaclesExpanded);
+//
+//                ArrayList<Pose2d> obstacles = new ArrayList<>();
+//
+//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
+//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
+//                        if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
+//                            obstacles.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 /Autopath.mapResolution1DPerMeter), new Rotation2d()));
+//                        }
+//                    }
+//                }
+//
+//                field.getObject("Obstacles").setPoses(obstacles);
+//
+//                Autopath.fieldMap.outputToSmartDashboardChanged = false;
+//            }
+//
+//            if(autopathTrajectoryPossibilitiesChanged) {
+//                for (int i = 0; i < autopathTrajectoryPossibilities.size(); i++) {
+//                    if (autopathTrajectoryPossibilities.get(i) != null) {
+//                        field.getObject("AutopathTrajectory: " + i).setTrajectory(autopathTrajectoryPossibilities.get(i));
+//                    }
+//                }
+//                autopathMaxBranches = Math.max(autopathTrajectoryPossibilities.size(), autopathMaxBranches);
+//                autopathTrajectoryPossibilitiesChanged = false;
+//            }
+//
+//            field.getObject("StartCollisionPoints").setPoses(autopathCollisionStarts);
+//            field.getObject("EndCollisionPoints").setPoses(autopathCollisionEnds);
+//            field.getObject("AutopathWaypoints").setPoses(autopathWaypoints);
+//        }
 
         if (autopathTrajectoryChanged && printAutopathing) {
             if(autopathTrajectory != null){

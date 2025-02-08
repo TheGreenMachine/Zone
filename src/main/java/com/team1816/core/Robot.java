@@ -7,7 +7,7 @@ import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutopathMode;
-import com.team1816.lib.autopath.Autopath;
+//import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.autopath.AutopathAlgorithm;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.*;
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     //TODO add new subsystems here
-    private Autopath autopather;
+//    private Autopath autopather;
     private Elevator elevator;
     private CoralArm coralArm;
     private AlgaeCatcher algaeCatcher;
@@ -182,7 +182,7 @@ public class Robot extends TimedRobot {
             subsystemManager = Injector.get(SubsystemLooper.class);
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
-            autopather = Injector.get(Autopath.class);
+//            autopather = Injector.get(Autopath.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
@@ -682,15 +682,11 @@ public class Robot extends TimedRobot {
             }
 
             manualControl();
-            if(robotState.autopathing)
-                autopather.routine();
+//            if(robotState.autopathing)
+//                autopather.routine();
         } catch (Throwable t) {
             faulted = true;
-            try {
-                throw t;
-            } catch (AutoModeEndedException e) {
-                throw new RuntimeException(e);
-            }
+            throw t;
         }
     }
 
@@ -706,7 +702,7 @@ public class Robot extends TimedRobot {
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
         if(robotState.autopathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.autopathBeforeTime > robotState.autopathPathCancelBufferMilli){
-            autopather.stop();
+//            autopather.stop();
         }
 
         if (robotState.rotatingClosedLoop) {

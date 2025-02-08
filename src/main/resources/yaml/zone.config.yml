@@ -142,7 +142,7 @@ subsystems:
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: true
+        implemented: false
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
@@ -188,7 +188,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: true
+        implemented: false
         motors:
             algaeCatcherIntakeMotor:
                 motorType: TalonFX
@@ -233,7 +233,7 @@ subsystems:
 
             algaeMotorRotationsPerDegree: 1
     elevator:
-        implemented: true
+        implemented: false
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -259,7 +259,7 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: true
+        implemented: false
         solenoids:
             pneumatic: -1 #idk wtf this is ngl
         constants:
