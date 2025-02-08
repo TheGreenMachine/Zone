@@ -1,5 +1,7 @@
 package com.team1816.lib.auto.modes;
 
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
@@ -8,9 +10,6 @@ import com.team1816.lib.auto.actions.AutoAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.auto.AutoModeManager;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.states.RobotState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;

@@ -7,8 +7,8 @@ import com.team1816.lib.auto.modes.AutoMode;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class DynamicTrajectoryOnlyAutoMode extends AutoMode {
-    public DynamicTrajectoryOnlyAutoMode(RobotState rs){
-        super.trajectoryActions = rs.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty();
+    public DynamicTrajectoryOnlyAutoMode(){
+        super.trajectoryActions = robotState.dAutoTrajectoryActions;
     }
 
     @Override
@@ -19,6 +19,6 @@ public class DynamicTrajectoryOnlyAutoMode extends AutoMode {
 
     @Override
     public Pose2d getInitialPose() {
-        return robotState.dynamicAutoScript2025.getStartPos();
+        return robotState.dStartPose;
     }
 }

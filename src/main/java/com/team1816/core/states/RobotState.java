@@ -1,9 +1,11 @@
 package com.team1816.core.states;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.season.auto.DynamicAutoScript2025;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import org.photonvision.EstimatedRobotPose;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -132,15 +135,17 @@ public class RobotState {
     public double robotVelocity = 0;
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
-    public ChassisSpeeds robotChassis;
-
+    public ChassisSpeeds robotChassis = new ChassisSpeeds();
 
     /**
      * DynamicAuto2025
      */
-    public DynamicAutoScript2025 dynamicAutoScript2025 = new DynamicAutoScript2025(6, 3);
-    public boolean dynamicAutoChanged = false;
-    public boolean isAutoDynamic = false;
+    public boolean dAutoChanged = false;
+    public boolean dIsAutoDynamic = false;
+    public HashMap<String, Pose2d> dAllDynamicPoints;
+    public Pose2d dStartPose;
+    public ArrayList<TrajectoryAction> dAutoTrajectoryActions;
+    public ArrayList<DynamicAutoScript2025.REEF_LEVEL> dCurrentCoralPlacementChoices;
 
     /**
      * Pigeon state
@@ -151,8 +156,8 @@ public class RobotState {
     /**
      * Initializes RobotState and field
      */
+    @Inject
     public RobotState() {
-        resetPosition();
         FieldConfig.setupField(field);
     }
 
@@ -164,24 +169,6 @@ public class RobotState {
     public final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     public EstimatedRobotPose currentVisionEstimatedPose;
     public boolean currentCamFind;
-
-    /**
-     * Resets drivetrain position to a specified pose of drivetrain
-     *
-     * @param initial_field_to_vehicle
-     */
-    public synchronized void resetPosition(Pose2d initial_field_to_vehicle) {
-        fieldToVehicle = initial_field_to_vehicle;
-    }
-
-    /**
-     * Resets the drivetrain to its default "zero" pose
-     *
-     * @see Constants
-     */
-    public synchronized void resetPosition() {
-        resetPosition(Constants.kDefaultZeroingPose);
-    }
 
     /**
      * Resets all values stored in RobotState

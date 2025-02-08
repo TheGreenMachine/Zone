@@ -1,12 +1,11 @@
 package com.team1816.season.subsystems;
 
-import com.team1816.core.states.RobotState;
-import com.team1816.lib.Infrastructure;
-import com.team1816.lib.subsystems.Subsystem;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.team1816.lib.hardware.PIDSlotConfiguration;
+import com.team1816.core.states.RobotState;
+import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.pcm.ISolenoid;
+import com.team1816.lib.subsystems.Subsystem;
 
 @Singleton
 public class Pneumatic extends Subsystem {

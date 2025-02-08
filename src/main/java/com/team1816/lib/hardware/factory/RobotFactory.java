@@ -5,7 +5,6 @@ import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.google.common.io.Resources;
 import com.google.inject.Singleton;
 import com.team1816.lib.hardware.*;

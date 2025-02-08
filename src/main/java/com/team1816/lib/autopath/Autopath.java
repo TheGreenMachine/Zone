@@ -1,5 +1,7 @@
 package com.team1816.lib.autopath;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
@@ -14,7 +16,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import jakarta.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ public class Autopath {
     /**
      * Initializes Autopath
      */
+    @Inject
     public Autopath() {
         robotState = Injector.get(RobotState.class);
 

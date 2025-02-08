@@ -1,10 +1,20 @@
 package com.team1816.lib.hardware.components.motor;
 
-import com.ctre.phoenix.motorcontrol.*;
-import com.revrobotics.*;
-import com.revrobotics.spark.*;
-import com.revrobotics.spark.config.*;
-import com.team1816.lib.hardware.components.motor.configurations.*;
+import com.ctre.phoenix.motorcontrol.ControlFrame;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkLimitSwitch;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.LimitSwitchConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.team1816.lib.hardware.components.motor.configurations.FeedbackDeviceType;
+import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
+import com.team1816.lib.hardware.components.motor.configurations.MotionCurveType;
 import com.team1816.lib.util.ConfigurationTranslator;
 import com.team1816.lib.util.logUtil.GreenLogger;
 

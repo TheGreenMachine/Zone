@@ -7,7 +7,7 @@ import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
-import com.team1816.lib.autopath.AutopathAlgorithm;
+import com.team1816.lib.autopath.Autopath;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -38,10 +38,12 @@ public class DynamicAutoScript2025 {
 
     private Robot robot;
     private RobotState robotState;
+    private Autopath autopather;
 
     public DynamicAutoScript2025(int numOfTrajectoryActions, int numOfCoralPlacementActions){
         robot = Injector.get(Robot.class);
         robotState = Injector.get(RobotState.class);
+        autopather = Injector.get(Autopath.class);
 
         addDefaultStartPosOption("Start Top", new Pose2d(new Translation2d(7.55,7.31), Rotation2d.fromDegrees(180)));
         addStartPosOption("Start Mid", new Pose2d(new Translation2d(7.55,4.2), Rotation2d.fromDegrees(180)));
@@ -78,7 +80,7 @@ public class DynamicAutoScript2025 {
         addToSmartDashboard();
     }
 
-    public void updateSendableChoosers(){
+    public void update(){
         boolean somethingChanged = false;
         if(color != robotState.allianceColor)
             somethingChanged = true;
@@ -102,7 +104,7 @@ public class DynamicAutoScript2025 {
             }
 
             if(color == Color.BLUE) {
-                Trajectory newTraj = AutopathAlgorithm.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
+                Trajectory newTraj = autopather.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
                 TrajectoryAction newTrajAction = null;
                 if (newTraj != null) {
                     if (!newTraj.getStates().isEmpty()) {
@@ -114,7 +116,7 @@ public class DynamicAutoScript2025 {
                 Pose2d redCurrentStartPos = new Pose2d(2 * Constants.fieldCenterX - currentStartPos.getX(), 2 * Constants.fieldCenterY - currentStartPos.getY(), Rotation2d.fromDegrees(180 + currentStartPos.getRotation().getDegrees()));
                 Pose2d targetPos = new Pose2d(2 * Constants.fieldCenterX - trajectoryActionChooser.getSelected().getX(), 2 * Constants.fieldCenterY - trajectoryActionChooser.getSelected().getY(), Rotation2d.fromDegrees(180 + trajectoryActionChooser.getSelected().getRotation().getDegrees()));
 
-                Trajectory newTraj = AutopathAlgorithm.calculateAutopath(redCurrentStartPos, targetPos);
+                Trajectory newTraj = autopather.calculateAutopath(redCurrentStartPos, targetPos);
                 TrajectoryAction newTrajAction = null;
                 if (newTraj != null) {
                     if (!newTraj.getStates().isEmpty()) {
@@ -136,20 +138,14 @@ public class DynamicAutoScript2025 {
         currentCoralPlacementChoices = newCurrentCoralPlacementChoices;
 
         if(somethingChanged && robot.isDisabled()) {
-            robotState.dynamicAutoChanged = true;
+            robotState.dAutoChanged = true;
             Injector.get(AutoModeManager.class).updateAutoMode();
         }
-    }
 
-    public HashMap<String, Pose2d> getAllDynamicPoints(){
-        return allDynamicPoints;
-    }
-
-    public Pose2d getStartPos(){
-        if(color == Color.BLUE)
-            return startPos;
-        else
-            return new Pose2d(2 * Constants.fieldCenterX - startPos.getX(), 2 * Constants.fieldCenterY - startPos.getY(), Rotation2d.fromDegrees(180 + startPos.getRotation().getDegrees()));
+        robotState.dAllDynamicPoints = allDynamicPoints;
+        robotState.dStartPose = startPos;
+        robotState.dAutoTrajectoryActions = getAutoTrajectoryActionsIgnoreEmpty();
+        robotState.dCurrentCoralPlacementChoices = currentCoralPlacementChoices;
     }
 
     public ArrayList<TrajectoryAction> getAutoTrajectoryActionsIgnoreEmpty(){
@@ -160,10 +156,6 @@ public class DynamicAutoScript2025 {
                 culledAutoTrajectoryActions.add(action);
 
         return culledAutoTrajectoryActions;
-    }
-
-    public ArrayList<REEF_LEVEL> getCoralPlacements(){
-        return currentCoralPlacementChoices;
     }
 
     private void addStartPosOption(String name, Pose2d pos){

@@ -1,11 +1,15 @@
 package com.team1816.lib.util;
 
-import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.signals.ControlModeValue;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkRelativeEncoder;
-import com.team1816.lib.hardware.components.motor.configurations.*;
+import com.team1816.lib.hardware.components.motor.configurations.FeedbackDeviceType;
+import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
+import com.team1816.lib.hardware.components.motor.configurations.MotionCurveType;
 import com.team1816.lib.util.logUtil.GreenLogger;
 
 /**

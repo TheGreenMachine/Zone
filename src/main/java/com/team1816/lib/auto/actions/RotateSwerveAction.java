@@ -1,10 +1,10 @@
 package com.team1816.lib.auto.actions;
 
+import com.team1816.core.configuration.Constants;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
-import com.team1816.core.configuration.Constants;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;

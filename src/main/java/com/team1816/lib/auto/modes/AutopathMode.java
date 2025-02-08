@@ -23,11 +23,11 @@ public class AutopathMode extends AutoMode{
     RobotState robotState;
     Autopath autopather;
 
-    public AutopathMode(){
+    public AutopathMode(RobotState robotState, Autopath autopather){
         super();
-        
-        robotState = Injector.get(RobotState.class);
-        autopather = Injector.get(Autopath.class);
+
+        this.robotState = robotState;
+        this.autopather = autopather;
     }
 
     @Override

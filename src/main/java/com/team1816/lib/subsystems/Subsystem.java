@@ -1,11 +1,12 @@
 package com.team1816.lib.subsystems;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.loops.ILooper;
-import com.team1816.core.states.RobotState;
 import edu.wpi.first.util.datalog.DataLogEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -22,6 +23,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
  * state; the robot code will try to match the two states with actions. Each Subsystem also is responsible for
  * initializing all member components on match start.
  */
+@Singleton
 public abstract class Subsystem implements Sendable {
 
     /**

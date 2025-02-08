@@ -1,7 +1,5 @@
 package com.team1816.lib.autopath;
 
-import com.team1816.lib.autopath.FieldMap;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
