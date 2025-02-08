@@ -479,7 +479,7 @@ public class RobotFactory {
     }
 
     private boolean isMotorValid(Map<String, MotorConfiguration> map, String name) {
-        if (map != null) {
+        if (map != null && map.containsKey(name)) {
             Integer hardwareId = map.get(name).id;
             return hardwareId != null && hardwareId > -1 && RobotBase.isReal();
         }

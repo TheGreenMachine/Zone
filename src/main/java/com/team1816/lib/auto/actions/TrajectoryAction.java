@@ -99,7 +99,7 @@ public class TrajectoryAction implements AutoAction {
 //                    ((TankDrive) drive)::updateTrajectoryVelocities
 //                );
             GreenLogger.log("Tank Drive is no longer supported.");
-            throw new IllegalArgumentException("Tank Drive is no longer supported.");
+            command = null;
         } else if (drive instanceof EnhancedSwerveDrive) {
             var thetaController = new ProfiledPIDController(
                     Constants.kPRotational,
