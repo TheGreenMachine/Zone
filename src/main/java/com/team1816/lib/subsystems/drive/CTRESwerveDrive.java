@@ -3,12 +3,13 @@ package com.team1816.lib.subsystems.drive;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.mechanisms.swerve.*;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrain;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.team1816.core.Robot;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.PIDUtil;
@@ -18,13 +19,15 @@ import com.team1816.lib.subsystems.LedManager;
 import com.team1816.lib.util.driveUtil.DriveConversions;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.team254.DriveSignal;
+import com.team1816.core.Robot;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.RobotState;
+import com.team1816.season.TunerConstants;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -133,8 +136,8 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
         // Drivetrain characterization
         LegacySwerveDrivetrainConstants constants = new LegacySwerveDrivetrainConstants()
-                .withCANbusName(factory.getCanBusName())
-                .withPigeon2Id(factory.getPigeonID());
+                .withCANbusName(TunerConstants.kCANBus.getName())
+                .withPigeon2Id(TunerConstants.DrivetrainConstants.Pigeon2Id);
 
         train = new LegacySwerveDrivetrain(constants, swerveModules);
         train.getDaqThread().setThreadPriority(99); // Making Odometry thread top Priority

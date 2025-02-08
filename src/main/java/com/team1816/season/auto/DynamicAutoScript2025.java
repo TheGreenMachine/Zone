@@ -7,7 +7,7 @@ import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
-import com.team1816.lib.autopath.Autopath;
+//import com.team1816.lib.autopath.Autopath;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -38,12 +38,12 @@ public class DynamicAutoScript2025 {
 
     private Robot robot;
     private RobotState robotState;
-    private Autopath autopather;
+//    private Autopath autopather;
 
     public DynamicAutoScript2025(int numOfTrajectoryActions, int numOfCoralPlacementActions){
         robot = Injector.get(Robot.class);
         robotState = Injector.get(RobotState.class);
-        autopather = Injector.get(Autopath.class);
+//        autopather = Injector.get(Autopath.class);
 
         addDefaultStartPosOption("Start Top", new Pose2d(new Translation2d(7.55,7.31), Rotation2d.fromDegrees(180)));
         addStartPosOption("Start Mid", new Pose2d(new Translation2d(7.55,4.2), Rotation2d.fromDegrees(180)));
@@ -80,20 +80,22 @@ public class DynamicAutoScript2025 {
         addToSmartDashboard();
     }
 
-    public void update(){
+    public void update() {
         boolean somethingChanged = false;
-        if(color != robotState.allianceColor)
+        if (color != robotState.allianceColor) {
             somethingChanged = true;
+        }
         color = robotState.allianceColor;
 
         Pose2d selected = startingPositionChooser.getSelected();
-        if(!startPos.equals(selected)) {
+        if (!startPos.equals(selected)) {
             somethingChanged = true;
             startPos = selected;
         }
 
         ArrayList<TrajectoryAction> newAutoTrajectoryActions = new ArrayList<>();
         Pose2d currentStartPos = startPos;
+
         for (int i = 0; i < trajectoryActionChoosers.size(); i++) {
             SendableChooser<Pose2d> trajectoryActionChooser = trajectoryActionChoosers.get(i);
 
@@ -102,34 +104,38 @@ public class DynamicAutoScript2025 {
                 currentTrajectoryActionChoices.set(i, selected2);
                 somethingChanged = true;
             }
-
-            if(color == Color.BLUE) {
-                Trajectory newTraj = autopather.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
-                TrajectoryAction newTrajAction = null;
-                if (newTraj != null) {
-                    if (!newTraj.getStates().isEmpty()) {
-                        newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), trajectoryActionChooser.getSelected().getRotation()));
-                    }
-                    newAutoTrajectoryActions.add(newTrajAction);
-                }
-            } else if(color == Color.RED) {
-                Pose2d redCurrentStartPos = new Pose2d(2 * Constants.fieldCenterX - currentStartPos.getX(), 2 * Constants.fieldCenterY - currentStartPos.getY(), Rotation2d.fromDegrees(180 + currentStartPos.getRotation().getDegrees()));
-                Pose2d targetPos = new Pose2d(2 * Constants.fieldCenterX - trajectoryActionChooser.getSelected().getX(), 2 * Constants.fieldCenterY - trajectoryActionChooser.getSelected().getY(), Rotation2d.fromDegrees(180 + trajectoryActionChooser.getSelected().getRotation().getDegrees()));
-
-                Trajectory newTraj = autopather.calculateAutopath(redCurrentStartPos, targetPos);
-                TrajectoryAction newTrajAction = null;
-                if (newTraj != null) {
-                    if (!newTraj.getStates().isEmpty()) {
-                        newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), targetPos.getRotation()));
-                    }
-                    newAutoTrajectoryActions.add(newTrajAction);
-                }
-            } else
-                System.out.println("idk how the fuck you got me to print");
-
-            currentStartPos = trajectoryActionChooser.getSelected();
         }
-        autoTrajectoryActions = newAutoTrajectoryActions;
+
+//        if (somethingChanged) {
+//            for (SendableChooser<Pose2d> trajectoryActionChooser : trajectoryActionChoosers) {
+//                if (color == Color.BLUE) {
+//                    Trajectory newTraj = autopather.calculateAutopath(currentStartPos, trajectoryActionChooser.getSelected());
+//                    TrajectoryAction newTrajAction = null;
+//                    if (newTraj != null) {
+//                        if (!newTraj.getStates().isEmpty()) {
+//                            newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), trajectoryActionChooser.getSelected().getRotation()));
+//                        }
+//                        newAutoTrajectoryActions.add(newTrajAction);
+//                    }
+//                } else if (color == Color.RED) {
+//                    Pose2d redCurrentStartPos = new Pose2d(2 * Constants.fieldCenterX - currentStartPos.getX(), 2 * Constants.fieldCenterY - currentStartPos.getY(), Rotation2d.fromDegrees(180 + currentStartPos.getRotation().getDegrees()));
+//                    Pose2d targetPos = new Pose2d(2 * Constants.fieldCenterX - trajectoryActionChooser.getSelected().getX(), 2 * Constants.fieldCenterY - trajectoryActionChooser.getSelected().getY(), Rotation2d.fromDegrees(180 + trajectoryActionChooser.getSelected().getRotation().getDegrees()));
+//
+//                    Trajectory newTraj = autopather.calculateAutopath(redCurrentStartPos, targetPos);
+//                    TrajectoryAction newTrajAction = null;
+//                    if (newTraj != null) {
+//                        if (!newTraj.getStates().isEmpty()) {
+//                            newTrajAction = new TrajectoryAction(newTraj, Collections.nCopies(newTraj.getStates().size(), targetPos.getRotation()));
+//                        }
+//                        newAutoTrajectoryActions.add(newTrajAction);
+//                    }
+//                } else
+//                    System.out.println("idk how the fuck you got me to print");
+//
+//                currentStartPos = trajectoryActionChooser.getSelected();
+//            }
+//            autoTrajectoryActions = newAutoTrajectoryActions;
+//    }
 
         ArrayList<REEF_LEVEL> newCurrentCoralPlacementChoices = new ArrayList<>();
         for (int i = 0; i < coralPlacementChoosers.size(); i++){

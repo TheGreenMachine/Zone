@@ -214,7 +214,7 @@ public class AlgaeCatcher extends Subsystem {
                 case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
             }
 
-            intakeMotor.set(GreenControlMode.VELOCITY_CONTROL, desiredAlgaeCatcherPower);
+            intakeMotor.set(GreenControlMode.VOLTAGE_CONTROL, desiredAlgaeCatcherPower);
             algaeCatcherCurrentDrawLogger.append(desiredAlgaeCatcherPower);
         }
 

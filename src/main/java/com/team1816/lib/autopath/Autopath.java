@@ -377,6 +377,7 @@ public class Autopath {
 
     public Trajectory calculateAutopath(Pose2d autopathStartPosition, Pose2d autopathTargetPosition){
 //        autopathBuffer = SmartDashboard.getNumber("Autopath Waypoint Buffer", 10);
+        System.out.println("hi");
 
         if(autopathStartPosition.equals(autopathTargetPosition))
             return new Trajectory();

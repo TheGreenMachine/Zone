@@ -3,22 +3,23 @@ package com.team1816.lib.autopath;
 import java.util.*;
 
 public class FieldMap {
-    private BitSet fieldPixelMap;
+//    private BitSet fieldPixelMap;
     private int mapY;
     private int mapX;
 
     FieldMap(int mapLengthX, int mapWidthY){
         this.mapY = mapWidthY;
         this.mapX = mapLengthX;
-        fieldPixelMap = new BitSet(mapLengthX * mapWidthY);
+//        fieldPixelMap = new BitSet(mapLengthX * mapWidthY);
     }
 
     public boolean checkPixelHasObject(double x, double y){
         return checkPixelHasObject((int)x, (int)y);
     }
     public boolean checkPixelHasObject(int x, int y){
-        if(x >= 0 && x < this.getMapX() && y>= 0 && y < this.getMapY())
-            return fieldPixelMap.get(mapX*y + x);
+        if(x >= 0 && x < this.getMapX() && y>= 0 && y < this.getMapY()) {
+//            return fieldPixelMap.get(mapX*y + x);
+        }
         return false;
     }
 
@@ -30,8 +31,9 @@ public class FieldMap {
     }
 
     public boolean checkPixelHasObjectOrOffMap(int x, int y){
-        if(x >= 0 && x < this.getMapX() && y>= 0 && y < this.getMapY())
-            return fieldPixelMap.get(mapX*y + x);
+        if(x >= 0 && x < this.getMapX() && y>= 0 && y < this.getMapY()) {
+//            return fieldPixelMap.get(mapX*y + x);
+        }
         return true;
     }
 
@@ -40,7 +42,7 @@ public class FieldMap {
     }
     public boolean drawPixel(int x, int y){
         try {
-            fieldPixelMap.set(mapX*y + x);
+//            fieldPixelMap.set(mapX*y + x);
             return true;
         } catch(Exception IndexOutOfBoundsException){
             return false;
@@ -52,7 +54,7 @@ public class FieldMap {
     }
     public boolean removePixel(int x, int y){
         try {
-            fieldPixelMap.set(mapX*y + x, false);
+//            fieldPixelMap.set(mapX*y + x, false);
             return true;
         } catch(Exception IndexOutOfBoundsException){
             return false;

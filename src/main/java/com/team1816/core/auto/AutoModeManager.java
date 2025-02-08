@@ -5,10 +5,10 @@ import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
-import com.team1816.lib.auto.modes.AutopathMode;
+//import com.team1816.lib.auto.modes.AutopathMode;
 import com.team1816.lib.auto.modes.DefaultMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
-import com.team1816.lib.autopath.Autopath;
+//import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.modes.*;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,7 +26,6 @@ public class AutoModeManager {
      * Properties: Selection
      */
     private RobotState robotState;
-    private Autopath autopather;
     private final SendableChooser<DesiredAuto> autoModeChooser;
     private final SendableChooser<Color> sideChooser;
     private DesiredAuto desiredAuto;
@@ -48,9 +47,8 @@ public class AutoModeManager {
      * @param rs RobotState
      */
     @Inject
-    public AutoModeManager(RobotState rs, Autopath autopather) {
+    public AutoModeManager(RobotState rs) {
         robotState = rs;
-        this.autopather = autopather;
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
         sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
 
@@ -191,7 +189,8 @@ public class AutoModeManager {
 
         DRIVE_STRAIGHT,
 
-        AUTOPATH,
+//        AUTOPATH,
+
         TOP_PLACE_1_AUTOMODE,
 
         TOP_PLACE_2_AUTOMODE,
@@ -231,9 +230,9 @@ public class AutoModeManager {
             case DRIVE_STRAIGHT:
                 robotState.dIsAutoDynamic = false;
                 return new DriveStraightMode();
-            case AUTOPATH:
-                robotState.dIsAutoDynamic = false;
-                return new AutopathMode(robotState, autopather);
+//            case AUTOPATH:
+//                robotState.dIsAutoDynamic = false;
+//                return new AutopathMode();
             case MIDDLE_PLACE_1_AUTOMODE:
                 robotState.dIsAutoDynamic = false;
                 return new MiddlePlace1AutoMode(color);
