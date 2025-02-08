@@ -1,9 +1,9 @@
 package com.team1816.lib.loops;
 
-import com.team1816.lib.subsystems.SubsystemLooper;
-import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
+import com.team1816.lib.subsystems.SubsystemLooper;
+import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 

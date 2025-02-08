@@ -1,15 +1,17 @@
 package com.team1816.core;
 
 import com.ctre.phoenix6.CANBus;
+import com.team1816.core.auto.AutoModeManager;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.Orchestrator;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
-import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.autopath.Autopath;
-import com.team1816.lib.autopath.AutopathAlgorithm;
 import com.team1816.lib.hardware.factory.RobotFactory;
-import com.team1816.lib.input_handler.*;
+import com.team1816.lib.input_handler.InputHandler;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
 import com.team1816.lib.loops.Looper;
 import com.team1816.lib.subsystems.LedManager;
@@ -18,10 +20,7 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.auto.AutoModeManager;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.states.Orchestrator;
-import com.team1816.core.states.RobotState;
+import com.team1816.season.auto.DynamicAutoScript2025;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
@@ -79,6 +78,8 @@ public class Robot extends TimedRobot {
 
     private LedManager ledManager;
     private Camera camera;
+
+    private DynamicAutoScript2025 dynamicAutoScript;
 
     /**
      * Factory
@@ -171,11 +172,11 @@ public class Robot extends TimedRobot {
 
             // TODO: Set up any other subsystems here.
 
+            robotState = Injector.get(RobotState.class);
             factory = Injector.get(RobotFactory.class);
             ledManager = Injector.get(LedManager.class);
             camera = Injector.get(Camera.class);
             camera.setDriverMode(true);
-            robotState = Injector.get(RobotState.class);
             orchestrator = Injector.get(Orchestrator.class);
             infrastructure = Injector.get(Infrastructure.class);
             subsystemManager = Injector.get(SubsystemLooper.class);
@@ -186,6 +187,8 @@ public class Robot extends TimedRobot {
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
             pneumatic = Injector.get(Pneumatic.class);
+
+            dynamicAutoScript = new DynamicAutoScript2025(5, 3);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -381,7 +384,7 @@ public class Robot extends TimedRobot {
                     "pivotA1/L3",
                     ActionState.PRESSED,
                     () -> {
-                        System.out.println("hi i activated");
+                        System.out.println("hi i activated :3");
                         if(CoralArm.robotState.isCoralBeamBreakTriggered){
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
@@ -410,8 +413,6 @@ public class Robot extends TimedRobot {
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
 
-            SmartDashboard.putNumber("Autopath Waypoint Buffer", 10);
-
         } catch (Throwable t) {
             faulted = true;
             throw t;
@@ -436,7 +437,7 @@ public class Robot extends TimedRobot {
                 autoModeManager.reset();
             }
 
-            AutopathAlgorithm.autopathMaxCalcMilli = 1000;
+            autopather.autopathMaxCalcMilli = 1000;
 
             subsystemManager.stop();
 
@@ -470,7 +471,7 @@ public class Robot extends TimedRobot {
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
 
-        AutopathAlgorithm.autopathMaxCalcMilli = 5;
+        autopather.autopathMaxCalcMilli = 5;
 
         autoStart = Timer.getFPGATimestamp();
         enabledLoop.start();
@@ -496,7 +497,7 @@ public class Robot extends TimedRobot {
 
             drive.setControlState(Drive.ControlState.OPEN_LOOP);
 
-            AutopathAlgorithm.autopathMaxCalcMilli = 5;
+            autopather.autopathMaxCalcMilli = 5;
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
@@ -604,11 +605,11 @@ public class Robot extends TimedRobot {
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
             boolean autoChanged = autoModeManager.update();
-            if(robotState.isAutoDynamic && RobotState.dynamicAutoChanged){
+            if(robotState.dIsAutoDynamic && robotState.dAutoChanged){
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
                 ArrayList<Trajectory.State> trajectoryStates = new ArrayList<>();
-                var trajectoryActions = robotState.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty();
+                var trajectoryActions = robotState.dAutoTrajectoryActions;
                 for(int i = 0; i < trajectoryActions.size(); i++) {
                     ArrayList<Trajectory.State> trajectoryActionStates = new ArrayList<>(trajectoryActions.get(i).getTrajectory().getStates());
                     trajectoryStates.addAll(trajectoryActionStates);
@@ -625,8 +626,8 @@ public class Robot extends TimedRobot {
                                     new Trajectory(trajectoryStates)
                             );
 
-                RobotState.dynamicAutoChanged = false;
-            } else if(!robotState.isAutoDynamic) {
+                robotState.dAutoChanged = false;
+            } else if(!robotState.dIsAutoDynamic) {
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
                 robotState.field
                         .getObject("Trajectory")
@@ -635,7 +636,7 @@ public class Robot extends TimedRobot {
                         );
             }
 
-            robotState.dynamicAutoScript2025.updateSendableChoosers();
+            dynamicAutoScript.update();
 
             if (drive.isDemoMode()) { // Demo-mode
                 drive.update();
@@ -683,15 +684,11 @@ public class Robot extends TimedRobot {
             }
 
             manualControl();
-            if(robotState.autopathing)
-                autopather.routine();
+//            if(robotState.autopathing)
+//                autopather.routine();
         } catch (Throwable t) {
             faulted = true;
-            try {
-                throw t;
-            } catch (AutoModeEndedException e) {
-                throw new RuntimeException(e);
-            }
+            throw t;
         }
     }
 
@@ -707,7 +704,7 @@ public class Robot extends TimedRobot {
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
         if(robotState.autopathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.autopathBeforeTime > robotState.autopathPathCancelBufferMilli){
-            autopather.stop();
+//            autopather.stop();
         }
 
         if (robotState.rotatingClosedLoop) {

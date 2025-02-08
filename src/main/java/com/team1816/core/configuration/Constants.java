@@ -4,8 +4,6 @@ import com.google.inject.Singleton;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Symmetry;
 import com.team1816.lib.hardware.factory.RobotFactory;
-import com.team1816.lib.variableInputs.Numeric;
-import com.team1816.lib.variableInputs.VariableInput;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;

@@ -12,8 +12,8 @@ import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @Singleton
@@ -82,7 +82,7 @@ public class AlgaeCatcher extends Subsystem {
         positionMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
 
 
-        algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", -1));
+        algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", 1));
 
         algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", -0.5);
         algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", -0.1);

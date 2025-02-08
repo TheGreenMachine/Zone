@@ -5,7 +5,6 @@ import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.google.common.io.Resources;
 import com.google.inject.Singleton;
 import com.team1816.lib.hardware.*;
@@ -479,7 +478,7 @@ public class RobotFactory {
     }
 
     private boolean isMotorValid(Map<String, MotorConfiguration> map, String name) {
-        if (map != null) {
+        if (map != null && map.containsKey(name)) {
             Integer hardwareId = map.get(name).id;
             return hardwareId != null && hardwareId > -1 && RobotBase.isReal();
         }

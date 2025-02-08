@@ -17,26 +17,24 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 import java.util.List;
 
-public class MiddlePlace2AutoMode extends AutoMode {
-
-    public MiddlePlace2AutoMode(Color color) {
+public class TopPlace2AutoMode extends AutoMode {
+    public TopPlace2AutoMode(Color color){
         super(
                 List.of(
                         new TrajectoryAction(
-                                new MiddleToSideThree(color)
+                                new TopToSideOne(robotState.allianceColor)
                         ), new TrajectoryAction(
-                                new SideThreeToCloseFeeder(color)
+                                new SideOneToTopFeeder(robotState.allianceColor)
                         ), new TrajectoryAction(
-                                new CloseFeederToSideFour(color)
+                                new TopFeederToSideSix(robotState.allianceColor)
                         ), new TrajectoryAction(
-                                new SideFourOut(color)
+                                new BackOutSideSix(robotState.allianceColor)
                         ), new TrajectoryAction(
-                                new SideFourIn(color)
+                                new BackInSideSix(robotState.allianceColor)
                         )
                 )
         );
     }
-
     @Override
     protected void routine() throws AutoModeEndedException {
         runAction(
@@ -53,14 +51,12 @@ public class MiddlePlace2AutoMode extends AutoMode {
                         new PlaceCoralSeriesAction(Elevator.ELEVATOR_STATE.L4, CoralArm.PIVOT_STATE.L4, true),
                         trajectoryActions.get(3),
                         new ParallelAction(
-                                new RotateSwerveAction(Rotation2d.fromDegrees(robotState.allianceColor == Color.BLUE ? 240 : 60)),
+                                new RotateSwerveAction(Rotation2d.fromDegrees(robotState.allianceColor == Color.BLUE ? 120 : 300)),
                                 new AlgaeCatcherQuickAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1)
                         ),
                         trajectoryActions.get(4)
-                )
-        );
+                ));
     }
-
     @Override
     public Pose2d getInitialPose() {
         return trajectoryActions.get(0).getTrajectory().getInitialPose();

@@ -2,7 +2,10 @@ package com.team1816.season.auto.modes;
 
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.auto.actions.*;
+import com.team1816.lib.auto.actions.ParallelAction;
+import com.team1816.lib.auto.actions.RotateSwerveAction;
+import com.team1816.lib.auto.actions.SeriesAction;
+import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.season.auto.actions.*;
 import com.team1816.season.auto.path.*;
@@ -54,7 +57,8 @@ public class BottomPlace2AutoMode extends AutoMode {
                                 new AlgaeCatcherQuickAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1)
                         ),
                         trajectoryActions.get(4)
-                ));
+                )
+        );
     }
 
     @Override
