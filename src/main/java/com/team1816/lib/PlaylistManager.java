@@ -79,7 +79,8 @@ public class PlaylistManager {
         LOWRIDER_WAR("lowrider"),
         SEPTEMBER_EWF("september"),
         FIRST_TRAIN("firstTrain"),
-        CRUEL_ANGELS_THESIS("cruelAngel");
+        CRUEL_ANGELS_THESIS("cruelAngel"),
+        HTG("htg");
 
         final String path;
 
