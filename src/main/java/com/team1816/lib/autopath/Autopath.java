@@ -81,102 +81,106 @@ public class Autopath {
      * @return
      */
     public static boolean testTrajectory(Trajectory trajectory){
-//        if(trajectory == null)
-//            return false;
-//
-//        Pose2d prevState = trajectory.sample(0).poseMeters;
-//
-//        for(int t = 1; t*.02 < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
-//            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-//            if(fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter)))
-//                return false;
-//
-//            prevState = currentState;
-//        }
+        if(trajectory == null)
+            return false;
+
+        Pose2d prevState = trajectory.sample(0).poseMeters;
+
+        for(int t = 1; t*.02 < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
+            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
+            if(fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter)))
+                return false;
+
+            prevState = currentState;
+        }
 
         return true;
     }
 
     public static TimestampTranslation2d returnCollisionStart(Trajectory trajectory){
-//        Pose2d prevState = trajectory.sample(0).poseMeters;
-//
-//        for(int t = 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
-//            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-//            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*mapResolution1DPerMeter), (int)(prevState.getY()*mapResolution1DPerMeter), (int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter));
-//
-//            if(result != null)
-//                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
-//
-//            prevState = currentState;
-//        }
+        Pose2d prevState = trajectory.sample(0).poseMeters;
+
+        for(int t = 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
+            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
+            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*mapResolution1DPerMeter), (int)(prevState.getY()*mapResolution1DPerMeter), (int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter));
+
+            if(result != null)
+                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
+
+            prevState = currentState;
+        }
         return null;
     }
 
     public static TimestampTranslation2d returnCollisionEnd(Trajectory trajectory, TimestampTranslation2d timestampTranslation2d){
 
-//        Pose2d prevState = trajectory.sample(timestampTranslation2d.getTimestamp()).poseMeters;
-//
-//        for(int t = (int)(timestampTranslation2d.getTimestamp()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) + 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
-//            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-//
-//
-//            int[] result =
-//                    Bresenham.lineReturnCollisionInverted(
-//                            fieldMap.getCurrentMap(),
-//                            (int)(prevState.getX()*mapResolution1DPerMeter),
-//                            (int)(prevState.getY()*mapResolution1DPerMeter),
-//                            (int)(currentState.getX()*mapResolution1DPerMeter),
-//                            (int)(currentState.getY()*mapResolution1DPerMeter),
-//                            true
-//                    );
-//
-//            if(result != null)
-//                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, new Translation2d(result[0], result[1]));
-//
-//            prevState = currentState;
-//        }
+        Pose2d prevState = trajectory.sample(timestampTranslation2d.getTimestamp()).poseMeters;
+
+        for(int t = (int)(timestampTranslation2d.getTimestamp()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) + 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond < trajectory.getTotalTimeSeconds() + 1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond; t++){
+            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
+
+
+            int[] result =
+                    Bresenham.lineReturnCollisionInverted(
+                            fieldMap.getCurrentMap(),
+                            (int)(prevState.getX()*mapResolution1DPerMeter),
+                            (int)(prevState.getY()*mapResolution1DPerMeter),
+                            (int)(currentState.getX()*mapResolution1DPerMeter),
+                            (int)(currentState.getY()*mapResolution1DPerMeter),
+                            true
+                    );
+
+            if(result != null)
+                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, new Translation2d(result[0], result[1]));
+
+            prevState = currentState;
+        }
 
         return timestampTranslation2d;
     }
 
     public static TimestampTranslation2d returnCollisionStartLast(Trajectory trajectory){
-//        Pose2d prevState = trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters;
-//
-//        for(int t = (int)(trajectory.getTotalTimeSeconds()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) - 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond > 0; t--){
-//            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-//            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*mapResolution1DPerMeter), (int)(prevState.getY()*mapResolution1DPerMeter), (int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter));
-//
-//            if(result != null)
-//                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
-//
-//            prevState = currentState;
-//        }
+        Pose2d prevState = trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters;
+
+        for(int t = (int)(trajectory.getTotalTimeSeconds()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) - 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond > 0; t--){
+            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
+            Translation2d result = Bresenham.lineReturnCollision(fieldMap.getCurrentMap(), (int)(prevState.getX()*mapResolution1DPerMeter), (int)(prevState.getY()*mapResolution1DPerMeter), (int)(currentState.getX()*mapResolution1DPerMeter), (int)(currentState.getY()*mapResolution1DPerMeter));
+
+            if(result != null)
+                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, result);
+
+            prevState = currentState;
+        }
         return null;
     }
 
     public static TimestampTranslation2d returnCollisionEndLast(Trajectory trajectory, TimestampTranslation2d timestampTranslation2d){
-//        Pose2d prevState = trajectory.sample(timestampTranslation2d.getTimestamp()).poseMeters;
-//
-//        for(int t = (int)(timestampTranslation2d.getTimestamp()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) - 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond > 0; t--){
-//            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
-//
-////            System.out.println("Testing line: "+prevState+" to: "+currentState);
-//
-//            int[] result =
-//                    Bresenham.lineReturnCollisionInverted(
-//                            fieldMap.getCurrentMap(),
-//                            (int)(prevState.getX()*mapResolution1DPerMeter),
-//                            (int)(prevState.getY()*mapResolution1DPerMeter),
-//                            (int)(currentState.getX()*mapResolution1DPerMeter),
-//                            (int)(currentState.getY()*mapResolution1DPerMeter),
-//                            true
-//                    );
-//
-//            if(result != null)
-//                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, new Translation2d(result[0], result[1]));
-//
-//            prevState = currentState;
-//        }
+//        System.out.println("Testing position: "+timestampTranslation2d.getTranslation2d()+" at time: "+timestampTranslation2d.getTimestamp());
+
+        Pose2d prevState = trajectory.sample(timestampTranslation2d.getTimestamp()).poseMeters;
+
+        for(int t = (int)(timestampTranslation2d.getTimestamp()*autopathTrajectoryPathCheckPrecisionInTimesPerSecond) - 1; t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond > 0; t--){
+            Pose2d currentState = trajectory.sample(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond).poseMeters;
+
+//            System.out.println("Testing line: "+prevState+" to: "+currentState);
+
+            int[] result =
+                    Bresenham.lineReturnCollisionInverted(
+                            fieldMap.getCurrentMap(),
+                            (int)(prevState.getX()*mapResolution1DPerMeter),
+                            (int)(prevState.getY()*mapResolution1DPerMeter),
+                            (int)(currentState.getX()*mapResolution1DPerMeter),
+                            (int)(currentState.getY()*mapResolution1DPerMeter),
+                            true
+                    );
+
+//            System.out.println(result);
+
+            if(result != null)
+                return new TimestampTranslation2d(t*1./autopathTrajectoryPathCheckPrecisionInTimesPerSecond, new Translation2d(result[0], result[1]));
+
+            prevState = currentState;
+        }
 
         return timestampTranslation2d;
     }

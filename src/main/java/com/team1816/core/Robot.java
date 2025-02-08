@@ -1,16 +1,17 @@
 package com.team1816.core;
 
 import com.ctre.phoenix6.CANBus;
+import com.team1816.core.auto.AutoModeManager;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.Orchestrator;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
-import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.auto.modes.AutopathMode;
-//import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.autopath.AutopathAlgorithm;
 import com.team1816.lib.hardware.factory.RobotFactory;
-import com.team1816.lib.input_handler.*;
+import com.team1816.lib.input_handler.InputHandler;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
 import com.team1816.lib.loops.Looper;
 import com.team1816.lib.subsystems.LedManager;
@@ -19,10 +20,6 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.auto.AutoModeManager;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.states.Orchestrator;
-import com.team1816.core.states.RobotState;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
@@ -603,7 +600,7 @@ public class Robot extends TimedRobot {
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
             boolean autoChanged = autoModeManager.update();
-            if(robotState.isAutoDynamic && RobotState.dynamicAutoChanged){
+            if(robotState.isAutoDynamic && robotState.dynamicAutoChanged){
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
                 ArrayList<Trajectory.State> trajectoryStates = new ArrayList<>();
@@ -624,7 +621,7 @@ public class Robot extends TimedRobot {
                                     new Trajectory(trajectoryStates)
                             );
 
-                RobotState.dynamicAutoChanged = false;
+                robotState.dynamicAutoChanged = false;
             } else if(!robotState.isAutoDynamic) {
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
                 robotState.field
