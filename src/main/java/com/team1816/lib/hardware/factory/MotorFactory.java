@@ -216,7 +216,11 @@ public class MotorFactory {
             Map<String, PIDSlotConfiguration> pidConfigList,
             int remoteSensorId
     ) {
+        if(subsystem.motors == null) return;
         MotorConfiguration motorConfiguration = subsystem.motors.get(name);
+        if(motorConfiguration == null){
+            return;
+        }
         boolean isTalon = !(motor instanceof LazySparkMax || motor instanceof GhostMotor); // Talon also refers to VictorSPX, isCTRE just looks worse :)
 
         // for newly attached motors only

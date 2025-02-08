@@ -43,7 +43,9 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         super(deviceNumber, canBus);
         name = motorName;
         configurator = super.getConfigurator();
-        configurator.refresh(configs);
+        if(configurator != null) {
+            configurator.refresh(configs);
+        }
     }
 
     @Override

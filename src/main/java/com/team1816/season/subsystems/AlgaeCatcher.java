@@ -82,7 +82,7 @@ public class AlgaeCatcher extends Subsystem {
         positionMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
 
 
-        algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", -1));
+        algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", 0));
 
         algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", -0.5);
         algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", -0.1);
