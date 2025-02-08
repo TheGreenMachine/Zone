@@ -37,9 +37,13 @@ public class DynamicAutoScript2025 {
     private ArrayList<SendableChooser<REEF_LEVEL>> coralPlacementChoosers = new ArrayList<>();
     private ArrayList<REEF_LEVEL> currentCoralPlacementChoices = new ArrayList<>();
 
-    private Robot robot = Injector.get(Robot.class);
+    private Robot robot;
+    private RobotState robotState;
 
     public DynamicAutoScript2025(int numOfTrajectoryActions, int numOfCoralPlacementActions){
+        robot = Injector.get(Robot.class);
+        robotState = Injector.get(RobotState.class);
+
         addDefaultStartPosOption("Start Top", new Pose2d(new Translation2d(7.55,7.31), Rotation2d.fromDegrees(180)));
         addStartPosOption("Start Mid", new Pose2d(new Translation2d(7.55,4.2), Rotation2d.fromDegrees(180)));
         addStartPosOption("Start Bot", new Pose2d(new Translation2d(7.55,.74), Rotation2d.fromDegrees(180)));
