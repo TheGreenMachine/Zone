@@ -7,7 +7,6 @@ import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
-import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.autopath.AutopathAlgorithm;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
@@ -81,9 +80,9 @@ public class DynamicAutoScript2025 {
 
     public void updateSendableChoosers(){
         boolean somethingChanged = false;
-        if(color != Autopath.robotState.allianceColor)
+        if(color != robotState.allianceColor)
             somethingChanged = true;
-        color = Autopath.robotState.allianceColor;
+        color = robotState.allianceColor;
 
         Pose2d selected = startingPositionChooser.getSelected();
         if(!startPos.equals(selected)) {
@@ -137,7 +136,7 @@ public class DynamicAutoScript2025 {
         currentCoralPlacementChoices = newCurrentCoralPlacementChoices;
 
         if(somethingChanged && robot.isDisabled()) {
-            Autopath.robotState.dynamicAutoChanged = true;
+            robotState.dynamicAutoChanged = true;
             Injector.get(AutoModeManager.class).updateAutoMode();
         }
     }
