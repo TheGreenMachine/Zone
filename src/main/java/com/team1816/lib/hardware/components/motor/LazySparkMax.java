@@ -143,7 +143,8 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void setInvertedMotor(boolean isInvertedMotor) {
-
+        sparkConfig.inverted(isInvertedMotor);
+        reconfigure();
     }
 
     @Override
@@ -231,7 +232,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public boolean getInvertedMotor() {
-        return false;
+        return configAccessor.getInverted();
     }
 
     @Override
