@@ -5,19 +5,19 @@ import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.core.states.RobotState;
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.datalog.*;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotBase;
-import jakarta.inject.Inject;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -30,14 +30,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 public class Camera extends Subsystem{
     /**
      * Properties
      */
     private static final String NAME = "camera";
     private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera (1)");
+    private static final List<AprilTag> aprilTags = List.of(
+            new AprilTag(1, new Pose3d(0, 0, 0.601, new Rotation3d()))
+    );
     public static final AprilTagFieldLayout kTagLayout =
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+//            new AprilTagFieldLayout(aprilTags, 17.548, 8.052);
     private static final List<Transform3d> robotToCams = Constants.kCameraMountingOffset3Ds;
 
     /**
@@ -89,7 +94,7 @@ public class Camera extends Subsystem{
     public void updateVisionEstimatedPoses() {
         robotState.visionEstimatedPoses.clear();
         robotState.visionStdDevs.clear();
-        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        Optional<EstimatedRobotPose> visionEst;
         for (int i = 0; i < cams.size(); i++) {
             for (var change : cams.get(i).getAllUnreadResults()) {
                 visionEst = photonEstimators.get(i).update(change);
@@ -116,6 +121,14 @@ public class Camera extends Subsystem{
      */
     public Matrix<N3, N1> getEstimationStdDevs(
             EstimatedRobotPose estimatedPose, List<PhotonTrackedTarget> targets) {
+        // Ignore estimates that are too far off of our current estimate they are
+        // probably not correct
+        if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
+                - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
+                || robotState.fieldToVehicle.getTranslation().getDistance(
+                        estimatedPose.estimatedPose.toPose2d().getTranslation()) >= 1.5 // Position difference in meters
+        )
+            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         var estStdDevs = robotState.kSingleTagStdDevs;
         int numTags = 0;
         double avgDist = 0;
@@ -134,6 +147,9 @@ public class Camera extends Subsystem{
         if (numTags == 1 && avgDist > 4)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+
+        // Set rotation std dev to max value because we trust our gyro over vision correction
+        estStdDevs.set(2, 0, Double.MAX_VALUE);
 
         return estStdDevs;
     }

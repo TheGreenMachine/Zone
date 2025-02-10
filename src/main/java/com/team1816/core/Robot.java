@@ -306,7 +306,7 @@ public class Robot extends TimedRobot {
                     "testingOffsetPose",
                     ActionState.PRESSED,
                     () ->
-                            drive.resetOdometry(robotState.fieldToVehicle.plus(new Transform2d(new Translation2d(1.0, 1.0), new Rotation2d(0.17 * 2 * Math.PI))))
+                            drive.resetOdometry(robotState.fieldToVehicle.plus(new Transform2d(new Translation2d(1.0, 1.0), new Rotation2d(Math.toRadians(0)))))
             );
 
             /** Operator Commands */

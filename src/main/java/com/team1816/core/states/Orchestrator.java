@@ -154,9 +154,9 @@ public class Orchestrator {
         camera.updateVisionEstimatedPoses();
         for (int i = 0; i < robotState.visionEstimatedPoses.size(); i++) {
             drive.updateOdometryWithVision(
-                    robotState.visionEstimatedPoses.get(0).estimatedPose.toPose2d(),
-                    robotState.visionEstimatedPoses.get(0).timestampSeconds,
-                    robotState.visionStdDevs.get(0)
+                    robotState.visionEstimatedPoses.get(i).estimatedPose.toPose2d(),
+                    robotState.visionEstimatedPoses.get(i).timestampSeconds,
+                    robotState.visionStdDevs.get(i)
             );
         }
     }

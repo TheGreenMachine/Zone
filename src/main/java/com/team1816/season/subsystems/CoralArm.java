@@ -86,7 +86,7 @@ public class CoralArm extends Subsystem {
         intakeMotor.selectPIDSlot(1);
         pivotMotor.selectPIDSlot(2);
 
-        coralSensor = new DigitalInput((int) factory.getConstant(NAME, "coralSensorChannel", -1));
+        coralSensor = new DigitalInput((int) factory.getConstant(NAME, "coralSensorChannel", 0));
 
         super.desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/desiredPivotPosition");
         super.actStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/actualPivotPosition");
