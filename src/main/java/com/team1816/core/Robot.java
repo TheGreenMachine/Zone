@@ -290,26 +290,26 @@ public class Robot extends TimedRobot {
                     drive::setSlowMode
             );
 
-//            inputHandler.listenAction(
-//                    "autopathingSpeaker",
-//                    ActionState.PRESSED,
-//                    () ->
-//                        autopather.start(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(0)))
-//            );
-//
-//            inputHandler.listenAction(
-//                    "autopathingAmp",
-//                    ActionState.PRESSED,
-//                    () ->
-//                        autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
-//            );
+            /*inputHandler.listenAction(
+                    "autopathingSpeaker",
+                    ActionState.PRESSED,
+                    () ->
+                        autopather.start(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(0)))
+            );
+
+            inputHandler.listenAction(
+                    "autopathingAmp",
+                    ActionState.PRESSED,
+                    () ->
+                        autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
+            );*/
             /*NEW SUBSYSTEM ACTIONS*/
-            inputHandler.listenActionPressAndRelease(
+            /*inputHandler.listenActionPressAndRelease(
                     "intakeCoral",
                     (pressed) -> {
                         coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
                     }
-            );
+            );*/
             inputHandler.listenActionPressAndRelease(
                     "outtakeCoral",
                     (pressed) -> {
@@ -319,8 +319,16 @@ public class Robot extends TimedRobot {
             inputHandler.listenActionPressAndRelease(
                     "intake/OuttakeAlgae",
                     (pressed) ->{
-                        algaeCatcher.setDesiredIntakeState(pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE);
-//                        System.out.println("I've been set!");
+                        if(pressed){
+                            if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD)
+                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
+                            else
+                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
+                        } else{
+                            if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD){
+                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
+                            }
+                        };
                     }
             );
             inputHandler.listenAction(
@@ -351,7 +359,7 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2);
                     }
             );
-            inputHandler.listenAction(
+/*            inputHandler.listenAction(
                     "pivotElevatorAndCoralFeeder",
                     ActionState.PRESSED,
                     () -> {
@@ -359,7 +367,6 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
                     }
             );
-
             inputHandler.listenAction(
                     "pivotAlgaeStow",
                     ActionState.PRESSED,
@@ -380,18 +387,17 @@ public class Robot extends TimedRobot {
                     () -> {
                         algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
                     }
-            );
+            );*/
             inputHandler.listenAction(
                     "pivotA1/L3",
                     ActionState.PRESSED,
                     () -> {
-//                        System.out.println("hi i activated :3");
                         if(CoralArm.robotState.isCoralBeamBreakTriggered){
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                         }
                         else{
-                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1);
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1);
                         }
 
                     }
@@ -405,8 +411,7 @@ public class Robot extends TimedRobot {
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                         }
                         else{
-                            algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE2);
-                        }
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE2);                        }
                     }
             );
 

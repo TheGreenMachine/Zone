@@ -15,6 +15,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * A subsystem for the coral arm.
@@ -129,7 +130,7 @@ public class CoralArm extends Subsystem {
 
     public boolean isBeamBreakTriggered() {
         if(RobotBase.isSimulation())
-            return true;
+            return false;
 
         return !coralSensor.get();
     }
@@ -146,35 +147,35 @@ public class CoralArm extends Subsystem {
 
         if(desiredIntakeState == INTAKE_STATE.REST && !robotState.isCoralBeamBreakTriggered){
             desiredIntakeState = INTAKE_STATE.INTAKE;
-            desiredIntakeStateChanged = true;
         }
 
         if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
             robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
 
-            if (robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.INTAKE) {
+            if (robotState.isCoralBeamBreakTriggered && (desiredIntakeState == INTAKE_STATE.INTAKE || desiredIntakeState == INTAKE_STATE.REST)) {
                 desiredIntakeState = INTAKE_STATE.HOLD;
-                desiredIntakeStateChanged = true;
             }
 
             if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.HOLD){
                 desiredIntakeState = INTAKE_STATE.INTAKE;
-                desiredIntakeStateChanged = true;
             }
 
             if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState != INTAKE_STATE.OUTTAKE){
                 desiredPivotState = PIVOT_STATE.FEEDER;
-                desiredIntakeStateChanged = true;
             }
         }
 
         if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
             robotState.actualCoralArmIntakeState = desiredIntakeState;
+            desiredIntakeStateChanged = true;
         }
 
         if (robotState.actualCoralArmPivotState != desiredPivotState) {
             robotState.actualCoralArmPivotState = desiredPivotState;
+            desiredPivotStateChanged = true;
         }
+
+        SmartDashboard.putBoolean("CoralArmBeamBreak", isBeamBreakTriggered());
 
         if (Constants.kLoggingRobot) {
             doubleDesStatesLogger().append(desiredPivotPosition);

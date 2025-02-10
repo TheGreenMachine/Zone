@@ -94,7 +94,7 @@ public class AlgaeCatcher extends Subsystem {
         pivotMotor.selectPIDSlot(1);
 
         pivotMotor.setSensorPosition(0, 50);
-        
+
         if (RobotBase.isSimulation()) {
             pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
             pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
@@ -136,7 +136,7 @@ public class AlgaeCatcher extends Subsystem {
 
     public boolean isBeamBreakTriggered() {
         if(RobotBase.isSimulation())
-            return true;
+            return false;
 
         return !algaeSensor.get();
     }
@@ -160,40 +160,39 @@ public class AlgaeCatcher extends Subsystem {
 
             if (robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
                 desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
-                desiredIntakeStateChanged = true;
             }
 
             if (!robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD) {
                 desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.INTAKE;
-                desiredIntakeStateChanged = true;
             }
         }
 
         if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.INTAKE;
-            desiredPivotStateChanged = true;
         } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.HOLD;
-            desiredPivotStateChanged = true;
         } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.STOP){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.STOW;
-            desiredPivotStateChanged = true;
         } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.ALGAE1 && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.ALGAE2){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.OUTTAKE;
-            desiredPivotStateChanged = true;
         }
 
         if (robotState.actualAlgaeCatcherIntakeState != desiredIntakeState) {
             robotState.actualAlgaeCatcherIntakeState = desiredIntakeState;
+            desiredIntakeStateChanged = true;
         }
 
         if (robotState.actualAlgaeCatcherPivotState != desiredPivotState) {
             robotState.actualAlgaeCatcherPivotState = desiredPivotState;
+            desiredPivotStateChanged = true;
         }
 
         if (intakeMotor.getMotorTemperature() >= 55) {
             SmartDashboard.putBoolean("Collector", false);
         }
+
+        SmartDashboard.putBoolean("AlgaeCatcherBeamBreak", isBeamBreakTriggered());
+
         if (Constants.kLoggingRobot) {
             ((DoubleLogEntry) desStatesLogger).append(desiredAlgaeCatcherPower);
         }
@@ -288,8 +287,12 @@ public class AlgaeCatcher extends Subsystem {
      *
      * @return desired collector state
      */
-    public ALGAE_CATCHER_INTAKE_STATE getDesiredAlgaeCatcherState() {
+    public ALGAE_CATCHER_INTAKE_STATE getDesiredAlgaeCatcherIntakeState() {
         return desiredIntakeState;
+    }
+
+    public ALGAE_CATCHER_PIVOT_STATE getDesiredAlgaeCatcherPivotState() {
+        return desiredPivotState;
     }
 
     /**
