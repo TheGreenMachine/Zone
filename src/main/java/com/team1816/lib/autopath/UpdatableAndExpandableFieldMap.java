@@ -150,14 +150,14 @@ public class UpdatableAndExpandableFieldMap {
         return expandedMap;
     }
 
-    public boolean isPerfectOverlay(){
-        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
-
-        overlayedMaps.addFieldMap(this.getTargetExpandedMap(stableMap));
-        overlayedMaps.addFieldMap(currentMap);
-
-        return overlayedMaps.isPerfectOverlay();
-    }
+//    public boolean isPerfectOverlay(){
+//        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
+//
+//        overlayedMaps.addFieldMap(this.getTargetExpandedMap(stableMap));
+//        overlayedMaps.addFieldMap(currentMap);
+//
+//        return overlayedMaps.isPerfectOverlay();
+//    }
 
     public void updateCurrentMap(){
         if(updatableMapChanged) {
@@ -166,30 +166,30 @@ public class UpdatableAndExpandableFieldMap {
         }
     }
 
-    public String printExpansionMapTest(){
-        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
+//    public String printExpansionMapTest(){
+//        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
+//
+//        overlayedMaps.addFieldMap(this.getTargetExpandedMap(stableMap));
+//        overlayedMaps.addFieldMap(currentMap);
+//
+//        return overlayedMaps.toStringIndicateOverlays();
+//    }
 
-        overlayedMaps.addFieldMap(this.getTargetExpandedMap(stableMap));
-        overlayedMaps.addFieldMap(currentMap);
-
-        return overlayedMaps.toStringIndicateOverlays();
-    }
-
-    public String printOverlayedMaps(boolean indicateOverlay, boolean overlayStableMap, boolean overlayUpdatableMap, boolean overlayCurrentMap){
-        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
-
-        if(overlayStableMap)
-            overlayedMaps.addFieldMap(stableMap);
-        if(overlayUpdatableMap)
-            overlayedMaps.addFieldMap(updatableMap);
-        if(overlayCurrentMap)
-            overlayedMaps.addFieldMap(currentMap);
-
-        if(indicateOverlay)
-            return overlayedMaps.toStringIndicateOverlays();
-        else
-            return overlayedMaps.toString();
-    }
+//    public String printOverlayedMaps(boolean indicateOverlay, boolean overlayStableMap, boolean overlayUpdatableMap, boolean overlayCurrentMap){
+//        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
+//
+//        if(overlayStableMap)
+//            overlayedMaps.addFieldMap(stableMap);
+//        if(overlayUpdatableMap)
+//            overlayedMaps.addFieldMap(updatableMap);
+//        if(overlayCurrentMap)
+//            overlayedMaps.addFieldMap(currentMap);
+//
+//        if(indicateOverlay)
+//            return overlayedMaps.toStringIndicateOverlays();
+//        else
+//            return overlayedMaps.toString();
+//    }
 
     public FieldMap getTargetExpandedMap(FieldMap map){
         FieldMap targetExpandedMap = new FieldMap(map.getMapX(), map.getMapY());
@@ -202,18 +202,18 @@ public class UpdatableAndExpandableFieldMap {
         return targetExpandedMap;
     }
 
-    public int[][] getOverlayedMaps(boolean overlayStableMap, boolean overlayUpdatableMap, boolean overlayCurrentMap){
-        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
-
-        if(overlayStableMap)
-            overlayedMaps.addFieldMap(stableMap);
-        if(overlayUpdatableMap)
-            overlayedMaps.addFieldMap(updatableMap);
-        if(overlayCurrentMap)
-            overlayedMaps.addFieldMap(currentMap);
-
-        return overlayedMaps.getOverlayedFieldMaps();
-    }
+//    public int[][] getOverlayedMaps(boolean overlayStableMap, boolean overlayUpdatableMap, boolean overlayCurrentMap){
+//        OverlayedFieldMap overlayedMaps = new OverlayedFieldMap(mapX, mapY);
+//
+//        if(overlayStableMap)
+//            overlayedMaps.addFieldMap(stableMap);
+//        if(overlayUpdatableMap)
+//            overlayedMaps.addFieldMap(updatableMap);
+//        if(overlayCurrentMap)
+//            overlayedMaps.addFieldMap(currentMap);
+//
+//        return overlayedMaps.getOverlayedFieldMaps();
+//    }
 
     public FieldMap getCurrentMap() {
         return currentMap;

@@ -1,20 +1,20 @@
 package com.team1816.lib.hardware.factory;
 
 import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.*;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.team1816.core.configuration.Constants;
 import com.team1816.lib.hardware.MotorConfiguration;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.SubsystemConfig;
 import com.team1816.lib.hardware.components.motor.*;
 import com.team1816.lib.hardware.components.motor.configurations.FeedbackDeviceType;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.configuration.Constants;
 import edu.wpi.first.wpilibj.RobotBase;
 
 import java.util.Map;
@@ -216,7 +216,11 @@ public class MotorFactory {
             Map<String, PIDSlotConfiguration> pidConfigList,
             int remoteSensorId
     ) {
+        if(subsystem.motors == null) return;
         MotorConfiguration motorConfiguration = subsystem.motors.get(name);
+        if(motorConfiguration == null){
+            return;
+        }
         boolean isTalon = !(motor instanceof LazySparkMax || motor instanceof GhostMotor); // Talon also refers to VictorSPX, isCTRE just looks worse :)
 
         // for newly attached motors only
@@ -337,7 +341,7 @@ public class MotorFactory {
             }
 
         } else {
-            motor.selectFeedbackSensor(FeedbackDeviceType.HALL_SENSOR); // Only using hall sensors on sparks at the moment
+//            motor.selectFeedbackSensor(FeedbackDeviceType.HALL_SENSOR); // No longer using hall sensor
         }
 
         //Inversion last because other things might override?

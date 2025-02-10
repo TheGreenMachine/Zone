@@ -3,22 +3,22 @@ package com.team1816.season.auto.actions;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.actions.AutoAction;
-import com.team1816.season.subsystems.AlgaeArm;
+import com.team1816.season.subsystems.Elevator;
 
-public class AlgaeArmAction implements AutoAction {
+public class ElevatorQuickAction implements AutoAction {
     private RobotState robotState;
-    private AlgaeArm algaeArm;
-    private AlgaeArm.ALGAE_ARM_STATE desiredState;
+    private Elevator elevator;
+    private Elevator.ELEVATOR_STATE desiredState;
 
-    public AlgaeArmAction(AlgaeArm.ALGAE_ARM_STATE desiredState) {
+    public ElevatorQuickAction(Elevator.ELEVATOR_STATE desiredState) {
         this.robotState = Injector.get(RobotState.class);
-        this.algaeArm = Injector.get(AlgaeArm.class);
+        this.elevator = Injector.get(Elevator.class);
         this.desiredState = desiredState;
     }
 
     @Override
     public void start() {
-        algaeArm.setDesiredState(desiredState);
+        elevator.setDesiredState(desiredState);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AlgaeArmAction implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return robotState.actualAlgaeArmState == desiredState;
+        return robotState.actualElevatorState == desiredState;
     }
 
     @Override

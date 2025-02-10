@@ -1,18 +1,23 @@
 package com.team1816.lib.hardware.components.motor;
 
-import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.ControlFrame;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
+import com.team1816.core.configuration.Constants;
 import com.team1816.lib.hardware.MotionMagicSlotConfiguration;
-import com.team1816.lib.hardware.components.motor.configurations.*;
+import com.team1816.lib.hardware.components.motor.configurations.FeedbackDeviceType;
+import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
+import com.team1816.lib.hardware.components.motor.configurations.MotionCurveType;
 import com.team1816.lib.util.ConfigurationTranslator;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.configuration.Constants;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class LazyTalonFX extends TalonFX implements IGreenMotor {
@@ -43,7 +48,9 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
         super(deviceNumber, canBus);
         name = motorName;
         configurator = super.getConfigurator();
-        configurator.refresh(configs);
+        if(configurator != null) {
+            configurator.refresh(configs);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.team1816.lib.input_handler;
 
 import com.google.inject.Inject;
+import com.team1816.core.configuration.AddInputHandlersHere;
 import com.team1816.lib.Injector;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.bindings.ButtonBoardControllerBinding;
@@ -12,7 +13,6 @@ import com.team1816.lib.input_handler.controlOptions.Button;
 import com.team1816.lib.input_handler.controlOptions.Dpad;
 import com.team1816.lib.input_handler.controlOptions.Trigger;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.configuration.AddInputHandlersHere;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

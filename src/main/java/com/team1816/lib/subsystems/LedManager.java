@@ -1,11 +1,11 @@
 package com.team1816.lib.subsystems;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton; // Switched from javax.inject.Singleton
+import com.google.inject.Singleton;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.ledManager.ILEDManager;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.states.RobotState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -35,7 +35,7 @@ public class LedManager extends Subsystem {
     /**
      * Components
      */
-    private final ILEDManager ledManager;
+    private ILEDManager ledManager = null;
 
     /**
      * State

@@ -1,6 +1,5 @@
 package com.team1816.lib.hardware.components.gyro;
 
-import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 

@@ -19,74 +19,78 @@ public class OverlayedFieldMap {
         fieldMaps.add(fieldMap);
     }
 
-    public boolean isPerfectOverlay(){
-        int[][] overlayedFieldMaps = this.getOverlayedFieldMaps();
+//    public boolean isPerfectOverlay(){
+//        int[][] overlayedFieldMaps = this.getOverlayedFieldMaps();
+//
+//        int overlayAmt = -1;
+//
+//        for(int j = 0; j < overlayedFieldMaps.length; j++)
+//            for(int i = 0; i < overlayedFieldMaps[0].length; i++)
+//                if(overlayedFieldMaps[j][i] != 0 && overlayedFieldMaps[j][i] != overlayAmt)
+//                    if(overlayAmt == -1)
+//                        overlayAmt = overlayedFieldMaps[j][i];
+//                    else
+//                        return false;
+//
+//        return true;
+//    }
 
-        int overlayAmt = -1;
+    /**
+     * Commented this method as it creates a dangerously huge array size w/ too much memory
+     * @return
+     */
+//    public int[][] getOverlayedFieldMaps(){
+//        int[][] overlayedFieldMaps = new int[mapY][mapX];
+//
+//        for(FieldMap map : fieldMaps)
+//            for(int j = 0; j < mapY; j++)
+//                for(int i = 0; i < mapX; i++)
+//                    if(map.checkPixelHasObject(i, j))
+//                        overlayedFieldMaps[j][i]++;
+//
+//        return overlayedFieldMaps;
+//    }
 
-        for(int j = 0; j < overlayedFieldMaps.length; j++)
-            for(int i = 0; i < overlayedFieldMaps[0].length; i++)
-                if(overlayedFieldMaps[j][i] != 0 && overlayedFieldMaps[j][i] != overlayAmt)
-                    if(overlayAmt == -1)
-                        overlayAmt = overlayedFieldMaps[j][i];
-                    else
-                        return false;
+//    public String toStringIndicateOverlays(){
+//        int[][] intMap = this.getOverlayedFieldMaps();
+//
+//        StringBuilder stringReturn = new StringBuilder();
+//
+//        for(int j = intMap.length-1; j >= 0; j--) {
+//            stringReturn.append(j > 9 ? j+" " : j+"  ");
+//            for (int i = 0; i < intMap[0].length; i++)
+//                if(intMap[j][i] > 1)
+//                    stringReturn.append("@  ");
+//                else
+//                    stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]>9 ? intMap[j][i]+" " : intMap[j][i]+"  ");
+//            stringReturn.append("\n");
+//        }
+//
+//        stringReturn.append("   ");
+//        for(int i = 0; i < intMap[0].length; i++)
+//            stringReturn.append(i > 9 ? i+" " : i+"  ");
+//        stringReturn.append("\n");
+//
+//        return stringReturn.toString();
+//    }
 
-        return true;
-    }
-
-    public int[][] getOverlayedFieldMaps(){
-        int[][] overlayedFieldMaps = new int[mapY][mapX];
-
-        for(FieldMap map : fieldMaps)
-            for(int j = 0; j < mapY; j++)
-                for(int i = 0; i < mapX; i++)
-                    if(map.checkPixelHasObject(i, j))
-                        overlayedFieldMaps[j][i]++;
-
-        return overlayedFieldMaps;
-    }
-
-    public String toStringIndicateOverlays(){
-        int[][] intMap = this.getOverlayedFieldMaps();
-
-        StringBuilder stringReturn = new StringBuilder();
-
-        for(int j = intMap.length-1; j >= 0; j--) {
-            stringReturn.append(j > 9 ? j+" " : j+"  ");
-            for (int i = 0; i < intMap[0].length; i++)
-                if(intMap[j][i] > 1)
-                    stringReturn.append("@  ");
-                else
-                    stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]>9 ? intMap[j][i]+" " : intMap[j][i]+"  ");
-            stringReturn.append("\n");
-        }
-
-        stringReturn.append("   ");
-        for(int i = 0; i < intMap[0].length; i++)
-            stringReturn.append(i > 9 ? i+" " : i+"  ");
-        stringReturn.append("\n");
-
-        return stringReturn.toString();
-    }
-
-    public String toString(){
-        int[][] intMap = this.getOverlayedFieldMaps();
-
-        StringBuilder stringReturn = new StringBuilder();
-
-        for(int j = intMap.length-1; j >= 0; j--) {
-            stringReturn.append(j > 9 ? j+" " : j+"  ");
-            for (int i = 0; i < intMap[0].length; i++)
-                stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]>9 ? intMap[j][i]+" " : intMap[j][i]+"  ");
-            stringReturn.append("\n");
-        }
-
-        stringReturn.append("   ");
-        for(int i = 0; i < intMap[0].length; i++)
-            stringReturn.append(i > 9 ? i+" " : i+"  ");
-        stringReturn.append("\n");
-
-        return stringReturn.toString();
-    }
+//    public String toString(){
+//        int[][] intMap = this.getOverlayedFieldMaps();
+//
+//        StringBuilder stringReturn = new StringBuilder();
+//
+//        for(int j = intMap.length-1; j >= 0; j--) {
+//            stringReturn.append(j > 9 ? j+" " : j+"  ");
+//            for (int i = 0; i < intMap[0].length; i++)
+//                stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]>9 ? intMap[j][i]+" " : intMap[j][i]+"  ");
+//            stringReturn.append("\n");
+//        }
+//
+//        stringReturn.append("   ");
+//        for(int i = 0; i < intMap[0].length; i++)
+//            stringReturn.append(i > 9 ? i+" " : i+"  ");
+//        stringReturn.append("\n");
+//
+//        return stringReturn.toString();
+//    }
 }

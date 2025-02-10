@@ -3,6 +3,8 @@ package com.team1816.core.states;
 import com.ctre.phoenix6.StatusCode;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.configuration.FieldConfig;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.input_handler.InputHandler;
@@ -11,8 +13,6 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.visionUtil.VisionPoint;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.configuration.FieldConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -34,9 +34,9 @@ public class Orchestrator {
     /**
      * Subsystems
      */
-    private static Drive drive;
-    private static Camera camera;
-    private static LedManager ledManager;
+    private Drive drive;
+    private Camera camera;
+    private LedManager ledManager;
     //TODO add new subsystems here
     private InputHandler inputHandler;
 

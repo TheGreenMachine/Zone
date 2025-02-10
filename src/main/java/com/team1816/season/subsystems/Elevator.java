@@ -1,32 +1,15 @@
 package com.team1816.season.subsystems;
 
-import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.team1816.core.configuration.Constants;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
-import com.team1816.lib.hardware.components.motor.LazyTalonFX;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
-import com.team1816.lib.util.logUtil.GreenLogger;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.util.datalog.BooleanLogEntry;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import java.util.Optional;
 
 @Singleton
 public class Elevator extends Subsystem {
@@ -46,7 +29,7 @@ public class Elevator extends Subsystem {
      * States
      */
 
-    private ELEVATOR_STATE desiredElevatorState = ELEVATOR_STATE.GROUND;
+    private ELEVATOR_STATE desiredElevatorState = ELEVATOR_STATE.FEEDER;
 
     private boolean elevatorOutputsChanged = false;
 
@@ -54,15 +37,14 @@ public class Elevator extends Subsystem {
 
     private double desiredElevatorPosition = 0;
     private double actualElevatorPosition = 0;
-    private double actualElevatorDegrees = 0;
 
-
+    private double elevatorMotorRotationsPerUnit = factory.getConstant(NAME, "elevatorMotorRotationsPerUnit", 1);
 
     /**
      * Constants
      */
 
-    private final double elevatorGroundPosition = factory.getConstant(NAME, "elevatorGroundPosition", 1.0);
+    private final double elevatorFeederPosition = factory.getConstant(NAME, "elevatorFeederPosition", 1.0);
     private final double elevatorL1Position = factory.getConstant(NAME, "elevatorL1Position", 1.0);
     private final double elevatorL2Position = factory.getConstant(NAME, "elevatorL2Position", 1.0);
     private final double elevatorL3Position = factory.getConstant(NAME, "elevatorL3Position", 1.0);
@@ -81,23 +63,13 @@ public class Elevator extends Subsystem {
         super(NAME, inf, rs);
         elevatorMotor = factory.getMotor(NAME, "elevatorMotor");
 
-        elevatorMotor.selectPIDSlot(2);
+        elevatorMotor.selectPIDSlot(0);
 
         if (RobotBase.isSimulation()) {
             elevatorMotor.setMotionProfileMaxVelocity(12 / 0.05);
             elevatorMotor.setMotionProfileMaxAcceleration(12 / 0.08);
             ((GhostMotor) elevatorMotor).setMaxVelRotationsPerSec(240);
         }
-    }
-
-    /**
-     * Sets the desired state of the elevator
-     *
-     * @param desiredElevatorState ELEVATOR_STATE
-     */
-    public void setDesiredElevatorState(ELEVATOR_STATE desiredElevatorState) {
-        this.desiredElevatorState = desiredElevatorState;
-        elevatorOutputsChanged = true;
     }
 
     /**
@@ -122,6 +94,12 @@ public class Elevator extends Subsystem {
 
         elevatorCurrentDraw = elevatorMotor.getMotorOutputCurrent();
 
+        robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
+
+        if(!robotState.isCoralBeamBreakTriggered && robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE) {
+            desiredElevatorState = ELEVATOR_STATE.FEEDER;
+        }
+
         if (robotState.actualElevatorState != desiredElevatorState) {
             robotState.actualElevatorState = desiredElevatorState;
         }
@@ -137,8 +115,8 @@ public class Elevator extends Subsystem {
         if (elevatorOutputsChanged) {
             elevatorOutputsChanged = false;
             switch (desiredElevatorState) {
-                case GROUND -> {
-                    desiredElevatorPosition = elevatorGroundPosition;
+                case FEEDER -> {
+                    desiredElevatorPosition = elevatorFeederPosition;
                 }
                 case L1 -> {
                     desiredElevatorPosition = elevatorL1Position;
@@ -153,12 +131,12 @@ public class Elevator extends Subsystem {
                     desiredElevatorPosition = elevatorL4Position;
                 }
             }
-            elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 1.5, 35));
+            elevatorMotor.set(GreenControlMode.POSITION_CONTROL, desiredElevatorPosition);
         }
     }
 
-    public double getActualPivotPosition () {
-        return elevatorMotor.getSensorPosition();
+    public boolean isElevatorInRange(){
+        return Math.abs(elevatorMotor.getSensorPosition() - desiredElevatorPosition) < 5;
     }
 
     @Override
@@ -186,15 +164,14 @@ public class Elevator extends Subsystem {
      *
      * @return desired elevator state
      */
-    public ELEVATOR_STATE getDesiredElevatorState() {
-        return desiredElevatorState;
-    }
+    public ELEVATOR_STATE getDesiredElevatorState() {return desiredElevatorState;}
+    public ELEVATOR_STATE getDesisetredElevatorState() {return desiredElevatorState;}
 
     /**
      * Elevator enum
      */
     public enum ELEVATOR_STATE {
-        GROUND,
+        FEEDER,
         L1,
         L2,
         L3,

@@ -1,7 +1,5 @@
 package com.team1816.lib.autopath;
 
-import com.team1816.lib.autopath.FieldMap;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -144,19 +142,23 @@ public class InputFieldMap extends FieldMap {
         super.drawPolygon(verticesX, verticesY, fillPolygon);
     }
 
-    public int[][] getCombinedMap(){
-        int[][] intMap = super.getBaseIntMap();
-
-        for(int i = 0; i < inputLineX.size(); i++) {
-            intMap[inputLineY.get(i)[0]][inputLineX.get(i)[0]] += inputLineCount.get(i) * 2;
-            intMap[inputLineY.get(i)[1]][inputLineX.get(i)[1]] += inputLineCount.get(i) * 2;
-        }
-
-        for(int i = 0; i < inputCircleX.size(); i++)
-            intMap[inputCircleY.get(i)][inputCircleX.get(i)] += inputCircleCount.get(i)*20;
-
-        return intMap;
-    }
+    /**
+     * Commented this method as it creates a dangerously huge array size w/ too much memory
+     * @return
+     */
+//    public int[][] getCombinedMap(){
+//        int[][] intMap = super.getBaseIntMap();
+//
+//        for(int i = 0; i < inputLineX.size(); i++) {
+//            intMap[inputLineY.get(i)[0]][inputLineX.get(i)[0]] += inputLineCount.get(i) * 2;
+//            intMap[inputLineY.get(i)[1]][inputLineX.get(i)[1]] += inputLineCount.get(i) * 2;
+//        }
+//
+//        for(int i = 0; i < inputCircleX.size(); i++)
+//            intMap[inputCircleY.get(i)][inputCircleX.get(i)] += inputCircleCount.get(i)*20;
+//
+//        return intMap;
+//    }
     public FieldMap getBaseMap(){
         return super.getCopy();
     }
@@ -263,24 +265,24 @@ public class InputFieldMap extends FieldMap {
         return super.toString();
     }
 
-    @Override
-    public String toString(){
-        int[][] intMap = this.getCombinedMap();
-
-        StringBuilder stringReturn = new StringBuilder();
-
-        for(int j = intMap.length-1; j >= 0; j--) {
-            stringReturn.append(j > 9 ? j+" " : j+"  ");
-            for (int i = 0; i < intMap[0].length; i++)
-                stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]>9 ? intMap[j][i]+" " : intMap[j][i]+"  ");
-            stringReturn.append("\n");
-        }
-
-        stringReturn.append("   ");
-        for(int i = 0; i < intMap[0].length; i++)
-            stringReturn.append(i > 9 ? i+" " : i+"  ");
-        stringReturn.append("\n");
-
-        return stringReturn.toString();
-    }
+//    @Override
+//    public String toString(){
+//        int[][] intMap = this.getCombinedMap();
+//
+//        StringBuilder stringReturn = new StringBuilder();
+//
+//        for(int j = intMap.length-1; j >= 0; j--) {
+//            stringReturn.append(j > 9 ? j+" " : j+"  ");
+//            for (int i = 0; i < intMap[0].length; i++)
+//                stringReturn.append(intMap[j][i] == 0 ? "   ": intMap[j][i]>9 ? intMap[j][i]+" " : intMap[j][i]+"  ");
+//            stringReturn.append("\n");
+//        }
+//
+//        stringReturn.append("   ");
+//        for(int i = 0; i < intMap[0].length; i++)
+//            stringReturn.append(i > 9 ? i+" " : i+"  ");
+//        stringReturn.append("\n");
+//
+//        return stringReturn.toString();
+//    }
 }

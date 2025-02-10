@@ -1,10 +1,11 @@
 package com.team1816.lib.subsystems.vision;
 
-import com.team1816.lib.Infrastructure;
-import com.team1816.lib.subsystems.Subsystem;
+import com.google.inject.Inject;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.core.states.RobotState;
+import com.team1816.lib.Infrastructure;
+import com.team1816.lib.subsystems.Subsystem;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
@@ -14,7 +15,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.RobotBase;
-import jakarta.inject.Inject;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;

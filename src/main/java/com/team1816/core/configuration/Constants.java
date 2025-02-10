@@ -4,8 +4,6 @@ import com.google.inject.Singleton;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Symmetry;
 import com.team1816.lib.hardware.factory.RobotFactory;
-import com.team1816.lib.variableInputs.Numeric;
-import com.team1816.lib.variableInputs.VariableInput;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -55,7 +53,7 @@ public class Constants {
     /**
      * Field characterization
      */
-    public static final Symmetry fieldSymmetry = Symmetry.AXIS;
+    public static final Symmetry fieldSymmetry = Symmetry.ORIGIN;
     public static final double fieldCenterY = 8.05 / 2.0; //FIXME
     public static final double fieldCenterX = 17.55 / 2.0; //FIXME
     public static final Pose2d fieldCenterPose = new Pose2d(

@@ -22,6 +22,7 @@ import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
+import com.team1816.season.TunerConstants;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -135,8 +136,8 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
         // Drivetrain characterization
         LegacySwerveDrivetrainConstants constants = new LegacySwerveDrivetrainConstants()
-                .withCANbusName(factory.getCanBusName())
-                .withPigeon2Id(factory.getPigeonID());
+                .withCANbusName(TunerConstants.kCANBus.getName())
+                .withPigeon2Id(TunerConstants.DrivetrainConstants.Pigeon2Id);
 
         train = new LegacySwerveDrivetrain(constants, swerveModules);
         train.getDaqThread().setThreadPriority(99); // Making Odometry thread top Priority

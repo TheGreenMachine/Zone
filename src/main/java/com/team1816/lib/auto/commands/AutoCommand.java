@@ -1,5 +1,6 @@
 package com.team1816.lib.auto.commands;
 
+import com.team1816.core.configuration.Constants;
 import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
@@ -7,7 +8,6 @@ import com.team1816.lib.auto.actions.AutoAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.configuration.Constants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;

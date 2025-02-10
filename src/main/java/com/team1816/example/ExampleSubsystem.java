@@ -2,11 +2,11 @@ package com.team1816.example;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.pcm.ISolenoid;
 import com.team1816.lib.subsystems.Subsystem;
-import com.team1816.core.states.RobotState;
 
 /**
  * All subsystems have an @Singleton annotation added to the top of their class declaration

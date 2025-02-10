@@ -1,5 +1,7 @@
 package com.team1816.lib.input_handler;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.team1816.lib.input_handler.bindings.ButtonBoardControllerBinding;
 import com.team1816.lib.input_handler.bindings.ControllerBinding;
 import com.team1816.lib.input_handler.controlOptions.*;
@@ -10,14 +12,8 @@ import com.team1816.lib.input_handler.events.TriggerEvent;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 
-import java.io.File;
 import java.util.EnumMap;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**

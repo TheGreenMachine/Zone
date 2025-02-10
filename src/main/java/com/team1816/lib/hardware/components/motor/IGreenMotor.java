@@ -3,7 +3,9 @@ package com.team1816.lib.hardware.components.motor;
 import com.ctre.phoenix.motorcontrol.ControlFrame;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.team1816.lib.hardware.components.motor.configurations.*;
+import com.team1816.lib.hardware.components.motor.configurations.FeedbackDeviceType;
+import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
+import com.team1816.lib.hardware.components.motor.configurations.MotionCurveType;
 
 public interface IGreenMotor {
     //Some getter methods add an underscore after get to avoid conflicts in LazyMotor classes

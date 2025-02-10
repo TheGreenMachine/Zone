@@ -5,10 +5,12 @@ import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
+//import com.team1816.lib.auto.modes.AutopathMode;
+import com.team1816.lib.auto.modes.DefaultMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
+//import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.season.auto.modes.TestAllDynamicPointsAutoMode;
-import com.team1816.season.auto.modes.TrajectoryOnlyAutoMode;
+import com.team1816.season.auto.modes.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,7 +25,7 @@ public class AutoModeManager {
     /**
      * Properties: Selection
      */
-    public static RobotState robotState;
+    private RobotState robotState;
     private final SendableChooser<DesiredAuto> autoModeChooser;
     private final SendableChooser<Color> sideChooser;
     private DesiredAuto desiredAuto;
@@ -56,8 +58,8 @@ public class AutoModeManager {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
         autoModeChooser.setDefaultOption(
-            DesiredAuto.DRIVE_STRAIGHT.name(),
-            DesiredAuto.DRIVE_STRAIGHT
+            DesiredAuto.DEFAULT.name(),
+            DesiredAuto.DEFAULT
         );
 
         SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
@@ -79,7 +81,7 @@ public class AutoModeManager {
         autoMode = new DriveStraightMode();
         autoModeThread = new Thread(autoMode::run);
         desiredAuto = DesiredAuto.DRIVE_STRAIGHT;
-        teamColor = Color.RED;
+        teamColor = sideChooser.getSelected();
         robotState.allianceColor = teamColor;
     }
 
@@ -183,13 +185,33 @@ public class AutoModeManager {
      * Enum for AutoModes
      */
     enum DesiredAuto {
+        DEFAULT,
+
         DRIVE_STRAIGHT,
 
 //        AUTOPATH,
 
-        DYNAMIC_TRAJECTORY_ONLY,
+        TOP_PLACE_1_AUTOMODE,
 
-        TEST_DYNAMIC_PATHS
+        TOP_PLACE_2_AUTOMODE,
+
+        MIDDLE_PLACE_1_AUTOMODE,
+
+        MIDDLE_PLACE_2_AUTOMODE,
+
+        BOTTOM_PLACE_1_AUTOMODE,
+
+        BOTTOM_PLACE_2_AUTOMODE,
+
+//        DYNAMIC_TRAJECTORY_ONLY,
+
+        DYNAMIC_PLACE_1,
+
+        DYNAMIC_PLACE_2,
+
+        DYNAMIC_PLACE_3
+
+//        TEST_DYNAMIC_PATHS
         }
 
 
@@ -202,21 +224,52 @@ public class AutoModeManager {
      */
     private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
         switch (mode) {
+            case DEFAULT:
+                robotState.dIsAutoDynamic = false;
+                return new DefaultMode();
             case DRIVE_STRAIGHT:
-                robotState.isAutoDynamic = false;
+                robotState.dIsAutoDynamic = false;
                 return new DriveStraightMode();
 //            case AUTOPATH:
-//                robotState.isAutoDynamic = false;
+//                robotState.dIsAutoDynamic = false;
 //                return new AutopathMode();
-            case DYNAMIC_TRAJECTORY_ONLY:
-                robotState.isAutoDynamic = true;
-                RobotState.dynamicAutoChanged = true;
-                return new TrajectoryOnlyAutoMode(robotState);
-            case TEST_DYNAMIC_PATHS:
-                return new TestAllDynamicPointsAutoMode();
+            case MIDDLE_PLACE_1_AUTOMODE:
+                robotState.dIsAutoDynamic = false;
+                return new MiddlePlace1AutoMode(color);
+            case MIDDLE_PLACE_2_AUTOMODE:
+                robotState.dIsAutoDynamic = false;
+                return new MiddlePlace2AutoMode(color);
+            case BOTTOM_PLACE_1_AUTOMODE:
+                robotState.dIsAutoDynamic = false;
+                return new BottomPlace1AutoMode(color);
+            case BOTTOM_PLACE_2_AUTOMODE:
+                robotState.dIsAutoDynamic = false;
+                return new BottomPlace2AutoMode(color);
+            case DYNAMIC_PLACE_1:
+                robotState.dIsAutoDynamic = true;
+                return new DynamicPlace1();
+            case DYNAMIC_PLACE_2:
+                robotState.dIsAutoDynamic = true;
+                return new DynamicPlace2();
+            case DYNAMIC_PLACE_3:
+                robotState.dIsAutoDynamic = true;
+                return new DynamicPlace3();
+            case TOP_PLACE_1_AUTOMODE:
+                robotState.dIsAutoDynamic = false;
+                return  new TopPlace1AutoMode(color);
+            case TOP_PLACE_2_AUTOMODE:
+                robotState.dIsAutoDynamic = false;
+                return new TopPlace2AutoMode(color);
+//            case DYNAMIC_TRAJECTORY_ONLY:
+//                robotState.isAutoDynamic = true;
+//                RobotState.dynamicAutoChanged = true;
+//                return new DynamicTrajectoryOnlyAutoMode(robotState);
+//            case TEST_DYNAMIC_PATHS:
+//                return new TestAllDynamicPointsAutoMode();
             default:
-                GreenLogger.log("Defaulting to drive straight mode");
-                return new DriveStraightMode();
+            robotState.dIsAutoDynamic = false;
+                GreenLogger.log("Defaulting to DefaultMode");
+                return new DefaultMode();
         }
     }
 }

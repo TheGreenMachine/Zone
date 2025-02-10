@@ -1,7 +1,5 @@
 package com.team1816.lib.auto.commands;
 
-import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
-
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
 /**
  * A command that uses two PID controllers ({@link PIDController}) and a ProfiledPIDController
