@@ -96,6 +96,8 @@ public class CoralArm extends Subsystem {
         super.desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/desiredPivotPosition");
         super.actStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/actualPivotPosition");
 
+        zeroSensors();
+
         if (RobotBase.isSimulation()) {
             pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
             pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
@@ -221,7 +223,7 @@ public class CoralArm extends Subsystem {
 
     @Override
     public void zeroSensors() {
-        // no implementation
+        pivotMotor.setSensorPosition(0);
     }
 
     @Override

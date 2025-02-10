@@ -85,16 +85,16 @@ public class AlgaeCatcher extends Subsystem {
 
         algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", 1));
 
-        algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", -0.5);
-        algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", -0.1);
-        algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", 0.25);
+        algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", 0);
+        algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", 0);
+        algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", 0);
 
         SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
         intakeMotor.selectPIDSlot(0);
         pivotMotor.selectPIDSlot(1);
 
-        pivotMotor.setSensorPosition(0, 50);
+        zeroSensors();
 
         if (RobotBase.isSimulation()) {
             pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
@@ -264,7 +264,7 @@ public class AlgaeCatcher extends Subsystem {
 
     @Override
     public void zeroSensors() {
-        //No implementation
+        pivotMotor.setSensorPosition(0);
     }
 
     @Override
