@@ -27,7 +27,7 @@ public class AlgaeCatcher extends Subsystem {
      * Components
      */
     private final IGreenMotor intakeMotor;
-    private final IGreenMotor positionMotor;
+    private final IGreenMotor pivotMotor;
 
     private final DigitalInput algaeSensor;
 
@@ -79,7 +79,7 @@ public class AlgaeCatcher extends Subsystem {
     public AlgaeCatcher(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
         intakeMotor = factory.getMotor(NAME, "algaeCatcherIntakeMotor");
-        positionMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
+        pivotMotor = factory.getMotor(NAME, "algaeCatcherPositionMotor");
 
 
         algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", 1));
@@ -91,12 +91,14 @@ public class AlgaeCatcher extends Subsystem {
         SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
         intakeMotor.selectPIDSlot(0);
-        positionMotor.selectPIDSlot(1);
+        pivotMotor.selectPIDSlot(1);
 
+        pivotMotor.setSensorPosition(0, 50);
+        
         if (RobotBase.isSimulation()) {
-            positionMotor.setMotionProfileMaxVelocity(12 / 0.05);
-            positionMotor.setMotionProfileMaxAcceleration(12 / 0.08);
-            ((GhostMotor) positionMotor).setMaxVelRotationsPerSec(240);
+            pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
+            pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
+            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(240);
         }
 
         if (Constants.kLoggingRobot) {
@@ -146,6 +148,10 @@ public class AlgaeCatcher extends Subsystem {
      */
     @Override
     public void readFromHardware() {
+        System.out.println(pivotMotor.getSensorPosition());
+        System.out.println(intakeMotor.getSensorVelocity());
+        System.out.println(desiredIntakeState.name());
+
         actualAlgaeCatcherVelocity = intakeMotor.getMotorOutputPercent();
         algaeCatcherCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
@@ -214,11 +220,13 @@ public class AlgaeCatcher extends Subsystem {
                 case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
             }
 
-            intakeMotor.set(GreenControlMode.VOLTAGE_CONTROL, desiredAlgaeCatcherPower);
+            intakeMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredAlgaeCatcherPower);
             algaeCatcherCurrentDrawLogger.append(desiredAlgaeCatcherPower);
+
+            System.out.println(desiredAlgaeCatcherPower);
         }
 
-        robotState.algaeCatcherPivot.setAngle(robotState.algaeBaseAngle + positionMotor.getSensorPosition() / algaeMotorRotationsPerDegree);
+        robotState.algaeCatcherPivot.setAngle(robotState.algaeBaseAngle + pivotMotor.getSensorPosition() / algaeMotorRotationsPerDegree);
 
         if(desiredPivotStateChanged) {
             desiredPivotStateChanged = false;
@@ -242,12 +250,12 @@ public class AlgaeCatcher extends Subsystem {
                     desiredPosition = algaeL3Position;
                 }
             }
-            positionMotor.set(GreenControlMode.POSITION_CONTROL, desiredPosition);
+            pivotMotor.set(GreenControlMode.POSITION_CONTROL, desiredPosition);
         }
     }
 
     public boolean isAlgaeCatcherPivotInRange(){
-        return Math.abs(positionMotor.getSensorPosition() - desiredPosition) < 5;
+        return Math.abs(pivotMotor.getSensorPosition() - desiredPosition) < 5;
     }
 
     public boolean isAlgaeCatcherIntakeInRange(){

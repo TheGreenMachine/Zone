@@ -48,6 +48,71 @@ subsystems:
             FREnc: 5
             FLEnc: 8
             RLEnc: 11
+        swerveModules:
+            modules:
+                backRight:
+                    drive: RRDr
+                    azimuth: RRAz
+                    canCoder: RREnc
+                    xCoord: -11.875
+                    yCoord: -11.875
+                    constants:
+                        encoderOffset: 0.3076171875
+                        couplingRatio: 3.589
+                        freeSpin12VRPS: 104
+                        invertSensorPhase: 1
+                frontRight:
+                    drive: FRDr
+                    azimuth: FRAz
+                    canCoder: FREnc
+                    xCoord: 7.125
+                    yCoord: -11.875
+                    constants:
+                        encoderOffset: 0.014404296875
+                        couplingRatio: 3.579
+                        freeSpin12VRPS: 101
+                        invertSensorPhase: 1
+                frontLeft:
+                    drive: FLDr
+                    azimuth: FLAz
+                    canCoder: FLEnc
+                    xCoord: 7.125
+                    yCoord: 11.875
+                    constants:
+                        encoderOffset: 0.34228515625
+                        couplingRatio: 3.576
+                        freeSpin12VRPS: 101
+                        invertSensorPhase: 1
+                backLeft:
+                    drive: RLDr
+                    azimuth: RLAz
+                    canCoder: RLEnc
+                    xCoord: -11.875
+                    yCoord: 11.875
+                    constants:
+                        encoderOffset: 0.23779296875
+                        couplingRatio: 3.572
+                        freeSpin12VRPS: 101
+                        invertSensorPhase: 1
+            drivePID:
+                slot0:
+                    kP: 0.0065
+                    kI: 0
+                    kD: 0.00005
+                    kV: 0.00925
+                    kS: 0
+                    kA: 0
+                    kG: 0
+            azimuthPID:
+                slot0:
+                    kP: 5
+                    kI: 0
+                    kD: 0
+                    kV: 0
+                    kS: 0
+                    kA: 0
+                    kG: 0
+                    allowableError: 5
         constants:
             ## Positional Configurations ##
             openLoopRampRate: 0.1
@@ -56,6 +121,7 @@ subsystems:
             ## Velocity Constraints ##
             maxRotVel: 0.8 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
+            wheelDiameter: 4
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
@@ -118,7 +184,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: false
+        implemented: true
         motors:
             algaeCatcherIntakeMotor:
                 motorType: TalonFX
@@ -129,7 +195,7 @@ subsystems:
                 motorType: TalonFX
                 motorName: algaeCatcherPositionMotor
                 id: 15
-                invertMotor: false
+                invertMotor: true
         pidConfig:
             slot0: #Intake
                 kP: 5
@@ -140,7 +206,7 @@ subsystems:
                 kA: 0
                 kG: 0
             slot1: #Position
-                kP: 5
+                kP: .05
                 kI: 0
                 kD: 0
                 kV: 0
@@ -148,9 +214,9 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            algaeCollectSpeed: -.75
+            algaeCollectSpeed: 0
             algaeHoldSpeed: 0
-            algaeReleaseSpeed: 1
+            algaeReleaseSpeed: 0
 
             algaeSensorChannel: 1
 
@@ -158,8 +224,8 @@ subsystems:
             intakePosition: 7.589
             holdPosition: 10.669
             outtakePosition: 10.699
-            algaeL2Position: 17.082
-            algaeL3Position: 29.919
+            algaeL2Position: 25
+            algaeL3Position: 40
 
             algaeMotorRotationsPerDegree: 8
     elevator:

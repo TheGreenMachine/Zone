@@ -319,7 +319,8 @@ public class Robot extends TimedRobot {
             inputHandler.listenActionPressAndRelease(
                     "intake/OuttakeAlgae",
                     (pressed) ->{
-                        algaeCatcher.setDesiredIntakeState((pressed && AlgaeCatcher.robotState.isCoralBeamBreakTriggered) ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE);
+                        algaeCatcher.setDesiredIntakeState(pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE);
+//                        System.out.println("I've been set!");
                     }
             );
             inputHandler.listenAction(
@@ -384,7 +385,7 @@ public class Robot extends TimedRobot {
                     "pivotA1/L3",
                     ActionState.PRESSED,
                     () -> {
-                        System.out.println("hi i activated :3");
+//                        System.out.println("hi i activated :3");
                         if(CoralArm.robotState.isCoralBeamBreakTriggered){
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
@@ -583,7 +584,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledPeriodic() {
-        inputHandler.updateControllerLayout();
+//        inputHandler.updateControllerLayout();
 
         try {
             if (RobotController.getUserButton()) {

@@ -156,8 +156,8 @@ public class RobotState {
     /**
      * Initializes RobotState and field
      */
-    @Inject
     public RobotState() {
+        resetPosition();
         FieldConfig.setupField(field);
     }
 
@@ -169,6 +169,24 @@ public class RobotState {
     public final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     public EstimatedRobotPose currentVisionEstimatedPose;
     public boolean currentCamFind;
+
+    /**
+     * Resets drivetrain position to a specified pose of drivetrain
+     *
+     * @param initial_field_to_vehicle
+     */
+    public synchronized void resetPosition(Pose2d initial_field_to_vehicle) {
+        fieldToVehicle = initial_field_to_vehicle;
+    }
+
+    /**
+     * Resets the drivetrain to its default "zero" pose
+     *
+     * @see Constants
+     */
+    public synchronized void resetPosition() {
+        resetPosition(Constants.kDefaultZeroingPose);
+    }
 
     /**
      * Resets all values stored in RobotState

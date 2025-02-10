@@ -73,7 +73,7 @@ public abstract class Drive
     /**
      * Components
      */
-    protected LedManager ledManager;
+    protected static LedManager ledManager;
     protected IPigeonIMU pigeon;
     public Orchestra orchestra;
     public boolean orchestraInit = false;
@@ -141,12 +141,6 @@ public abstract class Drive
     );
 
     public static final double kWheelCircumferenceMeters = Units.inchesToMeters(kDriveWheelDiameterInches) * Math.PI;
-
-    public static double kTrackScrubFactor = factory.getConstant(
-        NAME,
-        "kTrackScrubFactor",
-        1
-    );
 
     // Constraints
     public static final double kPathFollowingMaxAccelMeters = factory.getConstant(

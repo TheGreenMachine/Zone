@@ -11,7 +11,7 @@ driver:
     a: pivotElevatorAndCoralL1
     b: pivotElevatorAndCoralL2
     x: pivotA1/L3
-    y: pivotA2/L4
+    y: intake/OuttakeAlgae
   axes:
     rightTrigger:
     leftTrigger:
