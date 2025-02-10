@@ -55,6 +55,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void selectFeedbackSensor(FeedbackDeviceType deviceType) {
+        GreenLogger.log("Cannot select feedback sensor on SparkMax");
 //        encoder = configureRelativeEncoder(deviceType);
     }
 
