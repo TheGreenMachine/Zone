@@ -10,6 +10,7 @@ import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -249,7 +250,7 @@ public class AlgaeCatcher extends Subsystem {
                     desiredPosition = algaeL3Position;
                 }
             }
-            pivotMotor.set(GreenControlMode.POSITION_CONTROL, desiredPosition);
+            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPosition, .1, 40));
         }
     }
 

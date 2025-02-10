@@ -10,8 +10,8 @@ driver:
   buttonpad:
     a: activationDeepHanger
     b: intake/OuttakeAlgae
-    x: outtakeCoral
-    y: pivotElevatorAndCoralL1
+    x: pivotA1/L3
+    y: pivotA2/L4
   axes:
     rightTrigger:
     leftTrigger:

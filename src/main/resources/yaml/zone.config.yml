@@ -191,11 +191,16 @@ subsystems:
                 motorName: algaeCatcherIntakeMotor
                 id: 14
                 invertMotor: false
+                currentLimit: 20
             algaeCatcherPositionMotor:
                 motorType: TalonFX
                 motorName: algaeCatcherPositionMotor
                 id: 15
                 invertMotor: true
+                currentLimit: 20
+                motionMagic:
+                    expoKV: 0.035
+                    expoKA: 0.065
         pidConfig:
             slot0: #Intake
                 kP: 5
@@ -206,17 +211,18 @@ subsystems:
                 kA: 0
                 kG: 0
             slot1: #Position
-                kP: .05
-                kI: 0
-                kD: 0
+                kP: 0.6
+                ki: 0
+                kD: 0.02
                 kV: 0
                 kS: 0
                 kA: 0
                 kG: 0
+                gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: 0
+            algaeCollectSpeed: -75
             algaeHoldSpeed: 0
-            algaeReleaseSpeed: 0
+            algaeReleaseSpeed: 100
 
             algaeSensorChannel: 1
 
@@ -227,7 +233,7 @@ subsystems:
             algaeL2Position: 25
             algaeL3Position: 40
 
-            algaeMotorRotationsPerDegree: 8
+            algaeMotorRotationsPerDegree: .25
     elevator:
         implemented: false
         motors:
@@ -277,7 +283,7 @@ infrastructure:
     ## Pigeon ##
     pigeonId: 5
     isPigeon2: true
-inputHandler: drivercentric # the default input handler
+inputHandler: sim # the default input handler
 constants:
     zeroingButton: 9 # channel of DIO port
     enableMusic: 0
