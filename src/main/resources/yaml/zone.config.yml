@@ -187,7 +187,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: true
+        implemented: false
         motors:
             algaeCatcherIntakeMotor:
                 motorType: TalonFX
@@ -245,11 +245,14 @@ subsystems:
                 motorName: elevatorMotor
                 id: 16
                 invertMotor: false
+                motionMagic:
+                    expoKV: 0.4
+                    expoKA: 0.4
         pidConfig:
             slot0:
                 kP: 5
                 kI: 0
-                kD: 0
+                kD: 0.02
                 kV: 0
                 kS: 0
                 kA: 0
