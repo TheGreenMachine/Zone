@@ -150,6 +150,9 @@ subsystems:
                 motorName: coralArmPivotMotor
                 id: 13
                 invertMotor: false
+                motionMagic:
+                    expoKV: 0.4
+                    expoKA: 0.4
         pidConfig:
             slot0: #Intake
                 kP: 5
