@@ -148,9 +148,9 @@ public class AlgaeCatcher extends Subsystem {
      */
     @Override
     public void readFromHardware() {
-        System.out.println(pivotMotor.getSensorPosition());
-        System.out.println(intakeMotor.getSensorVelocity());
-        System.out.println(desiredIntakeState.name());
+        System.out.println("Pivot motor sensor position: " + pivotMotor.getSensorPosition());
+        System.out.println("Intake motor sensor velocity: " + intakeMotor.getSensorVelocity());
+        System.out.println("Desired intake state: " + desiredIntakeState.name());
 
         actualAlgaeCatcherVelocity = intakeMotor.getMotorOutputPercent();
         algaeCatcherCurrentDraw = intakeMotor.getMotorOutputCurrent();
