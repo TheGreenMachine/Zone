@@ -471,7 +471,7 @@ public class Robot extends TimedRobot {
 
         //TODO add new subsystem inits here
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-        algaeCatcher.setDesiredIntakeState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP);
+        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
         coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
@@ -498,7 +498,7 @@ public class Robot extends TimedRobot {
             infrastructure.startCompressor();
 
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-            algaeCatcher.setDesiredIntakeState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP);
+            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
 //            autopather.autopathMaxCalcMilli = 5;

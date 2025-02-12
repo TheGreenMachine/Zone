@@ -96,23 +96,22 @@ subsystems:
                         invertSensorPhase: 1
             drivePID:
                 slot0:
-                    kP: 0.0065
+                    kP: 100
                     kI: 0
-                    kD: 0.00005
-                    kV: 0.00925
-                    kS: 0
+                    kD: 0.5
+                    kV: 2.66
+                    kS: 0.1
                     kA: 0
                     kG: 0
             azimuthPID:
                 slot0:
-                    kP: 5
+                    kP: 0.1
                     kI: 0
                     kD: 0
-                    kV: 0
+                    kV: 0.124
                     kS: 0
                     kA: 0
                     kG: 0
-                    allowableError: 5
         constants:
             ## Positional Configurations ##
             openLoopRampRate: 0.1
@@ -145,11 +144,13 @@ subsystems:
                 motorName: coralArmIntakeMotor
                 id: 12
                 invertMotor: false
+                currentLimit: 20
             coralArmPivotMotor:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
                 id: 13
                 invertMotor: false
+                currentLimit: 20
                 motionMagic:
                     expoKV: 0.4
                     expoKA: 0.4
@@ -244,13 +245,14 @@ subsystems:
                 motorType: TalonFX
                 motorName: elevatorMotor
                 id: 16
-                invertMotor: false
+                invertMotor: true
+                currentLimit: 20
                 motionMagic:
                     expoKV: 0.4
                     expoKA: 0.4
         pidConfig:
             slot0:
-                kP: 5
+                kP: .8
                 kI: 0
                 kD: 0.02
                 kV: 0
@@ -259,11 +261,11 @@ subsystems:
                 kG: 0
         constants: # TODO: all of these
             elevatorRestPosition: 0
-            elevatorFeederPosition: 1
-            elevatorL1Position: 2
-            elevatorL2Position: 2.5
-            elevatorL3Position: 3
-            elevatorL4Position: 3.5
+            elevatorFeederPosition: 0
+            elevatorL1Position: 0
+            elevatorL2Position: 7.0
+            elevatorL3Position: 21.8
+            elevatorL4Position: 57.2
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:

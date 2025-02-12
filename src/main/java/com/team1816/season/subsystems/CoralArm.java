@@ -133,7 +133,7 @@ public class CoralArm extends Subsystem {
 
     public boolean isBeamBreakTriggered() {
         if(RobotBase.isSimulation())
-            return false;
+            return true;
 
         return !coralSensor.get();
     }
@@ -210,13 +210,12 @@ public class CoralArm extends Subsystem {
             desiredPivotStateChanged = false;
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
-            pivotMotor.set(GreenControlMode.POSITION_CONTROL, desiredPivotPosition);
+            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 0, 0));
         }
-        pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 0, 0));
     }
 
     public boolean isCoralArmPivotInRange(){
-        return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 5;
+        return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 1;
     }
 
     public boolean isCoralArmIntakeInRange(){

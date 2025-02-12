@@ -149,9 +149,9 @@ public class AlgaeCatcher extends Subsystem {
      */
     @Override
     public void readFromHardware() {
-        System.out.println(pivotMotor.getSensorPosition());
-        System.out.println(intakeMotor.getSensorVelocity());
-        System.out.println(desiredIntakeState.name());
+//        System.out.println(pivotMotor.getSensorPosition());
+//        System.out.println(intakeMotor.getSensorVelocity());
+//        System.out.println(desiredIntakeState.name());
 
         actualAlgaeCatcherVelocity = intakeMotor.getMotorOutputPercent();
         algaeCatcherCurrentDraw = intakeMotor.getMotorOutputCurrent();
@@ -250,12 +250,12 @@ public class AlgaeCatcher extends Subsystem {
                     desiredPosition = algaeL3Position;
                 }
             }
-            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPosition, .1, 40));
+            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPosition, .25, 40));
         }
     }
 
     public boolean isAlgaeCatcherPivotInRange(){
-        return Math.abs(pivotMotor.getSensorPosition() - desiredPosition) < 5;
+        return Math.abs(pivotMotor.getSensorPosition() - desiredPosition) < 2;
     }
 
     public boolean isAlgaeCatcherIntakeInRange(){
