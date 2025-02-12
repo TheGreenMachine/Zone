@@ -188,7 +188,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: false
+        implemented: true
         motors:
             algaeCatcherIntakeMotor:
                 motorType: TalonFX
@@ -215,7 +215,7 @@ subsystems:
                 kA: 0
                 kG: 0
             slot1: #Position
-                kP: 0.6
+                kP: 0.8
                 ki: 0
                 kD: 0.02
                 kV: 0
