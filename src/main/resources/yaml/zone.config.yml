@@ -65,7 +65,7 @@ subsystems:
                     drive: FRDr
                     azimuth: FRAz
                     canCoder: FREnc
-                    xCoord: 7.125
+                    xCoord: 11.875
                     yCoord: -11.875
                     constants:
                         encoderOffset: 0.014404296875
@@ -76,7 +76,7 @@ subsystems:
                     drive: FLDr
                     azimuth: FLAz
                     canCoder: FLEnc
-                    xCoord: 7.125
+                    xCoord: 11.875
                     yCoord: 11.875
                     constants:
                         encoderOffset: 0.34228515625
