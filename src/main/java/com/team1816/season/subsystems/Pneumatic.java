@@ -44,7 +44,7 @@ public class Pneumatic extends Subsystem {
     @Inject
     public Pneumatic(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
-        doublePneumatic = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
+        doublePneumatic = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 7, 6);
     }
 
     public PNEUMATIC_STATE getDesiredState() {
@@ -66,7 +66,7 @@ public class Pneumatic extends Subsystem {
 
     @Override
     public void readFromHardware() {
-        if (doublePneumatic.get() == DoubleSolenoid.Value.kForward) {
+        if (doublePneumatic.get() == DoubleSolenoid.Value.kReverse) {
             actualPneumaticState = PNEUMATIC_STATE.ON;
         } else {
             actualPneumaticState = PNEUMATIC_STATE.OFF;
@@ -80,14 +80,14 @@ public class Pneumatic extends Subsystem {
         if (pneumaticOutputsChanged) {
             pneumaticOutputsChanged = false;
 
-            doublePneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+            doublePneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON ? DoubleSolenoid.Value.kReverse: DoubleSolenoid.Value.kForward);
         }
     }
 
     @Override
     public void zeroSensors() {
         desiredPneumaticState = PNEUMATIC_STATE.OFF;
-        doublePneumatic.set(DoubleSolenoid.Value.kReverse);
+        doublePneumatic.set(DoubleSolenoid.Value.kForward);
     }
 
     @Override
