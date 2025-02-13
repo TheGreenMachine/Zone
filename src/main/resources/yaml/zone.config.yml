@@ -269,9 +269,10 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: false
+        implemented: true
         solenoids:
-            pneumatic: -1 #idk wtf this is ngl
+            pneumatic: 7 #idk wtf this is ngl
+            pneumatic2: 6
         constants:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
@@ -287,7 +288,7 @@ infrastructure:
     ## Pneumatics Control ##
     compressorEnabled: false
     pcmIsRev: false
-    pcmId: -1
+    pcmId: 0
     ## Pigeon ##
     pigeonId: 5
     isPigeon2: true
