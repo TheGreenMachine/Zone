@@ -9,6 +9,7 @@ import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 
 @Singleton
@@ -96,6 +97,7 @@ public class Elevator extends Subsystem {
 
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
+//        System.out.print(robotState.isCoralBeamBreakTriggered);
         if(!robotState.isCoralBeamBreakTriggered && robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE) {
             desiredElevatorState = ELEVATOR_STATE.FEEDER;
         }
@@ -131,12 +133,12 @@ public class Elevator extends Subsystem {
                     desiredElevatorPosition = elevatorL4Position;
                 }
             }
-            elevatorMotor.set(GreenControlMode.POSITION_CONTROL, desiredElevatorPosition);
+            elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
         }
     }
 
     public boolean isElevatorInRange(){
-        return Math.abs(elevatorMotor.getSensorPosition() - desiredElevatorPosition) < 5;
+        return Math.abs(elevatorMotor.getSensorPosition() - desiredElevatorPosition) < 1;
     }
 
     @Override

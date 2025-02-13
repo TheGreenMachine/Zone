@@ -8,10 +8,10 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    a: pivotElevatorAndCoralL1
-    b: pivotElevatorAndCoralL2
+    a: activationDeepHanger
+    b: intake/OuttakeAlgae
     x: pivotA1/L3
-    y: intake/OuttakeAlgae
+    y: pivotA2/L4
   axes:
     rightTrigger:
     leftTrigger:

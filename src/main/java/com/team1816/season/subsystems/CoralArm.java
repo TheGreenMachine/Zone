@@ -10,11 +10,13 @@ import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * A subsystem for the coral arm.
@@ -95,6 +97,8 @@ public class CoralArm extends Subsystem {
         super.desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/desiredPivotPosition");
         super.actStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/actualPivotPosition");
 
+        zeroSensors();
+
         if (RobotBase.isSimulation()) {
             pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
             pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
@@ -146,35 +150,35 @@ public class CoralArm extends Subsystem {
 
         if(desiredIntakeState == INTAKE_STATE.REST && !robotState.isCoralBeamBreakTriggered){
             desiredIntakeState = INTAKE_STATE.INTAKE;
-            desiredIntakeStateChanged = true;
         }
 
         if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
             robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
 
-            if (robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.INTAKE) {
+            if (robotState.isCoralBeamBreakTriggered && (desiredIntakeState == INTAKE_STATE.INTAKE || desiredIntakeState == INTAKE_STATE.REST)) {
                 desiredIntakeState = INTAKE_STATE.HOLD;
-                desiredIntakeStateChanged = true;
             }
 
             if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.HOLD){
                 desiredIntakeState = INTAKE_STATE.INTAKE;
-                desiredIntakeStateChanged = true;
             }
 
             if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState != INTAKE_STATE.OUTTAKE){
                 desiredPivotState = PIVOT_STATE.FEEDER;
-                desiredIntakeStateChanged = true;
             }
         }
 
         if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
             robotState.actualCoralArmIntakeState = desiredIntakeState;
+            desiredIntakeStateChanged = true;
         }
 
         if (robotState.actualCoralArmPivotState != desiredPivotState) {
             robotState.actualCoralArmPivotState = desiredPivotState;
+            desiredPivotStateChanged = true;
         }
+
+        SmartDashboard.putBoolean("CoralArmBeamBreak", isBeamBreakTriggered());
 
         if (Constants.kLoggingRobot) {
             doubleDesStatesLogger().append(desiredPivotPosition);
@@ -206,12 +210,12 @@ public class CoralArm extends Subsystem {
             desiredPivotStateChanged = false;
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
-            pivotMotor.set(GreenControlMode.POSITION_CONTROL, desiredPivotPosition);
+            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 0, 0));
         }
     }
 
     public boolean isCoralArmPivotInRange(){
-        return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 5;
+        return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 1;
     }
 
     public boolean isCoralArmIntakeInRange(){
@@ -220,7 +224,7 @@ public class CoralArm extends Subsystem {
 
     @Override
     public void zeroSensors() {
-        // no implementation
+        pivotMotor.setSensorPosition(0);
     }
 
     @Override

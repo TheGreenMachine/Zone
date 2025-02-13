@@ -96,23 +96,22 @@ subsystems:
                         invertSensorPhase: 1
             drivePID:
                 slot0:
-                    kP: 0.0065
+                    kP: 100
                     kI: 0
-                    kD: 0.00005
-                    kV: 0.00925
-                    kS: 0
+                    kD: 0.5
+                    kV: 2.66
+                    kS: 0.1
                     kA: 0
                     kG: 0
             azimuthPID:
                 slot0:
-                    kP: 5
+                    kP: 0.1
                     kI: 0
                     kD: 0
-                    kV: 0
+                    kV: 0.124
                     kS: 0
                     kA: 0
                     kG: 0
-                    allowableError: 5
         constants:
             ## Positional Configurations ##
             openLoopRampRate: 0.1
@@ -145,11 +144,16 @@ subsystems:
                 motorName: coralArmIntakeMotor
                 id: 12
                 invertMotor: false
+                currentLimit: 20
             coralArmPivotMotor:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
                 id: 13
                 invertMotor: false
+                currentLimit: 20
+                motionMagic:
+                    expoKV: 0.4
+                    expoKA: 0.4
         pidConfig:
             slot0: #Intake
                 kP: 5
@@ -184,18 +188,23 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: true
+        implemented: false
         motors:
             algaeCatcherIntakeMotor:
                 motorType: TalonFX
                 motorName: algaeCatcherIntakeMotor
                 id: 14
                 invertMotor: false
+                currentLimit: 20
             algaeCatcherPositionMotor:
                 motorType: TalonFX
                 motorName: algaeCatcherPositionMotor
                 id: 15
                 invertMotor: true
+                currentLimit: 20
+                motionMagic:
+                    expoKV: 0.05
+                    expoKA: 0.15
         pidConfig:
             slot0: #Intake
                 kP: 5
@@ -206,28 +215,29 @@ subsystems:
                 kA: 0
                 kG: 0
             slot1: #Position
-                kP: .05
-                kI: 0
-                kD: 0
+                kP: 0.8
+                ki: 0
+                kD: 0.02
                 kV: 0
                 kS: 0
                 kA: 0
                 kG: 0
+                gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: 0
+            algaeCollectSpeed: -50
             algaeHoldSpeed: 0
-            algaeReleaseSpeed: 0
+            algaeReleaseSpeed: 50
 
             algaeSensorChannel: 1
 
             stowPosition: 0.1
-            intakePosition: 7.589
-            holdPosition: 10.669
-            outtakePosition: 10.699
+            intakePosition: 11
+            holdPosition: 11
+            outtakePosition: 11
             algaeL2Position: 25
-            algaeL3Position: 40
+            algaeL3Position: 38
 
-            algaeMotorRotationsPerDegree: 8
+            algaeMotorRotationsPerDegree: .25
     elevator:
         implemented: false
         motors:
@@ -235,23 +245,27 @@ subsystems:
                 motorType: TalonFX
                 motorName: elevatorMotor
                 id: 16
-                invertMotor: false
+                invertMotor: true
+                currentLimit: 20
+                motionMagic:
+                    expoKV: 0.4
+                    expoKA: 0.4
         pidConfig:
             slot0:
-                kP: 5
+                kP: .8
                 kI: 0
-                kD: 0
+                kD: 0.02
                 kV: 0
                 kS: 0
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
             elevatorRestPosition: 0
-            elevatorFeederPosition: 1
-            elevatorL1Position: 2
-            elevatorL2Position: 2.5
-            elevatorL3Position: 3
-            elevatorL4Position: 3.5
+            elevatorFeederPosition: 0
+            elevatorL1Position: 0
+            elevatorL2Position: 7.0
+            elevatorL3Position: 21.8
+            elevatorL4Position: 57.2
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
