@@ -168,6 +168,8 @@ public class AlgaeCatcher extends Subsystem {
             }
         }
 
+//        System.out.println(isBeamBreakTriggered());
+
         if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.INTAKE;
         } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD){
@@ -223,7 +225,7 @@ public class AlgaeCatcher extends Subsystem {
             intakeMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredAlgaeCatcherPower);
             algaeCatcherCurrentDrawLogger.append(desiredAlgaeCatcherPower);
 
-            System.out.println(desiredAlgaeCatcherPower);
+//            System.out.println(desiredAlgaeCatcherPower);
         }
 
         robotState.algaeCatcherPivot.setAngle(robotState.algaeBaseAngle + pivotMotor.getSensorPosition() / algaeMotorRotationsPerDegree);

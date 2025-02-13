@@ -322,8 +322,8 @@ public class Robot extends TimedRobot {
                         if(pressed){
                             if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD)
                                 algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
-                            else
-                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
+//                            else
+//                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
                         } else{
                             if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD){
                                 algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);

@@ -188,7 +188,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: true
+        implemented: false
         motors:
             algaeCatcherIntakeMotor:
                 motorType: TalonFX
@@ -203,8 +203,8 @@ subsystems:
                 invertMotor: true
                 currentLimit: 20
                 motionMagic:
-                    expoKV: 0.035
-                    expoKA: 0.065
+                    expoKV: 0.05
+                    expoKA: 0.15
         pidConfig:
             slot0: #Intake
                 kP: 5
@@ -224,18 +224,18 @@ subsystems:
                 kG: 0
                 gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: -75
+            algaeCollectSpeed: -50
             algaeHoldSpeed: 0
-            algaeReleaseSpeed: 100
+            algaeReleaseSpeed: 50
 
             algaeSensorChannel: 1
 
             stowPosition: 0.1
-            intakePosition: 7.589
-            holdPosition: 10.669
-            outtakePosition: 10.699
+            intakePosition: 11
+            holdPosition: 11
+            outtakePosition: 11
             algaeL2Position: 25
-            algaeL3Position: 40
+            algaeL3Position: 38
 
             algaeMotorRotationsPerDegree: .25
     elevator:
