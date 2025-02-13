@@ -4,8 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
-import com.team1816.lib.hardware.components.pcm.IDoubleSolenoid;
-import com.team1816.lib.hardware.components.pcm.ISolenoid;
 import com.team1816.lib.subsystems.Subsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -28,7 +26,7 @@ public class Pneumatic extends Subsystem {
     private Pneumatic.PNEUMATIC_STATE desiredPneumaticState = PNEUMATIC_STATE.OFF;
     private Pneumatic.PNEUMATIC_STATE actualPneumaticState = PNEUMATIC_STATE.OFF;
 
-    private boolean pneumaticOutputsChanged = false;
+    private boolean pneumaticOutputsChanged = true;
 
     /**
      * Constants
@@ -56,7 +54,7 @@ public class Pneumatic extends Subsystem {
         pneumaticOutputsChanged = true;
     }
 
-    public void changePneumatic() {
+    public void toggle() {
         if (desiredPneumaticState == PNEUMATIC_STATE.OFF) {
             setDesiredState(PNEUMATIC_STATE.ON);
         } else {

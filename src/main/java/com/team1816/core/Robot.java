@@ -335,7 +335,7 @@ public class Robot extends TimedRobot {
                     "activationDeepHanger",
                     ActionState.PRESSED,
                     () -> {
-                        pneumatic.setDesiredState(Pneumatic.PNEUMATIC_STATE.ON);
+                        pneumatic.toggle();
                     }
             );
 
