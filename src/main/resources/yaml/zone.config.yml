@@ -239,14 +239,14 @@ subsystems:
 
             algaeMotorRotationsPerDegree: .25
     elevator:
-        implemented: false
+        implemented: true
         motors:
             elevatorMotor:
                 motorType: TalonFX
                 motorName: elevatorMotor
                 id: 16
                 invertMotor: true
-                currentLimit: 20
+                currentLimit: 60
                 motionMagic:
                     expoKV: 0.4
                     expoKA: 0.4
@@ -269,7 +269,7 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: true
+        implemented: false
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6
@@ -286,7 +286,7 @@ infrastructure:
     pdId: 1
     pdIsRev: true
     ## Pneumatics Control ##
-    compressorEnabled: false
+    compressorEnabled: true
     pcmIsRev: false
     pcmId: 0
     ## Pigeon ##

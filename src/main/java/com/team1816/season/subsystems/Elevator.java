@@ -143,7 +143,7 @@ public class Elevator extends Subsystem {
 
     @Override
     public void zeroSensors() {
-        elevatorMotor.setSensorPosition(0, 50);
+        elevatorMotor.setSensorPosition(0);
     }
 
     @Override

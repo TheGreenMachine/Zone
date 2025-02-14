@@ -70,7 +70,7 @@ public class Pneumatic extends Subsystem {
             actualPneumaticState = PNEUMATIC_STATE.OFF;
         }
 
-        System.out.println(actualPneumaticState.name());
+//        System.out.println(actualPneumaticState.name());
     }
 
     @Override

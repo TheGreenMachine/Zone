@@ -135,7 +135,8 @@ public class CoralArm extends Subsystem {
         if(RobotBase.isSimulation())
             return true;
 
-        return !coralSensor.get();
+        return true; //TODO change this
+//        return !coralSensor.get();
     }
 
     @Override
