@@ -203,6 +203,12 @@ public class AutoModeManager {
 
         BOTTOM_PLACE_2_AUTOMODE,
 
+        DRIVE_OFF_LINE_TOP,
+
+        DRIVE_OFF_LINE_MIDDLE,
+
+        DRIVE_OFF_LINE_BOTTOM,
+
 //        DYNAMIC_TRAJECTORY_ONLY,
 
         DYNAMIC_PLACE_1,
@@ -239,6 +245,15 @@ public class AutoModeManager {
             case MIDDLE_PLACE_2_AUTOMODE:
                 robotState.dIsAutoDynamic = false;
                 return new MiddlePlace2AutoMode(color);
+            case DRIVE_OFF_LINE_TOP:
+                robotState.dIsAutoDynamic = false;
+                return new DriveOffLineTopAutoMode(color);
+            case DRIVE_OFF_LINE_MIDDLE:
+                robotState.dIsAutoDynamic = false;
+                return new DriveOffLineMiddleAutoMode(color);
+            case DRIVE_OFF_LINE_BOTTOM:
+                robotState.dIsAutoDynamic = false;
+                return new DriveOffLineBottomAutoMode(color);
             case BOTTOM_PLACE_1_AUTOMODE:
                 robotState.dIsAutoDynamic = false;
                 return new BottomPlace1AutoMode(color);
