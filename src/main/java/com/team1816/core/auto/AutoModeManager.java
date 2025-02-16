@@ -9,6 +9,7 @@ import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.lib.auto.modes.DefaultMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
 //import com.team1816.lib.autopath.Autopath;
+import com.team1816.lib.auto.modes.TuneDrivetrainMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.modes.*;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -209,6 +210,8 @@ public class AutoModeManager {
 
         BOTTOM_DRIVE_STRAIGHT,
 
+        TUNE_DRIVETRAIN,
+
 //        DYNAMIC_TRAJECTORY_ONLY,
 
         DYNAMIC_PLACE_1,
@@ -275,6 +278,9 @@ public class AutoModeManager {
             case TOP_SIDE_1_SCORE_2:
                 robotState.dIsAutoDynamic = false;
                 return new TopPlace2AutoMode(color);
+            case TUNE_DRIVETRAIN:
+                robotState.dIsAutoDynamic = false;
+                return new TuneDrivetrainMode();
 //            case DYNAMIC_TRAJECTORY_ONLY:
 //                robotState.isAutoDynamic = true;
 //                RobotState.dynamicAutoChanged = true;

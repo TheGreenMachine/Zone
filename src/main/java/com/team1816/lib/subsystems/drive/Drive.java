@@ -151,7 +151,7 @@ public abstract class Drive
     public static final double kPathFollowingMaxVelMeters = factory.getConstant(
         NAME,
         "maxVelPathFollowing",
-        2.5
+        1
     );
     public static final double kMaxVelOpenLoopMeters = factory.getConstant(
         NAME,

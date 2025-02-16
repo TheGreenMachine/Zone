@@ -5,6 +5,8 @@ import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
+import java.sql.SQLOutput;
+
 public class ModuleRequest implements LegacySwerveRequest {
     public SwerveModuleState[] moduleStates = new SwerveModuleState[4];
 

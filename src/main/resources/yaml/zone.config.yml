@@ -122,9 +122,9 @@ subsystems:
             wheelDiameter: 4
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
-            maxVelOpenLoop: 3 # meters/s
-            maxVelPathFollowing: 4 # meters/s
-            maxAccel: 2 # meters/s^2
+            maxVelOpenLoop: 1 # meters/s
+            maxVelPathFollowing: .3 # meters/s
+            maxAccel: .1 # meters/s^2
             isDemoMode: 0
             ## Swerve Characterization ##
             azimuthEncPPR: 2048
