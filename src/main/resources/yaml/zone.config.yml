@@ -95,15 +95,6 @@ subsystems:
                         invertSensorPhase: 1
             drivePID:
                 slot0:
-                    kP: 100
-                    kI: 0
-                    kD: 0.5
-                    kV: 2.66
-                    kS: 0.1
-                    kA: 0
-                    kG: 0
-            azimuthPID:
-                slot0:
                     kP: 0.1
                     kI: 0
                     kD: 0
@@ -111,6 +102,16 @@ subsystems:
                     kS: 0
                     kA: 0
                     kG: 0
+            azimuthPID:
+                slot0:
+                    kP: 100
+                    kI: 0
+                    kD: 0.5
+                    kV: 2.66
+                    kS: 0.1
+                    kA: 0
+                    kG: 0
+
         constants:
             ## Positional Configurations ##
             openLoopRampRate: 0.1
