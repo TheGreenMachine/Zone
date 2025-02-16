@@ -13,8 +13,8 @@ driver:
     x: outtakeCoral
     y:
   axes:
-    rightTrigger: pivotA1/L3
-    leftTrigger: pivotA2/L4
+    rightTrigger: pivotElevatorAndCoralL3
+    leftTrigger: pivotElevatorAndCoralL4
   buttons:
     start:
     back: zeroPose

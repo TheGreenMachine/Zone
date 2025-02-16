@@ -389,29 +389,24 @@ public class Robot extends TimedRobot {
                     }
             );*/
             inputHandler.listenAction(
-                    "pivotA1/L3",
+                    "pivotElevatorAndCoralL3",
                     ActionState.PRESSED,
                     () -> {
                         if(CoralArm.robotState.isCoralBeamBreakTriggered){
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                         }
-                        else{
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1);
-                        }
 
                     }
             );
             inputHandler.listenAction(
-                    "pivotA2/L4",
+                    "pivotElevatorAndCoralL4",
                     ActionState.PRESSED,
                     () -> {
-                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
+                        if (CoralArm.robotState.isCoralBeamBreakTriggered) {
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                         }
-                        else{
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE2);                        }
                     }
             );
 
