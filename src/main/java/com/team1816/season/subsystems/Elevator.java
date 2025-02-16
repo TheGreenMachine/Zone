@@ -9,6 +9,7 @@ import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
 import com.team1816.lib.subsystems.Subsystem;
+import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -33,6 +34,7 @@ public class Elevator extends Subsystem {
     private ELEVATOR_STATE desiredElevatorState = ELEVATOR_STATE.FEEDER;
 
     private boolean elevatorOutputsChanged = false;
+    private boolean offsetHasBeenApplied = false;
 
     private double elevatorCurrentDraw;
 
@@ -45,11 +47,11 @@ public class Elevator extends Subsystem {
      * Constants
      */
 
-    private final double elevatorFeederPosition = factory.getConstant(NAME, "elevatorFeederPosition", 1.0);
-    private final double elevatorL1Position = factory.getConstant(NAME, "elevatorL1Position", 1.0);
-    private final double elevatorL2Position = factory.getConstant(NAME, "elevatorL2Position", 1.0);
-    private final double elevatorL3Position = factory.getConstant(NAME, "elevatorL3Position", 1.0);
-    private final double elevatorL4Position = factory.getConstant(NAME, "elevatorL4Position", 1.0);
+    private double elevatorFeederPosition = factory.getConstant(NAME, "elevatorFeederPosition", 1.0);
+    private double elevatorL1Position = factory.getConstant(NAME, "elevatorL1Position", 1.0);
+    private double elevatorL2Position = factory.getConstant(NAME, "elevatorL2Position", 1.0);
+    private double elevatorL3Position = factory.getConstant(NAME, "elevatorL3Position", 1.0);
+    private double elevatorL4Position = factory.getConstant(NAME, "elevatorL4Position", 1.0);
 
 //    private final boolean opposeLeaderDirection = ((int) factory.getConstant(NAME, "invertFollowerMotor", 0)) == 1;
 
@@ -114,27 +116,25 @@ public class Elevator extends Subsystem {
      */
     @Override
     public void writeToHardware() {
-        if (elevatorOutputsChanged) {
+        if (elevatorOutputsChanged || offsetHasBeenApplied) {
             elevatorOutputsChanged = false;
-            switch (desiredElevatorState) {
-                case FEEDER -> {
-                    desiredElevatorPosition = elevatorFeederPosition;
-                }
-                case L1 -> {
-                    desiredElevatorPosition = elevatorL1Position;
-                }
-                case L2 -> {
-                    desiredElevatorPosition = elevatorL2Position;
-                }
-                case L3 -> {
-                    desiredElevatorPosition = elevatorL3Position;
-                }
-                case L4 -> {
-                    desiredElevatorPosition = elevatorL4Position;
-                }
-            }
+            offsetHasBeenApplied = false;
+
+            desiredElevatorPosition = getElevatorPosition(desiredElevatorState);
             elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
         }
+    }
+
+    public void offsetElevator(double offsetAmount){
+        switch (desiredElevatorState) {
+            case L1 -> elevatorL1Position += offsetAmount;
+            case L2 -> elevatorL2Position += offsetAmount;
+            case L3 -> elevatorL3Position += offsetAmount;
+            case L4 -> elevatorL4Position += offsetAmount;
+            case FEEDER -> elevatorFeederPosition += offsetAmount;
+        }
+        offsetHasBeenApplied = true;
+        GreenLogger.log("Elevator " + desiredElevatorState + " position set to " + getElevatorPosition(desiredElevatorState));
     }
 
     public boolean isElevatorInRange(){
@@ -159,6 +159,16 @@ public class Elevator extends Subsystem {
     public boolean testSubsystem() {
         //TODO eventually.
         return false;
+    }
+
+    private double getElevatorPosition(ELEVATOR_STATE elevatorState) {
+        return switch (elevatorState) {
+            case L1 -> elevatorL1Position;
+            case L2 -> elevatorL2Position;
+            case L3 -> elevatorL3Position;
+            case L4 -> elevatorL4Position;
+            case FEEDER -> elevatorFeederPosition;
+        };
     }
 
     /**

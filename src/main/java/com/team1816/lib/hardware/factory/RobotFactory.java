@@ -118,6 +118,7 @@ public class RobotFactory {
         // Identifying motor
         if (subsystem.implemented) {
             if (isMotorValid(subsystem.motors, name)) {
+                String canBus = subsystem.motors.get(name).isLowSpeedCanBus != null && subsystem.motors.get(name).isLowSpeedCanBus ? "roboRio" : config.infrastructure.canBusName;
                 switch (subsystem.motors.get(name).motorType) {
                     case TalonFX -> {
                         motor =
@@ -128,7 +129,7 @@ public class RobotFactory {
                                         subsystem,
                                         pidConfigs,
                                         remoteSensorId,
-                                        config.infrastructure.canBusName
+                                        canBus
                                 );
                     }
                     case TalonSRX -> {
@@ -144,14 +145,13 @@ public class RobotFactory {
                                 );
                     }
                     case SparkMax -> {
-                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
-//                        motor =
-//                            MotorFactory.createSpark(
-//                                subsystem.motors.get(name).id,
-//                                name,
-//                                subsystem,
-//                                pidConfigs
-//                            );
+                        motor =
+                            MotorFactory.createSpark(
+                                subsystem.motors.get(name).id,
+                                name,
+                                subsystem,
+                                pidConfigs
+                            );
                     }
                     case VictorSPX -> {
                         GreenLogger.log("Victors cannot be main!");
@@ -225,15 +225,14 @@ public class RobotFactory {
                                 );
                     }
                     case SparkMax -> {
-                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
-//                        MotorFactory.createFollowerSpark(
-//                            subsystem.motors.get(name).id,
-//                            name,
-//                            subsystem,
-//                            subsystem.pidConfig,
-//                            main,
-//                            opposeLeaderDirection
-//                        );
+                        MotorFactory.createFollowerSpark(
+                            subsystem.motors.get(name).id,
+                            name,
+                            subsystem,
+                            subsystem.pidConfig,
+                            main,
+                            opposeLeaderDirection
+                        );
                     }
                     case VictorSPX -> {
                         followerMotor =

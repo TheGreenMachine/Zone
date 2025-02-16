@@ -91,8 +91,7 @@ public class AlgaeCatcher extends Subsystem {
 
         SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
-        intakeMotor.selectPIDSlot(0);
-        pivotMotor.selectPIDSlot(1);
+        pivotMotor.selectPIDSlot(0);
 
         zeroSensors();
 
@@ -210,7 +209,6 @@ public class AlgaeCatcher extends Subsystem {
     public void writeToHardware() {
         if (desiredIntakeStateChanged) {
             desiredIntakeStateChanged = false;
-            double desiredAlgaeCatcherPower = 0;
 
             switch (desiredIntakeState) {
                 case STOP -> desiredAlgaeCatcherPower = 0;
@@ -261,7 +259,7 @@ public class AlgaeCatcher extends Subsystem {
     }
 
     public boolean isAlgaeCatcherIntakeInRange(){
-        return Math.abs(intakeMotor.getSensorVelocity() - desiredAlgaeCatcherPower) < 5;
+        return Math.abs(intakeMotor.getMotorOutputPercent() - desiredAlgaeCatcherPower) < 5;
     }
 
     @Override

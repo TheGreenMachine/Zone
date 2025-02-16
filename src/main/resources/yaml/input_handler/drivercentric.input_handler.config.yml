@@ -32,10 +32,11 @@ operator:
     y:
 buttonboard:
   upLeft:
-  upRight:
-  up:
-  center:
+  upRight: decreaseCoralArmPivotOffset
+  up: increaseElevatorPivotOffset
+  center: decreaseElevatorPivotOffset
   left:
+  right: increaseCoralArmPivotOffset
   downLeft:
   down:
 demoMode: false

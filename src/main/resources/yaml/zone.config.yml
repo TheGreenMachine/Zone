@@ -1,4 +1,3 @@
-# TODO: Will need to be updated once "REEFSCAPE" robot, Zone is present. Currently, is not accurate
 subsystems:
     drivetrain:
         implemented: true
@@ -149,22 +148,15 @@ subsystems:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
                 id: 13
-                invertMotor: false
+                invertMotor: true
                 currentLimit: 20
+                isLowSpeedCanBus: true
                 motionMagic:
-                    expoKV: 0.4
-                    expoKA: 0.4
+                    expoKV: 0.12
+                    expoKA: 0.1
         pidConfig:
-            slot0: #Intake
-                kP: 5
-                kI: 0
-                kD: 0
-                kV: 0
-                kS: 0
-                kA: 0
-                kG: 0
-            slot1: #Pivot
-                kP: 5
+            slot0: #Pivot
+                kP: 0.05
                 kI: 0
                 kD: 0
                 kV: 0
@@ -172,19 +164,18 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: 20
-            outtakeSpeed: -20
+            intakeSpeed: -30
+            outtakeSpeed: 30
             holdSpeed: 0
 
             coralSensorChannel: 0
 
-            coralArmL1Position: 10
-            coralArmL2Position: 20
-            coralArmL3Position: 30
-            coralArmL4Position: 40
+            coralArmL1Position: 35
+            coralArmL2Position: 35
+            coralArmL3Position: 35
+            coralArmL4Position: 35
 
-            coralArmFeederPosition: 50
-            coralArmRestPosition: 60
+            coralArmFeederPosition: 23
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
@@ -206,15 +197,7 @@ subsystems:
                     expoKV: 0.05
                     expoKA: 0.15
         pidConfig:
-            slot0: #Intake
-                kP: 5
-                kI: 0
-                kD: 0
-                kV: 0
-                kS: 0
-                kA: 0
-                kG: 0
-            slot1: #Position
+            slot0: #Position
                 kP: 0.8
                 ki: 0
                 kD: 0.02
@@ -239,7 +222,7 @@ subsystems:
 
             algaeMotorRotationsPerDegree: .25
     elevator:
-        implemented: true
+        implemented: false
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -269,7 +252,7 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: false
+        implemented: true
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6

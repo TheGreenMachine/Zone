@@ -257,9 +257,7 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () ->
                             drive.resetHeading(
-                                    robotState.allianceColor == Color.BLUE ?
-                                            Rotation2d.fromDegrees(0) :
-                                            Rotation2d.fromDegrees(180)
+                                    Rotation2d.fromDegrees(robotState.fieldToVehicle.getRotation().getDegrees() + 180)
                             )
             );
 
@@ -415,6 +413,36 @@ public class Robot extends TimedRobot {
                     }
             );
 
+            /** Buttonboard Commands */
+
+            inputHandler.listenAction(
+                    "increaseElevatorPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        elevator.offsetElevator(0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "decreaseElevatorPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        elevator.offsetElevator(-0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "increaseCoralArmPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        coralArm.offsetCoralPivot(0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "decreaseCoralArmPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        coralArm.offsetCoralPivot(-0.1);
+                    }
+            );
 
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);

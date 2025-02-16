@@ -12,6 +12,6 @@ public class DefaultMode extends AutoMode{
     }
 
     public Pose2d getInitialPose() {
-        return new Pose2d(0,0, robotState.allianceColor == Color.BLUE ? Rotation2d.fromDegrees(0) : Rotation2d.fromDegrees(180));
+        return new Pose2d(0,0, robotState.allianceColor == Color.BLUE ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
     }
 }
