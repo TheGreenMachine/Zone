@@ -95,11 +95,11 @@ subsystems:
                         invertSensorPhase: 1
             drivePID:
                 slot0:
-                    kP: 100
+                    kP: 0.0065
                     kI: 0
-                    kD: 0.5
-                    kV: 2.66
-                    kS: 0.1
+                    kD: 0.00005
+                    kV: 0.00925
+                    kS: 0
                     kA: 0
                     kG: 0
             azimuthPID:
