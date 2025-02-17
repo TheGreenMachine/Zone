@@ -261,17 +261,6 @@ public class Robot extends TimedRobot {
                             )
             );
 
-            inputHandler.listenAction(
-                    "hardZeroPose", //FIXME this sometimes does weird rotation in sim, idk about in real life
-                    ActionState.PRESSED,
-                    () ->
-                            drive.zeroSensors(
-                                    robotState.allianceColor == Color.BLUE ?
-                                            Constants.kDefaultZeroingPose :
-                                            Constants.kFlippedZeroingPose
-                            )
-            );
-
 
             inputHandler.listenActionPressAndRelease(
                     "brakeMode",
