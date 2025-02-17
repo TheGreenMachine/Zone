@@ -104,10 +104,10 @@ subsystems:
                     kG: 0
             azimuthPID:
                 slot0:
-                    kP: 0.1
+                    kP: 5
                     kI: 0
                     kD: 0
-                    kV: 0.124
+                    kV: 0
                     kS: 0
                     kA: 0
                     kG: 0
