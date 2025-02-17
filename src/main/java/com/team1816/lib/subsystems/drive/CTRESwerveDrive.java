@@ -293,11 +293,6 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
     @Override
     public void setModuleStates(SwerveModuleState... desiredStates) {
-        for (int i = 0; i < 4; i++) {
-            desiredStates[i].speedMetersPerSecond =
-                    DriveConversions.metersToRotations(desiredStates[i].speedMetersPerSecond);
-        }
-
         request = autoRequest.withModuleStates(desiredStates);
 
         train.setControl(request);
