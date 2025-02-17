@@ -183,7 +183,7 @@ subsystems:
         implemented: false
         motors:
             algaeCatcherIntakeMotor:
-                motorType: TalonFX
+                motorType: SparkMax
                 motorName: algaeCatcherIntakeMotor
                 id: 14
                 invertMotor: false
