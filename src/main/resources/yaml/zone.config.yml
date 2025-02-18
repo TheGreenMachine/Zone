@@ -96,15 +96,15 @@ subsystems:
             drivePID:
                 slot0:
                     kP: 0.1
-                    kI: 0
-                    kD: 0
-                    kV: 0.124
+                    kI: 0.0005
+                    kD: 0.0015
+                    kV: 0.115
                     kS: 0
                     kA: 0
                     kG: 0
             azimuthPID:
                 slot0:
-                    kP: 100
+                    kP: 50
                     kI: 0
                     kD: 0.5
                     kV: 2.66
@@ -232,11 +232,11 @@ subsystems:
                 invertMotor: true
                 currentLimit: 60
                 motionMagic:
-                    expoKV: 0.4
-                    expoKA: 0.4
+                    expoKV: 0.1
+                    expoKA: 0.2
         pidConfig:
             slot0:
-                kP: .8
+                kP: 1
                 kI: 0
                 kD: 0.02
                 kV: 0
@@ -244,12 +244,11 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            elevatorRestPosition: 0
-            elevatorFeederPosition: 0
-            elevatorL1Position: 0
+            elevatorFeederPosition: 1
+            elevatorL1Position: 1
             elevatorL2Position: 7.0
             elevatorL3Position: 21.8
-            elevatorL4Position: 57.2
+            elevatorL4Position: 45.0
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
