@@ -290,7 +290,7 @@ public class RobotFactory {
                 .withCANcoderOffset(currentModule.EncoderOffset)
                 // General Motor
                 .withCouplingGearRatio(currentModule.CouplingGearRatio)
-                .withWheelRadius(currentModule.WheelRadius)
+                .withWheelRadius(Units.metersToInches(currentModule.WheelRadius))
                 .withLocationX(currentModule.LocationX) //IMPORTANT: IF THIS IS NOT A SQUARE SWERVEDRIVE, THESE MUST BE DIFFERENT.
                 .withLocationY(currentModule.LocationY)
                 // Drive Motor
