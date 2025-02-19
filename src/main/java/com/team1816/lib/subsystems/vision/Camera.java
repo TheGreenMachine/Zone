@@ -38,7 +38,8 @@ public class Camera extends Subsystem{
     private static final String NAME = "camera";
     private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera (1)");
     private static final List<AprilTag> aprilTags = List.of(
-            new AprilTag(1, new Pose3d(0, 0, 0.601, new Rotation3d()))
+            new AprilTag(1, new Pose3d(0, 0, 0.601, new Rotation3d())),
+            new AprilTag(2, new Pose3d(0, 2, 0.601, new Rotation3d()))
     );
     public static final AprilTagFieldLayout kTagLayout =
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -72,7 +73,7 @@ public class Camera extends Subsystem{
                 cameraProp.setFPS(15);
                 cameraProp.setAvgLatencyMs(50);
                 cameraProp.setLatencyStdDevMs(15);
-                PhotonCameraSim cameraSim = new PhotonCameraSim(cams.get(i), cameraProp);
+                PhotonCameraSim cameraSim = new PhotonCameraSim(cams.get(i), cameraProp, kTagLayout);
                 cameraSim.enableDrawWireframe(true);
                 visionSim.addCamera(cameraSim, robotToCams.get(i));
             }

@@ -468,6 +468,21 @@
     }
   },
   "NetworkTables": {
+    "CameraPublisher": {
+      "Arducam_OV9281_USB_Camera (1)-processed": {
+        "open": true,
+        "string[]##v_/CameraPublisher/Arducam_OV9281_USB_Camera (1)-processed/streams": {
+          "open": true
+        }
+      },
+      "lynel_crusher_Port_1181_Input_MJ-raw": {
+        "open": true,
+        "string[]##v_/CameraPublisher/lynel_crusher_Port_1181_Input_MJ-raw/streams": {
+          "open": true
+        }
+      },
+      "open": true
+    },
     "LiveWindow": {
       "drivetrain": {
         "open": true
@@ -505,6 +520,9 @@
     },
     "combined": true,
     "photonvision": {
+      "lynel_crusher_Port_1181_Input_MJ": {
+        "open": true
+      },
       "open": true,
       "zed": {
         "open": true
