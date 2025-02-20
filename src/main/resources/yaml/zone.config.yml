@@ -1,6 +1,6 @@
 subsystems:
     drivetrain:
-        implemented: true
+        implemented: false
         motors:
             RRDr:
                 motorType: TalonFX
@@ -137,7 +137,7 @@ subsystems:
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: true
+        implemented: false
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
@@ -180,7 +180,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: false
+        implemented: true
         motors:
             algaeCatcherIntakeMotor:
                 motorType: SparkMax
@@ -192,7 +192,7 @@ subsystems:
                 motorType: TalonFX
                 motorName: algaeCatcherPositionMotor
                 id: 15
-                invertMotor: true
+                invertMotor: false
                 currentLimit: 20
                 motionMagic:
                     expoKV: 0.05
@@ -208,22 +208,22 @@ subsystems:
                 kG: 0
                 gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: -50
+            algaeCollectSpeed: 15
             algaeHoldSpeed: 0
-            algaeReleaseSpeed: 50
+            algaeReleaseSpeed: -30
 
             algaeSensorChannel: 1
 
             stowPosition: 0.1
-            intakePosition: 11
-            holdPosition: 11
-            outtakePosition: 11
+            intakePosition: 16.8
+            holdPosition: 13.67
+            outtakePosition: 14.07
             algaeL2Position: 25
             algaeL3Position: 38
 
             algaeMotorRotationsPerDegree: .25
     elevator:
-        implemented: true
+        implemented: false
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -252,7 +252,7 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: true
+        implemented: false
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6

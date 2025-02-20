@@ -135,8 +135,8 @@ public class AlgaeCatcher extends Subsystem {
     }
 
     public boolean isBeamBreakTriggered() {
-        if(RobotBase.isSimulation())
-            return false;
+//        if(RobotBase.isSimulation())
+//            return false;
 
         return !algaeSensor.get();
     }
