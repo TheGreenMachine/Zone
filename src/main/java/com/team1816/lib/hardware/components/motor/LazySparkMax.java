@@ -104,11 +104,12 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
         if (demand != lastSet || currentControlMode != lastControlMode) {
             lastSet = demand;
             lastControlMode = currentControlMode;
-            closedLoopController.setReference(
-                demand,
-                ConfigurationTranslator.toSparkMaxControlType(controlMode),
-                currentPIDSlot
-            );
+            set(demand);
+//            closedLoopController.setReference(
+//                demand,
+//                ConfigurationTranslator.toSparkMaxControlType(controlMode),
+//                currentPIDSlot
+//            );
         }
     }
 

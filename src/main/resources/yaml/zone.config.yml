@@ -137,7 +137,7 @@ subsystems:
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: false
+        implemented: true
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
@@ -171,12 +171,12 @@ subsystems:
 
             coralSensorChannel: 0
 
-            coralArmL1Position: 35
-            coralArmL2Position: 35
-            coralArmL3Position: 35
+            coralArmL1Position: 36
+            coralArmL2Position: 36
+            coralArmL3Position: 36
             coralArmL4Position: 35
 
-            coralArmFeederPosition: 23
+            coralArmFeederPosition: 27.5
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
@@ -223,7 +223,7 @@ subsystems:
 
             algaeMotorRotationsPerDegree: .25
     elevator:
-        implemented: false
+        implemented: true
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -244,11 +244,11 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            elevatorFeederPosition: 1
+            elevatorFeederPosition: 0
             elevatorL1Position: 1
-            elevatorL2Position: 7.0
-            elevatorL3Position: 21.8
-            elevatorL4Position: 45.0
+            elevatorL2Position: 8.6
+            elevatorL3Position: 28.3
+            elevatorL4Position: 58.8
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
