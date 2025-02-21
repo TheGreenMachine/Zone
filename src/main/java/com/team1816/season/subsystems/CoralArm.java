@@ -134,9 +134,9 @@ public class CoralArm extends Subsystem {
     public boolean isBeamBreakTriggered() {
         if(RobotBase.isSimulation())
             return true;
+//        System.out.println(!coralSensor.get());
 
-        return true; //TODO change this
-//        return !coralSensor.get();
+        return !coralSensor.get();
     }
 
     @Override

@@ -165,18 +165,18 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: -30
-            outtakeSpeed: 30
+            intakeSpeed: -.60
+            outtakeSpeed: .30
             holdSpeed: 0
 
-            coralSensorChannel: 0
+            coralSensorChannel: 9
 
             coralArmL1Position: 36
             coralArmL2Position: 36
             coralArmL3Position: 36
             coralArmL4Position: 35
 
-            coralArmFeederPosition: 27.5
+            coralArmFeederPosition: 26.3
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
@@ -188,6 +188,7 @@ subsystems:
                 id: 14
                 invertMotor: false
                 currentLimit: 20
+                isLowSpeedCanBus: true
             algaeCatcherPositionMotor:
                 motorType: TalonFX
                 motorName: algaeCatcherPositionMotor
@@ -208,9 +209,9 @@ subsystems:
                 kG: 0
                 gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: 15
+            algaeCollectSpeed: .15
             algaeHoldSpeed: 0
-            algaeReleaseSpeed: -30
+            algaeReleaseSpeed: -.30
 
             algaeSensorChannel: 1
 
