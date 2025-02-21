@@ -31,7 +31,6 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
     protected ClosedLoopSlot currentPIDSlot;
 
     protected SparkLimitSwitch forwardLimitSwitch, reverseLimitSwitch = null;
-    private final LimitSwitchConfig limitSwitchConfig;
 
     protected double peakOutputForward, peakOutputBackward = -0;
 
@@ -50,7 +49,6 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
         name = motorName;
         sparkConfig = new SparkMaxConfig();
         currentPIDSlot = ClosedLoopSlot.kSlot0;
-        limitSwitchConfig = new LimitSwitchConfig();
     }
 
     @Override
@@ -115,16 +113,14 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
 
     @Override
     public void configForwardLimitSwitch(boolean normallyOpen) {
-        limitSwitchConfig.forwardLimitSwitchType(normallyOpen ? kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
-        sparkConfig.apply(limitSwitchConfig);
+        sparkConfig.limitSwitch.forwardLimitSwitchType(normallyOpen ? kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
         reconfigure();
         forwardLimitSwitch = super.getForwardLimitSwitch();
     }
 
     @Override
     public void configReverseLimitSwitch(boolean normallyOpen) {
-        limitSwitchConfig.reverseLimitSwitchType(normallyOpen ? kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
-        sparkConfig.apply(limitSwitchConfig);
+        sparkConfig.limitSwitch.reverseLimitSwitchType(normallyOpen ? kNormallyOpen : LimitSwitchConfig.Type.kNormallyClosed);
         reconfigure();
         reverseLimitSwitch = super.getReverseLimitSwitch();
     }
