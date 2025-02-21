@@ -133,10 +133,10 @@ public class ConfigurationTranslator {
             case PERCENT_OUTPUT -> controlType = SparkMax.ControlType.kDutyCycle;
             case VELOCITY_CONTROL -> controlType = SparkMax.ControlType.kVelocity;
             case POSITION_CONTROL -> controlType = SparkMax.ControlType.kPosition;
-//            case MOTION_PROFILE -> controlType = SparkMax.ControlType.kSmartMotion;
+            case MOTION_PROFILE -> controlType = SparkMax.ControlType.kSmartMotion;
             case CURRENT -> controlType = SparkMax.ControlType.kCurrent;
             case VOLTAGE_CONTROL -> controlType = SparkMax.ControlType.kVoltage;
-//            case SMART_VELOCITY -> controlType = SparkMax.ControlType.kSmartVelocity;
+            case SMART_VELOCITY -> controlType = SparkMax.ControlType.kSmartVelocity;
             default -> {
                 GreenLogger.log("Motor Control Mode " + controlMode + " not applicable to SparkMax ControlType, defaulting to Percent-Output");
                 controlType = SparkMax.ControlType.kDutyCycle;
