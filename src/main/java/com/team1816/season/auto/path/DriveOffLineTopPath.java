@@ -14,8 +14,8 @@ public class DriveOffLineTopPath extends AutoPath {
     @Override
     protected List<Pose2d> getWaypoints() {
         return List.of(
-                new Pose2d(7.54, 6.93, Rotation2d.fromDegrees(180)),
-                new Pose2d(5.85, 6.93, Rotation2d.fromDegrees(180))
+                new Pose2d(7.12, 7.45, Rotation2d.fromDegrees(180)),
+                new Pose2d(5.04, 7.45, Rotation2d.fromDegrees(180))
         );
     }
 
