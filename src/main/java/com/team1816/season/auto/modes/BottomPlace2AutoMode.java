@@ -54,7 +54,7 @@ public class BottomPlace2AutoMode extends AutoMode {
                         trajectoryActions.get(3),
                         new ParallelAction(
                                 new RotateSwerveAction(Rotation2d.fromDegrees(robotState.allianceColor == Color.BLUE ? 240 : 60)),
-                                new AlgaeCatcherQuickAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1)
+                                new AlgaeCatcherQuickAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE)
                         ),
                         trajectoryActions.get(4)
                 )

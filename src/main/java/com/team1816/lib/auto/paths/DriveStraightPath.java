@@ -17,7 +17,7 @@ public class DriveStraightPath extends AutoPath {
     public List<Pose2d> getWaypoints() {
         var waypoints = List.of(
                 new Pose2d(0.0, 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(10, 0, Rotation2d.fromDegrees(0))
+                new Pose2d(5, 0, Rotation2d.fromDegrees(0))
         );
         return waypoints;
     }

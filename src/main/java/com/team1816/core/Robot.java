@@ -331,7 +331,7 @@ public class Robot extends TimedRobot {
 
             /*NEW SUBSYSTEM ACTIONS*/
             inputHandler.listenAction(
-                    "pivotElevatorAndCoralL1",
+                    "L1",
                     ActionState.PRESSED,
                     () -> {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
@@ -339,7 +339,7 @@ public class Robot extends TimedRobot {
                     }
             );
             inputHandler.listenAction(
-                    "pivotElevatorAndCoralL2",
+                    "L2",
                     ActionState.PRESSED,
                     () -> {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
@@ -376,29 +376,28 @@ public class Robot extends TimedRobot {
                     }
             );*/
             inputHandler.listenAction(
-                    "pivotA1/L3",
+                    "L3",
                     ActionState.PRESSED,
                     () -> {
-                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
-                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
-                        }
-                        else{
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1);
-                        }
-
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                     }
             );
             inputHandler.listenAction(
-                    "pivotA2/L4",
+                    "L4",
                     ActionState.PRESSED,
                     () -> {
-                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
-                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
-                        }
-                        else{
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE2);                        }
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
+                    }
+            );
+            inputHandler.listenActionPressAndRelease(
+                    "removeAlgae",
+                    (pressed) ->{
+                        algaeCatcher.setDesiredState(
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
+                        );
                     }
             );
 

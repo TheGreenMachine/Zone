@@ -39,8 +39,7 @@ public class AlgaeCatcher extends Subsystem {
     private static final double intakePosition = factory.getConstant(NAME,"intakePosition",1.0);
     private static final double holdPosition = factory.getConstant(NAME,"holdPosition",1.0);
     private static final double outtakePosition = factory.getConstant(NAME,"outtakePosition",1.0);
-    private static final double algaeL2Position = factory.getConstant(NAME,"algaeL2Position",1.0);
-    private static final double algaeL3Position = factory.getConstant(NAME,"algaeL3Position",1.0);
+    private static final double removeAlgaePosition = factory.getConstant(NAME,"removeAlgaePosition",1.0);
 
     private final double algaeMotorRotationsPerDegree = factory.getConstant(NAME, "algaeMotorRotationsPerDegree", 1);
 
@@ -173,7 +172,7 @@ public class AlgaeCatcher extends Subsystem {
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.HOLD;
         } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.STOP){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.STOW;
-        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.ALGAE1 && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.ALGAE2){
+        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.OUTTAKE;
         }
 
@@ -239,11 +238,8 @@ public class AlgaeCatcher extends Subsystem {
                 case OUTTAKE -> {
                     desiredPosition = outtakePosition;
                 }
-                case ALGAE1 -> {
-                    desiredPosition = algaeL2Position;
-                }
-                case ALGAE2 -> {
-                    desiredPosition = algaeL3Position;
+                case REMOVE_ALGAE -> {
+                    desiredPosition = removeAlgaePosition;
                 }
             }
             pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPosition, .25, 40));
@@ -315,7 +311,6 @@ public class AlgaeCatcher extends Subsystem {
         HOLD,
         INTAKE,
         OUTTAKE,
-        ALGAE1,
-        ALGAE2
+        REMOVE_ALGAE
     }
 }

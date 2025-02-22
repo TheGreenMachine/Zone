@@ -11,15 +11,15 @@ driver:
     a: activationDeepHanger
     b: intake/OuttakeAlgae
     x: outtakeCoral
-    y:
+    y: removeAlgae
   axes:
-    rightTrigger: pivotA1/L3
-    leftTrigger: pivotA2/L4
+    rightTrigger: L3
+    leftTrigger: L4
   buttons:
     start:
     back: zeroPose
-    leftBumper: pivotElevatorAndCoralL2
-    rightBumper: pivotElevatorAndCoralL1
+    leftBumper: L2
+    rightBumper: L1
   dpad:
     up:
     down:

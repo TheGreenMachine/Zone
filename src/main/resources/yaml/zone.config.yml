@@ -1,6 +1,6 @@
 subsystems:
     drivetrain:
-        implemented: false
+        implemented: true
         motors:
             RRDr:
                 motorType: TalonFX
@@ -124,7 +124,7 @@ subsystems:
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
-            maxVelPathFollowing: 4 # meters/s
+            maxVelPathFollowing: 1 # meters/s
             maxAccel: 2 # meters/s^2
             isDemoMode: 0
             ## Swerve Characterization ##
@@ -166,7 +166,7 @@ subsystems:
                 kG: 0
         constants: # TODO: all of these
             intakeSpeed: -.60
-            outtakeSpeed: .30
+            outtakeSpeed: .80
             holdSpeed: 0
 
             coralSensorChannel: 9
@@ -180,7 +180,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: true
+        implemented: false
         motors:
             algaeCatcherIntakeMotor:
                 motorType: SparkMax
@@ -219,12 +219,11 @@ subsystems:
             intakePosition: 16.8
             holdPosition: 13.67
             outtakePosition: 14.07
-            algaeL2Position: 25
-            algaeL3Position: 38
+            removeAlgaePosition: 1.0
 
             algaeMotorRotationsPerDegree: .25
     elevator:
-        implemented: false
+        implemented: true
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -253,7 +252,7 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: false
+        implemented: true
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6
