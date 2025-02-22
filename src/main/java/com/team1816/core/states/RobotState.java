@@ -95,7 +95,6 @@ public class RobotState {
     public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
     public boolean isCoralBeamBreakTriggered = false;
-    public boolean isAlgaeBeamBreakTriggered = false;
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();

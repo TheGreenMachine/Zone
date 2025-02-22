@@ -85,9 +85,9 @@ public class AlgaeCatcher extends Subsystem {
 
         algaeSensor = new DigitalInput((int) factory.getConstant(NAME, "algaeSensorChannel", 1));
 
-        algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", 0);
+        algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", .3);
         algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", 0);
-        algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", 0);
+        algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", -.3);
 
         SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
@@ -155,16 +155,14 @@ public class AlgaeCatcher extends Subsystem {
         actualAlgaeCatcherVelocity = intakeMotor.getMotorOutputPercent();
         algaeCatcherCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if (robotState.isAlgaeBeamBreakTriggered != isBeamBreakTriggered()) {
-            robotState.isAlgaeBeamBreakTriggered = isBeamBreakTriggered();
-
-            if (robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
-                desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
-            }
-
-            if (!robotState.isAlgaeBeamBreakTriggered && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD) {
-                desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.INTAKE;
-            }
+        // get value once the value may change ever call, and you want to use
+        // the same value for all the logic
+        boolean beamBreak = isBeamBreakTriggered();
+        if (beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
+            desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
+        }
+        else if (!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
+            desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.INTAKE;
         }
 
 //        System.out.println(isBeamBreakTriggered());
@@ -209,7 +207,6 @@ public class AlgaeCatcher extends Subsystem {
     public void writeToHardware() {
         if (desiredIntakeStateChanged) {
             desiredIntakeStateChanged = false;
-
             switch (desiredIntakeState) {
                 case STOP -> desiredAlgaeCatcherPower = 0;
 
@@ -219,11 +216,10 @@ public class AlgaeCatcher extends Subsystem {
 
                 case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
             }
-
+            // Good to log states to aid troubleshooting
+            GreenLogger.log("Coral:" + desiredIntakeState + " Power:" + desiredAlgaeCatcherPower);
             intakeMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredAlgaeCatcherPower);
             algaeCatcherCurrentDrawLogger.append(desiredAlgaeCatcherPower);
-
-//            System.out.println(desiredAlgaeCatcherPower);
         }
 
         robotState.algaeCatcherPivot.setAngle(robotState.algaeBaseAngle + pivotMotor.getSensorPosition() / algaeMotorRotationsPerDegree);

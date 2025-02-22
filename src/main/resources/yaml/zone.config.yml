@@ -1,6 +1,6 @@
 subsystems:
     drivetrain:
-        implemented: false
+        implemented: true
         motors:
             RRDr:
                 motorType: TalonFX
@@ -209,9 +209,9 @@ subsystems:
                 kG: 0
                 gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: .15
+            algaeCollectSpeed: -.30
             algaeHoldSpeed: 0
-            algaeReleaseSpeed: -.30
+            algaeReleaseSpeed: .80
 
             algaeSensorChannel: 1
 
