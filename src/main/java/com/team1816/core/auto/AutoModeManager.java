@@ -198,7 +198,7 @@ public class AutoModeManager {
 
         TOP_SIDE_1_SCORE_2,
 
-        MIDDLE_SIDE_3_SCORE_1,
+        MIDDLE_SIDE_2_SCORE_1,
 
         MIDDLE_SIDE_3_SCORE_2,
 
@@ -245,7 +245,7 @@ public class AutoModeManager {
 //            case AUTOPATH:
 //                robotState.dIsAutoDynamic = false;
 //                return new AutopathMode();
-            case MIDDLE_SIDE_3_SCORE_1:
+            case MIDDLE_SIDE_2_SCORE_1:
                 robotState.dIsAutoDynamic = false;
                 return new MiddlePlace1AutoMode(color);
             case MIDDLE_SIDE_3_SCORE_2:

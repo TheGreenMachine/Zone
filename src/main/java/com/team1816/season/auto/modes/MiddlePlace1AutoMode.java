@@ -10,6 +10,7 @@ import com.team1816.season.auto.actions.CoralArmQuickAction;
 import com.team1816.season.auto.actions.ElevatorQuickAction;
 import com.team1816.season.auto.actions.PlaceCoralSeriesAction;
 import com.team1816.season.auto.path.MiddleToSideThree;
+import com.team1816.season.auto.path.MiddleToSideTwo;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,7 +23,7 @@ public class MiddlePlace1AutoMode extends AutoMode {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new MiddleToSideThree(color)
+                                new MiddleToSideTwo(color)
                         )
                 )
         );

@@ -7,15 +7,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 import java.util.List;
 
-public class DriveOffLineMiddlePath extends AutoPath {
-    public DriveOffLineMiddlePath(Color color) {
+public class MiddleToSideTwo extends AutoPath {
+    public MiddleToSideTwo(Color color) {
         super(color);
     }
     @Override
     protected List<Pose2d> getWaypoints() {
         return List.of(
                 new Pose2d(7.9, 4.14, Rotation2d.fromDegrees(180)),
-                new Pose2d(6.26, 4.14, Rotation2d.fromDegrees(180))
+                new Pose2d(5.85, 4.14, Rotation2d.fromDegrees(180))
         );
     }
 
@@ -25,7 +25,7 @@ public class DriveOffLineMiddlePath extends AutoPath {
                 Rotation2d.fromDegrees(180),
                 Rotation2d.fromDegrees(180)
         );
-    }
+    }   
 
     @Override
     protected boolean usingApp() {
