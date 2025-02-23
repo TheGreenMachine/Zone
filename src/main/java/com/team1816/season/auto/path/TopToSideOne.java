@@ -15,7 +15,7 @@ public class TopToSideOne extends AutoPath {
     @Override
     protected List<Pose2d> getWaypoints() {
         return List.of(
-                new Pose2d(7.12, 7.45, Rotation2d.fromDegrees(-129)),
+                new Pose2d(7.12, 7.45, Rotation2d.fromDegrees(270)),
                 new Pose2d(5.24, 5.14, Rotation2d.fromDegrees(-129))
         );
     }
@@ -23,8 +23,8 @@ public class TopToSideOne extends AutoPath {
     @Override
     protected List<Rotation2d> getWaypointHeadings() {
         return List.of(
-                Rotation2d.fromDegrees(220),
-                Rotation2d.fromDegrees(238)
+                Rotation2d.fromDegrees(270),
+                Rotation2d.fromDegrees(235)
         );
     }
 

@@ -137,7 +137,7 @@ subsystems:
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: false
+        implemented: true
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
