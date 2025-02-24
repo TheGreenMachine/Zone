@@ -250,8 +250,9 @@ public class Robot extends TimedRobot {
             /** Register inputHandler */
             inputHandler = Injector.get(InputHandler.class);
 
-
-            /** Driver Commands */
+            /**NEW SUBSYSTEM ACTIONS*/
+                /** Driver Commands */
+                    /**Intake/Driving Inputs*/
             inputHandler.listenAction(
                     "zeroPose",
                     ActionState.PRESSED,
@@ -276,27 +277,6 @@ public class Robot extends TimedRobot {
                     "slowMode",
                     drive::setSlowMode
             );
-
-            /*inputHandler.listenAction(
-                    "autopathingSpeaker",
-                    ActionState.PRESSED,
-                    () ->
-                        autopather.start(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(0)))
-            );
-
-            inputHandler.listenAction(
-                    "autopathingAmp",
-                    ActionState.PRESSED,
-                    () ->
-                        autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
-            );*/
-            /*NEW SUBSYSTEM ACTIONS*/
-            /*inputHandler.listenActionPressAndRelease(
-                    "intakeCoral",
-                    (pressed) -> {
-                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
-                    }
-            );*/
             inputHandler.listenAction(
                     "outtakeCoral",
                     ActionState.PRESSED,
@@ -324,10 +304,8 @@ public class Robot extends TimedRobot {
                     }
             );
 
+                  /**Position inputs*/
 
-            /** Operator Commands */
-
-            /*NEW SUBSYSTEM ACTIONS*/
             inputHandler.listenAction(
                     "L1",
                     ActionState.PRESSED,
@@ -342,7 +320,32 @@ public class Robot extends TimedRobot {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
                     }
             );
-/*            inputHandler.listenAction(
+            inputHandler.listenAction(
+                    "L3",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
+                    }
+            );
+            inputHandler.listenAction(
+                    "L4",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
+                    }
+            );
+            inputHandler.listenActionPressAndRelease(
+                    "removeAlgae",
+                    (pressed) ->{
+                        algaeCatcher.setDesiredState(
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
+                        );
+                    }
+            );
+            /**COMMENTED ACTIONS THAT MIGHT BE IMPORTANT*/
+                /**REEFSCAPE ACTIONS*/
+            /*            inputHandler.listenAction(
                     "pivotElevatorAndCoralFeeder",
                     ActionState.PRESSED,
                     () -> {
@@ -371,29 +374,26 @@ public class Robot extends TimedRobot {
                         algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
                     }
             );*/
-            inputHandler.listenAction(
-                    "L3",
+                /**CRESCENDO ACTIONS*/
+                        /*inputHandler.listenAction(
+                    "autopathingSpeaker",
                     ActionState.PRESSED,
-                    () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
-                    }
+                    () ->
+                        autopather.start(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(0)))
             );
+
             inputHandler.listenAction(
-                    "L4",
+                    "autopathingAmp",
                     ActionState.PRESSED,
-                    () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
+                    () ->
+                        autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
+            );*/
+            /*inputHandler.listenActionPressAndRelease(
+                    "intakeCoral",
+                    (pressed) -> {
+                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
                     }
-            );
-            inputHandler.listenActionPressAndRelease(
-                    "removeAlgae",
-                    (pressed) ->{
-                        algaeCatcher.setDesiredState(
-                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
-                                pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
-                        );
-                    }
-            );
+            );*/
 
             /** Buttonboard Commands */
 
