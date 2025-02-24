@@ -159,21 +159,11 @@ public class AlgaeCatcher extends Subsystem {
         boolean beamBreak = isBeamBreakTriggered();
         if (beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
             desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
-        }
-        else if (!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
-            desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.INTAKE;
-        }
-
-//        System.out.println(isBeamBreakTriggered());
-
-        if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE){
-            desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.INTAKE;
-        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD){
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.HOLD;
-        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.STOP){
+        }
+        if (!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE) {
+            desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.STOP;
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.STOW;
-        } else if (desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE && desiredPivotState != ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE){
-            desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.OUTTAKE;
         }
 
         if (robotState.actualAlgaeCatcherIntakeState != desiredIntakeState) {

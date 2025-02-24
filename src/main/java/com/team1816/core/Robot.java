@@ -297,25 +297,23 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
                     }
             );*/
-            inputHandler.listenActionPressAndRelease(
+            inputHandler.listenAction(
                     "outtakeCoral",
-                    (pressed) -> {
-                        coralArm.setDesiredIntakeState(pressed ? CoralArm.INTAKE_STATE.OUTTAKE : CoralArm.INTAKE_STATE.REST);
+                    ActionState.PRESSED,
+                    () -> {
+                        coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.OUTTAKE);
                     }
             );
-            inputHandler.listenActionPressAndRelease(
+            inputHandler.listenAction(
                     "intake/OuttakeAlgae",
-                    (pressed) ->{
-                        if(pressed){
-                            if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD)
-                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
-                            else
-                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
-                        } else{
-                            if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD){
-                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-                            }
-                        };
+                    ActionState.PRESSED,
+                    () -> {
+                        if(algaeCatcher.isBeamBreakTriggered()) {
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
+                        }
+                        else {
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
+                        }
                     }
             );
             inputHandler.listenAction(

@@ -16,6 +16,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -60,6 +61,8 @@ public class CoralArm extends Subsystem {
 
     private double desiredPivotPosition = 0;
     private double actualPivotPosition = 0;
+
+    private double beamBreakLastUntriggeredTimestamp = -100;
 
     /**
      * Constants
@@ -150,36 +153,32 @@ public class CoralArm extends Subsystem {
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if(robotState.isElevatorInRange && robotState.actualElevatorState != Elevator.ELEVATOR_STATE.FEEDER) {
+        //Setting beam break state
+        if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
+            robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
+            if(!robotState.isCoralBeamBreakTriggered)
+                beamBreakLastUntriggeredTimestamp = Timer.getFPGATimestamp();
+        }
+
+        //Setting intake motor state
+        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Math.abs(Timer.getFPGATimestamp() - (beamBreakLastUntriggeredTimestamp + 0.3/*Delay to make sure coral gets fully off*/)) <= 0.1)
+            desiredIntakeState = INTAKE_STATE.INTAKE;
+        if(desiredIntakeState != INTAKE_STATE.OUTTAKE) {
+            desiredIntakeState = robotState.isCoralBeamBreakTriggered ? INTAKE_STATE.HOLD : INTAKE_STATE.INTAKE;
+        }
+
+        //Setting pivot motor state
+        if(robotState.isElevatorInRange) {
             desiredPivotState = switch (robotState.actualElevatorState){
                 case L1 -> PIVOT_STATE.L1;
                 case L2 -> PIVOT_STATE.L2;
                 case L3 -> PIVOT_STATE.L3;
                 case L4 -> PIVOT_STATE.L4;
-                case FEEDER -> PIVOT_STATE.FEEDER;
+                case FEEDER -> robotState.isCoralBeamBreakTriggered ? PIVOT_STATE.UP : PIVOT_STATE.FEEDER;
             };
         }
-        if(desiredIntakeState == INTAKE_STATE.REST && !robotState.isCoralBeamBreakTriggered){
-            desiredIntakeState = INTAKE_STATE.INTAKE;
-        }
-
-        if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
-            robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
-
-            if (robotState.isCoralBeamBreakTriggered){
-                desiredPivotState = PIVOT_STATE.UP;
-            }
-
-            if (robotState.isCoralBeamBreakTriggered && (desiredIntakeState == INTAKE_STATE.INTAKE || desiredIntakeState == INTAKE_STATE.REST)) {
-                desiredIntakeState = INTAKE_STATE.HOLD;
-            }
-
-            if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.HOLD){
-                desiredIntakeState = INTAKE_STATE.INTAKE;
-            }
-        }
-        if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState != INTAKE_STATE.OUTTAKE){
-            desiredPivotState = PIVOT_STATE.FEEDER;
+        else {
+            desiredPivotState = PIVOT_STATE.UP;
         }
 
         if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
