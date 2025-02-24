@@ -335,7 +335,6 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L1);
                     }
             );
             inputHandler.listenAction(
@@ -343,7 +342,6 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2);
                     }
             );
 /*            inputHandler.listenAction(
@@ -380,7 +378,6 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
                     }
             );
             inputHandler.listenAction(
@@ -388,7 +385,6 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                     }
             );
             inputHandler.listenActionPressAndRelease(
@@ -579,7 +575,7 @@ public class Robot extends TimedRobot {
             Robot.robotDt = getLastRobotLoop();
             loopStart = Timer.getFPGATimestamp();
 
-
+            robotState.isElevatorInRange = elevator.isElevatorInRange();
             if (Constants.kLoggingRobot) {
                 looperLogger.append(looperDt);
                 robotLoopLogger.append(robotDt);

@@ -216,7 +216,7 @@ public class AlgaeCatcher extends Subsystem {
                 case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
             }
             // Good to log states to aid troubleshooting
-            GreenLogger.log("Coral:" + desiredIntakeState + " Power:" + desiredAlgaeCatcherPower);
+            GreenLogger.log("Algae intake: " + desiredIntakeState + " Power: " + desiredAlgaeCatcherPower);
             intakeMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredAlgaeCatcherPower);
             algaeCatcherCurrentDrawLogger.append(desiredAlgaeCatcherPower);
         }

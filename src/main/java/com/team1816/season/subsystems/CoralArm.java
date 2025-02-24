@@ -73,6 +73,7 @@ public class CoralArm extends Subsystem {
     private double l3Position = factory.getConstant(NAME, "coralArmL3Position", 1.0);
     private double l4Position = factory.getConstant(NAME, "coralArmL4Position", 1.0);
     private double feederPosition = factory.getConstant(NAME, "coralArmFeederPosition", 1.0);
+    private double upPosition = factory.getConstant(NAME, "coralArmUpPosition", 1.0);
 
     private final double motorRotationsPerDegree = factory.getConstant(NAME, "coralArmMotorRotationsPerDegree", 1);
 
@@ -149,12 +150,25 @@ public class CoralArm extends Subsystem {
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
+        if(robotState.isElevatorInRange && robotState.actualElevatorState != Elevator.ELEVATOR_STATE.FEEDER) {
+            desiredPivotState = switch (robotState.actualElevatorState){
+                case L1 -> PIVOT_STATE.L1;
+                case L2 -> PIVOT_STATE.L2;
+                case L3 -> PIVOT_STATE.L3;
+                case L4 -> PIVOT_STATE.L4;
+                case FEEDER -> PIVOT_STATE.FEEDER;
+            };
+        }
         if(desiredIntakeState == INTAKE_STATE.REST && !robotState.isCoralBeamBreakTriggered){
             desiredIntakeState = INTAKE_STATE.INTAKE;
         }
 
         if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
             robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
+
+            if (robotState.isCoralBeamBreakTriggered){
+                desiredPivotState = PIVOT_STATE.UP;
+            }
 
             if (robotState.isCoralBeamBreakTriggered && (desiredIntakeState == INTAKE_STATE.INTAKE || desiredIntakeState == INTAKE_STATE.REST)) {
                 desiredIntakeState = INTAKE_STATE.HOLD;
@@ -163,10 +177,9 @@ public class CoralArm extends Subsystem {
             if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState == INTAKE_STATE.HOLD){
                 desiredIntakeState = INTAKE_STATE.INTAKE;
             }
-
-            if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState != INTAKE_STATE.OUTTAKE){
-                desiredPivotState = PIVOT_STATE.FEEDER;
-            }
+        }
+        if (!robotState.isCoralBeamBreakTriggered && desiredIntakeState != INTAKE_STATE.OUTTAKE){
+            desiredPivotState = PIVOT_STATE.FEEDER;
         }
 
         if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
@@ -223,6 +236,7 @@ public class CoralArm extends Subsystem {
                 case L3 -> l3Position += offsetAmount;
                 case L4 -> l4Position += offsetAmount;
                 case FEEDER -> feederPosition += offsetAmount;
+                case UP -> upPosition += offsetAmount;
         }
         offsetHasBeenApplied = true;
         GreenLogger.log("Coral arm " + desiredPivotState + " pivot position set to " + getPivotPosition(desiredPivotState));
@@ -258,6 +272,7 @@ public class CoralArm extends Subsystem {
             case L3 -> l3Position;
             case L4 -> l4Position;
             case FEEDER -> feederPosition;
+            case UP -> upPosition;
         };
     }
 
@@ -274,7 +289,8 @@ public class CoralArm extends Subsystem {
         L2,
         L3,
         L4,
-        FEEDER
+        FEEDER,
+        UP
     }
 
     public enum INTAKE_STATE {

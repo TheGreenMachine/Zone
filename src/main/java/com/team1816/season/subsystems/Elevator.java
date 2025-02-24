@@ -121,8 +121,6 @@ public class Elevator extends Subsystem {
             offsetHasBeenApplied = false;
 
             desiredElevatorPosition = getElevatorPosition(desiredElevatorState);
-            System.out.println("Elevator state: "+desiredElevatorState);
-            System.out.println("Elevator position: "+desiredElevatorPosition);
             elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
         }
     }

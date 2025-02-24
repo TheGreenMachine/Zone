@@ -165,8 +165,8 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: -.60
-            outtakeSpeed: .80
+            intakeSpeed: -.40
+            outtakeSpeed: .40
             holdSpeed: 0
 
             coralSensorChannel: 9
@@ -175,12 +175,13 @@ subsystems:
             coralArmL2Position: 36
             coralArmL3Position: 36
             coralArmL4Position: 35
+            coralArmUpPosition: 17
 
             coralArmFeederPosition: 26.3
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
-        implemented: false
+        implemented: true
         motors:
             algaeCatcherIntakeMotor:
                 motorType: SparkMax
