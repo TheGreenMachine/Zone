@@ -155,8 +155,9 @@ public class CoralArm extends Subsystem {
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
         //Setting beam break state
-        if (robotState.isCoralBeamBreakTriggered != isBeamBreakTriggered()) {
-            robotState.isCoralBeamBreakTriggered = isBeamBreakTriggered();
+        var beamBreak = isBeamBreakTriggered();
+        if (robotState.isCoralBeamBreakTriggered != beamBreak) {
+            robotState.isCoralBeamBreakTriggered = beamBreak;
             if(!robotState.isCoralBeamBreakTriggered) {
                 beamBreakLastUntriggeredTimestamp = Timer.getFPGATimestamp();
                 shouldStopOuttakingSoon = true;
@@ -164,7 +165,7 @@ public class CoralArm extends Subsystem {
         }
 
         //Setting intake motor state
-        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Timer.getFPGATimestamp() >= (beamBreakLastUntriggeredTimestamp + 0.6/*Delay to make sure coral gets fully off*/) && shouldStopOuttakingSoon) {
+        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Timer.getFPGATimestamp() >= (beamBreakLastUntriggeredTimestamp + 2/*Delay to make sure coral gets fully off*/) && shouldStopOuttakingSoon) {
             desiredIntakeState = INTAKE_STATE.INTAKE;
             shouldStopOuttakingSoon = false;
         }
@@ -196,13 +197,13 @@ public class CoralArm extends Subsystem {
             desiredPivotStateChanged = true;
         }
 
-        SmartDashboard.putBoolean("CoralArmBeamBreak", isBeamBreakTriggered());
+        SmartDashboard.putBoolean("CoralArmBeamBreak", beamBreak);
 
         if (Constants.kLoggingRobot) {
             doubleDesStatesLogger().append(desiredPivotPosition);
             doubleActStatesLogger().append(actualPivotPosition);
 
-            beamBreakLogger.append(isBeamBreakTriggered());
+            beamBreakLogger.append(beamBreak);
         }
     }
 
@@ -229,8 +230,9 @@ public class CoralArm extends Subsystem {
             offsetHasBeenApplied = false;
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
-            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 1, 35));
+            pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 1, 36));
         }
+        GreenLogger.log("Coral arm intake state: "+desiredIntakeState+" Intake power: "+desiredIntakePower+" Pivot state: "+desiredPivotState+" Pivot position: "+desiredPivotPosition);
     }
 
     public void offsetCoralPivot(double offsetAmount){
@@ -247,7 +249,7 @@ public class CoralArm extends Subsystem {
     }
 
     public boolean isCoralArmPivotInRange(){
-        return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 1;
+        return Math.abs(pivotMotor.getSensorPosition() - desiredPivotPosition) < 2;
     }
 
     public boolean isCoralArmIntakeInRange(){

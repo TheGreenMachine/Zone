@@ -34,8 +34,11 @@ public class TopPlace1AutoMode extends AutoMode {
                                 new DelayedElevatorAction(Elevator.ELEVATOR_STATE.L4, 2),
                                 trajectoryActions.get(0)
                         ),
-                        new WaitAction(1.5),
-                        new OuttakeCoralSeriesAction()
+                        new SeriesAction(
+                                new WaitForCoralPivotPosition(CoralArm.PIVOT_STATE.L4),
+                                new WaitAction(0.5),
+                                new OuttakeCoralSeriesAction()
+                        )
                 ));
     }
     @Override

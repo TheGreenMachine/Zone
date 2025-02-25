@@ -144,7 +144,7 @@ subsystems:
                 motorName: coralArmIntakeMotor
                 id: 12
                 invertMotor: false
-                currentLimit: 20
+                currentLimit: 25
             coralArmPivotMotor:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
@@ -165,8 +165,8 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: -.40
-            outtakeSpeed: .40
+            intakeSpeed: -.80
+            outtakeSpeed: .80
             holdSpeed: 0
 
             coralSensorChannel: 9
@@ -174,8 +174,8 @@ subsystems:
             coralArmL1Position: 36
             coralArmL2Position: 36
             coralArmL3Position: 36
-            coralArmL4Position: 35
-            coralArmUpPosition: 17
+            coralArmL4Position: 36
+            coralArmUpPosition: 20
 
             coralArmFeederPosition: 26.3
 
@@ -220,7 +220,7 @@ subsystems:
             intakePosition: 16.8
             holdPosition: 13.67
             outtakePosition: 14.07
-            removeAlgaePosition: 1.0
+            removeAlgaePosition: 5.1
 
             algaeMotorRotationsPerDegree: .25
     elevator:
