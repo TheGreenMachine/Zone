@@ -35,11 +35,11 @@ public class AlgaeCatcher extends Subsystem {
     /**
      * Constants
      */
-    private static final double stowPosition = factory.getConstant(NAME,"stowPosition",1.0);
-    private static final double intakePosition = factory.getConstant(NAME,"intakePosition",1.0);
-    private static final double holdPosition = factory.getConstant(NAME,"holdPosition",1.0);
-    private static final double outtakePosition = factory.getConstant(NAME,"outtakePosition",1.0);
-    private static final double removeAlgaePosition = factory.getConstant(NAME,"removeAlgaePosition",1.0);
+    private double stowPosition = factory.getConstant(NAME,"stowPosition",1.0);
+    private double intakePosition = factory.getConstant(NAME,"intakePosition",1.0);
+    private double holdPosition = factory.getConstant(NAME,"holdPosition",1.0);
+    private double outtakePosition = factory.getConstant(NAME,"outtakePosition",1.0);
+    private double removeAlgaePosition = factory.getConstant(NAME,"removeAlgaePosition",1.0);
 
     private final double algaeMotorRotationsPerDegree = factory.getConstant(NAME, "algaeMotorRotationsPerDegree", 1);
 
@@ -49,6 +49,7 @@ public class AlgaeCatcher extends Subsystem {
     public final double algaeCollectSpeed;
     public final double algaeHoldSpeed;
     public final double algaeReleaseSpeed;
+    private boolean offsetHasBeenApplied = false;
 
     /**
      * Logging
@@ -234,6 +235,16 @@ public class AlgaeCatcher extends Subsystem {
             }
             pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPosition, .25, 40));
         }
+    }
+    public void offsetAlgaePivot(double offsetAmount){
+        switch (desiredPivotState) {
+            case STOW -> stowPosition += offsetAmount;
+            case HOLD -> holdPosition += offsetAmount;
+            case INTAKE -> intakePosition += offsetAmount;
+            case OUTTAKE -> outtakePosition += offsetAmount;
+            case REMOVE_ALGAE -> removeAlgaePosition += offsetAmount;
+        }
+        offsetHasBeenApplied = true;
     }
 
     public boolean isAlgaeCatcherPivotInRange(){
