@@ -204,6 +204,8 @@ public class AutoModeManager {
 
         BOTTOM_SIDE_3_SCORE_1,
 
+        BOTTOM_SIDE_3_SCORE_1_FEEDER,
+
         BOTTOM_SIDE_3_SCORE_2,
 
         TOP_DRIVE_STRAIGHT,
@@ -262,7 +264,10 @@ public class AutoModeManager {
                 return new DriveOffLineBottomAutoMode(color);
             case BOTTOM_SIDE_3_SCORE_1:
                 robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color);
+                return new BottomPlace1AutoMode(color, false);
+            case BOTTOM_SIDE_3_SCORE_1_FEEDER:
+                robotState.dIsAutoDynamic = false;
+                return new BottomPlace1AutoMode(color, true);
             case BOTTOM_SIDE_3_SCORE_2:
                 robotState.dIsAutoDynamic = false;
                 return new BottomPlace2AutoMode(color);

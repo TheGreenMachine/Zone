@@ -8,12 +8,12 @@ import com.team1816.season.subsystems.CoralArm;
 public class WaitForCoralPivotPosition implements AutoAction {
     private final RobotState robotState;
     private final CoralArm coralArm;
-    private final CoralArm.PIVOT_STATE pivotState;
+    private final CoralArm.PIVOT_STATE pivotPosition;
 
     public WaitForCoralPivotPosition(CoralArm.PIVOT_STATE pivotPosition){
         robotState = Injector.get(RobotState.class);
         coralArm = Injector.get(CoralArm.class);
-        pivotState = pivotPosition;
+        this.pivotPosition = pivotPosition;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class WaitForCoralPivotPosition implements AutoAction {
 
     @Override
     public boolean isFinished() {
-        return coralArm.isCoralArmPivotInRange() && robotState.actualCoralArmPivotState == pivotState;
+        return coralArm.isCoralArmPivotInRange() && robotState.actualCoralArmPivotState == pivotPosition;
     }
 
     @Override

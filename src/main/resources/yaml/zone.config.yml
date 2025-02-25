@@ -247,7 +247,7 @@ subsystems:
         constants: # TODO: all of these
             elevatorFeederPosition: 0
             elevatorL1Position: 1
-            elevatorL2Position: 1.07
+            elevatorL2Position: 14.2
             elevatorL3Position: 33.7
             elevatorL4Position: 66.9
 

@@ -5,6 +5,7 @@ import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.ParallelAction;
 import com.team1816.lib.auto.actions.SeriesAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
+import com.team1816.lib.auto.actions.WaitAction;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.season.auto.actions.*;
 import com.team1816.season.auto.path.MiddleToSideThree;
@@ -35,6 +36,8 @@ public class MiddlePlace1AutoMode extends AutoMode {
                                 new DelayedElevatorAction(Elevator.ELEVATOR_STATE.L4, 1),
                                 trajectoryActions.get(0)
                         ),
+                        new WaitForCoralPivotPosition(CoralArm.PIVOT_STATE.L4),
+                        new WaitAction(0.5),
                         new OuttakeCoralSeriesAction()
                 )
         );
