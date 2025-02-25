@@ -164,7 +164,7 @@ public class CoralArm extends Subsystem {
         }
 
         //Setting intake motor state
-        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Timer.getFPGATimestamp() >= (beamBreakLastUntriggeredTimestamp + 0.3/*Delay to make sure coral gets fully off*/) && shouldStopOuttakingSoon) {
+        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Timer.getFPGATimestamp() >= (beamBreakLastUntriggeredTimestamp + 0.6/*Delay to make sure coral gets fully off*/) && shouldStopOuttakingSoon) {
             desiredIntakeState = INTAKE_STATE.INTAKE;
             shouldStopOuttakingSoon = false;
         }

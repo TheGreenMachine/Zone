@@ -203,7 +203,7 @@ public class AlgaeCatcher extends Subsystem {
 
                 case HOLD -> desiredAlgaeCatcherPower = algaeHoldSpeed;
 
-                case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
+                case OUTTAKE,REMOVE_ALGAE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
             }
             // Good to log states to aid troubleshooting
             GreenLogger.log("Algae intake: " + desiredIntakeState + " Power: " + desiredAlgaeCatcherPower);
@@ -294,7 +294,8 @@ public class AlgaeCatcher extends Subsystem {
         STOP,
         INTAKE,
         HOLD,
-        OUTTAKE
+        OUTTAKE,
+        REMOVE_ALGAE
     }
     public enum ALGAE_CATCHER_PIVOT_STATE {
         STOW,

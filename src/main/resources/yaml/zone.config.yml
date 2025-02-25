@@ -247,9 +247,9 @@ subsystems:
         constants: # TODO: all of these
             elevatorFeederPosition: 0
             elevatorL1Position: 1
-            elevatorL2Position: 8.6
-            elevatorL3Position: 28.3
-            elevatorL4Position: 58.8
+            elevatorL2Position: 1.07
+            elevatorL3Position: 33.7
+            elevatorL4Position: 66.9
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:

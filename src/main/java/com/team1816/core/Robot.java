@@ -389,7 +389,7 @@ public class Robot extends TimedRobot {
                     "removeAlgae",
                     (pressed) ->{
                         algaeCatcher.setDesiredState(
-                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
                                 pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
                         );
                     }
@@ -482,7 +482,7 @@ public class Robot extends TimedRobot {
         //TODO add new subsystem inits here
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
         algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.UP, CoralArm.INTAKE_STATE.HOLD);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();

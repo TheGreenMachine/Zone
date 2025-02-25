@@ -106,6 +106,7 @@ public class Elevator extends Subsystem {
 
         if (robotState.actualElevatorState != desiredElevatorState) {
             robotState.actualElevatorState = desiredElevatorState;
+            elevatorOutputsChanged = true;
         }
     }
 
@@ -121,6 +122,7 @@ public class Elevator extends Subsystem {
             offsetHasBeenApplied = false;
 
             desiredElevatorPosition = getElevatorPosition(desiredElevatorState);
+            System.out.println("Elevator state: "+desiredElevatorState+" Position: "+desiredElevatorPosition);
             elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
         }
     }
@@ -138,7 +140,7 @@ public class Elevator extends Subsystem {
     }
 
     public boolean isElevatorInRange(){
-        return Math.abs(elevatorMotor.getSensorPosition() - desiredElevatorPosition) < 1;
+        return Math.abs(elevatorMotor.getSensorPosition() - desiredElevatorPosition) < 2;
     }
 
     @Override
