@@ -9,7 +9,7 @@ public class OuttakeCoralSeriesAction extends SeriesAction{
         super(
                 new SeriesAction(
                         new CoralArmQuickIntakeAction(CoralArm.INTAKE_STATE.OUTTAKE),
-                        new WaitAction(1)
+                        new WaitAction(2)
                 )
         );
     }
