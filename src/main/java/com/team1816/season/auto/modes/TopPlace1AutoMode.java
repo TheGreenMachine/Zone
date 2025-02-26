@@ -8,23 +8,28 @@ import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.auto.actions.WaitAction;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.season.auto.actions.*;
-import com.team1816.season.auto.path.TopToSideOne;
+import com.team1816.season.auto.path.Reef1AToTopFeeder;
+import com.team1816.season.auto.path.TopStartToReef1A;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 
 import java.util.List;
 
 public class TopPlace1AutoMode extends AutoMode {
-    public TopPlace1AutoMode(Color color){
+    private final boolean endAtFeeder;
+
+    public TopPlace1AutoMode(Color color, boolean endAtFeeder){
         super(
                 List.of(
                         new TrajectoryAction(
-                                new TopToSideOne(robotState.allianceColor)
+                                new TopStartToReef1A(robotState.allianceColor)
+                        ),
+                        new TrajectoryAction(
+                                new Reef1AToTopFeeder(robotState.allianceColor)
                         )
                 )
         );
+        this.endAtFeeder = endAtFeeder;
     }
     @Override
     protected void routine() throws AutoModeEndedException {
@@ -36,12 +41,9 @@ public class TopPlace1AutoMode extends AutoMode {
                         ),
                         new WaitForCoralPivotPosition(CoralArm.PIVOT_STATE.L4),
                         new WaitAction(0.5),
-                        new OuttakeCoralSeriesAction()
+                        new OuttakeCoralSeriesAction(),
+                        endAtFeeder ? trajectoryActions.get(1) : new WaitAction(0)
                 )
         );
-    }
-    @Override
-    public Pose2d getInitialPose() {
-        return trajectoryActions.get(0).getTrajectory().getInitialPose();
     }
 }

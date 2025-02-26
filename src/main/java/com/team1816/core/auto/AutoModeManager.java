@@ -196,17 +196,23 @@ public class AutoModeManager {
 
         TOP_SIDE_1_SCORE_1,
 
-        TOP_SIDE_1_SCORE_2,
+        TOP_SIDE_1_SCORE_1_FEEDER,
+
+//        TOP_SIDE_1_SCORE_2,
 
         MIDDLE_SIDE_2_SCORE_1,
 
-        MIDDLE_SIDE_3_SCORE_2,
+        MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER,
+
+        MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER,
+
+//        MIDDLE_SIDE_3_SCORE_2,
 
         BOTTOM_SIDE_3_SCORE_1,
 
         BOTTOM_SIDE_3_SCORE_1_FEEDER,
 
-        BOTTOM_SIDE_3_SCORE_2,
+//        BOTTOM_SIDE_3_SCORE_2,
 
         TOP_DRIVE_STRAIGHT,
 
@@ -216,11 +222,11 @@ public class AutoModeManager {
 
 //        DYNAMIC_TRAJECTORY_ONLY,
 
-        DYNAMIC_PLACE_1,
-
-        DYNAMIC_PLACE_2,
-
-        DYNAMIC_PLACE_3
+//        DYNAMIC_PLACE_1,
+//
+//        DYNAMIC_PLACE_2,
+//
+//        DYNAMIC_PLACE_3
 
 //        TEST_DYNAMIC_PATHS
         }
@@ -249,10 +255,16 @@ public class AutoModeManager {
 //                return new AutopathMode();
             case MIDDLE_SIDE_2_SCORE_1:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color);
-            case MIDDLE_SIDE_3_SCORE_2:
+                return new MiddlePlace1AutoMode(color, "none");
+            case MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace2AutoMode(color);
+                return new MiddlePlace1AutoMode(color, "top");
+            case MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER:
+                robotState.dIsAutoDynamic = false;
+                return new MiddlePlace1AutoMode(color, "bottom");
+//            case MIDDLE_SIDE_3_SCORE_2:
+//                robotState.dIsAutoDynamic = false;
+//                return new MiddlePlace2AutoMode(color);
             case TOP_DRIVE_STRAIGHT:
                 robotState.dIsAutoDynamic = false;
                 return new DriveOffLineTopAutoMode(color);
@@ -268,24 +280,27 @@ public class AutoModeManager {
             case BOTTOM_SIDE_3_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
                 return new BottomPlace1AutoMode(color, true);
-            case BOTTOM_SIDE_3_SCORE_2:
-                robotState.dIsAutoDynamic = false;
-                return new BottomPlace2AutoMode(color);
-            case DYNAMIC_PLACE_1:
-                robotState.dIsAutoDynamic = true;
-                return new DynamicPlace1();
-            case DYNAMIC_PLACE_2:
-                robotState.dIsAutoDynamic = true;
-                return new DynamicPlace2();
-            case DYNAMIC_PLACE_3:
-                robotState.dIsAutoDynamic = true;
-                return new DynamicPlace3();
+//            case BOTTOM_SIDE_3_SCORE_2:
+//                robotState.dIsAutoDynamic = false;
+//                return new BottomPlace2AutoMode(color);
+//            case DYNAMIC_PLACE_1:
+//                robotState.dIsAutoDynamic = true;
+//                return new DynamicPlace1();
+//            case DYNAMIC_PLACE_2:
+//                robotState.dIsAutoDynamic = true;
+//                return new DynamicPlace2();
+//            case DYNAMIC_PLACE_3:
+//                robotState.dIsAutoDynamic = true;
+//                return new DynamicPlace3();
             case TOP_SIDE_1_SCORE_1:
                 robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color);
-            case TOP_SIDE_1_SCORE_2:
+                return  new TopPlace1AutoMode(color, false);
+            case TOP_SIDE_1_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new TopPlace2AutoMode(color);
+                return  new TopPlace1AutoMode(color, true);
+//            case TOP_SIDE_1_SCORE_2:
+//                robotState.dIsAutoDynamic = false;
+//                return new TopPlace2AutoMode(color);
 //            case DYNAMIC_TRAJECTORY_ONLY:
 //                robotState.isAutoDynamic = true;
 //                RobotState.dynamicAutoChanged = true;

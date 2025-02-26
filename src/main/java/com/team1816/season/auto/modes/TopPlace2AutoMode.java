@@ -22,9 +22,9 @@ public class TopPlace2AutoMode extends AutoMode {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new TopToSideOne(robotState.allianceColor)
+                                new TopStartToReef1A(robotState.allianceColor)
                         ), new TrajectoryAction(
-                                new SideOneToTopFeeder(robotState.allianceColor)
+                                new Reef1AToTopFeeder(robotState.allianceColor)
                         ), new TrajectoryAction(
                                 new TopFeederToSideSix(robotState.allianceColor)
                         ), new TrajectoryAction(

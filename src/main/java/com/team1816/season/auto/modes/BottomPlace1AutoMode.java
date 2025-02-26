@@ -1,6 +1,5 @@
 package com.team1816.season.auto.modes;
 
-import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.ParallelAction;
@@ -9,26 +8,24 @@ import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.auto.actions.WaitAction;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.season.auto.actions.*;
-import com.team1816.season.auto.path.BottomToSideThree;
-import com.team1816.season.auto.path.SideThreeToCloseFeeder;
+import com.team1816.season.auto.path.BottomStartToReef3B;
+import com.team1816.season.auto.path.Reef3BToBottomFeeder;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 
 import java.util.List;
 
 public class BottomPlace1AutoMode extends AutoMode {
-    private boolean endAtFeeder;
+    private final boolean endAtFeeder;
 
     public BottomPlace1AutoMode(Color color, boolean endAtFeeder) {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new BottomToSideThree(color)
+                                new BottomStartToReef3B(color)
                         ),
                         new TrajectoryAction(
-                                new SideThreeToCloseFeeder(color)
+                                new Reef3BToBottomFeeder(color)
                         )
                 )
         );
@@ -49,10 +46,5 @@ public class BottomPlace1AutoMode extends AutoMode {
                         endAtFeeder ? trajectoryActions.get(1) : new WaitAction(0)
                 )
         );
-    }
-
-    @Override
-    public Pose2d getInitialPose() {
-        return trajectoryActions.get(0).getTrajectory().getInitialPose();
     }
 }
