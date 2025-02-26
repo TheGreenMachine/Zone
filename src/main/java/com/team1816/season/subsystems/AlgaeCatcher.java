@@ -160,11 +160,10 @@ public class AlgaeCatcher extends Subsystem {
         if (beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
             desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.HOLD;
-        }
-        if (!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE) {
+        } /*else if ((!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE)*//* || (!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD)*//*) {
             desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.STOP;
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.STOW;
-        }
+        }*/
 
         if (robotState.actualAlgaeCatcherIntakeState != desiredIntakeState) {
             robotState.actualAlgaeCatcherIntakeState = desiredIntakeState;

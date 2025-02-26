@@ -211,17 +211,17 @@ subsystems:
                 kG: 0
                 gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: -.30
-            algaeHoldSpeed: 0
-            algaeReleaseSpeed: .80
+            algaeCollectSpeed: -.60
+            algaeHoldSpeed: -.60
+            algaeReleaseSpeed: 1
 
             algaeSensorChannel: 1
 
             stowPosition: 0.1
             intakePosition: 16.8
-            holdPosition: 13.67
-            outtakePosition: 14.07
-            removeAlgaePosition: 5.1
+            holdPosition: 13
+            outtakePosition: 13
+            removeAlgaePosition: 3   #4.8
 
             algaeMotorRotationsPerDegree: .25
     elevator:
@@ -262,7 +262,7 @@ subsystems:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
     camera:
-        implemented: false
+        implemented: true
         constants:
             useMultiTargetOdometry: 0
 infrastructure:
