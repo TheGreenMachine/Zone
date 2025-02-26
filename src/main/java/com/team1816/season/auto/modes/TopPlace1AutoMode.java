@@ -40,8 +40,4 @@ public class TopPlace1AutoMode extends AutoMode {
                 )
         );
     }
-    @Override
-    public Pose2d getInitialPose() {
-        return trajectoryActions.get(0).getTrajectory().getInitialPose();
-    }
 }

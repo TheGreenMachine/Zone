@@ -568,6 +568,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         try {
+//            System.out.println(robotState.fieldToVehicle);
             // updating loop timers
             Robot.looperDt = getLastSubsystemLoop();
             Robot.robotDt = getLastRobotLoop();
