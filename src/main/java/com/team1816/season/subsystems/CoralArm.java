@@ -232,7 +232,7 @@ public class CoralArm extends Subsystem {
             desiredPivotPosition = getPivotPosition(desiredPivotState);
             pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 1, 36));
         }
-        GreenLogger.log("Coral arm intake state: "+desiredIntakeState+" Intake power: "+desiredIntakePower+" Pivot state: "+desiredPivotState+" Pivot position: "+desiredPivotPosition);
+//        GreenLogger.log("Coral arm intake state: "+desiredIntakeState+" Intake power: "+desiredIntakePower+" Pivot state: "+desiredPivotState+" Pivot position: "+desiredPivotPosition);
     }
 
     public void offsetCoralPivot(double offsetAmount){

@@ -125,7 +125,8 @@ subsystems:
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
             maxVelPathFollowing: 1 # meters/s
-            maxAccel: 2 # meters/s^2
+            maxAccel: 1 # meters/s^2
+            #FR OUT, RL OUT, FL IN, BR IN
             isDemoMode: 0
             ## Swerve Characterization ##
             azimuthEncPPR: 2048
@@ -210,17 +211,17 @@ subsystems:
                 kG: 0
                 gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: -.30
-            algaeHoldSpeed: 0
-            algaeReleaseSpeed: .80
+            algaeCollectSpeed: -.60
+            algaeHoldSpeed: -.60
+            algaeReleaseSpeed: 1
 
             algaeSensorChannel: 1
 
             stowPosition: 0.1
             intakePosition: 16.8
-            holdPosition: 13.67
-            outtakePosition: 14.07
-            removeAlgaePosition: 5.1
+            holdPosition: 13
+            outtakePosition: 13
+            removeAlgaePosition: 3   #4.8
 
             algaeMotorRotationsPerDegree: .25
     elevator:
@@ -249,7 +250,7 @@ subsystems:
             elevatorL1Position: 1
             elevatorL2Position: 14.2
             elevatorL3Position: 33.7
-            elevatorL4Position: 66.9
+            elevatorL4Position: 63.1
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:

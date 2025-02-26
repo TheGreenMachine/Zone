@@ -16,7 +16,7 @@ public class BottomStartToReef3B extends AutoPath {
     protected List<Pose2d> getWaypoints() {
         return List.of(
                 new Pose2d(Constants.bottomStartPose.getTranslation(), Rotation2d.fromDegrees(90)),
-                new Pose2d(Constants.reef3BPose.getTranslation(), Rotation2d.fromDegrees(129))
+                new Pose2d(Constants.reef3BPose.getTranslation(), Rotation2d.fromDegrees(-231))
         );
     }
 
