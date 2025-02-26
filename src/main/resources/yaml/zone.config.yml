@@ -262,7 +262,7 @@ subsystems:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
     camera:
-        implemented: true
+        implemented: false
         constants:
             useMultiTargetOdometry: 0
 infrastructure:
