@@ -17,6 +17,7 @@ public class TopStartToReef1A extends AutoPath {
     protected List<Pose2d> getWaypoints() {
         return List.of(
                 new Pose2d(Constants.topStartPose.getTranslation(), Rotation2d.fromDegrees(270)),
+                new Pose2d(7.12, 6.45, Rotation2d.fromDegrees(270)),
                 new Pose2d(Constants.reef1APose.getTranslation(), Rotation2d.fromDegrees(-129))
         );
     }
@@ -25,6 +26,7 @@ public class TopStartToReef1A extends AutoPath {
     protected List<Rotation2d> getWaypointHeadings() {
         return List.of(
                 Constants.topStartPose.getRotation(),
+                Rotation2d.fromDegrees(270),
                 Constants.reef1APose.getRotation()
         );
     }

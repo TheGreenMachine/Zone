@@ -176,9 +176,9 @@ subsystems:
             coralArmL2Position: 36
             coralArmL3Position: 36
             coralArmL4Position: 36
-            coralArmUpPosition: 20
+            coralArmUpPosition: 28
 
-            coralArmFeederPosition: 26.3
+            coralArmFeederPosition: 28
 
             coralArmMotorRotationsPerDegree: 1
     algaeCatcher:
