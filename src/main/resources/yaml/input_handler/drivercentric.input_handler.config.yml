@@ -21,10 +21,10 @@ driver:
     leftBumper: L2
     rightBumper: L1
   dpad:
-    up:
-    down:
-    left:
-    right:
+    right: robotcentricRight
+    down: robotcentricDown
+    left: robotcentricLeft
+    up: robotcentricUp
 operator:
   controllerType: Xbox
   rumble: true

@@ -395,6 +395,59 @@ public class Robot extends TimedRobot {
                     }
             );*/
 
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricRight",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricDown",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricLeft",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricUp",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+
             /** Buttonboard Commands */
 
             inputHandler.listenAction(
@@ -725,6 +778,12 @@ public class Robot extends TimedRobot {
 
         if (robotState.rotatingClosedLoop) {
             drive.rotationPeriodic();
+        } else if (robotState.robotcentricRequestAmount > 0){
+            drive.setTeleopInputs(
+                    robotState.robotcentricThrottleInput,
+                    robotState.robotcentricStrafeInput,
+                    robotState.robotcentricRotationInput
+            );
         } else {
             drive.setTeleopInputs(
                     robotState.throttleInput,
