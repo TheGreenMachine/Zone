@@ -73,7 +73,7 @@ public class RobotState {
     public double throttleInput = 0;
     public double strafeInput = 0;
     public double rotationInput = 0;
-    public int robotcentricRequestAmount = 4;
+    public int robotcentricRequestAmount = 4; //this is here because robot on startup will activate all not pressed commands, so this counters it
     public double robotcentricThrottleInput = 0;
     public double robotcentricStrafeInput = 0;
     public double robotcentricRotationInput = 0;
