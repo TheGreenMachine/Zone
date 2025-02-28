@@ -32,7 +32,7 @@ public class TrajectoryAction implements AutoAction {
      *
      * @see Command
      */
-    private final Command command;
+    private final Command pathCommand;
 
     /**
      * Trajectory (list of states) for drivetrain to follow
@@ -94,7 +94,7 @@ public class TrajectoryAction implements AutoAction {
 //                    ((TankDrive) drive)::updateTrajectoryVelocities
 //                );
             GreenLogger.log("Tank Drive is no longer supported.");
-            command = null;
+            pathCommand = null;
         } else if (drive instanceof EnhancedSwerveDrive) {
             var thetaController = new ProfiledPIDController(
                     Constants.kPRotational,
@@ -107,7 +107,7 @@ public class TrajectoryAction implements AutoAction {
             PIDController xController = new PIDController(Constants.kPTranslational, 0, 0);
             PIDController yController = new PIDController(Constants.kPTranslational, 0, 0);
 
-            command =
+            pathCommand =
                 new SwerveControllerCommand(
                     trajectory,
                     drive::getPose,
@@ -124,7 +124,7 @@ public class TrajectoryAction implements AutoAction {
             GreenLogger.log(
                 " oh man oh god I'm neither swerve nor tank! " + drive.toString()
             );
-            command = null;
+            pathCommand = null;
         }
     }
 
@@ -160,7 +160,7 @@ public class TrajectoryAction implements AutoAction {
             "Starting trajectory! (Seconds = " + trajectory.getTotalTimeSeconds() + ")"
         );
         drive.startTrajectory(trajectory, headings);
-        command.initialize();
+        pathCommand.initialize();
     }
 
     /**
@@ -172,7 +172,7 @@ public class TrajectoryAction implements AutoAction {
      */
     @Override
     public void update() {
-        command.execute();
+        pathCommand.execute();
     }
 
     /**
@@ -184,7 +184,7 @@ public class TrajectoryAction implements AutoAction {
      */
     @Override
     public boolean isFinished() {
-        return command.isFinished();
+        return pathCommand.isFinished();
     }
 
     /**
@@ -196,7 +196,7 @@ public class TrajectoryAction implements AutoAction {
      */
     @Override
     public void done() {
-        command.end(false);
+        pathCommand.end(false);
         drive.stop();
     }
 }
