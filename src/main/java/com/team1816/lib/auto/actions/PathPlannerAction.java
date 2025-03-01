@@ -1,6 +1,7 @@
 package com.team1816.lib.auto.actions;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.team1816.lib.Injector;
 import com.team1816.lib.subsystems.drive.Drive;
@@ -9,6 +10,7 @@ import com.team1816.lib.subsystems.drive.TankDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import java.util.List;
@@ -41,6 +43,32 @@ public class PathPlannerAction implements AutoAction {
             pathCommand = null;
         } else if (drive instanceof EnhancedSwerveDrive) {
             this.pathCommand = AutoBuilder.followPath(path);
+        } else {
+            GreenLogger.log(
+                    " oh man oh god I'm neither swerve nor tank! " + drive.toString()
+            );
+            pathCommand = null;
+        }
+    }
+
+    /**
+     * Creates a {@link PathPlannerAction} by dynamically creating one.
+     * <p>
+     * Visit <a href="https://pathplanner.dev/">pathplanner.dev</a> for more information.
+     */
+    public PathPlannerAction(Pose2d initialPose, Pose2d targetPose, double endVelocity) {
+        this.initialPose = initialPose;
+        this.drive = Injector.get(Drive.Factory.class).getInstance();
+
+        if (drive instanceof TankDrive) {
+            GreenLogger.log("Tank Drive is no longer supported.");
+            pathCommand = null;
+        } else if (drive instanceof EnhancedSwerveDrive) {
+            PathConstraints constraints = new PathConstraints( // TODO: change this to actual values
+                    3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+            this.pathCommand = AutoBuilder.pathfindToPose(
+                targetPose, constraints, endVelocity
+            );
         } else {
             GreenLogger.log(
                     " oh man oh god I'm neither swerve nor tank! " + drive.toString()

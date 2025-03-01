@@ -285,7 +285,7 @@ public class AutoModeManager {
                 return new TopPlace2AutoMode(color);
             case CIRCLE_BLAH_MODE:
                 robotState.dIsAutoDynamic = false;
-                return new CircleAroundReefAndGoBackToInitialPosition1();
+                return new PathPlannerTestMode();
 //            case DYNAMIC_TRAJECTORY_ONLY:
 //                robotState.isAutoDynamic = true;
 //                RobotState.dynamicAutoChanged = true;

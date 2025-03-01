@@ -9,8 +9,12 @@ import com.team1816.lib.auto.modes.AutoMode;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-public class CircleAroundReefAndGoBackToInitialPosition1 extends AutoMode {
-    private final PathPlannerAction action = new PathPlannerAction("Circle Around Reef And Go Back To Initial Position 1");
+public class PathPlannerTestMode extends AutoMode {
+    public PathPlannerTestMode() {
+        action = new PathPlannerAction(robotState.fieldToVehicle, new Pose2d(7, 7.889, new Rotation2d(180)), 3);
+    }
+
+    private final PathPlannerAction action;
 
     @Override
     protected void routine() throws AutoModeEndedException {
