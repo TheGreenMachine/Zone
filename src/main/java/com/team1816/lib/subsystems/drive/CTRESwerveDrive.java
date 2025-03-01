@@ -243,7 +243,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                     () -> robotState.allianceColor == Color.RED
             );
 
-            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("path").setPoses(p));
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
         }
     }
 

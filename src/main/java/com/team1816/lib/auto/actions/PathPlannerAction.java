@@ -2,7 +2,6 @@ package com.team1816.lib.auto.actions;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * This class represents an action that will move the robot along a PathPlanner trajectory.
  */
-public class PathPlannerAction extends TrajectoryAction {
+public class PathPlannerAction implements AutoAction {
     /**
      * Creates a {@link PathPlannerAction} by loading a {@link PathPlannerPath} from the deploy
      * folder.
@@ -26,7 +25,6 @@ public class PathPlannerAction extends TrajectoryAction {
      * @throws RuntimeException when the path failed to load
      */
     public PathPlannerAction(String actionName) {
-        super(new Trajectory(), List.of()); // TODO: uncouple AutoModes from TrajectoryAction ASAP
         try {
             this.path = PathPlannerPath.fromPathFile(actionName);
         } catch (Exception e) {
@@ -46,15 +44,11 @@ public class PathPlannerAction extends TrajectoryAction {
             );
             pathCommand = null;
         }
-
-        robotState = Injector.get(RobotState.class);
     }
 
     private final PathPlannerPath path;
     private final Command pathCommand;
     private final Drive drive;
-
-    private final RobotState robotState;
 
     /**
      * Returns the path that is associated with the action
@@ -77,16 +71,6 @@ public class PathPlannerAction extends TrajectoryAction {
     public void start() {
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         pathCommand.initialize();
-
-//        RobotConfig config;
-//        try {
-//            config = RobotConfig.fromGUISettings();
-//        } catch (IOException | ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//        var sm = path.generateTrajectory(robotState.robotChassis, robotState.fieldToVehicle.getRotation(), config).getStates();
-//
-//        System.out.println(sm);
     }
 
     /**
