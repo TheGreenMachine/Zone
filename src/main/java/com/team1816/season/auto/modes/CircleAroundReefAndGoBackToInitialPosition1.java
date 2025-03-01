@@ -1,5 +1,7 @@
 package com.team1816.season.auto.modes;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.FlippingUtil;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.actions.*;
 import com.team1816.lib.auto.modes.AutoMode;
@@ -18,6 +20,11 @@ public class CircleAroundReefAndGoBackToInitialPosition1 extends AutoMode {
 
     @Override
     public Pose2d getInitialPose() {
-        return action.getPath().flipPath().getPathPoses().get(0);
+        Pose2d origin = action.getPath().getPathPoses().get(0);
+        if (AutoBuilder.shouldFlip()) {
+            origin = FlippingUtil.flipFieldPose(origin);
+        }
+
+        return origin;
     }
 }

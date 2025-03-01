@@ -1,7 +1,6 @@
 package com.team1816.lib.auto.actions;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
@@ -9,12 +8,9 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.subsystems.drive.TankDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
-import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -32,7 +28,7 @@ public class PathPlannerAction extends TrajectoryAction {
     public PathPlannerAction(String actionName) {
         super(new Trajectory(), List.of()); // TODO: uncouple AutoModes from TrajectoryAction ASAP
         try {
-            this.path = PathPlannerPath.fromPathFile(actionName).flipPath();
+            this.path = PathPlannerPath.fromPathFile(actionName);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

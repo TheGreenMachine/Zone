@@ -11,13 +11,13 @@ import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.auto.Color;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.components.gyro.Pigeon2Wrapper;
@@ -37,7 +37,6 @@ import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -241,10 +240,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                             new PIDConstants(5,0, 0)
                     ),
                     pathRobotConfig,
-                    () -> {
-                        var alliance = DriverStation.getAlliance();
-                        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
-                    }
+                    () -> robotState.allianceColor == Color.RED
             );
 
             PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("path").setPoses(p));
