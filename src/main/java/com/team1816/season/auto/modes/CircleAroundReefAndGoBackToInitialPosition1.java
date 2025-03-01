@@ -21,7 +21,7 @@ public class CircleAroundReefAndGoBackToInitialPosition1 extends AutoMode {
 
     @Override
     public Pose2d getInitialPose() {
-        Pose2d origin = action.getPath().getPathPoses().get(0);
+        Pose2d origin = action.getPathInitialPose();
         if (AutoBuilder.shouldFlip()) {
             origin = FlippingUtil.flipFieldPose(origin);
         }

@@ -7,6 +7,7 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.subsystems.drive.TankDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -25,12 +26,14 @@ public class PathPlannerAction implements AutoAction {
      * @throws RuntimeException when the path failed to load
      */
     public PathPlannerAction(String actionName) {
+        PathPlannerPath path;
         try {
-            this.path = PathPlannerPath.fromPathFile(actionName);
+            path = PathPlannerPath.fromPathFile(actionName);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+        this.initialPose = path.getPathPoses().get(0);
         this.drive = Injector.get(Drive.Factory.class).getInstance();
 
         if (drive instanceof TankDrive) {
@@ -46,18 +49,16 @@ public class PathPlannerAction implements AutoAction {
         }
     }
 
-    private final PathPlannerPath path;
+    private final Pose2d initialPose;
     private final Command pathCommand;
     private final Drive drive;
 
     /**
-     * Returns the path that is associated with the action
-     *
-     * @return trajectory
-     * @see Trajectory
+     * Returns the initial pose of the action. Note that this does not change based on the colour
+     * of the alliance.
      */
-    public PathPlannerPath getPath() {
-        return path;
+    public Pose2d getPathInitialPose() {
+        return initialPose;
     }
 
     /**
