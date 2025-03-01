@@ -186,7 +186,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
                     }
             );
 
-            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("path").setPoses(p));
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
         }
     }
 

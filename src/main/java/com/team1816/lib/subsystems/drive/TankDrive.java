@@ -159,6 +159,8 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
                     }
             );
         }
+
+        PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
         */
         GreenLogger.log("PathPlanner autos disabled for Tank Drive.");
     }
