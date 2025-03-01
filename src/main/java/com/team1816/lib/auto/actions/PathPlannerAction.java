@@ -32,7 +32,7 @@ public class PathPlannerAction extends TrajectoryAction {
     public PathPlannerAction(String actionName) {
         super(new Trajectory(), List.of()); // TODO: uncouple AutoModes from TrajectoryAction ASAP
         try {
-            this.path = PathPlannerPath.fromPathFile(actionName);
+            this.path = PathPlannerPath.fromPathFile(actionName).flipPath();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

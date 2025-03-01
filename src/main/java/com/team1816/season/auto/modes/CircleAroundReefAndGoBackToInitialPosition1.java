@@ -18,6 +18,6 @@ public class CircleAroundReefAndGoBackToInitialPosition1 extends AutoMode {
 
     @Override
     public Pose2d getInitialPose() {
-        return action.getPath().getPathPoses().get(0);
+        return action.getPath().flipPath().getPathPoses().get(0);
     }
 }
