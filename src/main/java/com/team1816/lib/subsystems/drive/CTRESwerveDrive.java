@@ -234,10 +234,10 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                     this::resetOdometry,
                     () -> chassisSpeed,
                     (ChassisSpeeds speeds, DriveFeedforwards feedforwards) ->
-                            setModuleStates(swerveKinematics.toSwerveModuleStates(chassisSpeed)),
+                            setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
                     new PPHolonomicDriveController(
-                            new PIDConstants(drivePIDConfig.kP, drivePIDConfig.kI, drivePIDConfig.kD),
-                            new PIDConstants(azimuthPIDConfig.kP, azimuthPIDConfig.kI, azimuthPIDConfig.kD)
+                            new PIDConstants(5,0, 0),
+                            new PIDConstants(5,0, 0)
                     ),
                     pathRobotConfig,
                     () -> {
