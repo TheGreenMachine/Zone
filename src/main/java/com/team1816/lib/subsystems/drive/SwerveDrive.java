@@ -159,7 +159,8 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         }
 
         // Initialise PathPlanner autopath builder configured to Swerve Drive
-        PIDSlotConfiguration pidConfig = getPIDConfig();
+        PIDSlotConfiguration drivePIDConfig = getPIDConfig();
+        PIDSlotConfiguration azimuthPIDConfig = getAzimuthPIDConfig();
         RobotConfig pathRobotConfig = null;
         try {
             pathRobotConfig = RobotConfig.fromGUISettings();
@@ -175,10 +176,13 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
                     () -> chassisSpeed,
                     (ChassisSpeeds speeds) ->
                             setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
-                    new PPHolonomicDriveController(
-                            new PIDConstants(pidConfig.kP, pidConfig.kI, pidConfig.kD),
-                            new PIDConstants(pidConfig.kP, pidConfig.kI, pidConfig.kD)
-                    ),
+                    Robot.isSimulation()
+                            ? new PPHolonomicDriveController(
+                            new PIDConstants(5),
+                            new PIDConstants(5))
+                            : new PPHolonomicDriveController(
+                            new PIDConstants(drivePIDConfig.kP, drivePIDConfig.kI, drivePIDConfig.kD),
+                            new PIDConstants(azimuthPIDConfig.kP, azimuthPIDConfig.kI, azimuthPIDConfig.kD)),
                     pathRobotConfig,
                     () -> {
                         var alliance = DriverStation.getAlliance();
@@ -608,6 +612,14 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
             .getSubsystem(NAME)
             .swerveModules.drivePID.getOrDefault("slot0", defaultPIDConfig)
             : defaultPIDConfig;
+    }
+
+    public PIDSlotConfiguration getAzimuthPIDConfig() {
+        return (factory.getSubsystem(NAME).implemented)
+                ? factory
+                .getSubsystem(NAME)
+                .swerveModules.azimuthPID.get("slot0")
+                : null;
     }
 
     /**
