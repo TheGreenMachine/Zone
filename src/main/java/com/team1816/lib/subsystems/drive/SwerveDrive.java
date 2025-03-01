@@ -174,7 +174,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
                     this::resetOdometry,
                     () -> chassisSpeed,
                     (ChassisSpeeds speeds) ->
-                            setModuleStates(swerveKinematics.toSwerveModuleStates(chassisSpeed)),
+                            setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
                     new PPHolonomicDriveController(
                             new PIDConstants(pidConfig.kP, pidConfig.kI, pidConfig.kD),
                             new PIDConstants(pidConfig.kP, pidConfig.kI, pidConfig.kD)
