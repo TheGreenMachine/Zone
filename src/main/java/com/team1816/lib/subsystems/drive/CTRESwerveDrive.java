@@ -16,6 +16,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.PIDUtil;
@@ -245,6 +246,8 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
                     }
             );
+
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("path").setPoses(p));
         }
     }
 

@@ -6,6 +6,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
@@ -184,6 +185,8 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
                         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
                     }
             );
+
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("path").setPoses(p));
         }
     }
 
