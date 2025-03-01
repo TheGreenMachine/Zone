@@ -41,7 +41,7 @@ public class BottomPlace1AutoMode extends AutoMode {
                                 trajectoryActions.get(0)
                         ),
                         new WaitForCoralPivotPosition(CoralArm.PIVOT_STATE.L4),
-                        new WaitAction(0.5),
+                        new WaitAction(6),
                         new OuttakeCoralSeriesAction(),
                         endAtFeeder ? trajectoryActions.get(1) : new WaitAction(0)
                 )

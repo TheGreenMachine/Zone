@@ -314,6 +314,7 @@ public class RobotState {
 
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
         SmartDashboard.putData("AlgaeCatcher", algaeMech2d);
+//        System.out.println(fieldToVehicle);
 
         if (RobotBase.isSimulation()) {
             // TODO: Display any stats here

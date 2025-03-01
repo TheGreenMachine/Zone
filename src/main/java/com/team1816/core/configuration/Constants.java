@@ -90,12 +90,12 @@ public class Constants {
     );
 
     //Position constants TODO: finish tuning all of these
-    public static final Pose2d reef1APose = new Pose2d(5.29, 5.28, Rotation2d.fromDegrees(240));
+    public static final Pose2d reef1APose = new Pose2d(5.32345, 5.28, Rotation2d.fromDegrees(240));
     public static final Pose2d reef1BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(240));
     public static final Pose2d reef2APose = new Pose2d(6.4, 4.14, Rotation2d.fromDegrees(180));
     public static final Pose2d reef2BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(180));
     public static final Pose2d reef3APose = new Pose2d(0, 0, Rotation2d.fromDegrees(120));
-    public static final Pose2d reef3BPose = new Pose2d(5.09+.416-.1, 2.73-0.2475+.41, Rotation2d.fromDegrees(120));
+    public static final Pose2d reef3BPose = new Pose2d(5.28-.14+.06-.044-.055-.0381, 2.56-.15+.13+.025-.0953+.0660, Rotation2d.fromDegrees(120));
     public static final Pose2d reef4APose = new Pose2d(0, 0, Rotation2d.fromDegrees(60));
     public static final Pose2d reef4BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(60));
     public static final Pose2d reef5APose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
