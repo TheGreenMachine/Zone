@@ -5,6 +5,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PPLTVController;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
@@ -28,6 +33,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
 import static com.team1816.lib.util.driveUtil.DriveConversions.*;
@@ -124,6 +130,37 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
             gyroPitchLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Tank/Pitch");
             gyroRollLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Tank/Roll");
         }
+
+        // Initialise PathPlanner autopath builder configured to Differential Drive
+        // Not enabled. In order to enable, please provide an implementation for the fourth
+        // parameter.
+        /*
+        RobotConfig pathRobotConfig = null;
+        try {
+            pathRobotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            DriverStation.reportWarning("Unable to configure PathPlanner!", e.getStackTrace());
+        }
+
+        if (pathRobotConfig != null) {
+            // https://pathplanner.dev/pplib-getting-started.html#ltv-differential
+            AutoBuilder.configure(
+                    this::getPose,
+                    this::resetOdometry,
+                    () -> chassisSpeed,
+                    (speeds, feedforwards) -> {
+                        // no-op
+                    },
+                    new PPLTVController(0.02),
+                    pathRobotConfig,
+                    () -> {
+                        var alliance = DriverStation.getAlliance();
+                        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                    }
+            );
+        }
+        */
+        GreenLogger.log("PathPlanner autos disabled for Tank Drive.");
     }
 
     /**

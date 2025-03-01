@@ -214,6 +214,8 @@ public class AutoModeManager {
 
 //        DYNAMIC_TRAJECTORY_ONLY,
 
+        CIRCLE_BLAH_MODE,
+
         DYNAMIC_PLACE_1,
 
         DYNAMIC_PLACE_2,
@@ -281,6 +283,9 @@ public class AutoModeManager {
             case TOP_SIDE_1_SCORE_2:
                 robotState.dIsAutoDynamic = false;
                 return new TopPlace2AutoMode(color);
+            case CIRCLE_BLAH_MODE:
+                robotState.dIsAutoDynamic = false;
+                return new CircleAroundReefAndGoBackToInitialPosition1();
 //            case DYNAMIC_TRAJECTORY_ONLY:
 //                robotState.isAutoDynamic = true;
 //                RobotState.dynamicAutoChanged = true;
