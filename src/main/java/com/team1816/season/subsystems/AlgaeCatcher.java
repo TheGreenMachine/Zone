@@ -49,6 +49,7 @@ public class AlgaeCatcher extends Subsystem {
     public final double algaeCollectSpeed;
     public final double algaeHoldSpeed;
     public final double algaeReleaseSpeed;
+    public final double removeAlgaeSpeed;
 
     /**
      * Logging
@@ -87,6 +88,7 @@ public class AlgaeCatcher extends Subsystem {
         algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", .3);
         algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", 0);
         algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", -.3);
+        removeAlgaeSpeed = factory.getConstant(NAME, "removeAlgaeSpeed", -.3);
 
         SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
@@ -202,7 +204,9 @@ public class AlgaeCatcher extends Subsystem {
 
                 case HOLD -> desiredAlgaeCatcherPower = algaeHoldSpeed;
 
-                case OUTTAKE,REMOVE_ALGAE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
+                case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
+
+                case REMOVE_ALGAE -> desiredAlgaeCatcherPower = removeAlgaeSpeed;
             }
             // Good to log states to aid troubleshooting
             GreenLogger.log("Algae intake: " + desiredIntakeState + " Power: " + desiredAlgaeCatcherPower);

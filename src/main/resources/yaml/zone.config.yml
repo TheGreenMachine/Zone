@@ -181,6 +181,8 @@ subsystems:
             coralArmFeederPosition: 28
 
             coralArmMotorRotationsPerDegree: 1
+
+            stopOuttakingDelay: 2
     algaeCatcher:
         implemented: true
         motors:
@@ -214,6 +216,7 @@ subsystems:
             algaeCollectSpeed: -.60
             algaeHoldSpeed: -.60
             algaeReleaseSpeed: 1
+            removeAlgaeSpeed: 1
 
             algaeSensorChannel: 1
 

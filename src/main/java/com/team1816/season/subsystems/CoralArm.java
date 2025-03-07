@@ -81,6 +81,8 @@ public class CoralArm extends Subsystem {
 
     private final double motorRotationsPerDegree = factory.getConstant(NAME, "coralArmMotorRotationsPerDegree", 1);
 
+    private final double stopOuttakingDelay = factory.getConstant(NAME, "stopOuttakingDelay", 2);
+
     /**
      * Logging
      */
@@ -155,7 +157,7 @@ public class CoralArm extends Subsystem {
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
         //Setting beam break state
-        var beamBreak = isBeamBreakTriggered();
+        boolean beamBreak = isBeamBreakTriggered();
         if (robotState.isCoralBeamBreakTriggered != beamBreak) {
             robotState.isCoralBeamBreakTriggered = beamBreak;
             if(!robotState.isCoralBeamBreakTriggered) {
@@ -165,7 +167,7 @@ public class CoralArm extends Subsystem {
         }
 
         //Setting intake motor state
-        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Timer.getFPGATimestamp() >= (beamBreakLastUntriggeredTimestamp + 2/*Delay to make sure coral gets fully off*/) && shouldStopOuttakingSoon) {
+        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Timer.getFPGATimestamp() >= (beamBreakLastUntriggeredTimestamp + stopOuttakingDelay/*Delay to make sure coral gets fully off*/) && shouldStopOuttakingSoon) {
             desiredIntakeState = INTAKE_STATE.INTAKE;
             shouldStopOuttakingSoon = false;
         }

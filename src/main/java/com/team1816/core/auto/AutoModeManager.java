@@ -255,13 +255,13 @@ public class AutoModeManager {
 //                return new AutopathMode();
             case MIDDLE_SIDE_2_SCORE_1:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, "none");
+                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.NONE);
             case MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, "top");
+                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.TOP);
             case MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, "bottom");
+                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.BOTTOM);
 //            case MIDDLE_SIDE_3_SCORE_2:
 //                robotState.dIsAutoDynamic = false;
 //                return new MiddlePlace2AutoMode(color);

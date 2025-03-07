@@ -17,9 +17,9 @@ import com.team1816.season.subsystems.Elevator;
 import java.util.List;
 
 public class MiddlePlace1AutoMode extends AutoMode {
-    private final String endingFeeder;
+    private final ENDING_FEEDER endingFeeder;
 
-    public MiddlePlace1AutoMode(Color color, String endingFeeder) {
+    public MiddlePlace1AutoMode(Color color, ENDING_FEEDER endingFeeder) {
         super(
                 List.of(
                         new TrajectoryAction(
@@ -44,11 +44,21 @@ public class MiddlePlace1AutoMode extends AutoMode {
                                 new DelayedElevatorAction(Elevator.ELEVATOR_STATE.L4, 1),
                                 trajectoryActions.get(0)
                         ),
-                        new WaitForCoralPivotPosition(CoralArm.PIVOT_STATE.L4),
+                        new WaitForCoralPivotPositionAction(CoralArm.PIVOT_STATE.L4),
                         new WaitAction(6),
                         new OuttakeCoralSeriesAction(),
-                        endingFeeder.equals("top") ? trajectoryActions.get(1) : endingFeeder.equals("bottom") ? trajectoryActions.get(2) : new WaitAction(0)
+                        switch (endingFeeder) {
+                            case TOP -> trajectoryActions.get(1);
+                            case BOTTOM -> trajectoryActions.get(2);
+                            case NONE -> new WaitAction(0);
+                        }
                 )
         );
+    }
+
+    public enum ENDING_FEEDER {
+        TOP,
+        BOTTOM,
+        NONE
     }
 }
