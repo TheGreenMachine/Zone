@@ -478,6 +478,21 @@ public class Robot extends TimedRobot {
                         coralArm.offsetCoralPivot(-0.1);
                     }
             );
+            inputHandler.listenAction(
+                    "increaseAlgaePivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        algaeCatcher.offsetAlgaePivot(0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "decreaseAlgaePivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        algaeCatcher.offsetAlgaePivot(-0.1);
+                    }
+            );
+
 
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
