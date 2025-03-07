@@ -23,9 +23,9 @@ public class BottomPlace2AutoMode extends AutoMode {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new BottomToSideThree(color)
+                                new BottomStartToReef3B(color)
                         ), new TrajectoryAction(
-                                new SideThreeToCloseFeeder(color)
+                                new Reef3BToBottomFeeder(color)
                         ), new TrajectoryAction(
                                 new CloseFeederToSideFour(color)
                         ), new TrajectoryAction(

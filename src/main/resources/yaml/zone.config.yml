@@ -125,7 +125,8 @@ subsystems:
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
             maxVelPathFollowing: 1 # meters/s
-            maxAccel: 2 # meters/s^2
+            maxAccel: 1 # meters/s^2
+            #FR OUT, RL OUT, FL IN, BR IN
             isDemoMode: 0
             ## Swerve Characterization ##
             azimuthEncPPR: 2048
@@ -144,7 +145,7 @@ subsystems:
                 motorName: coralArmIntakeMotor
                 id: 12
                 invertMotor: false
-                currentLimit: 20
+                currentLimit: 25
             coralArmPivotMotor:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
@@ -165,8 +166,8 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: -.40
-            outtakeSpeed: .40
+            intakeSpeed: -.80
+            outtakeSpeed: .80
             holdSpeed: 0
 
             coralSensorChannel: 9
@@ -174,12 +175,14 @@ subsystems:
             coralArmL1Position: 36
             coralArmL2Position: 36
             coralArmL3Position: 36
-            coralArmL4Position: 35
-            coralArmUpPosition: 17
+            coralArmL4Position: 36
+            coralArmUpPosition: 28
 
-            coralArmFeederPosition: 26.3
+            coralArmFeederPosition: 28
 
             coralArmMotorRotationsPerDegree: 1
+
+            stopOuttakingDelay: 2
     algaeCatcher:
         implemented: true
         motors:
@@ -210,17 +213,18 @@ subsystems:
                 kG: 0
                 gravityType: cosine
         constants: # TODO: all of these
-            algaeCollectSpeed: -.30
-            algaeHoldSpeed: 0
-            algaeReleaseSpeed: .80
+            algaeCollectSpeed: -.60
+            algaeHoldSpeed: -.60
+            algaeReleaseSpeed: 1
+            removeAlgaeSpeed: 1
 
             algaeSensorChannel: 1
 
             stowPosition: 0.1
             intakePosition: 16.8
-            holdPosition: 13.67
-            outtakePosition: 14.07
-            removeAlgaePosition: 1.0
+            holdPosition: 13
+            outtakePosition: 13
+            removeAlgaePosition: 3   #4.8
 
             algaeMotorRotationsPerDegree: .25
     elevator:
@@ -247,9 +251,9 @@ subsystems:
         constants: # TODO: all of these
             elevatorFeederPosition: 0
             elevatorL1Position: 1
-            elevatorL2Position: 8.6
-            elevatorL3Position: 28.3
-            elevatorL4Position: 58.8
+            elevatorL2Position: 14.2
+            elevatorL3Position: 33.7
+            elevatorL4Position: 63.1
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:

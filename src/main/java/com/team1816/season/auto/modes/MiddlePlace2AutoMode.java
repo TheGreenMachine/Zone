@@ -25,7 +25,7 @@ public class MiddlePlace2AutoMode extends AutoMode {
                         new TrajectoryAction(
                                 new MiddleToSideThree(color)
                         ), new TrajectoryAction(
-                                new SideThreeToCloseFeeder(color)
+                                new Reef3BToBottomFeeder(color)
                         ), new TrajectoryAction(
                                 new CloseFeederToSideFour(color)
                         ), new TrajectoryAction(

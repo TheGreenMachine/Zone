@@ -8,10 +8,10 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    a: activationDeepHanger
-    b: intake/OuttakeAlgae
-    x: pivotA1/L3
-    y: pivotA2/L4
+    a: robotcentricRight
+    b: robotcentricDown
+    x: robotcentricLeft
+    y: robotcentricUp
   axes:
     rightTrigger:
     leftTrigger:

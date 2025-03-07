@@ -289,10 +289,10 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         if(algaeCatcher.isBeamBreakTriggered()) {
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
                         }
                         else {
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
                         }
                     }
             );
@@ -338,7 +338,7 @@ public class Robot extends TimedRobot {
                     "removeAlgae",
                     (pressed) ->{
                         algaeCatcher.setDesiredState(
-                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
                                 pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
                         );
                     }
@@ -394,6 +394,59 @@ public class Robot extends TimedRobot {
                         coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
                     }
             );*/
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricRight",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricDown",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricLeft",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricUp",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
 
             /** Buttonboard Commands */
 
@@ -497,7 +550,7 @@ public class Robot extends TimedRobot {
         //TODO add new subsystem inits here
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
         algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.UP, CoralArm.INTAKE_STATE.HOLD);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
@@ -583,6 +636,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         try {
+//            System.out.println(robotState.fieldToVehicle);
             // updating loop timers
             Robot.looperDt = getLastSubsystemLoop();
             Robot.robotDt = getLastRobotLoop();
@@ -739,6 +793,12 @@ public class Robot extends TimedRobot {
 
         if (robotState.rotatingClosedLoop) {
             drive.rotationPeriodic();
+        } else if (robotState.robotcentricRequestAmount > 0){
+            drive.setTeleopInputs(
+                    robotState.robotcentricThrottleInput,
+                    robotState.robotcentricStrafeInput,
+                    robotState.robotcentricRotationInput
+            );
         } else {
             drive.setTeleopInputs(
                     robotState.throttleInput,

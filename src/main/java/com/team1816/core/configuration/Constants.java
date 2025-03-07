@@ -89,6 +89,25 @@ public class Constants {
             new Rotation3d(Math.PI,-0.44,Math.PI)
     );
 
+    //Position constants TODO: finish tuning all of these
+    public static final Pose2d reef1APose = new Pose2d(5.32345, 5.28, Rotation2d.fromDegrees(240));
+    public static final Pose2d reef1BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(240));
+    public static final Pose2d reef2APose = new Pose2d(6.4, 4.14, Rotation2d.fromDegrees(180));
+    public static final Pose2d reef2BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(180));
+    public static final Pose2d reef3APose = new Pose2d(0, 0, Rotation2d.fromDegrees(120));
+    public static final Pose2d reef3BPose = new Pose2d(5.0629, 2.5357, Rotation2d.fromDegrees(120));
+    public static final Pose2d reef4APose = new Pose2d(0, 0, Rotation2d.fromDegrees(60));
+    public static final Pose2d reef4BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(60));
+    public static final Pose2d reef5APose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    public static final Pose2d reef5BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    public static final Pose2d reef6APose = new Pose2d(0, 0, Rotation2d.fromDegrees(300));
+    public static final Pose2d reef6BPose = new Pose2d(0, 0, Rotation2d.fromDegrees(300));
+    public static final Pose2d topFeederPose = new Pose2d(1.19, 6.84, Rotation2d.fromDegrees(125));
+    public static final Pose2d bottomFeederPose = new Pose2d(1.25, 1, Rotation2d.fromDegrees(235));
+    public static final Pose2d topStartPose = new Pose2d(7.12, 7.58, Rotation2d.fromDegrees(270));
+    public static final Pose2d middleStartPose = new Pose2d(7.9, 4.31, Rotation2d.fromDegrees(180));
+    public static final Pose2d bottomStartPose = new Pose2d(7.12, 0.47, Rotation2d.fromDegrees(90));
+
     /**
      * Drivetrain characterization
      */
