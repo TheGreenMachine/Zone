@@ -176,13 +176,10 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
                     () -> chassisSpeed,
                     (ChassisSpeeds speeds) ->
                             setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
-                    Robot.isSimulation()
-                            ? new PPHolonomicDriveController(
+                    new PPHolonomicDriveController(
                             new PIDConstants(5),
-                            new PIDConstants(5))
-                            : new PPHolonomicDriveController(
-                            new PIDConstants(drivePIDConfig.kP, drivePIDConfig.kI, drivePIDConfig.kD),
-                            new PIDConstants(azimuthPIDConfig.kP, azimuthPIDConfig.kI, azimuthPIDConfig.kD)),
+                            new PIDConstants(5)
+                    ),
                     pathRobotConfig,
                     () -> {
                         var alliance = DriverStation.getAlliance();
