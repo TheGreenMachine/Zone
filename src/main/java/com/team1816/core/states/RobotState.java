@@ -3,8 +3,10 @@ package com.team1816.core.states;
 import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
+import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.TrajectoryAction;
+import com.team1816.lib.freedomPath.FreedomPath;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.season.auto.DynamicAutoScript2025;
@@ -120,26 +122,26 @@ public class RobotState {
     public final MechanismLigament2d algaeCatcherPivot = algaeCatcherBase.append(new MechanismLigament2d("algaePivot", .7, algaeBaseAngle));
 
     /**
-     * Autopathing state
+     * FreedomPathing state
      */
 
-    public boolean autopathing = false;
-    public boolean printAutopathing = false;  //Change this one to see the obstacle boundaries //As of 2/8/2025, does nothing because of commented code in outputToSmartDashboard()
-    public boolean printAutopathFieldTest = false;
-    public Trajectory autopathTrajectory = null;
-    public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();
-    public boolean autopathTrajectoryChanged = false;
-    public boolean autopathTrajectoryPossibilitiesChanged = false;
-    public ArrayList<Pose2d> autopathCollisionStarts = new ArrayList<>();
-    public ArrayList<Pose2d> autopathCollisionEnds = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypoints = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypointsSuccess = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypointsFail = new ArrayList<>();
-    public int autopathMaxBranches = 0;
-    public ArrayList<Pose2d> autopathInputWaypoints = new ArrayList<>();
+    public boolean isFreedomPathing = false;
+    public boolean printFreedomPathing = true;  //Change this one to see the obstacle boundaries //As of 2/8/2025, does nothing because of commented code in outputToSmartDashboard()
+    public boolean printFreedomPathFieldTest = false;
+    public Trajectory freedomPathTrajectory = null;
+    public ArrayList<Trajectory> freedomPathTrajectoryPossibilities = new ArrayList<>();
+    public boolean freedomPathTrajectoryChanged = false;
+    public boolean freedomPathTrajectoryPossibilitiesChanged = false;
+    public ArrayList<Pose2d> freedomPathCollisionStarts = new ArrayList<>();
+    public ArrayList<Pose2d> freedomPathCollisionEnds = new ArrayList<>();
+    public ArrayList<Pose2d> freedomPathWaypoints = new ArrayList<>();
+    public ArrayList<Pose2d> freedomPathWaypointsSuccess = new ArrayList<>();
+    public ArrayList<Pose2d> freedomPathWaypointsFail = new ArrayList<>();
+    public int freedomPathMaxBranches = 0;
+    public ArrayList<Pose2d> freedomPathInputWaypoints = new ArrayList<>();
     public double robotVelocity = 0;
-    public double autopathBeforeTime = 0;
-    public double autopathPathCancelBufferMilli = 500;
+    public double freedomPathBeforeTime = 0;
+    public double freedomPathCancelBufferMilli = 500;
     public ChassisSpeeds robotChassis = new ChassisSpeeds();
 
     /**
@@ -252,64 +254,65 @@ public class RobotState {
     public synchronized void outputToSmartDashboard() {
         field.setRobotPose(fieldToVehicle);
 
-//        if (printAutopathing) {
-//            if (Autopath.fieldMap != null && Autopath.fieldMap.outputToSmartDashboardChanged) {
-//                ArrayList<Pose2d> obstaclesExpanded = new ArrayList<>();
-//
-//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-//                        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
-//                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 / Autopath.mapResolution1DPerMeter), new Rotation2d()));
-//                        }
-//                    }
-//                }
-//
-//                field.getObject("ExpandedObstacles").setPoses(obstaclesExpanded);
-//
-//                ArrayList<Pose2d> obstacles = new ArrayList<>();
-//
-//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-//                        if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
-//                            obstacles.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 /Autopath.mapResolution1DPerMeter), new Rotation2d()));
-//                        }
-//                    }
-//                }
-//
-//                field.getObject("Obstacles").setPoses(obstacles);
-//
-//                Autopath.fieldMap.outputToSmartDashboardChanged = false;
-//            }
-//
-//            if(autopathTrajectoryPossibilitiesChanged) {
-//                for (int i = 0; i < autopathTrajectoryPossibilities.size(); i++) {
-//                    if (autopathTrajectoryPossibilities.get(i) != null) {
-//                        field.getObject("AutopathTrajectory: " + i).setTrajectory(autopathTrajectoryPossibilities.get(i));
-//                    }
-//                }
-//                autopathMaxBranches = Math.max(autopathTrajectoryPossibilities.size(), autopathMaxBranches);
-//                autopathTrajectoryPossibilitiesChanged = false;
-//            }
-//
-//            field.getObject("StartCollisionPoints").setPoses(autopathCollisionStarts);
-//            field.getObject("EndCollisionPoints").setPoses(autopathCollisionEnds);
-//            field.getObject("AutopathWaypoints").setPoses(autopathWaypoints);
-//        }
+        if (printFreedomPathing) {
+            FreedomPath freedomPath = Injector.get(FreedomPath.class);
+            if (freedomPath.fieldMap != null && freedomPath.fieldMap.outputToSmartDashboardChanged) {
+                ArrayList<Pose2d> obstaclesExpanded = new ArrayList<>();
 
-        if (autopathTrajectoryChanged && printAutopathing) {
-            if(autopathTrajectory != null){
-                for (int i = 0; i < autopathMaxBranches; i++) {
-                    field.getObject("AutopathTrajectory: " + i).close();
+                for (int i = 0; i < freedomPath.fieldMap.getCurrentMap().getMapX(); i++) {
+                    for (int i2 = 0; i2 < freedomPath.fieldMap.getCurrentMap().getMapY(); i2++) {
+                        if (freedomPath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
+                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / freedomPath.mapResolution1DPerMeter, i2 / freedomPath.mapResolution1DPerMeter), new Rotation2d()));
+                        }
+                    }
                 }
-                field.getObject("AutopathTrajectory").setTrajectory(autopathTrajectory);
-            } else
-                field.getObject("AutopathTrajectory").setPoses(List.of(new Pose2d(new Translation2d(-1, -1), new Rotation2d())));
-            autopathTrajectoryChanged = false;
+
+                field.getObject("ExpandedObstacles").setPoses(obstaclesExpanded);
+
+                ArrayList<Pose2d> obstacles = new ArrayList<>();
+
+                for (int i = 0; i < freedomPath.fieldMap.getCurrentMap().getMapX(); i++) {
+                    for (int i2 = 0; i2 < freedomPath.fieldMap.getCurrentMap().getMapY(); i2++) {
+                        if (freedomPath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
+                            obstacles.add(new Pose2d(new Translation2d(i / freedomPath.mapResolution1DPerMeter, i2 /freedomPath.mapResolution1DPerMeter), new Rotation2d()));
+                        }
+                    }
+                }
+
+                field.getObject("Obstacles").setPoses(obstacles);
+
+                freedomPath.fieldMap.outputToSmartDashboardChanged = false;
+            }
+
+            if(freedomPathTrajectoryPossibilitiesChanged) {
+                for (int i = 0; i < freedomPathTrajectoryPossibilities.size(); i++) {
+                    if (freedomPathTrajectoryPossibilities.get(i) != null) {
+                        field.getObject("FreedomPathTrajectory: " + i).setTrajectory(freedomPathTrajectoryPossibilities.get(i));
+                    }
+                }
+                freedomPathMaxBranches = Math.max(freedomPathTrajectoryPossibilities.size(), freedomPathMaxBranches);
+                freedomPathTrajectoryPossibilitiesChanged = false;
+            }
+
+            field.getObject("StartCollisionPoints").setPoses(freedomPathCollisionStarts);
+            field.getObject("EndCollisionPoints").setPoses(freedomPathCollisionEnds);
+            field.getObject("FreedomPathWaypoints").setPoses(freedomPathWaypoints);
         }
 
-        if(printAutopathFieldTest) {
-            field.getObject("AutopathSuccessfulPoints").setPoses(autopathWaypointsSuccess);
-            field.getObject("AutopathFailPoints").setPoses(autopathWaypointsFail);
+        if (freedomPathTrajectoryChanged && printFreedomPathing) {
+            if(freedomPathTrajectory != null){
+                for (int i = 0; i < freedomPathMaxBranches; i++) {
+                    field.getObject("FreedomPathTrajectory: " + i).close();
+                }
+                field.getObject("FreedomPathTrajectory").setTrajectory(freedomPathTrajectory);
+            } else
+                field.getObject("FreedomPathTrajectory").setPoses(List.of(new Pose2d(new Translation2d(-1, -1), new Rotation2d())));
+            freedomPathTrajectoryChanged = false;
+        }
+
+        if(printFreedomPathFieldTest) {
+            field.getObject("FreedomPathSuccessfulPoints").setPoses(freedomPathWaypointsSuccess);
+            field.getObject("FreedomPathFailPoints").setPoses(freedomPathWaypointsFail);
         }
 
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);

@@ -1,4 +1,4 @@
-package com.team1816.lib.autopath;
+package com.team1816.lib.freedomPath;
 
 public class UpdatableAndExpandableFieldMap {
     private final FieldMap stableMap;

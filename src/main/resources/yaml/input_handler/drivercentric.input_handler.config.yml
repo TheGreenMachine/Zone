@@ -8,7 +8,7 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    a: activationDeepHanger
+    a: freedomPathingSpeaker
     b: intake/OuttakeAlgae
     x: outtakeCoral
     y: removeAlgae

@@ -4,19 +4,19 @@ import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.actions.DriveOpenLoopAction;
 import com.team1816.lib.auto.modes.AutoMode;
-import com.team1816.lib.autopath.Autopath;
+import com.team1816.lib.freedomPath.FreedomPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class TestAllDynamicPointsAutoMode extends AutoMode {
-    Autopath autopather;
+    FreedomPath freedomPather;
 
     ArrayList<String> failedPointNames = new ArrayList<>();
 
     public TestAllDynamicPointsAutoMode(){
-        autopather = Injector.get(Autopath.class);
+        freedomPather = Injector.get(FreedomPath.class);
 
         ArrayList<Map.Entry<String, Pose2d>> points = new ArrayList<>(robotState.dAllDynamicPoints.entrySet());
         for(Map.Entry<String, Pose2d> point1 : points){
@@ -25,12 +25,12 @@ public class TestAllDynamicPointsAutoMode extends AutoMode {
                     continue;
                 else{
                     try{
-                        autopather.calculateAutopath(point1.getValue(), point2.getValue());
+                        freedomPather.calculateFreedomPath(point1.getValue(), point2.getValue());
                     } catch(Exception e){
                         System.out.println(point1.getKey()+" to "+point2.getKey()+" threw an error");
                         throw e;
                     }
-                    if (autopather.calculateAutopath(point1.getValue(), point2.getValue()) == null)
+                    if (freedomPather.calculateFreedomPath(point1.getValue(), point2.getValue()) == null)
                         failedPointNames.add("failed point: \"" + point1.getKey() + "\" to point: \"" + point2.getKey() + "\"");
                 }
             }

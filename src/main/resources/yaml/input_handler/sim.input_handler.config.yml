@@ -8,10 +8,10 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    a: robotcentricRight
-    b: robotcentricDown
-    x: robotcentricLeft
-    y: robotcentricUp
+    a: freedomPathingSpeaker
+    b: freedomPathingSpeaker
+    x:
+    y:
   axes:
     rightTrigger:
     leftTrigger:
@@ -31,11 +31,12 @@ operator:
   buttonpad:
     y:
 buttonboard:
-  upLeft:
-  upRight:
-  up:
-  center:
-  left:
+  upLeft: increaseAlgaePivotOffset
+  upRight: decreaseCoralArmPivotOffset
+  up: increaseElevatorPivotOffset
+  center: decreaseElevatorPivotOffset
+  left: decreaseAlgaePivotOffset
+  right: increaseCoralArmPivotOffset
   downLeft:
   down:
 demoMode: false

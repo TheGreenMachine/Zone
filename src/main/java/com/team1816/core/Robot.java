@@ -8,8 +8,9 @@ import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
+import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
-//import com.team1816.lib.autopath.Autopath;
+import com.team1816.lib.freedomPath.FreedomPath;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.InputHandler;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
@@ -25,7 +26,9 @@ import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Pneumatic;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
@@ -70,7 +73,7 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     //TODO add new subsystems here
-//    private Autopath autopather;
+    private FreedomPath freedomPather;
     private Elevator elevator;
     private CoralArm coralArm;
     private AlgaeCatcher algaeCatcher;
@@ -182,7 +185,7 @@ public class Robot extends TimedRobot {
             subsystemManager = Injector.get(SubsystemLooper.class);
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
-//            autopather = Injector.get(Autopath.class);
+            freedomPather = Injector.get(FreedomPath.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
@@ -375,19 +378,20 @@ public class Robot extends TimedRobot {
                     }
             );*/
                 /**CRESCENDO ACTIONS*/
-                        /*inputHandler.listenAction(
-                    "autopathingSpeaker",
+            inputHandler.listenAction(
+                    "freedomPathingSpeaker",
                     ActionState.PRESSED,
-                    () ->
-                        autopather.start(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(0)))
+                    () -> {
+                            System.out.println("IWEOFWIEOFIWOEJF");
+                        freedomPather.start(new Pose2d(new Translation2d(8, 4), Rotation2d.fromDegrees(0)));}
             );
 
             inputHandler.listenAction(
-                    "autopathingAmp",
+                    "freedomPathingAmp",
                     ActionState.PRESSED,
                     () ->
-                        autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
-            );*/
+                        freedomPather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
+            );
             /*inputHandler.listenActionPressAndRelease(
                     "intakeCoral",
                     (pressed) -> {
@@ -521,7 +525,7 @@ public class Robot extends TimedRobot {
                 autoModeManager.reset();
             }
 
-//            autopather.autopathMaxCalcMilli = 1000;
+            freedomPather.freedomPathMaxCalcMilli = 1000;
 
             subsystemManager.stop();
 
@@ -555,7 +559,7 @@ public class Robot extends TimedRobot {
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
 
-//        autopather.autopathMaxCalcMilli = 5;
+        freedomPather.freedomPathMaxCalcMilli = 5;
 
         autoStart = Timer.getFPGATimestamp();
         enabledLoop.start();
@@ -579,7 +583,7 @@ public class Robot extends TimedRobot {
             algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
-//            autopather.autopathMaxCalcMilli = 5;
+            freedomPather.freedomPathMaxCalcMilli = 5;
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
@@ -768,11 +772,10 @@ public class Robot extends TimedRobot {
             }
 
             manualControl();
-//            if(robotState.autopathing)
-//                autopather.routine();
-        } catch (Throwable t) {
+            if(robotState.isFreedomPathing)
+                freedomPather.routine();
+        } catch (AutoModeEndedException e) {
             faulted = true;
-            throw t;
         }
     }
 
@@ -787,8 +790,8 @@ public class Robot extends TimedRobot {
         robotState.strafeInput = -inputHandler.getActionAsDouble("strafe");
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
-        if(robotState.autopathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.autopathBeforeTime > robotState.autopathPathCancelBufferMilli){
-//            autopather.stop();
+        if(robotState.isFreedomPathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.freedomPathBeforeTime > robotState.freedomPathCancelBufferMilli){
+            freedomPather.stop();
         }
 
         if (robotState.rotatingClosedLoop) {

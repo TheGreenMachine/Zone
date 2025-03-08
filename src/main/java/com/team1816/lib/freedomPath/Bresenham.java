@@ -1,4 +1,4 @@
-package com.team1816.lib.autopath;
+package com.team1816.lib.freedomPath;
 
 import edu.wpi.first.math.geometry.Translation2d;
 

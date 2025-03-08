@@ -4,12 +4,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.auto.modes.AutoMode;
+import com.team1816.lib.auto.modes.*;
 //import com.team1816.lib.auto.modes.AutopathMode;
-import com.team1816.lib.auto.modes.DefaultMode;
-import com.team1816.lib.auto.modes.DriveStraightMode;
 //import com.team1816.lib.autopath.Autopath;
-import com.team1816.lib.auto.modes.TuneDrivetrainMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.modes.*;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -192,7 +189,7 @@ public class AutoModeManager {
 
         TUNE_DRIVETRAIN,
 
-//        AUTOPATH,
+        AUTOPATH,
 
         TOP_SIDE_1_SCORE_1,
 
@@ -250,9 +247,9 @@ public class AutoModeManager {
             case TUNE_DRIVETRAIN:
                 robotState.dIsAutoDynamic = false;
                 return new TuneDrivetrainMode();
-//            case AUTOPATH:
-//                robotState.dIsAutoDynamic = false;
-//                return new AutopathMode();
+            case AUTOPATH:
+                robotState.dIsAutoDynamic = false;
+                return new FreedomPathMode();
             case MIDDLE_SIDE_2_SCORE_1:
                 robotState.dIsAutoDynamic = false;
                 return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.NONE);
