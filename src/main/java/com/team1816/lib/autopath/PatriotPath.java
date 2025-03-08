@@ -11,7 +11,7 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 
 @Singleton
-public class DynamicPath {
+public class PatriotPath {
     public RobotState robotState;
 
     private final long looperDtInMS = (long) (Constants.kLooperDt * 1000);
@@ -27,7 +27,7 @@ public class DynamicPath {
      * Initializes Autopath
      */
     @Inject
-    public DynamicPath() {
+    public PatriotPath() {
         robotState = Injector.get(RobotState.class);
     }
 
