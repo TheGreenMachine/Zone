@@ -18,6 +18,6 @@ public class DriveStraightMode extends AutoMode {
     }
 
     public Pose2d getInitialPose() {
-        return new Pose2d(0,0, robotState.allianceColor == Color.BLUE ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
+        return new Pose2d(8,4, robotState.allianceColor == Color.BLUE ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
     }
 }

@@ -126,7 +126,7 @@ public class RobotState {
      */
 
     public boolean isFreedomPathing = false;
-    public boolean printFreedomPathing = true;  //Change this one to see the obstacle boundaries //As of 2/8/2025, does nothing because of commented code in outputToSmartDashboard()
+    public boolean printFreedomPathing = false;  //Change this one to see the obstacle boundaries //As of 2/8/2025, does nothing because of commented code in outputToSmartDashboard()
     public boolean printFreedomPathFieldTest = false;
     public Trajectory freedomPathTrajectory = null;
     public ArrayList<Trajectory> freedomPathTrajectoryPossibilities = new ArrayList<>();

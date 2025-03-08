@@ -378,7 +378,6 @@ public class FreedomPath {
 
     public Trajectory calculateFreedomPath(Pose2d freedomPathStartPosition, Pose2d freedomPathTargetPosition){
         freedomPathBuffer = SmartDashboard.getNumber("FreedomPath Waypoint Buffer", 10);
-        System.out.println("hi");
 
         if(freedomPathStartPosition.equals(freedomPathTargetPosition))
             return new Trajectory();
@@ -413,7 +412,7 @@ public class FreedomPath {
 
 
         TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
-        config.setStartVelocity(velocity);
+//        config.setStartVelocity(velocity);
 //        config.setEndVelocity(robotState.robotVelocity);
 //        config.setEndVelocity(Math.min(Drive.kPathFollowingMaxVelMeters/2, 3));
 

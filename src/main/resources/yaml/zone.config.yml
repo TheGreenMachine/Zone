@@ -116,16 +116,16 @@ subsystems:
             ## Positional Configurations ##
             openLoopRampRate: 0.1
             isSwerve: 1
-            isCTRSwerve: 0 #TODO IF ALL ELSE FAILS
+            isCTRSwerve: 1 #TODO IF ALL ELSE FAILS
             ## Velocity Constraints ##
             maxRotVel: 0.8 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
             wheelDiameter: 4
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
-            maxVelOpenLoop: 3 # meters/s
+            maxVelOpenLoop: 1 # meters/s
             maxVelPathFollowing: 1 # meters/s
-            maxAccel: 1 # meters/s^2
+            maxAccel: .5 # meters/s^2
             #FR OUT, RL OUT, FL IN, BR IN
             isDemoMode: 0
             ## Swerve Characterization ##

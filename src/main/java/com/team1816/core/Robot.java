@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
 
     //TODO add new subsystems here
     private FreedomPath freedomPather;
+    private double driveDeadBand;
     private Elevator elevator;
     private CoralArm coralArm;
     private AlgaeCatcher algaeCatcher;
@@ -186,6 +187,7 @@ public class Robot extends TimedRobot {
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
             freedomPather = Injector.get(FreedomPath.class);
+            driveDeadBand = factory.getConstant("drivetrain", "driveDeadband", 0.1);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
@@ -790,7 +792,7 @@ public class Robot extends TimedRobot {
         robotState.strafeInput = -inputHandler.getActionAsDouble("strafe");
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
-        if(robotState.isFreedomPathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.freedomPathBeforeTime > robotState.freedomPathCancelBufferMilli){
+        if(robotState.isFreedomPathing && (Math.abs(robotState.throttleInput) > driveDeadBand || Math.abs(robotState.strafeInput) > driveDeadBand) && (double) System.nanoTime() /1000000 - robotState.freedomPathBeforeTime > robotState.freedomPathCancelBufferMilli){
             freedomPather.stop();
         }
 
