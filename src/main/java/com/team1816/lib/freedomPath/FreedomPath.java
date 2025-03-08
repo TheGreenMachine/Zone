@@ -962,55 +962,56 @@ public class FreedomPath {
             }
     }
 
-    private int[] getClosestValidPoint(int pointX, int pointY, FieldMap fieldMap){
+    public int[] getClosestValidPoint(int pointX, int pointY, FieldMap fieldMap){
         int currentPointX = pointX + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
         int currentPointY = pointY + Math.max(fieldMap.getMapX(), fieldMap.getMapY());
 
-        for(int i = 0; i < Math.hypot(currentPointX, currentPointY)*Math.pow(2, 0.5); i++){
+        for(int i = 0; i < Math.hypot(currentPointX-pointX, currentPointY-pointY)*Math.pow(2, 0.5); i++){
             int checkPointX = pointX+i;
             int checkPointY = pointY+i;
 
-            if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+            if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX-pointX, currentPointY-pointY) > Math.hypot(checkPointX-pointX, checkPointY-pointY)){
                 currentPointX = checkPointX;
                 currentPointY = checkPointY;
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for(int i2 = 0; i2 < i*2; i2++){
                 checkPointX--;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX-pointX, currentPointY-pointY) > Math.hypot(checkPointX-pointX, checkPointY-pointY)){
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for(int i2 = 0; i2 < i*2; i2++){
                 checkPointY--;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX-pointX, currentPointY-pointY) > Math.hypot(checkPointX-pointX, checkPointY-pointY)){
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for(int i2 = 0; i2 < i*2; i2++){
                 checkPointX++;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX-pointX, currentPointY-pointY) > Math.hypot(checkPointX-pointX, checkPointY-pointY)){
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
 
-            for(int i2 = 0; i2 < i; i2++){
+            for(int i2 = 0; i2 < i*2; i2++){
                 checkPointY++;
-                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX, currentPointY) > Math.hypot(checkPointX, checkPointY)){
+                if(!fieldMap.checkPixelHasObjectOrOffMap(checkPointX, checkPointY) && Math.hypot(currentPointX-pointX, currentPointY-pointY) > Math.hypot(checkPointX-pointX, checkPointY-pointY)){
                     currentPointX = checkPointX;
                     currentPointY = checkPointY;
                 }
             }
         }
 
-        if(!fieldMap.checkPixelHasObjectOrOffMap(currentPointX, currentPointY))
+        System.out.println(currentPointX + " " + currentPointY);
+        if(!fieldMap.checkPixelHasObjectOrOffMap(currentPointX, currentPointY)) {
             return new int[]{currentPointX, currentPointY};
-        else {
+        }else {
             System.out.println("FreedomPathAlgorithm has done a dumb in the getClosestValidPoint method and couldn't find a valid point");
             return null;
         }

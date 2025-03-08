@@ -191,6 +191,8 @@ public class AutoModeManager {
 
         AUTOPATH,
 
+        FREEDOM_PATH_POINT,
+
         TOP_SIDE_1_SCORE_1,
 
         TOP_SIDE_1_SCORE_1_FEEDER,
@@ -250,6 +252,9 @@ public class AutoModeManager {
             case AUTOPATH:
                 robotState.dIsAutoDynamic = false;
                 return new FreedomPathMode();
+            case FREEDOM_PATH_POINT:
+                robotState.dIsAutoDynamic = false;
+                return new FreedomPathPointMode();
             case MIDDLE_SIDE_2_SCORE_1:
                 robotState.dIsAutoDynamic = false;
                 return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.NONE);
