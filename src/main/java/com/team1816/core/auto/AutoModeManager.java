@@ -50,8 +50,6 @@ public class AutoModeManager {
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
         sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
 
-        SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard=
-
         for (DesiredAuto desiredAuto : DesiredAuto.values()) {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
@@ -60,10 +58,12 @@ public class AutoModeManager {
             DesiredAuto.DEFAULT
         );
 
-        SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
+        SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard=
 
         sideChooser.setDefaultOption(Color.BLUE.name(), Color.BLUE); // initialize options
         sideChooser.addOption(Color.RED.name(), Color.RED); // initialize options
+
+        SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
 
         /**
          * Dynamic Auto

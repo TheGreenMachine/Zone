@@ -285,6 +285,10 @@
           "weight": 0.0,
           "width": 0.009999999776482582
         },
+        "Reef": {
+          "arrows": false,
+          "style": "Line (Closed)"
+        },
         "Robot": {
           "arrowColor": [
             0.5980392098426819,
@@ -425,8 +429,5 @@
   },
   "NetworkTables Info": {
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }

@@ -9,9 +9,9 @@ driver:
       horizontal: rotation
   buttonpad:
     a: freedomPathingSpeaker
-    b: intake/OuttakeAlgae
+    b: freedomPathingAmp
     x: outtakeCoral
-    y: removeAlgae
+    y: freedomPathing3
   axes:
     rightTrigger: L3
     leftTrigger: L4

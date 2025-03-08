@@ -384,7 +384,6 @@ public class Robot extends TimedRobot {
                     "freedomPathingSpeaker",
                     ActionState.PRESSED,
                     () -> {
-                            System.out.println("IWEOFWIEOFIWOEJF");
                         freedomPather.start(new Pose2d(new Translation2d(8, 4), Rotation2d.fromDegrees(0)));}
             );
 
@@ -392,7 +391,14 @@ public class Robot extends TimedRobot {
                     "freedomPathingAmp",
                     ActionState.PRESSED,
                     () ->
-                        freedomPather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
+                        freedomPather.start(new Pose2d(new Translation2d(2.75, 4.6), Rotation2d.fromDegrees(0)))
+            );
+
+            inputHandler.listenAction(
+                    "freedomPathing3",
+                    ActionState.PRESSED,
+                    () ->
+                            freedomPather.start(new Pose2d(new Translation2d(8, 6), Rotation2d.fromDegrees(0)))
             );
             /*inputHandler.listenActionPressAndRelease(
                     "intakeCoral",
@@ -527,7 +533,7 @@ public class Robot extends TimedRobot {
                 autoModeManager.reset();
             }
 
-            freedomPather.freedomPathMaxCalcMilli = 1000;
+            freedomPather.freedomPathMaxCalcMilli = 3000;
 
             subsystemManager.stop();
 
@@ -561,7 +567,7 @@ public class Robot extends TimedRobot {
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
 
-        freedomPather.freedomPathMaxCalcMilli = 5;
+        freedomPather.freedomPathMaxCalcMilli = isSimulation() ? 5 : 500;
 
         autoStart = Timer.getFPGATimestamp();
         enabledLoop.start();
@@ -585,7 +591,7 @@ public class Robot extends TimedRobot {
             algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
-            freedomPather.freedomPathMaxCalcMilli = 5;
+            freedomPather.freedomPathMaxCalcMilli = isSimulation() ? 5 : 500;
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
@@ -658,6 +664,8 @@ public class Robot extends TimedRobot {
                 }
                 lowSpeedTrafficLogger.append(CANBus.getStatus(Constants.kLowSpeedBusName).BusUtilization);
             }
+
+            SmartDashboard.putBoolean("Can FreedomPath", !freedomPather.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(robotState.fieldToVehicle.getX()*100), (int)(robotState.fieldToVehicle.getY()*100)));
 
             subsystemManager.outputToSmartDashboard(); // update shuffleboard for subsystem values
             robotState.outputToSmartDashboard(); // update robot state on field for Field2D widget

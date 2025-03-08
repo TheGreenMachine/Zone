@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
@@ -27,11 +28,13 @@ public class FreedomPath {
 
     public RobotState robotState;
 
+    public Drive drive;
+
     private final long looperDtInMS = (long) (Constants.kLooperDt * 1000);
 
     private Pose2d freedomPathTargetPosition = new Pose2d(0,0,new Rotation2d(0));
 
-    private FieldMap stableFieldMap = new FieldMap(1755/2, 805/2/*1, 1*/);
+    private FieldMap stableFieldMap = new FieldMap(1755, 805/*1, 1*/);
 
     public UpdatableAndExpandableFieldMap fieldMap;
     public UpdatableAndExpandableFieldMap fieldMapExpanded;
@@ -42,7 +45,7 @@ public class FreedomPath {
 
     public int freedomPathTrajectoryPathCheckPrecisionInTimesPerSecond = 50;
 
-    public final double mapResolution1DPerMeter = 50;
+    public final double mapResolution1DPerMeter = 100;
 
     /**
      * State: if path needs to be stopped
@@ -56,17 +59,28 @@ public class FreedomPath {
     public FreedomPath() {
         robotState = Injector.get(RobotState.class);
 
+        drive = (Injector.get(Drive.Factory.class)).getInstance();
+
 //        Noah is the best
-        stableFieldMap.drawPolygon(new int[]{368/2, 449/2, 530/2, 530/2, 449/2, 368/2}, new int[]{353/2, 310/2, 353/2, 453/2, 495/2, 453/2}, true);
-        stableFieldMap.drawPolygon(new int[]{1225/2, 1306/2, 1387/2, 1387/2, 1306/2, 1225/2}, new int[]{353/2, 310/2, 353/2, 453/2, 495/2, 453/2}, true);
+        stableFieldMap.drawPolygon(new int[]{368, 449, 530, 530, 449, 368}, new int[]{353, 310, 353, 453, 495, 453}, true);
+        stableFieldMap.drawPolygon(new int[]{1225, 1306, 1387, 1387, 1306, 1225}, new int[]{353, 310, 353, 453, 495, 453}, true);
 //        stableFieldMap.drawPolygon(new int[]{850/2, 850/2, 910/2, 910/2}, new int[]{420/2, 390/2, 390/2, 420/2}, true);
 //        stableFieldMap.drawPolygon(new int[]{0/2, 170/2, 0/2}, new int[]{0/2, 0/2, 150/2}, true);
 //        stableFieldMap.drawPolygon(new int[]{0/2, 170/2, 0/2}, new int[]{805/2, 805/2, 655/2}, true);
 //        stableFieldMap.drawPolygon(new int[]{1755/2, 1585/2, 1755/2}, new int[]{0/2, 0/2, 150/2}, true);
 //        stableFieldMap.drawPolygon(new int[]{1755/2, 1585/2, 1755/2}, new int[]{805/2, 805/2, 655/2}, true);
 
-        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799/2);
-        fieldMapExpanded = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 65/2);
+        robotState.field.getObject("Reef").setPoses(
+                new Pose2d(new Translation2d(368/100., 353/100.), new Rotation2d()),
+                new Pose2d(new Translation2d(449/100., 310/100.), new Rotation2d()),
+                new Pose2d(new Translation2d(530/100., 353/100.), new Rotation2d()),
+                new Pose2d(new Translation2d(530/100., 453/100.), new Rotation2d()),
+                new Pose2d(new Translation2d(449/100., 495/100.), new Rotation2d()),
+                new Pose2d(new Translation2d(368/100., 453/100.), new Rotation2d())
+        );
+
+        fieldMap = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 59.26969039916799);
+//        fieldMapExpanded = new UpdatableAndExpandableFieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY(), stableFieldMap, new FieldMap(stableFieldMap.getMapX(), stableFieldMap.getMapY()), 65);
     }
 
     /**
@@ -259,6 +273,8 @@ public class FreedomPath {
 
         freedomPathTrajectoryAction = new TrajectoryAction(freedomPathTrajectory, freedomPathHeadings);
 
+        drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
+
         freedomPathTrajectoryAction.start();
     }
 
@@ -285,10 +301,6 @@ public class FreedomPath {
                 e.printStackTrace();
             }
         }
-        else{
-            freedomPathTrajectoryAction.done();
-            done();
-        }
     }
 
     /**
@@ -296,6 +308,8 @@ public class FreedomPath {
      */
     protected void done() {
         robotState.isFreedomPathing = false;
+
+        drive.setControlState(Drive.ControlState.OPEN_LOOP);
 
         System.out.println("Started at "+freedomPathStartPosition);
         System.out.println("Hopefully ended at "+freedomPathTargetPosition);
@@ -309,7 +323,7 @@ public class FreedomPath {
      */
     public void stop() {
         freedomPathTrajectoryAction.done();
-        robotState.isFreedomPathing = false;
+        done();
     }
 
     /**
@@ -412,6 +426,7 @@ public class FreedomPath {
 
 
         TrajectoryConfig config = new TrajectoryConfig(Drive.kPathFollowingMaxVelMeters, Drive.kPathFollowingMaxAccelMeters);
+        config.setEndVelocity(0);
 //        config.setStartVelocity(velocity);
 //        config.setEndVelocity(robotState.robotVelocity);
 //        config.setEndVelocity(Math.min(Drive.kPathFollowingMaxVelMeters/2, 3));
@@ -1008,7 +1023,7 @@ public class FreedomPath {
             }
         }
 
-        System.out.println(currentPointX + " " + currentPointY);
+//        System.out.println(currentPointX + " " + currentPointY);
         if(!fieldMap.checkPixelHasObjectOrOffMap(currentPointX, currentPointY)) {
             return new int[]{currentPointX, currentPointY};
         }else {
