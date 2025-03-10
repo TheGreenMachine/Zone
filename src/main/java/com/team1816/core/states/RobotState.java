@@ -4,6 +4,7 @@ import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
@@ -44,6 +45,7 @@ public class RobotState {
      */
     public final Field2d field = new Field2d();
     public Color allianceColor = Color.BLUE;
+    public FieldPlacement sideOfField = FieldPlacement.BOTTOM;
     public Pose2d fieldToVehicle = Constants.EmptyPose2d;
     public Pose2d driverRelativeFieldToVehicle = Constants.EmptyPose2d;
     public Pose2d extrapolatedFieldToVehicle = Constants.EmptyPose2d;

@@ -4,6 +4,7 @@ import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.Symmetry;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -40,6 +41,8 @@ public class WaitUntilInsideRegion implements AutoAction {
 
     private Color allianceColor;
 
+    private FieldPlacement fieldPlacement;
+
     /**
      * Instantiates a WaitUntilInsideRegion action based on state parameters
      *
@@ -63,16 +66,23 @@ public class WaitUntilInsideRegion implements AutoAction {
         Translation2d bottomLeft,
         Translation2d topRight,
         String name,
-        Color color
+        Color color,
+        FieldPlacement fieldPlacement
     ) {
         this.name = name;
         mBottomLeft = bottomLeft;
         mTopRight = topRight;
         mRobotState = Injector.get(RobotState.class);
         allianceColor = color;
+        fieldPlacement = fieldPlacement;
+
         if (Constants.fieldSymmetry == Symmetry.AXIS && color == Color.RED) {
             mBottomLeft = new Translation2d(Constants.fieldCenterX * 2 - mTopRight.getX() - Math.abs(topRight.getX() - bottomLeft.getX()), mBottomLeft.getY());
             mTopRight = new Translation2d(Constants.fieldCenterX * 2 - mBottomLeft.getX() + Math.abs(topRight.getX() - bottomLeft.getX()), mTopRight.getY());
+        }
+        if (Constants.fieldSymmetry == Symmetry.AXIS && fieldPlacement == FieldPlacement.TOP){
+            mBottomLeft = new Translation2d(mBottomLeft.getX(), Constants.fieldCenterY * 2 - mTopRight.getY() - Math.abs(topRight.getY() - bottomLeft.getY()));
+            mTopRight = new Translation2d(mTopRight.getX(), Constants.fieldCenterY * 2 - mBottomLeft.getY() + Math.abs(topRight.getY() - bottomLeft.getY()));
         }
     }
 

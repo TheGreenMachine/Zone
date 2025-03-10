@@ -2,6 +2,7 @@ package com.team1816.season.auto.modes;
 
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.actions.ParallelAction;
 import com.team1816.lib.auto.actions.RotateSwerveAction;
 import com.team1816.lib.auto.actions.SeriesAction;
@@ -19,19 +20,19 @@ import java.util.List;
 
 public class BottomPlace2AutoMode extends AutoMode {
 
-    public BottomPlace2AutoMode(Color color) {
+    public BottomPlace2AutoMode(Color color, FieldPlacement fieldPlacement) {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new BottomStartToReef3B(color)
+                                new BottomStartToReef3B(color, fieldPlacement)
                         ), new TrajectoryAction(
-                                new Reef3BToBottomFeeder(color)
+                                new Reef3BToBottomFeeder(color, fieldPlacement)
                         ), new TrajectoryAction(
-                                new CloseFeederToSideFour(color)
+                                new CloseFeederToSideFour(color, fieldPlacement)
                         ), new TrajectoryAction(
-                                new SideFourOut(color)
+                                new SideFourOut(color, fieldPlacement)
                         ), new TrajectoryAction(
-                                new SideFourIn(color)
+                                new SideFourIn(color, fieldPlacement)
                         )
                 )
         );
@@ -50,10 +51,14 @@ public class BottomPlace2AutoMode extends AutoMode {
                         trajectoryActions.get(1),
                         new WaitForCoralAction(),
                         trajectoryActions.get(2),
-                        new PlaceCoralSeriesAction(Elevator.ELEVATOR_STATE.L4, CoralArm.PIVOT_STATE.L4, true),
+                        new PlaceCoralSeriesAction(Elevator.ELEVATOR_STATE.L3, CoralArm.PIVOT_STATE.L3, true),
                         trajectoryActions.get(3),
                         new ParallelAction(
-                                new RotateSwerveAction(Rotation2d.fromDegrees(robotState.allianceColor == Color.BLUE ? 240 : 60)),
+                                new RotateSwerveAction(Rotation2d.fromDegrees(robotState.allianceColor == Color.BLUE && robotState.sideOfField == FieldPlacement.BOTTOM ? 240 :
+                                        robotState.allianceColor == Color.BLUE && robotState.sideOfField == FieldPlacement.TOP ? 120 :
+                                        robotState.allianceColor == Color.RED && robotState.sideOfField == FieldPlacement.BOTTOM ? 60 :
+                                        robotState.allianceColor == Color.RED && robotState.sideOfField == FieldPlacement.TOP ? 300 : 0
+                                        )),
                                 new AlgaeCatcherQuickAction(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE)
                         ),
                         trajectoryActions.get(4)

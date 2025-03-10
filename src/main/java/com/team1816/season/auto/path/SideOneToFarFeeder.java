@@ -1,6 +1,7 @@
 package com.team1816.season.auto.path;
 
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.paths.AutoPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -8,8 +9,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.List;
 
 public class SideOneToFarFeeder extends AutoPath {
-    public SideOneToFarFeeder(Color color) {
-        super(color);
+    public SideOneToFarFeeder(Color color, FieldPlacement fieldPlacement) {
+        super(color, fieldPlacement);
     }
     @Override
     protected List<Pose2d> getWaypoints() {

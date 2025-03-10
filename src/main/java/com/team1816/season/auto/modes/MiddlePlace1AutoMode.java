@@ -2,6 +2,7 @@ package com.team1816.season.auto.modes;
 
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.actions.ParallelAction;
 import com.team1816.lib.auto.actions.SeriesAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
@@ -19,17 +20,17 @@ import java.util.List;
 public class MiddlePlace1AutoMode extends AutoMode {
     private final ENDING_FEEDER endingFeeder;
 
-    public MiddlePlace1AutoMode(Color color, ENDING_FEEDER endingFeeder) {
+    public MiddlePlace1AutoMode(Color color, ENDING_FEEDER endingFeeder, FieldPlacement fieldPlacement) {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new MiddleStartToReef2A(color)
+                                new MiddleStartToReef2A(color, fieldPlacement)
                         ),
                         new TrajectoryAction(
-                                new Reef2AToTopFeeder(color)
+                                new Reef2AToTopFeeder(color, fieldPlacement)
                         ),
                         new TrajectoryAction(
-                                new Reef2AToBottomFeeder(color)
+                                new Reef2AToBottomFeeder(color, fieldPlacement)
                         )
                 )
         );

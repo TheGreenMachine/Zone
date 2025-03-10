@@ -3,7 +3,9 @@ package com.team1816.core.auto;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
+import com.team1816.lib.DriverStationFieldPlacement;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.modes.AutoMode;
 //import com.team1816.lib.auto.modes.AutopathMode;
 import com.team1816.lib.auto.modes.DefaultMode;
@@ -29,6 +31,7 @@ public class AutoModeManager {
     private RobotState robotState;
     private final SendableChooser<DesiredAuto> autoModeChooser;
     private final SendableChooser<Color> sideChooser;
+    private final SendableChooser<FieldPlacement> placementChooser;
     private DesiredAuto desiredAuto;
     private Color teamColor;
 
@@ -50,6 +53,7 @@ public class AutoModeManager {
     @Inject
     public AutoModeManager(RobotState rs) {
         robotState = rs;
+        placementChooser = new SendableChooser<>(); //Shuffleboard dropdown menu to choose desired FieldPlacement
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
         sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
 
@@ -67,6 +71,12 @@ public class AutoModeManager {
 
         sideChooser.setDefaultOption(Color.BLUE.name(), Color.BLUE); // initialize options
         sideChooser.addOption(Color.RED.name(), Color.RED); // initialize options
+
+        SmartDashboard.putData("Field Placement", placementChooser);
+
+        placementChooser.setDefaultOption(FieldPlacement.BOTTOM.name(), FieldPlacement.BOTTOM);
+        placementChooser.addOption(FieldPlacement.TOP.name(), FieldPlacement.TOP);
+        placementChooser.addOption(FieldPlacement.MIDDLE.name(), FieldPlacement.MIDDLE);
 
         /**
          * Dynamic Auto
@@ -96,11 +106,26 @@ public class AutoModeManager {
 
         Color selectedColor = Color.BLUE;
 
+        FieldPlacement selectedFieldPlacement = FieldPlacement.BOTTOM;
+
+
+
         if (RobotBase.isSimulation()) {
             selectedColor = sideChooser.getSelected();
         } else if (RobotBase.isReal()) {
-            var dsAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : sideChooser.getSelected(); //ternary hell
+            var dsAlliance = DriverStation.getAlliance().isPresent()  ? DriverStation.getAlliance().get() : sideChooser.getSelected(); //ternary hell
+            var dsAutoPlacement = DriverStationFieldPlacement.getAutoPlacement().isPresent() ? DriverStationFieldPlacement.getAutoPlacement().get() : sideChooser.getSelected();
             selectedColor = (dsAlliance == DriverStation.Alliance.Red) ? Color.RED : Color.BLUE;
+                    if(dsAutoPlacement == DriverStationFieldPlacement.AutoPlacement.Top) {
+                        selectedFieldPlacement = FieldPlacement.TOP;
+                    } else if(dsAutoPlacement == DriverStationFieldPlacement.AutoPlacement.Bottom) {
+                selectedFieldPlacement = FieldPlacement.BOTTOM;
+                    } else {
+                        selectedFieldPlacement = FieldPlacement.MIDDLE;
+                    }
+
+
+
         }
 
         boolean autoChanged = desiredAuto != selectedAuto;
@@ -120,7 +145,7 @@ public class AutoModeManager {
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
 
-            autoMode = generateAutoMode(selectedAuto, selectedColor);
+            autoMode = generateAutoMode(selectedAuto, selectedColor, selectedFieldPlacement);
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
@@ -129,7 +154,7 @@ public class AutoModeManager {
     }
 
     public void updateAutoMode(){
-        autoMode = generateAutoMode(autoModeChooser.getSelected(), getSelectedColor());
+        autoMode = generateAutoMode(autoModeChooser.getSelected(), getSelectedColor(), getSelectedFieldPlacement());
         autoModeThread = new Thread(autoMode::run);
     }
 
@@ -163,6 +188,10 @@ public class AutoModeManager {
      */
     public Color getSelectedColor() {
         return sideChooser.getSelected();
+    }
+
+    public FieldPlacement getSelectedFieldPlacement() {
+        return placementChooser.getSelected();
     }
 
     /**
@@ -239,7 +268,7 @@ public class AutoModeManager {
      * @return AutoMode
      * @see AutoMode
      */
-    private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
+    private AutoMode generateAutoMode(DesiredAuto mode, Color color, FieldPlacement fieldPlacement) {
         switch (mode) {
             case DEFAULT:
                 robotState.dIsAutoDynamic = false;
@@ -255,31 +284,31 @@ public class AutoModeManager {
 //                return new AutopathMode();
             case MIDDLE_SIDE_2_SCORE_1:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.NONE);
+                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.NONE, fieldPlacement);
             case MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.TOP);
+                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.TOP, fieldPlacement);
             case MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.BOTTOM);
+                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.BOTTOM, fieldPlacement);
 //            case MIDDLE_SIDE_3_SCORE_2:
 //                robotState.dIsAutoDynamic = false;
 //                return new MiddlePlace2AutoMode(color);
             case TOP_DRIVE_STRAIGHT:
                 robotState.dIsAutoDynamic = false;
-                return new DriveOffLineTopAutoMode(color);
+                return new DriveOffLineTopAutoMode(color, fieldPlacement);
             case MIDDLE_DRIVE_STRAIGHT:
                 robotState.dIsAutoDynamic = false;
-                return new DriveOffLineMiddleAutoMode(color);
+                return new DriveOffLineMiddleAutoMode(color, fieldPlacement);
             case BOTTOM_DRIVE_STRAIGHT:
                 robotState.dIsAutoDynamic = false;
-                return new DriveOffLineBottomAutoMode(color);
+                return new DriveOffLineBottomAutoMode(color, fieldPlacement);
             case BOTTOM_SIDE_3_SCORE_1:
                 robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color, false);
+                return new BottomPlace1AutoMode(color, false, fieldPlacement);
             case BOTTOM_SIDE_3_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color, true);
+                return new BottomPlace1AutoMode(color, true, fieldPlacement);
 //            case BOTTOM_SIDE_3_SCORE_2:
 //                robotState.dIsAutoDynamic = false;
 //                return new BottomPlace2AutoMode(color);
@@ -294,10 +323,10 @@ public class AutoModeManager {
 //                return new DynamicPlace3();
             case TOP_SIDE_1_SCORE_1:
                 robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color, false);
+                return  new TopPlace1AutoMode(color, false, fieldPlacement);
             case TOP_SIDE_1_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color, true);
+                return  new TopPlace1AutoMode(color, true, fieldPlacement);
 //            case TOP_SIDE_1_SCORE_2:
 //                robotState.dIsAutoDynamic = false;
 //                return new TopPlace2AutoMode(color);

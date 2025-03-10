@@ -2,6 +2,7 @@ package com.team1816.lib.auto.paths;
 
 import com.team1816.core.configuration.Constants;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.Symmetry;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,7 +32,8 @@ public abstract class AutoPath {
     /**
      * State: contains information about whether the trajectory should be reflected and how
      */
-    boolean reflected;
+    boolean reflectedByX;
+    boolean reflectedByY;
 
     /**
      * State: contains information about whether the trajectory should be rotated and how
@@ -43,28 +45,52 @@ public abstract class AutoPath {
     public AutoPath() {
     }
 
-    public AutoPath(Color color) {
+    public AutoPath(Color color, FieldPlacement fieldPlacement) {
         if (Constants.fieldSymmetry == Symmetry.AXIS && color == Color.RED) {
-            setReflected(true);
+            setReflectedByX(true);
             setRotated(false);
         } else if (Constants.fieldSymmetry == Symmetry.ORIGIN && color == Color.RED) {
-            setReflected(false);
+            setReflectedByX(false);
             setRotated(true);
         } else {
-            setReflected(false);
+            setReflectedByX(false);
             setRotated(false);
         }
+        if (Constants.fieldSymmetry == Symmetry.AXIS && fieldPlacement == FieldPlacement.TOP) {
+            setReflectedByY(true);
+            setRotated(false);
+        } else if (Constants.fieldSymmetry == Symmetry.ORIGIN && fieldPlacement == FieldPlacement.TOP){
+            setReflectedByY(false);
+            setRotated(true);
+        } else  {
+            setReflectedByY(false);
+            setRotated(false);
+        }
+
     }
 
     public void updateColor(Color color) {
         if (Constants.fieldSymmetry == Symmetry.AXIS && color == Color.RED) {
-            setReflected(true);
+            setReflectedByX(true);
             setRotated(false);
         } else if (Constants.fieldSymmetry == Symmetry.ORIGIN && color == Color.RED) {
-            setReflected(false);
+            setReflectedByX(false);
             setRotated(true);
         } else {
-            setReflected(false);
+            setReflectedByX(false);
+            setRotated(false);
+        }
+    }
+
+    public void updateFieldPlacement(FieldPlacement fieldPlacement) {
+        if (Constants.fieldSymmetry == Symmetry.AXIS && fieldPlacement == FieldPlacement.TOP) {
+            setReflectedByY(true);
+            setRotated(false);
+        } else if (Constants.fieldSymmetry == Symmetry.ORIGIN && fieldPlacement == FieldPlacement.TOP){
+            setReflectedByX(false);
+            setRotated(true);
+        } else  {
+            setReflectedByY(false);
             setRotated(false);
         }
     }
@@ -72,10 +98,14 @@ public abstract class AutoPath {
     /**
      * Sets the reflected state to passed argument
      *
-     * @param reflected - reflected
+     * @param reflectedByX - reflected
      */
-    protected void setReflected(boolean reflected) {
-        this.reflected = reflected;
+    protected void setReflectedByX(boolean reflectedByX) {
+        this.reflectedByX = reflectedByX;
+    }
+
+    protected void setReflectedByY(boolean reflectedByY){
+        this.reflectedByY = reflectedByY;
     }
 
     /**
@@ -103,11 +133,21 @@ public abstract class AutoPath {
      *
      * @return waypoints
      */
-    protected List<Pose2d> getReflectedWaypoints() {
+    protected List<Pose2d> getReflectedByXWaypoints() {
         List<Pose2d> waypoints = getWaypoints();
         List<Pose2d> reflectedWaypoints = new ArrayList<>();
         for (int i = 0; i < waypoints.size(); i++) {
             Pose2d waypoint = new Pose2d(2 * Constants.fieldCenterX - waypoints.get(i).getX(), waypoints.get(i).getY(), Rotation2d.fromDegrees(180 - waypoints.get(i).getRotation().getDegrees()));
+            reflectedWaypoints.add(i, waypoint);
+        }
+        return reflectedWaypoints;
+    }
+
+    protected List<Pose2d> getReflectedByYWaypoints() {
+        List<Pose2d> waypoints = getWaypoints();
+        List<Pose2d> reflectedWaypoints = new ArrayList<>();
+        for (int i = 0; i < waypoints.size(); i++) {
+            Pose2d waypoint = new Pose2d(waypoints.get(i).getX(), 2 * Constants.fieldCenterY - waypoints.get(i).getY(), Rotation2d.fromDegrees(180 - waypoints.get(i).getRotation().getDegrees()));
             reflectedWaypoints.add(i, waypoint);
         }
         return reflectedWaypoints;
@@ -181,10 +221,10 @@ public abstract class AutoPath {
      */
     public Trajectory getAsTrajectory() {
         if (trajectory == null) {
-            if (!reflected && !rotated) {
+            if (!reflectedByX && !rotated) {
                 trajectory = PathUtil.generateTrajectory(usingApp(), getWaypoints());
-            } else if (reflected) {
-                trajectory = PathUtil.generateTrajectory(usingApp(), getReflectedWaypoints());
+            } else if (reflectedByX) {
+                trajectory = PathUtil.generateTrajectory(usingApp(), getReflectedByXWaypoints());
             } else {
                 trajectory = PathUtil.generateTrajectory(usingApp(), getRotatedWaypoints());
             }
@@ -200,18 +240,18 @@ public abstract class AutoPath {
      */
     public List<Rotation2d> getAsTrajectoryHeadings() {
         if (headings == null) {
-            if (!reflected && !rotated) {
+            if (!reflectedByX && !rotated) {
                 headings =
                     PathUtil.generateHeadings(
                         usingApp(),
                         getWaypoints(),
                         getWaypointHeadings()
                     );
-            } else if (reflected) {
+            } else if (reflectedByX) {
                 headings =
                     PathUtil.generateHeadings(
                         usingApp(),
-                        getReflectedWaypoints(),
+                        getReflectedByXWaypoints(),
                         getReflectedWaypointHeadings()
                     );
             } else {

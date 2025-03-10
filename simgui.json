@@ -95,6 +95,7 @@
       "/SmartDashboard/Dynamic Start": "String Chooser",
       "/SmartDashboard/Elevator+CoralArm": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Field Placement": "String Chooser",
       "/SmartDashboard/Playlist": "String Chooser",
       "/SmartDashboard/Robot color": "String Chooser",
       "/SmartDashboard/Starting Position": "String Chooser",
@@ -338,6 +339,11 @@
           "style": "Line"
         },
         "width": 17.54825210571289,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field Placement": {
         "window": {
           "visible": true
         }

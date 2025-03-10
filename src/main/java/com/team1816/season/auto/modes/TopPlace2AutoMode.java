@@ -18,19 +18,19 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.List;
 
 public class TopPlace2AutoMode extends AutoMode {
-    public TopPlace2AutoMode(Color color){
+    public TopPlace2AutoMode(){
         super(
                 List.of(
                         new TrajectoryAction(
-                                new TopStartToReef1A(robotState.allianceColor)
+                                new TopStartToReef1A(robotState.allianceColor, robotState.sideOfField)
                         ), new TrajectoryAction(
-                                new Reef1AToTopFeeder(robotState.allianceColor)
+                                new Reef1AToTopFeeder(robotState.allianceColor, robotState.sideOfField)
                         ), new TrajectoryAction(
-                                new TopFeederToSideSix(robotState.allianceColor)
+                                new TopFeederToSideSix(robotState.allianceColor, robotState.sideOfField)
                         ), new TrajectoryAction(
-                                new BackOutSideSix(robotState.allianceColor)
+                                new BackOutSideSix(robotState.allianceColor, robotState.sideOfField)
                         ), new TrajectoryAction(
-                                new BackInSideSix(robotState.allianceColor)
+                                new BackInSideSix(robotState.allianceColor, robotState.sideOfField)
                         )
                 )
         );

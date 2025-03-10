@@ -6,6 +6,7 @@ import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
+import com.team1816.lib.auto.FieldPlacement;
 import com.team1816.lib.auto.actions.TrajectoryAction;
 //import com.team1816.lib.autopath.Autopath;
 import com.team1816.season.subsystems.CoralArm;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 
 public class DynamicAutoScript2025 {
     private Color color = Color.BLUE;
+    private FieldPlacement fieldPlacement = FieldPlacement.BOTTOM;
 
     private HashMap<String, Pose2d> allDynamicPoints = new HashMap<>();
 
@@ -86,6 +88,10 @@ public class DynamicAutoScript2025 {
             somethingChanged = true;
         }
         color = robotState.allianceColor;
+        if(fieldPlacement != robotState.sideOfField){
+            somethingChanged = true;
+        }
+        fieldPlacement = robotState.sideOfField;
 
         Pose2d selected = startingPositionChooser.getSelected();
         if (!startPos.equals(selected)) {
