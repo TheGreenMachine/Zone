@@ -2,10 +2,12 @@ package com.team1816.lib.hardware.components.motor;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.team1816.lib.hardware.components.motor.configurations.*;
+import com.team1816.core.configuration.Constants;
+import com.team1816.lib.hardware.components.motor.configurations.FeedbackDeviceType;
+import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
+import com.team1816.lib.hardware.components.motor.configurations.MotionCurveType;
 import com.team1816.lib.util.ConfigurationTranslator;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.configuration.Constants;
 import edu.wpi.first.wpilibj.DriverStation;
 
 @SuppressWarnings("deprecation") //IF I SEE ONE MORE WARNING AT COMPILE TIME I WILL LOSE IT

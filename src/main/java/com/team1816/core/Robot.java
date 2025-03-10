@@ -1,15 +1,17 @@
 package com.team1816.core;
 
 import com.ctre.phoenix6.CANBus;
-import com.team1816.core.configuration.FieldConfig;
+import com.team1816.core.auto.AutoModeManager;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.Orchestrator;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
-import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.autopath.Autopath;
+//import com.team1816.lib.autopath.Autopath;
 import com.team1816.lib.hardware.factory.RobotFactory;
-import com.team1816.lib.input_handler.*;
+import com.team1816.lib.input_handler.InputHandler;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
 import com.team1816.lib.loops.Looper;
 import com.team1816.lib.subsystems.LedManager;
@@ -18,17 +20,12 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.auto.AutoModeManager;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.states.Orchestrator;
-import com.team1816.core.states.RobotState;
+import com.team1816.season.auto.DynamicAutoScript2025;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
-import edu.wpi.first.math.geometry.Pose2d;
+import com.team1816.season.subsystems.Pneumatic;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
@@ -73,13 +70,16 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     //TODO add new subsystems here
-    private Autopath autopather;
+//    private Autopath autopather;
     private Elevator elevator;
     private CoralArm coralArm;
     private AlgaeCatcher algaeCatcher;
+    private Pneumatic pneumatic;
 
     private LedManager ledManager;
     private Camera camera;
+
+    private DynamicAutoScript2025 dynamicAutoScript;
 
     /**
      * Factory
@@ -182,10 +182,13 @@ public class Robot extends TimedRobot {
             subsystemManager = Injector.get(SubsystemLooper.class);
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
-            autopather = Injector.get(Autopath.class);
+//            autopather = Injector.get(Autopath.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
+            pneumatic = Injector.get(Pneumatic.class);
+
+            dynamicAutoScript = new DynamicAutoScript2025(5, 3);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -227,7 +230,7 @@ public class Robot extends TimedRobot {
 
             drive = (Injector.get(Drive.Factory.class)).getInstance();
 
-            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher);
+            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher, pneumatic);
 
             subsystemManager.registerEnabledLoops(enabledLoop);
             subsystemManager.registerDisabledLoops(disabledLoop);
@@ -247,27 +250,15 @@ public class Robot extends TimedRobot {
             /** Register inputHandler */
             inputHandler = Injector.get(InputHandler.class);
 
-
-            /** Driver Commands */
+            /**NEW SUBSYSTEM ACTIONS*/
+                /** Driver Commands */
+                    /**Intake/Driving Inputs*/
             inputHandler.listenAction(
                     "zeroPose",
                     ActionState.PRESSED,
                     () ->
                             drive.resetHeading(
-                                    robotState.allianceColor == Color.BLUE ?
-                                            Rotation2d.fromDegrees(0) :
-                                            Rotation2d.fromDegrees(180)
-                            )
-            );
-
-            inputHandler.listenAction(
-                    "hardZeroPose", //FIXME this sometimes does weird rotation in sim, idk about in real life
-                    ActionState.PRESSED,
-                    () ->
-                            drive.zeroSensors(
-                                    robotState.allianceColor == Color.BLUE ?
-                                            Constants.kDefaultZeroingPose :
-                                            Constants.kFlippedZeroingPose
+                                    Rotation2d.fromDegrees(robotState.fieldToVehicle.getRotation().getDegrees() + 180)
                             )
             );
 
@@ -286,8 +277,105 @@ public class Robot extends TimedRobot {
                     "slowMode",
                     drive::setSlowMode
             );
+            inputHandler.listenAction(
+                    "outtakeCoral",
+                    ActionState.PRESSED,
+                    () -> {
+                        coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.OUTTAKE);
+                    }
+            );
+            inputHandler.listenAction(
+                    "intake/OuttakeAlgae",
+                    ActionState.PRESSED,
+                    () -> {
+                        if(algaeCatcher.isBeamBreakTriggered()) {
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
+                        }
+                        else {
+                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
+                        }
+                    }
+            );
+            inputHandler.listenAction(
+                    "activationDeepHanger",
+                    ActionState.PRESSED,
+                    () -> {
+                        pneumatic.toggle();
+                    }
+            );
+
+                  /**Position inputs*/
 
             inputHandler.listenAction(
+                    "L1",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "L2",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
+                    }
+            );
+            inputHandler.listenAction(
+                    "L3",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
+                    }
+            );
+            inputHandler.listenAction(
+                    "L4",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
+                    }
+            );
+            inputHandler.listenActionPressAndRelease(
+                    "removeAlgae",
+                    (pressed) ->{
+                        algaeCatcher.setDesiredState(
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
+                                pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
+                        );
+                    }
+            );
+            /**COMMENTED ACTIONS THAT MIGHT BE IMPORTANT*/
+                /**REEFSCAPE ACTIONS*/
+            /*            inputHandler.listenAction(
+                    "pivotElevatorAndCoralFeeder",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotAlgaeStow",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotAlgaeIntake",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
+                    }
+            );
+            inputHandler.listenAction(
+                    "pivotAlgaeOuttake",
+                    ActionState.PRESSED,
+                    () -> {
+                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
+                    }
+            );*/
+                /**CRESCENDO ACTIONS*/
+                        /*inputHandler.listenAction(
                     "autopathingSpeaker",
                     ActionState.PRESSED,
                     () ->
@@ -299,6 +387,110 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () ->
                         autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
+            );*/
+            /*inputHandler.listenActionPressAndRelease(
+                    "intakeCoral",
+                    (pressed) -> {
+                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
+                    }
+            );*/
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricRight",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricDown",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricLeft",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricUp",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+
+            /** Buttonboard Commands */
+
+            inputHandler.listenAction(
+                    "increaseElevatorPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        elevator.offsetElevator(0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "decreaseElevatorPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        elevator.offsetElevator(-0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "increaseCoralArmPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        coralArm.offsetCoralPivot(0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "decreaseCoralArmPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        coralArm.offsetCoralPivot(-0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "increaseAlgaePivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        algaeCatcher.offsetAlgaePivot(0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "decreaseAlgaePivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        algaeCatcher.offsetAlgaePivot(-0.1);
+                    }
             );
 
             //For testing only
@@ -313,8 +505,6 @@ public class Robot extends TimedRobot {
 
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
-
-            SmartDashboard.putNumber("Autopath Waypoint Buffer", 10);
 
         } catch (Throwable t) {
             faulted = true;
@@ -339,6 +529,8 @@ public class Robot extends TimedRobot {
             if (autoModeManager.getSelectedAuto() == null) {
                 autoModeManager.reset();
             }
+
+//            autopather.autopathMaxCalcMilli = 1000;
 
             subsystemManager.stop();
 
@@ -365,12 +557,14 @@ public class Robot extends TimedRobot {
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
         //TODO add new subsystem inits here
-        elevator.setDesiredState(Elevator.ELEVATOR_STATE.REST);
-        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_STATE.STOP);
-        coralArm.setDesiredState(CoralArm.PIVOT_STATE.REST, CoralArm.INTAKE_STATE.REST);
+        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.UP, CoralArm.INTAKE_STATE.HOLD);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
+
+//        autopather.autopathMaxCalcMilli = 5;
 
         autoStart = Timer.getFPGATimestamp();
         enabledLoop.start();
@@ -389,6 +583,12 @@ public class Robot extends TimedRobot {
             ledManager.indicateStatus(LedManager.RobotStatus.ENABLED);
 
             infrastructure.startCompressor();
+
+            elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
+            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+
+//            autopather.autopathMaxCalcMilli = 5;
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
@@ -445,6 +645,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         try {
+//            System.out.println(robotState.fieldToVehicle);
             // updating loop timers
             Robot.looperDt = getLastSubsystemLoop();
             Robot.robotDt = getLastRobotLoop();
@@ -458,6 +659,7 @@ public class Robot extends TimedRobot {
                 FieldConfig.field.getObject("SimActualRobotPosition").setPose(robotState.simActualFieldToVehicle);
             }
 
+            robotState.isElevatorInRange = elevator.isElevatorInRange();
             if (Constants.kLoggingRobot) {
                 looperLogger.append(looperDt);
                 robotLoopLogger.append(robotDt);
@@ -483,7 +685,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledPeriodic() {
-        inputHandler.updateControllerLayout();
+//        inputHandler.updateControllerLayout();
 
         try {
             if (RobotController.getUserButton()) {
@@ -503,24 +705,29 @@ public class Robot extends TimedRobot {
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
             boolean autoChanged = autoModeManager.update();
-            if(robotState.isAutoDynamic && RobotState.dynamicAutoChanged){
+            if(robotState.dIsAutoDynamic && robotState.dAutoChanged){
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
                 ArrayList<Trajectory.State> trajectoryStates = new ArrayList<>();
-                var trajectoryActions = robotState.dynamicAutoScript2025.getAutoTrajectoryActionsIgnoreEmpty();
+                var trajectoryActions = robotState.dAutoTrajectoryActions;
                 for(int i = 0; i < trajectoryActions.size(); i++) {
                     ArrayList<Trajectory.State> trajectoryActionStates = new ArrayList<>(trajectoryActions.get(i).getTrajectory().getStates());
                     trajectoryStates.addAll(trajectoryActionStates);
                 }
 
-                robotState.field
-                        .getObject("Trajectory")
-                        .setTrajectory(
-                                new Trajectory(trajectoryStates)
-                        );
+                if(trajectoryStates.isEmpty())
+                    robotState.field
+                            .getObject("Trajectory")
+                            .close();
+                else
+                    robotState.field
+                            .getObject("Trajectory")
+                            .setTrajectory(
+                                    new Trajectory(trajectoryStates)
+                            );
 
-                RobotState.dynamicAutoChanged = false;
-            } else if(!robotState.isAutoDynamic && autoChanged) {
+                robotState.dAutoChanged = false;
+            } else if(!robotState.dIsAutoDynamic) {
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
                 robotState.field
                         .getObject("Trajectory")
@@ -529,7 +736,8 @@ public class Robot extends TimedRobot {
                         );
             }
 
-            robotState.dynamicAutoScript2025.updateSendableChoosers();
+            if(robotState.dIsAutoDynamic)
+                dynamicAutoScript.update();
 
             if (drive.isDemoMode()) { // Demo-mode
                 drive.update();
@@ -554,7 +762,7 @@ public class Robot extends TimedRobot {
                 .setTrajectory(autoModeManager.getSelectedAuto().getCurrentTrajectory());
 
         if(Constants.kLoggingRobot) {
-            GreenLogger.updatePeriodicLogs();
+//            GreenLogger.updatePeriodicLogs();
         }
 
     }
@@ -567,19 +775,15 @@ public class Robot extends TimedRobot {
         try {
 
             if(Constants.kLoggingRobot) {
-                GreenLogger.updatePeriodicLogs();
+//                GreenLogger.updatePeriodicLogs();
             }
 
             manualControl();
-            if(robotState.autopathing)
-                autopather.routine();
+//            if(robotState.autopathing)
+//                autopather.routine();
         } catch (Throwable t) {
             faulted = true;
-            try {
-                throw t;
-            } catch (AutoModeEndedException e) {
-                throw new RuntimeException(e);
-            }
+            throw t;
         }
     }
 
@@ -595,16 +799,22 @@ public class Robot extends TimedRobot {
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
         if(robotState.autopathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.autopathBeforeTime > robotState.autopathPathCancelBufferMilli){
-            autopather.stop();
+//            autopather.stop();
         }
 
         if (robotState.rotatingClosedLoop) {
             drive.rotationPeriodic();
+        } else if (robotState.robotcentricRequestAmount > 0){
+            drive.setTeleopInputs(
+                    robotState.robotcentricThrottleInput,
+                    robotState.robotcentricStrafeInput,
+                    robotState.robotcentricRotationInput
+            );
         } else {
             drive.setTeleopInputs(
-                    -inputHandler.getActionAsDouble("throttle"),
-                    -inputHandler.getActionAsDouble("strafe"),
-                    -inputHandler.getActionAsDouble("rotation")
+                    robotState.throttleInput,
+                    robotState.strafeInput,
+                    robotState.rotationInput
             );
         }
     }

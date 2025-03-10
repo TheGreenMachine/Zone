@@ -1,7 +1,6 @@
 package com.team1816.lib.autopath;
-import edu.wpi.first.math.geometry.Translation2d;
 
-import java.util.ArrayList;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class Bresenham {
     // function for line generation using Bresenham's line drawing algorithm

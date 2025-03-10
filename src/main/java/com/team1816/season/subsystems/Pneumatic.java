@@ -1,12 +1,12 @@
 package com.team1816.season.subsystems;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.subsystems.Subsystem;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.team1816.lib.hardware.PIDSlotConfiguration;
-import com.team1816.lib.hardware.components.pcm.ISolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 @Singleton
 public class Pneumatic extends Subsystem {
@@ -18,7 +18,7 @@ public class Pneumatic extends Subsystem {
     /**
      * Components
      */
-    private final ISolenoid pneumatic;
+    private final DoubleSolenoid doublePneumatic;
 
     /**
      * State
@@ -26,7 +26,7 @@ public class Pneumatic extends Subsystem {
     private Pneumatic.PNEUMATIC_STATE desiredPneumaticState = PNEUMATIC_STATE.OFF;
     private Pneumatic.PNEUMATIC_STATE actualPneumaticState = PNEUMATIC_STATE.OFF;
 
-    private boolean pneumaticOutputsChanged = false;
+    private boolean pneumaticOutputsChanged = true;
 
     /**
      * Constants
@@ -42,9 +42,7 @@ public class Pneumatic extends Subsystem {
     @Inject
     public Pneumatic(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
-        pneumatic = factory.getSolenoid(NAME, "pneumatic");
-
-        PIDSlotConfiguration config = factory.getPidSlotConfig(NAME);
+        doublePneumatic = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 7, 6);
     }
 
     public PNEUMATIC_STATE getDesiredState() {
@@ -56,37 +54,38 @@ public class Pneumatic extends Subsystem {
         pneumaticOutputsChanged = true;
     }
 
-    public void changePneumatic() {
+    public void toggle() {
         if (desiredPneumaticState == PNEUMATIC_STATE.OFF) {
             setDesiredState(PNEUMATIC_STATE.ON);
         } else {
             setDesiredState(PNEUMATIC_STATE.OFF);
         }
-        pneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON);
-        actualPneumaticState = desiredPneumaticState;
     }
 
     @Override
     public void readFromHardware() {
-        if (pneumatic.get()) {
+        if (doublePneumatic.get() == DoubleSolenoid.Value.kReverse) {
             actualPneumaticState = PNEUMATIC_STATE.ON;
         } else {
             actualPneumaticState = PNEUMATIC_STATE.OFF;
         }
+
+//        System.out.println(actualPneumaticState.name());
     }
 
     @Override
     public void writeToHardware() {
         if (pneumaticOutputsChanged) {
             pneumaticOutputsChanged = false;
-            pneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON);
-            actualPneumaticState = desiredPneumaticState;
+
+            doublePneumatic.set(desiredPneumaticState == PNEUMATIC_STATE.ON ? DoubleSolenoid.Value.kReverse: DoubleSolenoid.Value.kForward);
         }
     }
 
     @Override
     public void zeroSensors() {
         desiredPneumaticState = PNEUMATIC_STATE.OFF;
+        doublePneumatic.set(DoubleSolenoid.Value.kForward);
     }
 
     @Override

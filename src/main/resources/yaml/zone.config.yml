@@ -1,134 +1,135 @@
-# TODO: Will need to be updated once "REEFSCAPE" robot, Zone is present. Currently, is not accurate
 subsystems:
     drivetrain:
         implemented: true
         motors:
-            FLDr:
-                motorType: TalonFX
-                motorName: FLDr
-                id: 7
-                invertMotor: false
-            FRDr:
-                motorType: TalonFX
-                motorName: FRDr
-                id: 2
-                invertMotor: true
-            RLDr:
-                motorType: TalonFX
-                motorName: BLDr
-                id: 8
-                invertMotor: true
             RRDr:
                 motorType: TalonFX
                 motorName: BRDr
-                id: 1
-                invertMotor: true
-            FLAz:
-                motorType: TalonFX
-                motorName: FLAz
-                id: 12
-                invertMotor: false
-            FRAz:
-                motorType: TalonFX
-                motorName: FRAz
-                id: 3
-                invertMotor: false
-            RLAz:
-                motorType: TalonFX
-                motorName: BLAz
-                id: 9
+                id: 0
                 invertMotor: false
             RRAz:
                 motorType: TalonFX
                 motorName: BRAz
-                id: 0
+                id: 1
+                invertMotor: false
+            FRDr:
+                motorType: TalonFX
+                motorName: FRDr
+                id: 3
+                invertMotor: false
+            FRAz:
+                motorType: TalonFX
+                motorName: FRAz
+                id: 4
+                invertMotor: false
+            FLDr:
+                motorType: TalonFX
+                motorName: FLDr
+                id: 6
+                invertMotor: false
+            FLAz:
+                motorType: TalonFX
+                motorName: FLAz
+                id: 7
+                invertMotor: false
+            RLDr:
+                motorType: TalonFX
+                motorName: BLDr
+                id: 9
+                invertMotor: false
+            RLAz:
+                motorType: TalonFX
+                motorName: BLAz
+                id: 10
                 invertMotor: false
         canCoders:
-            FLEnc: 16
-            FREnc: 15
-            RLEnc: 17
-            RREnc: 14
+            RREnc: 2
+            FREnc: 5
+            FLEnc: 8
+            RLEnc: 11
         swerveModules:
             modules:
-                frontLeft:
-                    drive: FLDr
-                    azimuth: FLAz
-                    canCoder: FLEnc
-                    xCoord: 7.125
-                    yCoord: 11.375
+                backRight:
+                    drive: RRDr
+                    azimuth: RRAz
+                    canCoder: RREnc
+                    xCoord: -11.875
+                    yCoord: -11.875
                     constants:
-                        encoderOffset: -0.34228515625
-                        couplingRatio: 3.576
-                        freeSpin12VRPS: 101
+                        encoderOffset: 0.3076171875
+                        couplingRatio: 3.589
+                        freeSpin12VRPS: 104
                         invertSensorPhase: 1
                 frontRight:
                     drive: FRDr
                     azimuth: FRAz
                     canCoder: FREnc
-                    xCoord: 7.125
-                    yCoord: -11.375
+                    xCoord: 11.875
+                    yCoord: -11.875
                     constants:
-                        encoderOffset: -0.014404296875
+                        encoderOffset: 0.014404296875
                         couplingRatio: 3.579
+                        freeSpin12VRPS: 101
+                        invertSensorPhase: 1
+                frontLeft:
+                    drive: FLDr
+                    azimuth: FLAz
+                    canCoder: FLEnc
+                    xCoord: 11.875
+                    yCoord: 11.875
+                    constants:
+                        encoderOffset: 0.34228515625
+                        couplingRatio: 3.576
                         freeSpin12VRPS: 101
                         invertSensorPhase: 1
                 backLeft:
                     drive: RLDr
                     azimuth: RLAz
                     canCoder: RLEnc
-                    xCoord: -11.375
-                    yCoord: 11.375
+                    xCoord: -11.875
+                    yCoord: 11.875
                     constants:
                         encoderOffset: 0.23779296875
                         couplingRatio: 3.572
                         freeSpin12VRPS: 101
                         invertSensorPhase: 1
-                backRight:
-                    drive: RRDr
-                    azimuth: RRAz
-                    canCoder: RREnc
-                    xCoord: -11.375
-                    yCoord: -11.375
-                    constants:
-                        encoderOffset: 0.3076171875
-                        couplingRatio: 3.589
-                        freeSpin12VRPS: 104
-                        invertSensorPhase: 1
             drivePID:
                 slot0:
-                    kP: 0.0065
-                    kI: 0
-                    kD: 0.00005
-                    kV: 0.00925
+                    kP: 0.1
+                    kI: 0.0005
+                    kD: 0.0015
+                    kV: 0.115
+                    kS: 0
+                    kA: 0
+                    kG: 0
             azimuthPID:
                 slot0:
-                    kP: 75
+                    kP: 50
                     kI: 0
-                    kD: 0
-                    kV: 0
-                    allowableError: 5
+                    kD: 0.5
+                    kV: 2.66
+                    kS: 0.1
+                    kA: 0
+                    kG: 0
+
         constants:
             ## Positional Configurations ##
-            deepCageHangerEthanPosition: 0.1
-            deepCageHangerLiaoPosition: 0.1
             openLoopRampRate: 0.1
             isSwerve: 1
-            isCTRSwerve: 0 #TODO IF ALL ELSE FAILS
-            wheelDiameter: 3.81 #inches
-            kTrackScrubFactor: 1.0
+            isCTRSwerve: 1 #TODO IF ALL ELSE FAILS
             ## Velocity Constraints ##
             maxRotVel: 0.8 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
+            wheelDiameter: 4
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
-            maxVel12VMPS: 5.2
-            maxVelPathFollowing: 4 # meters/s
-            maxAccel: 3 # meters/s^2
+            maxVelPathFollowing: 1 # meters/s
+            maxAccel: 1 # meters/s^2
+            #FR OUT, RL OUT, FL IN, BR IN
             isDemoMode: 0
             ## Swerve Characterization ##
-            driveGearRatio: 6.12 # L2
-            azimuthGearRatio: 12.8 # MK4
+            azimuthEncPPR: 2048
             ## Control Configurations ##
             slowModeScalar: 0.4
             turboModeScalar: 1.73
@@ -136,10 +137,130 @@ subsystems:
             rotationalDeadband: 0.1
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
+    coralArm:
+        implemented: true
+        motors:
+            coralArmIntakeMotor:
+                motorType: SparkMax
+                motorName: coralArmIntakeMotor
+                id: 12
+                invertMotor: false
+                currentLimit: 25
+            coralArmPivotMotor:
+                motorType: TalonFX
+                motorName: coralArmPivotMotor
+                id: 13
+                invertMotor: true
+                currentLimit: 20
+                isLowSpeedCanBus: true
+                motionMagic:
+                    expoKV: 0.12
+                    expoKA: 0.1
+        pidConfig:
+            slot0: #Pivot
+                kP: 0.05
+                kI: 0
+                kD: 0
+                kV: 0
+                kS: 0
+                kA: 0
+                kG: 0
+        constants: # TODO: all of these
+            intakeSpeed: -.80
+            outtakeSpeed: .80
+            holdSpeed: 0
+
+            coralSensorChannel: 9
+
+            coralArmL1Position: 36
+            coralArmL2Position: 36
+            coralArmL3Position: 36
+            coralArmL4Position: 36
+            coralArmUpPosition: 28
+
+            coralArmFeederPosition: 28
+
+            coralArmMotorRotationsPerDegree: 1
+
+            stopOuttakingDelay: 2
+    algaeCatcher:
+        implemented: true
+        motors:
+            algaeCatcherIntakeMotor:
+                motorType: SparkMax
+                motorName: algaeCatcherIntakeMotor
+                id: 14
+                invertMotor: false
+                currentLimit: 20
+                isLowSpeedCanBus: true
+            algaeCatcherPositionMotor:
+                motorType: TalonFX
+                motorName: algaeCatcherPositionMotor
+                id: 15
+                invertMotor: false
+                currentLimit: 20
+                motionMagic:
+                    expoKV: 0.05
+                    expoKA: 0.15
+        pidConfig:
+            slot0: #Position
+                kP: 0.8
+                ki: 0
+                kD: 0.02
+                kV: 0
+                kS: 0
+                kA: 0
+                kG: 0
+                gravityType: cosine
+        constants: # TODO: all of these
+            algaeCollectSpeed: -.60
+            algaeHoldSpeed: -.60
+            algaeReleaseSpeed: 1
+            removeAlgaeSpeed: 1
+
+            algaeSensorChannel: 1
+
+            stowPosition: 0.1
+            intakePosition: 16.8
+            holdPosition: 13
+            outtakePosition: 13
+            removeAlgaePosition: 3   #4.8
+
+            algaeMotorRotationsPerDegree: .25
+    elevator:
+        implemented: true
+        motors:
+            elevatorMotor:
+                motorType: TalonFX
+                motorName: elevatorMotor
+                id: 16
+                invertMotor: true
+                currentLimit: 60
+                motionMagic:
+                    expoKV: 0.1
+                    expoKA: 0.2
+        pidConfig:
+            slot0:
+                kP: 1
+                kI: 0
+                kD: 0.02
+                kV: 0
+                kS: 0
+                kA: 0
+                kG: 0
+        constants: # TODO: all of these
+            elevatorFeederPosition: 0
+            elevatorL1Position: 1
+            elevatorL2Position: 14.2
+            elevatorL3Position: 33.7
+            elevatorL4Position: 63.1
+
+            elevatorMotorRotationsPerUnit: 1
     pneumatic:
         implemented: true
         solenoids:
-            pneumatic: 6
+            pneumatic: 7 #idk wtf this is ngl
+            pneumatic2: 6
         constants:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
@@ -147,121 +268,15 @@ subsystems:
         implemented: true
         constants:
             useMultiTargetOdometry: 0
-    algaeCatcher:
-        #TODO tune these stuffs
-        implemented: true
-        motors:
-            algaeCatcherLeadMotor:
-                motorType: TalonFX
-                motorName: leadMotor
-                id: -324092
-                invertMotor: false
-            algaeCatcherFollowerMotor:
-                motorType: TalonFX
-                motorName: followerMotor
-                id: -314159
-                invertMotor: false
-            algaeCatcherPositionMotor:
-                motorType: TalonFX
-                motorName: positionMotor
-                id: -314159
-                invertMotor: false
-        pidConfig:
-            slot0:
-                kP: 0.043
-                Ki: 0
-                kD: 0.00001
-                kV: 0.0099
-        constants:
-            algaeCollectSpeed: -0.5
-            algaeHoldSpeed: -0.1
-            algaeReleaseSpeed: 0.25
-
-            neutralPosition: 1
-            intakePosition: 1
-            holdPosition: 1
-            outtakePosition: 1
-    coralArm:
-        implemented: true
-        motors:
-            coralPivotMotor:
-                motorType: TalonFX
-                motorName: pivotMotor
-                id: -1
-                invertMotor: false
-            coralIntakeMotor:
-                motorType: SparkMax
-                motorName: intakeMotor
-                id: -1
-                invertMotor: false
-        pidConfig:
-            slot1:
-                kP: 0
-                kI: 0
-                kD: 0
-                kV: 0
-            slot2:
-                kP: 0
-                kI: 0
-                kD: 0
-                kV: 0
-        constants: # TODO: all of these
-            intakeSpeed: 1
-            outtakeSpeed: -1
-            holdSpeed: 0
-
-            coralSensorChannel: 0
-
-            coralArmL1Position: 1
-            coralArmL2Position: 2
-            coralArmL3Position: 3
-            coralArmL4Position: 4
-            coralArmFeederPosition: -1
-            coralArmRestPosition: -1
-    elevator:
-        implemented: true
-        motors:
-            elevatorMotor:
-                motorType: TalonFX
-                motorName: elevatorMotor
-                id: 10
-                invertMotor: false
-                currentLimit: 20
-                motionMagic:
-                    expoKV: 0.035
-                    expoKA: 0.065
-        constants:
-            elevatorRestPosition: 0.1
-            elevatorFeederPosition: 0.1
-            elevatorL1Position: 0.1
-            elevatorL2Position: 0.1
-            elevatorL3Position: 0.1
-            elevatorL4Position: 0.1
-    ethan:
-      deepCageHangerMotor:
-        motorType: TalonFX
-        motorName: deepCageHangerMotor
-        id: 10
-        invertMotor: false
-        currentLimit: 20
-        motionMagic:
-          expoKV: 0.035
-          expoKA: 0.065
-      deepCageHangerFollowMotor:
-        motorType: TalonFX
-        motorName: deepCageHangerFollowMotor
-        id: 4
-        invertMotor: false
-        currentLimit: 20
 infrastructure:
     canBusName: highSpeed
     ## Power Distribution ##
     pdId: 1
     pdIsRev: true
     ## Pneumatics Control ##
-    compressorEnabled: false
+    compressorEnabled: true
     pcmIsRev: false
-    pcmId: -1
+    pcmId: 0
     ## Pigeon ##
     pigeonId: 5
     isPigeon2: true

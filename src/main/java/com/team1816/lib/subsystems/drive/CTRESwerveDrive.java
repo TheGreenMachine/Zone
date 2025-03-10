@@ -16,12 +16,12 @@ import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.components.gyro.Pigeon2Wrapper;
 import com.team1816.lib.hardware.factory.MotorFactory;
 import com.team1816.lib.subsystems.LedManager;
-import com.team1816.lib.util.driveUtil.DriveConversions;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
+import com.team1816.season.TunerConstants;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -70,6 +70,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
      */
     private LegacySwerveRequest request;
     private LegacySwerveRequest.FieldCentric fieldCentricRequest;
+    private LegacySwerveRequest.RobotCentric robotCentricRequest;
     private LegacySwerveRequest.SwerveDriveBrake brakeRequest;
     private ModuleRequest autoRequest;
 
@@ -84,9 +85,9 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
     public static final int kBackLeft = 2;
     public static final int kBackRight = 3;
 
-    private static final double maxVel12MPS = factory.getConstant(NAME,"maxVel12VMPS", 5.2);
+    private static final double maxVel12MPS = TunerConstants.kSpeedAt12Volts.magnitude();
 
-    private static final double driveGearRatio = factory.getConstant(NAME, "driveGearRatio", 6.75);
+    private static final double driveGearRatio = TunerConstants.kDriveGearRatio;
 
     private double driveScalar;
     private static final double normalDriveScalar = kMaxVelOpenLoopMeters / maxVel12MPS;
@@ -135,8 +136,8 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
         // Drivetrain characterization
         LegacySwerveDrivetrainConstants constants = new LegacySwerveDrivetrainConstants()
-                .withCANbusName(factory.getCanBusName())
-                .withPigeon2Id(factory.getPigeonID());
+                .withCANbusName(TunerConstants.kCANBus.getName())
+                .withPigeon2Id(TunerConstants.DrivetrainConstants.Pigeon2Id);
 
         train = new LegacySwerveDrivetrain(constants, swerveModules);
         train.getDaqThread().setThreadPriority(99); // Making Odometry thread top Priority
@@ -147,6 +148,10 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 .withSteerRequestType(LegacySwerveModule.SteerRequestType.MotionMagic)
                 .withDeadband(driveDeadband * kMaxVelOpenLoopMeters)
                 .withRotationalDeadband(rotationalDeadband * kMaxAngularSpeed);
+
+        robotCentricRequest = new LegacySwerveRequest.RobotCentric()
+                .withDriveRequestType(LegacySwerveModule.DriveRequestType.OpenLoopVoltage)
+                .withSteerRequestType(LegacySwerveModule.SteerRequestType.MotionMagic);
 
         autoRequest = new ModuleRequest()
                 .withModuleStates(new SwerveModuleState[4]);
@@ -243,6 +248,11 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
         if (isBraking) {
             request = brakeRequest;
+        } else if (robotState.robotcentricRequestAmount > 0){
+            request = robotCentricRequest
+                    .withVelocityX(throttle * maxVel12MPS * driveScalar)
+                    .withVelocityY(strafe * maxVel12MPS * driveScalar)
+                    .withRotationalRate(rotation * kMaxAngularSpeed * Math.PI * rotationScalar);
         } else {
             request = fieldCentricRequest
                     .withVelocityX(throttle  * maxVel12MPS * driveScalar * deadbander)
@@ -292,11 +302,6 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
     @Override
     public void setModuleStates(SwerveModuleState... desiredStates) {
-        for (int i = 0; i < 4; i++) {
-            desiredStates[i].speedMetersPerSecond =
-                    DriveConversions.metersToRotations(desiredStates[i].speedMetersPerSecond);
-        }
-
         request = autoRequest.withModuleStates(desiredStates);
 
         train.setControl(request);

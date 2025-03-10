@@ -2,7 +2,7 @@ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.2.1"
+    id "edu.wpi.first.GradleRIO" version "2025.3.1"
     id 'org.jsonschema2dataclass' version '4.0.1'
 }
 
@@ -117,10 +117,8 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     implementation 'org.yaml:snakeyaml:2.2'
-    implementation 'gov.nist.math:jama:1.0.3'
     implementation 'com.google.inject:guice:7.0.0'
     implementation 'com.google.inject.extensions:guice-assistedinject:7.0.0'
-    implementation 'org.apache.commons:commons-math3:3.6.1'
 
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'

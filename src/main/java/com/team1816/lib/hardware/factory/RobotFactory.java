@@ -2,10 +2,13 @@ package com.team1816.lib.hardware.factory;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
-import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.google.common.io.Resources;
 import com.google.inject.Singleton;
 import com.team1816.lib.hardware.*;
@@ -25,6 +28,7 @@ import com.team1816.lib.hardware.components.sensor.ProximitySensor;
 import com.team1816.lib.subsystems.drive.SwerveModule;
 import com.team1816.lib.util.driveUtil.DriveConversions;
 import com.team1816.lib.util.logUtil.GreenLogger;
+import com.team1816.season.TunerConstants;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -115,6 +119,7 @@ public class RobotFactory {
         // Identifying motor
         if (subsystem.implemented) {
             if (isMotorValid(subsystem.motors, name)) {
+                String canBus = subsystem.motors.get(name).isLowSpeedCanBus != null && subsystem.motors.get(name).isLowSpeedCanBus ? "roboRio" : config.infrastructure.canBusName;
                 switch (subsystem.motors.get(name).motorType) {
                     case TalonFX -> {
                         motor =
@@ -125,7 +130,7 @@ public class RobotFactory {
                                         subsystem,
                                         pidConfigs,
                                         remoteSensorId,
-                                        config.infrastructure.canBusName
+                                        canBus
                                 );
                     }
                     case TalonSRX -> {
@@ -141,14 +146,13 @@ public class RobotFactory {
                                 );
                     }
                     case SparkMax -> {
-                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
-//                        motor =
-//                            MotorFactory.createSpark(
-//                                subsystem.motors.get(name).id,
-//                                name,
-//                                subsystem,
-//                                pidConfigs
-//                            );
+                        motor =
+                            MotorFactory.createSpark(
+                                subsystem.motors.get(name).id,
+                                name,
+                                subsystem,
+                                pidConfigs
+                            );
                     }
                     case VictorSPX -> {
                         GreenLogger.log("Victors cannot be main!");
@@ -222,15 +226,14 @@ public class RobotFactory {
                                 );
                     }
                     case SparkMax -> {
-                        GreenLogger.log("Sparks are deprecated as of 2025. Motor not configured");
-//                        MotorFactory.createFollowerSpark(
-//                            subsystem.motors.get(name).id,
-//                            name,
-//                            subsystem,
-//                            subsystem.pidConfig,
-//                            main,
-//                            opposeLeaderDirection
-//                        );
+                        MotorFactory.createFollowerSpark(
+                            subsystem.motors.get(name).id,
+                            name,
+                            subsystem,
+                            subsystem.pidConfig,
+                            main,
+                            opposeLeaderDirection
+                        );
                     }
                     case VictorSPX -> {
                         followerMotor =
@@ -262,59 +265,52 @@ public class RobotFactory {
     }
 
     public LegacySwerveModuleConstants getCTRESwerveModule(String subsystemName, String name) {
-        var subsystem = getSubsystem(subsystemName);
-        ModuleConfiguration module = subsystem.swerveModules.modules.get(name);
+        SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> currentModule = null;
 
-        if (module == null) {
-            DriverStation.reportError(
-                    "No swerve module with name " + name + " subsystem " + subsystemName,
-                    true
-            );
-            return null;
+        switch(name){
+            case "backRight":
+                currentModule = TunerConstants.BackRight;
+                break;
+            case "frontRight":
+                currentModule = TunerConstants.FrontRight;
+                break;
+            case "frontLeft":
+                currentModule = TunerConstants.FrontLeft;
+                break;
+            case "backLeft":
+                currentModule = TunerConstants.BackLeft;
+                break;
         }
-
-        MotorConfiguration driveMotor = subsystem.motors.get(module.drive);
-        MotorConfiguration azimuthMotor = subsystem.motors.get(module.azimuth);
-
-        var canCoder = subsystem.canCoders.get(module.canCoder);
-
-        double moduleXDist = Units.inchesToMeters(module.xCoord);
-        double moduleYDist = Units.inchesToMeters(module.yCoord);
-
-        boolean usingPhoenixPro = getConstant("isProLicensed", 0) > 0;
-
-        double driveGearRatio = getConstant("drivetrain", "driveGearRatio", 6.12);
 
         var moduleConfig = new LegacySwerveModuleConstants()
                 // General Drivetrain
-                .withSpeedAt12VoltsMps(
-                        DriveConversions.canonicalRotationsToMeters(module.constants.get("freeSpin12VRPS"), driveGearRatio))
-                .withFeedbackSource(usingPhoenixPro
-                        ? LegacySwerveModuleConstants.SteerFeedbackType.FusedCANcoder
-                        : LegacySwerveModuleConstants.SteerFeedbackType.RemoteCANcoder)
+                .withSpeedAt12VoltsMps(currentModule.SpeedAt12Volts)
+                .withFeedbackSource(LegacySwerveModuleConstants.SteerFeedbackType.FusedCANcoder)
                 // CANCoder
-                .withCANcoderId(canCoder)
-                .withCANcoderOffset(module.constants.get("encoderOffset"))
+                .withCANcoderId(currentModule.EncoderId)
+                .withCANcoderOffset(currentModule.EncoderOffset)
                 // General Motor
-                .withCouplingGearRatio(module.constants.get("couplingRatio"))
-                .withWheelRadius(getConstant("drivetrain", "wheelDiameter", 4) / 2)
-                .withLocationX(moduleXDist) //IMPORTANT: IF THIS IS NOT A SQUARE SWERVEDRIVE, THESE MUST BE DIFFERENT.
-                .withLocationY(moduleYDist)
+                .withCouplingGearRatio(currentModule.CouplingGearRatio)
+                .withWheelRadius(Units.metersToInches(currentModule.WheelRadius))
+                .withLocationX(currentModule.LocationX) //IMPORTANT: IF THIS IS NOT A SQUARE SWERVEDRIVE, THESE MUST BE DIFFERENT.
+                .withLocationY(currentModule.LocationY)
                 // Drive Motor
-                .withDriveMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
-                .withDriveMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Drive))
-                .withDriveMotorId(driveMotor.id)
-                .withSlipCurrent(150) //TODO 120?
-                .withDriveMotorGearRatio(driveGearRatio)
-                .withDriveMotorInverted(driveMotor.invertMotor)
+                .withDriveMotorClosedLoopOutput(LegacySwerveModule.ClosedLoopOutputType.Voltage)
+                .withDriveMotorGains(currentModule.DriveMotorGains)
+                .withDriveMotorId(currentModule.DriveMotorId)
+                .withSlipCurrent(currentModule.SlipCurrent)
+                .withDriveMotorGearRatio(currentModule.DriveMotorGearRatio)
+                .withDriveMotorInverted(currentModule.DriveMotorInverted)
                 // Azimuth Motor
-                .withSteerMotorClosedLoopOutput(com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.ClosedLoopOutputType.Voltage)
-                .withSteerMotorGains(getSwervePIDConfigs(subsystemName, PIDConfig.Azimuth))
-                .withSteerMotorId(azimuthMotor.id)
-                .withSteerMotorGearRatio(getConstant("drivetrain", "azimuthGearRatio", 12.8))
-                .withSteerMotorInverted(azimuthMotor.invertMotor)
-                .withSteerFrictionVoltage(0)
-                .withDriveFrictionVoltage(0)
+                .withSteerMotorClosedLoopOutput(LegacySwerveModule.ClosedLoopOutputType.Voltage)
+                .withSteerMotorGains(currentModule.SteerMotorGains)
+                .withSteerMotorId(currentModule.SteerMotorId)
+                .withSteerMotorGearRatio(currentModule.SteerMotorGearRatio)
+                .withSteerMotorInverted(currentModule.SteerMotorInverted)
+                .withSteerFrictionVoltage(currentModule.SteerFrictionVoltage)
+                .withDriveFrictionVoltage(currentModule.DriveFrictionVoltage)
+                .withSteerMotorInitialConfigs(currentModule.SteerMotorInitialConfigs)
+                .withDriveMotorInitialConfigs(currentModule.DriveMotorInitialConfigs)
                 ;
 
         return moduleConfig;
@@ -560,8 +556,7 @@ public class RobotFactory {
                 .withKV(configs.kV)
                 .withKS(configs.kS)
                 .withKA(configs.kA)
-                .withKG(configs.kG)
-                .withGravityType(GravityTypeValue.valueOf(configs.gravityType));
+                .withKG(configs.kG);
     }
 
     public PIDSlotConfiguration getPidSlotConfig(String subsystemName) {

@@ -27,6 +27,9 @@
         "invertMotor" : {
             "type": "boolean"
         },
+        "isLowSpeedCanBus" : {
+            "type": "boolean"
+        },
         "motionMagic" :  {
             "$ref": "motionmagicconfig.schema.json"
         }

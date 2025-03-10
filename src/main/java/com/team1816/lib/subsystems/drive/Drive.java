@@ -2,6 +2,8 @@ package com.team1816.lib.subsystems.drive;
 
 import com.ctre.phoenix6.Orchestra;
 import com.google.inject.Inject;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.components.gyro.IPigeon2;
@@ -13,8 +15,6 @@ import com.team1816.lib.subsystems.PidProvider;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.team254.DriveSignal;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.states.RobotState;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -142,12 +142,6 @@ public abstract class Drive
     );
 
     public static final double kWheelCircumferenceMeters = Units.inchesToMeters(kDriveWheelDiameterInches) * Math.PI;
-
-    public static double kTrackScrubFactor = factory.getConstant(
-        NAME,
-        "kTrackScrubFactor",
-        1
-    );
 
     // Constraints
     public static final double kPathFollowingMaxAccelMeters = factory.getConstant(

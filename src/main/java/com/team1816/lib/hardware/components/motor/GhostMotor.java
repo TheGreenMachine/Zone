@@ -1,10 +1,14 @@
 package com.team1816.lib.hardware.components.motor;
 
-import com.ctre.phoenix.motorcontrol.*;
-import com.team1816.lib.hardware.components.motor.configurations.*;
+import com.ctre.phoenix.motorcontrol.ControlFrame;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.team1816.core.Robot;
+import com.team1816.lib.hardware.components.motor.configurations.FeedbackDeviceType;
+import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
+import com.team1816.lib.hardware.components.motor.configurations.MotionCurveType;
 import com.team1816.lib.util.driveUtil.DriveConversions;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.core.Robot;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;

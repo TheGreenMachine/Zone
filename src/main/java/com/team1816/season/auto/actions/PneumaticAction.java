@@ -17,7 +17,7 @@ public class PneumaticAction implements AutoAction {
 
     @Override
     public void start() {
-        pneumatic.changePneumatic();
+        pneumatic.toggle();
     }
 
     @Override

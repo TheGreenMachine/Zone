@@ -8,34 +8,35 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    b: brakeMode
-    x: autopathingSpeaker
-    a:
-    y:
+    a: activationDeepHanger
+    b: intake/OuttakeAlgae
+    x: outtakeCoral
+    y: removeAlgae
   axes:
-    rightTrigger: turboMode
-    leftTrigger: slowMode
+    rightTrigger: L3
+    leftTrigger: L4
   buttons:
-    start: zeroPose
-    back: hardZeroPose
-    leftBumper:
-    rightBumper:
+    start:
+    back: zeroPose
+    leftBumper: L2
+    rightBumper: L1
   dpad:
-    up:
-    down:
-    left:
-    right:
+    right: robotcentricRight
+    down: robotcentricDown
+    left: robotcentricLeft
+    up: robotcentricUp
 operator:
   controllerType: Xbox
   rumble: true
   buttonpad:
     y:
 buttonboard:
-  upLeft:
-  upRight:
-  up:
-  center:
-  left:
+  upLeft: increaseAlgaePivotOffset
+  upRight: decreaseCoralArmPivotOffset
+  up: increaseElevatorPivotOffset
+  center: decreaseElevatorPivotOffset
+  left: decreaseAlgaePivotOffset
+  right: increaseCoralArmPivotOffset
   downLeft:
   down:
 demoMode: false
