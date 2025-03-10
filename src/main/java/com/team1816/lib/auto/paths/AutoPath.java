@@ -228,6 +228,13 @@ public abstract class AutoPath {
             } else {
                 trajectory = PathUtil.generateTrajectory(usingApp(), getRotatedWaypoints());
             }
+            if(!reflectedByY && !rotated) {
+                trajectory = PathUtil.generateTrajectory(usingApp(), getWaypoints());
+            } else if (reflectedByY) {
+                trajectory = PathUtil.generateTrajectory(usingApp(), getReflectedByYWaypoints());
+            } else {
+                trajectory = PathUtil.generateTrajectory(usingApp(), getRotatedWaypoints());
+            }
         }
         return trajectory;
     }
@@ -261,6 +268,28 @@ public abstract class AutoPath {
                         getRotatedWaypoints(),
                         getRotatedWaypointHeadings()
                     );
+            }
+            if(!reflectedByY && !rotated) {
+                headings =
+                        PathUtil.generateHeadings(
+                                usingApp(),
+                                getWaypoints(),
+                                getWaypointHeadings()
+                        );
+            } else if (reflectedByY) {
+                headings =
+                        PathUtil.generateHeadings(
+                                usingApp(),
+                                getReflectedByYWaypoints(),
+                                getReflectedWaypointHeadings()
+                        );
+            } else {
+                headings =
+                        PathUtil.generateHeadings(
+                                usingApp(),
+                                getRotatedWaypoints(),
+                                getRotatedWaypointHeadings()
+                        );
             }
         }
         return headings;

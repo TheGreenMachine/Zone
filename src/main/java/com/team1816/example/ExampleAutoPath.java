@@ -54,6 +54,10 @@ public class ExampleAutoPath extends AutoPath {
     protected List<Pose2d> getReflectedByXWaypoints() {
         return null;
     }
+    @Override
+    protected List<Pose2d> getReflectedByYWaypoints(){
+        return null;
+    }
 
     @Override
     protected List<Rotation2d> getReflectedWaypointHeadings() {
