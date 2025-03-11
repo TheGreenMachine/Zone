@@ -63,12 +63,6 @@ public class PatriotPath {
             }
 
             pathPlannerAction.update();
-
-            try {
-                Thread.sleep(looperDtInMS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         } else {
             pathPlannerAction.done();
             done();
@@ -86,6 +80,7 @@ public class PatriotPath {
      * Stops the auto path
      */
     public void stop() {
+        System.out.println("Stop");
         pathPlannerAction.done();
         robotState.autopathing = false;
     }

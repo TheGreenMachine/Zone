@@ -66,9 +66,13 @@ public class PathPlannerAction implements AutoAction {
         } else if (drive instanceof EnhancedSwerveDrive) {
             PathConstraints constraints = new PathConstraints( // TODO: change this to actual values
                     3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+            long startTime = System.nanoTime();
             this.pathCommand = AutoBuilder.pathfindToPose(
                 targetPose, constraints, endVelocity
             );
+            long timeTaken = System.nanoTime() - startTime;
+            System.out.println("Time taken to generate path: " + timeTaken);
+
         } else {
             GreenLogger.log(
                     " oh man oh god I'm neither swerve nor tank! " + drive.toString()
