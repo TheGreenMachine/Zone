@@ -3,6 +3,7 @@ package com.team1816.core;
 import com.ctre.phoenix6.CANBus;
 import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
+import com.team1816.core.configuration.FieldConfig;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
@@ -26,6 +27,8 @@ import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Pneumatic;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
@@ -498,7 +501,7 @@ public class Robot extends TimedRobot {
                     "testingOffsetPose",
                     ActionState.PRESSED,
                     () ->
-                            drive.resetOdometry(robotState.fieldToVehicle.plus(new Transform2d(new Translation2d(1.0, 1.0), new Rotation2d(Math.toRadians(0)))))
+                            drive.resetEstimatedOdometry(robotState.fieldToVehicle.plus(new Transform2d(new Translation2d(1.0, 1.0), new Rotation2d(Math.toRadians(0)))))
             );
 
             /** Operator Commands */

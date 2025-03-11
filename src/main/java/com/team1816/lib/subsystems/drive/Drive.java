@@ -553,6 +553,13 @@ public abstract class Drive
      */
     public abstract void resetOdometry(Pose2d pose);
 
+    /**
+     * Resets the odometry calculations to a specific pose without resetting simulated "actual" positions
+     *
+     * @param pose
+     */
+    public abstract void resetEstimatedOdometry(Pose2d pose);
+
     public void resetHeading(Rotation2d rotation) {}
 
     public void updateOdometryWithVision(Pose2d estimatedPose2D, double timestamp, Matrix<N3, N1> stdDevs) {

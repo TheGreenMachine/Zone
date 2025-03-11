@@ -66,6 +66,11 @@ public class GhostDrivetrain extends Drive {
     }
 
     @Override
+    public void resetEstimatedOdometry(Pose2d pose) {
+
+    }
+
+    @Override
     public void zeroSensors(Pose2d pose) {
 
     }

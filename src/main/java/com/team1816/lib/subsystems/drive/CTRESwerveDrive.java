@@ -381,6 +381,11 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
         updateRobotState();
     }
 
+    @Override
+    public void resetEstimatedOdometry(Pose2d pose) {
+        resetOdometry(pose);
+    }
+
     public void resetHeading(Rotation2d rotation) {
         GreenLogger.log("Resetting Headings!");
         train.setOperatorPerspectiveForward(rotation);

@@ -496,6 +496,22 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
         swerveEstimator.resetPosition(actualHeading, actualModulePositions, pose);
         swerveEstimator.update(actualHeading, actualModulePositions);
+        simActualSwerveOdometry.resetPosition(actualHeading, actualModulePositions, pose);
+        simActualSwerveOdometry.update(actualHeading, actualModulePositions);
+        updateRobotState();
+    }
+
+    /**
+     * Resets the odometry calculations to a specific pose without resetting simulated "actual" positions
+     *
+     * @param pose Pose2d
+     * @see Drive#resetOdometry(Pose2d)
+     */
+    @Override
+    public void resetEstimatedOdometry(Pose2d pose) {
+        actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
+        swerveEstimator.resetPosition(actualHeading, actualModulePositions, pose);
+        swerveEstimator.update(actualHeading, actualModulePositions);
         updateRobotState();
     }
 

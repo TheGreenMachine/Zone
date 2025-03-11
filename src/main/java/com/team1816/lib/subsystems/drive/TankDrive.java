@@ -274,7 +274,30 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
             pose
         );
         tankEstimator.update(actualHeading, leftActualDistance, rightActualDistance);
+        simActualTankOdometry.resetPosition(
+                getActualHeading(),
+                leftActualDistance,
+                rightActualDistance,
+                pose
+        );
+        simActualTankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
         updateRobotState();
+    }
+
+    /**
+     * Resets the odometry to a certain pose without resetting simulated "actual" positions
+     *
+     * @param pose Pose2d
+     */
+    @Override
+    public void resetEstimatedOdometry(Pose2d pose) {
+        tankEstimator.resetPosition(
+                getActualHeading(),
+                leftActualDistance,
+                rightActualDistance,
+                pose
+        );
+        tankEstimator.update(actualHeading, leftActualDistance, rightActualDistance);
     }
 
     public void updateOdometryWithVision(Pose2d estimatedPose2D, double timestamp, Matrix<N3, N1> stdDevs) {
