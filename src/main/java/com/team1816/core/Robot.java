@@ -400,6 +400,13 @@ public class Robot extends TimedRobot {
                     () ->
                             freedomPather.start(new Pose2d(new Translation2d(8, 6), Rotation2d.fromDegrees(0)))
             );
+
+            inputHandler.listenAction(
+                    "freedomPathing4",
+                    ActionState.PRESSED,
+                    () ->
+                            freedomPather.start(new Pose2d(new Translation2d(10, 4), Rotation2d.fromDegrees(0)))
+            );
             /*inputHandler.listenActionPressAndRelease(
                     "intakeCoral",
                     (pressed) -> {

@@ -10,7 +10,7 @@ driver:
   buttonpad:
     a: freedomPathingSpeaker
     b: freedomPathingAmp
-    x: outtakeCoral
+    x: freedomPathing4
     y: freedomPathing3
   axes:
     rightTrigger: L3

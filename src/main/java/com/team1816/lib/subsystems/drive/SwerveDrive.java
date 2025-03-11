@@ -292,7 +292,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         }
         SwerveDriveKinematics.desaturateWheelSpeeds(
             desiredStates,
-            (kPathFollowingMaxVelMeters)
+            (kPathFollowingMaxVelMeters+0.5)
         );
         desiredModuleStates = desiredStates;
         for (int i = 0; i < 4; i++) {

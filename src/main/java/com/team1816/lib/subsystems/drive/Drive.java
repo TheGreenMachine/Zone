@@ -168,7 +168,7 @@ public abstract class Drive
     public static final double kMaxAngularSpeed = factory.getConstant(NAME, "maxRotVel", 2); // rad/sec
     public static final double kMaxAngularSpeedClosedLoop = factory.getConstant(NAME, "maxRotVelClosedLoop", 2); // rad/sec
     public static final double kMaxAngularAccelerationRadiansPerSecondSquared =
-        2 * Math.PI;
+        1 * Math.PI;
 
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeed * Math.PI, //TODO if this is too slow may need to consider using kMaxAngularSpeedClosedLoop
@@ -217,7 +217,7 @@ public abstract class Drive
         ledManager = lm;
         orchestra = new Orchestra();
         thetaController = new ProfiledPIDController(
-                20,
+                Constants.kPRotational,
                 0,
                 0,
                 kRotationActionControllerConstraints

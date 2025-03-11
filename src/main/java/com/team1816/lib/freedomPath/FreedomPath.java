@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryParameterizer;
 import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -249,10 +250,11 @@ public class FreedomPath {
 
         if(freedomPathTrajectory == null){
             robotState.isFreedomPathing = false;
+            GreenLogger.log("FreedomPath Failed To Calculate");
             return;
         }
 
-        System.out.println("Time taken "+(System.nanoTime()-beforeTime)/1000000000);
+        GreenLogger.log("Time taken "+(System.nanoTime()-beforeTime)/1000000000);
 
         ArrayList<Rotation2d> freedomPathHeadings = new ArrayList<>();
         freedomPathHeadings.add(freedomPathTargetPosition.getRotation());
@@ -400,16 +402,22 @@ public class FreedomPath {
         robotState.freedomPathCollisionStarts.clear();
         robotState.freedomPathCollisionEnds.clear();
 
+        String errorMessage = "Failed path Start: "+freedomPathStartPosition+", End: "+freedomPathTargetPosition;
+
         startTime = System.nanoTime()/1000000;
 
         if(fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(freedomPathTargetPosition.getX()*mapResolution1DPerMeter), (int)(freedomPathTargetPosition.getY()*mapResolution1DPerMeter))) {
             if(robotState.freedomPathTrajectory != null)
                 robotState.freedomPathTrajectoryChanged = true;
+            GreenLogger.log("FreedomPath failed because your target position is not valid");
+            GreenLogger.log(errorMessage);
             return null;
         }
         if(fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap((int)(freedomPathStartPosition.getX()*mapResolution1DPerMeter), (int)(freedomPathStartPosition.getY()*mapResolution1DPerMeter))) {
             if(robotState.freedomPathTrajectory != null)
                 robotState.freedomPathTrajectoryChanged = true;
+            GreenLogger.log("FreedomPath failed because your start position is not valid");
+            GreenLogger.log(errorMessage);
             return null;
         }
 
@@ -432,20 +440,29 @@ public class FreedomPath {
 //        config.setEndVelocity(Math.min(Drive.kPathFollowingMaxVelMeters/2, 3));
 
         ArrayList<WaypointTreeNode> branches = new ArrayList<>();
-        branches.add(
-                new WaypointTreeNode(
-                        new Pose2d(freedomPathStartPosition.getTranslation(), startDirection),
-                        new ArrayList<>(),
-                        new Pose2d(freedomPathTargetPosition.getTranslation(), Rotation2d.fromRadians(Math.atan2(freedomPathTargetPosition.getY() - freedomPathStartPosition.getY(), freedomPathTargetPosition.getX() - freedomPathStartPosition.getX()))),
-                        config,
-                        new ArrayList<>(),
-                        false
-                )
-        );
+
+        try{
+            WaypointTreeNode firstBranch = new WaypointTreeNode(
+                    new Pose2d(freedomPathStartPosition.getTranslation(), startDirection),
+                    new ArrayList<>(),
+                    new Pose2d(freedomPathTargetPosition.getTranslation(), Rotation2d.fromRadians(Math.atan2(freedomPathTargetPosition.getY() - freedomPathStartPosition.getY(), freedomPathTargetPosition.getX() - freedomPathStartPosition.getX()))),
+                    config,
+                    new ArrayList<>(),
+                    false
+            );
+            branches.add(firstBranch);
+        } catch (TrajectoryParameterizer.TrajectoryGenerationException e){
+            GreenLogger.log("Your FreedomPath start and end nodes are too close bro");
+            GreenLogger.log(errorMessage);
+            return null;
+        }
 
         while(!branches.isEmpty() && !branches.get(0).trajectoryCheck){
-            if(System.nanoTime()/1000000-startTime > freedomPathMaxCalcMilli)
+            if(System.nanoTime()/1000000-startTime > freedomPathMaxCalcMilli) {
+                GreenLogger.log("FreedomPath took too long and couldn't find a path");
+                GreenLogger.log(errorMessage);
                 return null;
+            }
 //            long startTime2 = System.nanoTime();
             boolean foundWorkingPath;
             for(int i = 1; i < branches.size(); i++)
@@ -568,8 +585,11 @@ public class FreedomPath {
 //                robotState.freedomPathWaypoints.add(new Pose2d(new Translation2d(newWaypointNegative[0], newWaypointNegative[1]), new Rotation2d()));
 //            }
 
-            if(System.nanoTime()/1000000-startTime > freedomPathMaxCalcMilli)
+            if(System.nanoTime()/1000000-startTime > freedomPathMaxCalcMilli){
+                GreenLogger.log("FreedomPath took too long and couldn't find a path");
+                GreenLogger.log(errorMessage);
                 return null;
+            }
 
             int[] tempNewWaypointPositiveLast = getWaypointLast(bestGuessTrajectory, false);
             if(tempNewWaypointPositiveLast != null) {
