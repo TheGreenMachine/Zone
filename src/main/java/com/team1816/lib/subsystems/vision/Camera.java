@@ -39,8 +39,7 @@ public class Camera extends Subsystem{
     private static final String NAME = "camera";
     private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera");
     private static final List<AprilTag> aprilTags = List.of(
-            new AprilTag(1, new Pose3d(0, 0, 0.601, new Rotation3d())),
-            new AprilTag(2, new Pose3d(0, 2, 0.601, new Rotation3d()))
+            new AprilTag(20, new Pose3d(2.1336, 0, 1.0033, new Rotation3d(0,0,Math.PI)))
     );
     public static final AprilTagFieldLayout kTagLayout =
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);

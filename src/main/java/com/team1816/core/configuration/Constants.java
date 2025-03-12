@@ -78,10 +78,10 @@ public class Constants {
 
     public static final List<Transform3d> kCameraMountingOffset3Ds = List.of(
         new Transform3d( //FIXME
-            -0.369,
-            0,
-            0.601,
-            new Rotation3d(Math.PI,-0.44,Math.PI)
+                0.3048,
+            0.0889,
+            1.0033,
+            new Rotation3d(0,Math.toRadians(22),0)
         )
     );
 

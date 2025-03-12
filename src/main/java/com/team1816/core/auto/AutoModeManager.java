@@ -220,6 +220,8 @@ public class AutoModeManager {
 
         BOTTOM_DRIVE_STRAIGHT,
 
+        VISION_TEST,
+
 //        DYNAMIC_TRAJECTORY_ONLY,
 
 //        DYNAMIC_PLACE_1,
@@ -298,6 +300,9 @@ public class AutoModeManager {
             case TOP_SIDE_1_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
                 return  new TopPlace1AutoMode(color, true);
+            case VISION_TEST:
+                robotState.dIsAutoDynamic = false;
+                return new VisionTestingMode(color);
 //            case TOP_SIDE_1_SCORE_2:
 //                robotState.dIsAutoDynamic = false;
 //                return new TopPlace2AutoMode(color);
