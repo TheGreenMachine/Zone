@@ -1,6 +1,5 @@
 package com.team1816.core.states;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
@@ -69,11 +68,16 @@ public class RobotState {
             );
 
     /**
-     * Current Drive inputs
+     * Current Drive inputs and states
      */
     public double throttleInput = 0;
     public double strafeInput = 0;
     public double rotationInput = 0;
+    public int robotcentricRequestAmount = 4; //this is here because robot on startup will activate all not pressed commands, so this counters it
+    public double robotcentricThrottleInput = 0;
+    public double robotcentricStrafeInput = 0;
+    public double robotcentricRotationInput = 0;
+    public double robotcentricInput = 0.3; //0 to 1
 
     /**
      * Rotating closed loop
@@ -310,6 +314,7 @@ public class RobotState {
 
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
         SmartDashboard.putData("AlgaeCatcher", algaeMech2d);
+//        System.out.println(fieldToVehicle);
 
         if (RobotBase.isSimulation()) {
             // TODO: Display any stats here

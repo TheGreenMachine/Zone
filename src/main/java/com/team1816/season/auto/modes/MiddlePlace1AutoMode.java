@@ -5,29 +5,35 @@ import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.ParallelAction;
 import com.team1816.lib.auto.actions.SeriesAction;
 import com.team1816.lib.auto.actions.TrajectoryAction;
+import com.team1816.lib.auto.actions.WaitAction;
 import com.team1816.lib.auto.modes.AutoMode;
-import com.team1816.season.auto.actions.CoralArmQuickAction;
-import com.team1816.season.auto.actions.DelayedElevatorAction;
-import com.team1816.season.auto.actions.ElevatorQuickAction;
-import com.team1816.season.auto.actions.PlaceCoralSeriesAction;
-import com.team1816.season.auto.path.MiddleToSideThree;
-import com.team1816.season.auto.path.MiddleToSideTwo;
+import com.team1816.season.auto.actions.*;
+import com.team1816.season.auto.path.MiddleStartToReef2A;
+import com.team1816.season.auto.path.Reef2AToBottomFeeder;
+import com.team1816.season.auto.path.Reef2AToTopFeeder;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
-import edu.wpi.first.math.geometry.Pose2d;
 
 import java.util.List;
 
 public class MiddlePlace1AutoMode extends AutoMode {
+    private final ENDING_FEEDER endingFeeder;
 
-    public MiddlePlace1AutoMode(Color color) {
+    public MiddlePlace1AutoMode(Color color, ENDING_FEEDER endingFeeder) {
         super(
                 List.of(
                         new TrajectoryAction(
-                                new MiddleToSideTwo(color)
+                                new MiddleStartToReef2A(color)
+                        ),
+                        new TrajectoryAction(
+                                new Reef2AToTopFeeder(color)
+                        ),
+                        new TrajectoryAction(
+                                new Reef2AToBottomFeeder(color)
                         )
                 )
         );
+        this.endingFeeder = endingFeeder;
     }
 
     @Override
@@ -35,20 +41,24 @@ public class MiddlePlace1AutoMode extends AutoMode {
         runAction(
                 new SeriesAction(
                         new ParallelAction(
-                                new CoralArmQuickAction(CoralArm.INTAKE_STATE.INTAKE, CoralArm.PIVOT_STATE.FEEDER),
-                                new ElevatorQuickAction(Elevator.ELEVATOR_STATE.FEEDER)
-                        ),
-                        new ParallelAction(
                                 new DelayedElevatorAction(Elevator.ELEVATOR_STATE.L4, 1),
                                 trajectoryActions.get(0)
                         ),
-                        new PlaceCoralSeriesAction(Elevator.ELEVATOR_STATE.L4, CoralArm.PIVOT_STATE.L4, true)
+                        new WaitForCoralPivotPositionAction(CoralArm.PIVOT_STATE.L4),
+                        new WaitAction(6),
+                        new OuttakeCoralSeriesAction(),
+                        switch (endingFeeder) {
+                            case TOP -> trajectoryActions.get(1);
+                            case BOTTOM -> trajectoryActions.get(2);
+                            case NONE -> new WaitAction(0);
+                        }
                 )
         );
     }
 
-    @Override
-    public Pose2d getInitialPose() {
-        return trajectoryActions.get(0).getTrajectory().getInitialPose();
+    public enum ENDING_FEEDER {
+        TOP,
+        BOTTOM,
+        NONE
     }
 }

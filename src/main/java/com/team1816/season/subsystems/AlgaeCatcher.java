@@ -49,6 +49,8 @@ public class AlgaeCatcher extends Subsystem {
     public final double algaeCollectSpeed;
     public final double algaeHoldSpeed;
     public final double algaeReleaseSpeed;
+    public final double removeAlgaeSpeed;
+
     private boolean offsetHasBeenApplied = false;
 
     /**
@@ -88,6 +90,7 @@ public class AlgaeCatcher extends Subsystem {
         algaeCollectSpeed = factory.getConstant(NAME, "algaeCollectSpeed", .3);
         algaeHoldSpeed = factory.getConstant(NAME, "algaeHoldSpeed", 0);
         algaeReleaseSpeed = factory.getConstant(NAME, "algaeReleaseSpeed", -.3);
+        removeAlgaeSpeed = factory.getConstant(NAME, "removeAlgaeSpeed", -.3);
 
         SmartDashboard.putBoolean("AlgaeCollector", intakeMotor.getMotorTemperature() < 55);
 
@@ -161,11 +164,10 @@ public class AlgaeCatcher extends Subsystem {
         if (beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.INTAKE) {
             desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.HOLD;
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.HOLD;
-        }
-        if (!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE) {
+        } /*else if ((!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.OUTTAKE)*//* || (!beamBreak && desiredIntakeState == ALGAE_CATCHER_INTAKE_STATE.HOLD)*//*) {
             desiredIntakeState = ALGAE_CATCHER_INTAKE_STATE.STOP;
             desiredPivotState = ALGAE_CATCHER_PIVOT_STATE.STOW;
-        }
+        }*/
 
         if (robotState.actualAlgaeCatcherIntakeState != desiredIntakeState) {
             robotState.actualAlgaeCatcherIntakeState = desiredIntakeState;
@@ -205,6 +207,8 @@ public class AlgaeCatcher extends Subsystem {
                 case HOLD -> desiredAlgaeCatcherPower = algaeHoldSpeed;
 
                 case OUTTAKE -> desiredAlgaeCatcherPower = algaeReleaseSpeed;
+
+                case REMOVE_ALGAE -> desiredAlgaeCatcherPower = removeAlgaeSpeed;
             }
             // Good to log states to aid troubleshooting
             GreenLogger.log("Algae intake: " + desiredIntakeState + " Power: " + desiredAlgaeCatcherPower);
@@ -305,7 +309,8 @@ public class AlgaeCatcher extends Subsystem {
         STOP,
         INTAKE,
         HOLD,
-        OUTTAKE
+        OUTTAKE,
+        REMOVE_ALGAE
     }
     public enum ALGAE_CATCHER_PIVOT_STATE {
         STOW,
