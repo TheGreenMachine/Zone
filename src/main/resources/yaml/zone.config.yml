@@ -256,6 +256,35 @@ subsystems:
             elevatorL4Position: 63.1
 
             elevatorMotorRotationsPerUnit: 1
+    ramp:
+        motors:
+            rampMotor:
+                motorType: TalonFX
+                motorName: elevatorMotor
+                id: 16
+                invertMotor: true
+                currentLimit: 60
+                motionMagic:
+                    expoKV: 0.1
+                    expoKA: 0.2
+            pidConfig:
+                slot0:
+                    kP: 1
+                    kI: 0
+                    kD: 0.02
+                    kV: 0
+                    kS: 0
+                    kA: 0
+                    kG: 0
+            constants: # TODO: all of these
+                rampStowPosition: 0
+                rampL1FeederPosition: 1
+                rampHoldPosition: 14.2
+                rampOtherFeederPosition: 33.7
+                rampScorePosition: 63.1
+
+                rampMotorRotationsPerUnit: 1
+
     pneumatic:
         implemented: true
         solenoids:

@@ -8,10 +8,7 @@ import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.season.auto.DynamicAutoScript2025;
-import com.team1816.season.subsystems.AlgaeCatcher;
-import com.team1816.season.subsystems.CoralArm;
-import com.team1816.season.subsystems.Elevator;
-import com.team1816.season.subsystems.Pneumatic;
+import com.team1816.season.subsystems.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -96,6 +93,7 @@ public class RobotState {
     public CoralArm.INTAKE_STATE actualCoralArmIntakeState = CoralArm.INTAKE_STATE.INTAKE;
     public CoralArm.PIVOT_STATE actualCoralArmPivotState = CoralArm.PIVOT_STATE.FEEDER;
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
+    public Ramp.RAMP_STATE actualRampState = Ramp.RAMP_STATE.STOW;
     public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
     public boolean isCoralBeamBreakTriggered = false;
@@ -205,6 +203,7 @@ public class RobotState {
         actualAlgaeCatcherIntakeState = AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP;
         actualAlgaeCatcherPivotState = AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW;
         actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
+        actualRampState = Ramp.RAMP_STATE.STOW;
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;

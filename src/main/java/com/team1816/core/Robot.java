@@ -21,10 +21,7 @@ import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.DynamicAutoScript2025;
-import com.team1816.season.subsystems.AlgaeCatcher;
-import com.team1816.season.subsystems.CoralArm;
-import com.team1816.season.subsystems.Elevator;
-import com.team1816.season.subsystems.Pneumatic;
+import com.team1816.season.subsystems.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -74,6 +71,7 @@ public class Robot extends TimedRobot {
     private Elevator elevator;
     private CoralArm coralArm;
     private AlgaeCatcher algaeCatcher;
+    private Ramp ramp;
     private Pneumatic pneumatic;
 
     private LedManager ledManager;
@@ -186,6 +184,7 @@ public class Robot extends TimedRobot {
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             algaeCatcher = Injector.get(AlgaeCatcher.class);
+            ramp = Injector.get(Ramp.class);
             pneumatic = Injector.get(Pneumatic.class);
 
             dynamicAutoScript = new DynamicAutoScript2025(5, 3);
@@ -230,7 +229,7 @@ public class Robot extends TimedRobot {
 
             drive = (Injector.get(Drive.Factory.class)).getInstance();
 
-            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher, pneumatic);
+            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher,ramp, pneumatic);
 
             subsystemManager.registerEnabledLoops(enabledLoop);
             subsystemManager.registerDisabledLoops(disabledLoop);
@@ -285,14 +284,13 @@ public class Robot extends TimedRobot {
                     }
             );
             inputHandler.listenAction(
-                    "intake/OuttakeAlgae",
+                    "feeder",
                     ActionState.PRESSED,
                     () -> {
-                        if(algaeCatcher.isBeamBreakTriggered()) {
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
-                        }
-                        else {
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
+                        if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER) {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.OTHER_FEEDER);
+                        } else if(robotState.actualRampState == Ramp.RAMP_STATE.OTHER_FEEDER) {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
                         }
                     }
             );
@@ -334,15 +332,15 @@ public class Robot extends TimedRobot {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
                     }
             );
-            inputHandler.listenActionPressAndRelease(
-                    "removeAlgae",
-                    (pressed) ->{
-                        algaeCatcher.setDesiredState(
-                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
-                                pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
-                        );
-                    }
-            );
+//            inputHandler.listenActionPressAndRelease(
+//                    "removeAlgae",
+//                    (pressed) ->{
+//                        algaeCatcher.setDesiredState(
+//                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
+//                                pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
+//                        );
+//                    }
+//            );
             /**COMMENTED ACTIONS THAT MIGHT BE IMPORTANT*/
                 /**REEFSCAPE ACTIONS*/
             /*            inputHandler.listenAction(
