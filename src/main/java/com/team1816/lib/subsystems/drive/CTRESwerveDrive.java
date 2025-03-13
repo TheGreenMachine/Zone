@@ -491,8 +491,6 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
             if (actualModuleStates != null) {
                 actualModuleStructLogger.append(actualModuleStates);
             }
-
-            robotState.robotChassis = chassisSpeed;
         }
     }
 
@@ -626,9 +624,6 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
             if (inputNormed < inputDeadband) {
                 deadbander = 0;
             }
-
-            //Keep this line for reference
-            Translation2d distanceToTarget = new Translation2d(robotState.allianceColor == com.team1816.lib.auto.Color.BLUE ? Constants.blueSpeakerX : Constants.redSpeakerX, Constants.speakerY).minus(robotState.fieldToVehicle.getTranslation());
 
             double rotationalSpeed = thetaController.calculate(robotState.fieldToVehicle.getRotation().getRadians(), robotState.targetRotationRadians);
 

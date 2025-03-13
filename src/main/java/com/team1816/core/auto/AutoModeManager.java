@@ -192,45 +192,11 @@ public class AutoModeManager {
 
         TUNE_DRIVETRAIN,
 
-//        AUTOPATH,
-
-        TOP_SIDE_1_SCORE_1,
-
-        TOP_SIDE_1_SCORE_1_FEEDER,
-
-//        TOP_SIDE_1_SCORE_2,
-
-        MIDDLE_SIDE_2_SCORE_1,
-
-        MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER,
-
-        MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER,
-
-//        MIDDLE_SIDE_3_SCORE_2,
-
-        BOTTOM_SIDE_3_SCORE_1,
-
-        BOTTOM_SIDE_3_SCORE_1_FEEDER,
-
-//        BOTTOM_SIDE_3_SCORE_2,
-
         TOP_DRIVE_STRAIGHT,
 
         MIDDLE_DRIVE_STRAIGHT,
 
-        BOTTOM_DRIVE_STRAIGHT,
-
-//        DYNAMIC_TRAJECTORY_ONLY,
-
-//        DYNAMIC_PLACE_1,
-//
-//        DYNAMIC_PLACE_2,
-//
-//        DYNAMIC_PLACE_3
-
-        CIRCLE_BLAH_MODE,
-
-//        TEST_DYNAMIC_PATHS
+        BOTTOM_DRIVE_STRAIGHT
         }
 
 
@@ -244,73 +210,18 @@ public class AutoModeManager {
     private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
         switch (mode) {
             case DEFAULT:
-                robotState.dIsAutoDynamic = false;
                 return new DefaultMode();
             case DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
                 return new DriveStraightMode();
             case TUNE_DRIVETRAIN:
-                robotState.dIsAutoDynamic = false;
                 return new TuneDrivetrainMode();
-//            case AUTOPATH:
-//                robotState.dIsAutoDynamic = false;
-//                return new AutopathMode();
-            case MIDDLE_SIDE_2_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.NONE);
-            case MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.TOP);
-            case MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.BOTTOM);
-//            case MIDDLE_SIDE_3_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new MiddlePlace2AutoMode(color);
             case TOP_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
                 return new DriveOffLineTopAutoMode(color);
             case MIDDLE_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
                 return new DriveOffLineMiddleAutoMode(color);
             case BOTTOM_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
                 return new DriveOffLineBottomAutoMode(color);
-            case BOTTOM_SIDE_3_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color, false);
-            case BOTTOM_SIDE_3_SCORE_1_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color, true);
-//            case BOTTOM_SIDE_3_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new BottomPlace2AutoMode(color);
-//            case DYNAMIC_PLACE_1:
-//                robotState.dIsAutoDynamic = true;
-//                return new DynamicPlace1();
-//            case DYNAMIC_PLACE_2:
-//                robotState.dIsAutoDynamic = true;
-//                return new DynamicPlace2();
-//            case DYNAMIC_PLACE_3:
-//                robotState.dIsAutoDynamic = true;
-//                return new DynamicPlace3();
-            case TOP_SIDE_1_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color, false);
-            case TOP_SIDE_1_SCORE_1_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return new TopPlace2AutoMode(color);
-            case CIRCLE_BLAH_MODE:
-                robotState.dIsAutoDynamic = false;
-                return new CircleAroundReefAndGoBackToInitialPosition1();
-//            case DYNAMIC_TRAJECTORY_ONLY:
-//                robotState.isAutoDynamic = true;
-//                RobotState.dynamicAutoChanged = true;
-//                return new DynamicTrajectoryOnlyAutoMode(robotState);
-//            case TEST_DYNAMIC_PATHS:
-//                return new TestAllDynamicPointsAutoMode();
             default:
-            robotState.dIsAutoDynamic = false;
                 GreenLogger.log("Defaulting to DefaultMode");
                 return new DefaultMode();
         }
