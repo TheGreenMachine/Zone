@@ -2,6 +2,11 @@ package com.team1816.lib.subsystems.drive;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
@@ -26,6 +31,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
 import java.util.List;
@@ -150,6 +156,38 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/Temperature"), swerveModules[0]::getMotorTemp);
             gyroPitchLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/Pitch");
             gyroRollLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/Roll");
+        }
+
+        // Initialise PathPlanner autopath builder configured to Swerve Drive
+        PIDSlotConfiguration drivePIDConfig = getPIDConfig();
+        PIDSlotConfiguration azimuthPIDConfig = getAzimuthPIDConfig();
+        RobotConfig pathRobotConfig = null;
+        try {
+            pathRobotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            DriverStation.reportWarning("Unable to configure PathPlanner!", e.getStackTrace());
+        }
+
+        if (pathRobotConfig != null) {
+            // https://pathplanner.dev/pplib-getting-started.html#holonomic-swerve
+            AutoBuilder.configure(
+                    this::getPose,
+                    this::resetOdometry,
+                    () -> chassisSpeed,
+                    (ChassisSpeeds speeds) ->
+                            setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
+                    new PPHolonomicDriveController(
+                            new PIDConstants(5),
+                            new PIDConstants(5)
+                    ),
+                    pathRobotConfig,
+                    () -> {
+                        var alliance = DriverStation.getAlliance();
+                        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                    }
+            );
+
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
         }
     }
 
@@ -571,6 +609,14 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
             .getSubsystem(NAME)
             .swerveModules.drivePID.getOrDefault("slot0", defaultPIDConfig)
             : defaultPIDConfig;
+    }
+
+    public PIDSlotConfiguration getAzimuthPIDConfig() {
+        return (factory.getSubsystem(NAME).implemented)
+                ? factory
+                .getSubsystem(NAME)
+                .swerveModules.azimuthPID.get("slot0")
+                : null;
     }
 
     /**

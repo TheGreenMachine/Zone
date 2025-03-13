@@ -10,7 +10,14 @@ import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.auto.Color;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.components.gyro.Pigeon2Wrapper;
@@ -36,6 +43,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.util.datalog.StructArrayLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -212,6 +220,35 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
             GreenLogger.addPeriodicLog(new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/DesiredSpeeds"), this::getDesiredSpeeds);
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/moduleTemps"), motorTemperatures.get(0).asSupplier());
+        }
+
+        // Initialise PathPlanner autopath builder configured to CTRE Swerve Drive
+        PIDSlotConfiguration drivePIDConfig = getPIDConfig();
+        PIDSlotConfiguration azimuthPIDConfig = getAzimuthPIDConfig();
+        RobotConfig pathRobotConfig = null;
+        try {
+            pathRobotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            DriverStation.reportWarning("Unable to configure PathPlanner!", e.getStackTrace());
+        }
+
+        if (pathRobotConfig != null) {
+            // https://pathplanner.dev/pplib-getting-started.html#holonomic-swerve
+            AutoBuilder.configure(
+                    this::getPose,
+                    this::resetOdometry,
+                    () -> chassisSpeed,
+                    (ChassisSpeeds speeds, DriveFeedforwards feedforwards) ->
+                            setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
+                            new PPHolonomicDriveController(
+                                    new PIDConstants(5, 0, 0),
+                                    new PIDConstants(5, 0, 0)
+                            ),
+                    pathRobotConfig,
+                    () -> robotState.allianceColor == Color.RED
+            );
+
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
         }
     }
 
@@ -455,6 +492,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 actualModuleStructLogger.append(actualModuleStates);
             }
 
+            robotState.robotChassis = chassisSpeed;
         }
     }
 
@@ -559,6 +597,14 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 .getSubsystem(NAME)
                 .swerveModules.drivePID.getOrDefault("slot0", defaultPIDConfig)
                 : defaultPIDConfig;
+    }
+
+    public PIDSlotConfiguration getAzimuthPIDConfig() {
+        return (factory.getSubsystem(NAME).implemented)
+                ? factory
+                .getSubsystem(NAME)
+                .swerveModules.azimuthPID.get("slot0")
+                : null;
     }
 
     /**

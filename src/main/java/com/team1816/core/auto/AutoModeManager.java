@@ -228,6 +228,8 @@ public class AutoModeManager {
 //
 //        DYNAMIC_PLACE_3
 
+        CIRCLE_BLAH_MODE,
+
 //        TEST_DYNAMIC_PATHS
         }
 
@@ -297,10 +299,10 @@ public class AutoModeManager {
                 return  new TopPlace1AutoMode(color, false);
             case TOP_SIDE_1_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color, true);
-//            case TOP_SIDE_1_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new TopPlace2AutoMode(color);
+                return new TopPlace2AutoMode(color);
+            case CIRCLE_BLAH_MODE:
+                robotState.dIsAutoDynamic = false;
+                return new CircleAroundReefAndGoBackToInitialPosition1();
 //            case DYNAMIC_TRAJECTORY_ONLY:
 //                robotState.isAutoDynamic = true;
 //                RobotState.dynamicAutoChanged = true;
