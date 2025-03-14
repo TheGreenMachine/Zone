@@ -295,6 +295,17 @@ public class Robot extends TimedRobot {
                     }
             );
             inputHandler.listenAction(
+                    "ejectCoral",
+                    ActionState.PRESSED,
+                    () -> {
+                        if(robotState.actualRampState == Ramp.RAMP_STATE.EJECT_CORAL) {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.OTHER_FEEDER);
+                        } else if(robotState.actualRampState == Ramp.RAMP_STATE.OTHER_FEEDER) {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.EJECT_CORAL);
+                        }
+                    }
+            );
+            inputHandler.listenAction(
                     "activationDeepHanger",
                     ActionState.PRESSED,
                     () -> {
@@ -332,66 +343,6 @@ public class Robot extends TimedRobot {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
                     }
             );
-//            inputHandler.listenActionPressAndRelease(
-//                    "removeAlgae",
-//                    (pressed) ->{
-//                        algaeCatcher.setDesiredState(
-//                                pressed ? AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP,
-//                                pressed ? AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.REMOVE_ALGAE : AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW
-//                        );
-//                    }
-//            );
-            /**COMMENTED ACTIONS THAT MIGHT BE IMPORTANT*/
-                /**REEFSCAPE ACTIONS*/
-            /*            inputHandler.listenAction(
-                    "pivotElevatorAndCoralFeeder",
-                    ActionState.PRESSED,
-                    () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
-                    }
-            );
-            inputHandler.listenAction(
-                    "pivotAlgaeStow",
-                    ActionState.PRESSED,
-                    () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-                    }
-            );
-            inputHandler.listenAction(
-                    "pivotAlgaeIntake",
-                    ActionState.PRESSED,
-                    () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
-                    }
-            );
-            inputHandler.listenAction(
-                    "pivotAlgaeOuttake",
-                    ActionState.PRESSED,
-                    () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
-                    }
-            );*/
-                /**CRESCENDO ACTIONS*/
-                        /*inputHandler.listenAction(
-                    "autopathingSpeaker",
-                    ActionState.PRESSED,
-                    () ->
-                        autopather.start(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(0)))
-            );
-
-            inputHandler.listenAction(
-                    "autopathingAmp",
-                    ActionState.PRESSED,
-                    () ->
-                        autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
-            );*/
-            /*inputHandler.listenActionPressAndRelease(
-                    "intakeCoral",
-                    (pressed) -> {
-                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
-                    }
-            );*/
 
             inputHandler.listenActionPressAndRelease(
                     "robotcentricRight",
@@ -549,7 +500,6 @@ public class Robot extends TimedRobot {
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
         algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
         coralArm.setDesiredState(CoralArm.PIVOT_STATE.UP, CoralArm.INTAKE_STATE.HOLD);
-        ramp.setDesiredState(Ramp.RAMP_STATE.STOW);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
@@ -577,7 +527,6 @@ public class Robot extends TimedRobot {
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
             algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
-            ramp.setDesiredState(Ramp.RAMP_STATE.STOW);
 
 //            autopather.autopathMaxCalcMilli = 5;
 

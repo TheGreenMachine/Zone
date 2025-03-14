@@ -38,5 +38,5 @@ buttonboard:
   left: decreaseRampPivotOffset
   right: increaseCoralArmPivotOffset
   downLeft:
-  down:
+  down: ejectCoral
 demoMode: false
