@@ -56,7 +56,7 @@ public class Ramp extends Subsystem {
         super(NAME, inf, rs);
         rampMotor = factory.getMotor(NAME, "rampMotor");
 
-        rampMotor.selectPIDSlot(6);
+        rampMotor.selectPIDSlot(0);
 
 
 
