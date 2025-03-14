@@ -223,19 +223,19 @@ subsystems:
                 currentLimit: 20
         pidConfig:
             slot0:
-                kP: 1
+                kP: 0.22
                 kI: 0
-                kD: 0.02
+                kD: 0
                 kV: 0
                 kS: 0
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
             rampStowPosition: 0
-            rampL1FeederPosition: 1
-            rampOtherFeederPosition: 33.7
-            rampScorePosition: 63.1
-            rampHoldPosition: 14.2
+            rampL1FeederPosition: -1.428
+            rampOtherFeederPosition: -14.69
+            rampScorePosition: -10
+            rampHoldPosition: -1.428
 
 
             rampMotorRotationsPerUnit: 1
