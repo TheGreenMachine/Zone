@@ -9,7 +9,7 @@ driver:
       horizontal: rotation
   buttonpad:
     a: activationDeepHanger
-    b: intake/OuttakeAlgae
+    b: feeder
     x: outtakeCoral
     y: removeAlgae
   axes:
