@@ -477,17 +477,17 @@ public class Robot extends TimedRobot {
                     }
             );
             inputHandler.listenAction(
-                    "increaseAlgaePivotOffset",
+                    "increaseRampPivotOffset",
                     ActionState.HELD,
                     () -> {
-                        algaeCatcher.offsetAlgaePivot(0.1);
+                        ramp.offsetRamp(0.1);
                     }
             );
             inputHandler.listenAction(
-                    "decreaseAlgaePivotOffset",
+                    "decreaseRampPivotOffset",
                     ActionState.HELD,
                     () -> {
-                        algaeCatcher.offsetAlgaePivot(-0.1);
+                        ramp.offsetRamp(-0.1);
                     }
             );
 
@@ -549,6 +549,7 @@ public class Robot extends TimedRobot {
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
         algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
         coralArm.setDesiredState(CoralArm.PIVOT_STATE.UP, CoralArm.INTAKE_STATE.HOLD);
+        ramp.setDesiredState(Ramp.RAMP_STATE.STOW);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
@@ -576,6 +577,7 @@ public class Robot extends TimedRobot {
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
             algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+            ramp.setDesiredState(Ramp.RAMP_STATE.STOW);
 
 //            autopather.autopathMaxCalcMilli = 5;
 

@@ -138,7 +138,7 @@ subsystems:
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: true
+        implemented: false
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
@@ -184,7 +184,7 @@ subsystems:
 
             stopOuttakingDelay: 2
     elevator:
-        implemented: true
+        implemented: false
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -213,35 +213,32 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     ramp:
+        implemented: true
         motors:
             rampMotor:
-                motorType: TalonFX
-                motorName: elevatorMotor
+                motorType: SparkMax
+                motorName: rampMotor
                 id: 14
-                invertMotor: true
-                currentLimit: 60
-                motionMagic:
-                    expoKV: 0.1
-                    expoKA: 0.2
-            pidConfig:
-                slot0:
-                    kP: 1
-                    kI: 0
-                    kD: 0.02
-                    kV: 0
-                    kS: 0
-                    kA: 0
-                    kG: 0
-            constants: # TODO: all of these
-                rampStowPosition: 0
-                rampL1FeederPosition: 1
-                rampOtherFeederPosition: 33.7
-                rampScorePosition: 63.1
-                rampHoldPosition: 14.2
+                invertMotor: false
+                currentLimit: 20
+        pidConfig:
+            slot0:
+                kP: 1
+                kI: 0
+                kD: 0.02
+                kV: 0
+                kS: 0
+                kA: 0
+                kG: 0
+        constants: # TODO: all of these
+            rampStowPosition: 0
+            rampL1FeederPosition: 1
+            rampOtherFeederPosition: 33.7
+            rampScorePosition: 63.1
+            rampHoldPosition: 14.2
 
 
-                rampMotorRotationsPerUnit: 1
-
+            rampMotorRotationsPerUnit: 1
     pneumatic:
         implemented: true
         solenoids:

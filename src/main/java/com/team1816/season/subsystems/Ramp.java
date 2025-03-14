@@ -40,7 +40,7 @@ public class Ramp extends Subsystem {
 
     private double rampStowPosition = factory.getConstant(NAME, "rampStowPosition", 1.0);
     private double rampL1FeederPosition = factory.getConstant(NAME, "rampL1FeederPosition", 1.0);
-    private double rampOtherFeederPosition = factory.getConstant(NAME, "rampOtherPosition", 1.0);
+    private double rampOtherFeederPosition = factory.getConstant(NAME, "rampOtherFeederPosition", 1.0);
     private double rampScorePosition = factory.getConstant(NAME, "rampScorePosition", 1.0);
     private double rampHoldPosition = factory.getConstant(NAME, "rampHoldPosition", 1.0);
 
