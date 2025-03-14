@@ -225,9 +225,9 @@ subsystems:
                     expoKA: 0.2
             pidConfig:
                 slot0:
-                    kP: 1
+                    kP: 0.22
                     kI: 0
-                    kD: 0.02
+                    kD: 0
                     kV: 0
                     kS: 0
                     kA: 0
