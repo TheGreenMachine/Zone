@@ -38,11 +38,11 @@ public class Ramp extends Subsystem {
 
     /**Constants*/
 
-    private double rampStowPosition = factory.getConstant(NAME, "rampFeederPosition", 1.0);
-    private double rampL1FeederPosition = factory.getConstant(NAME, "rampL1Position", 1.0);
+    private double rampStowPosition = factory.getConstant(NAME, "rampStowPosition", 1.0);
+    private double rampL1FeederPosition = factory.getConstant(NAME, "rampL1FeederPosition", 1.0);
     private double rampOtherFeederPosition = factory.getConstant(NAME, "rampOtherPosition", 1.0);
     private double rampScorePosition = factory.getConstant(NAME, "rampScorePosition", 1.0);
-    private double rampHoldPosition = factory.getConstant(NAME, "rampL4Position", 1.0);
+    private double rampHoldPosition = factory.getConstant(NAME, "rampHoldPosition", 1.0);
 
     /**
      * Base parameters needed to instantiate a subsystem
@@ -107,7 +107,7 @@ public class Ramp extends Subsystem {
 
             desiredRampPosition = getRampPosition(desiredRampState);
 //            System.out.println("ramp state: "+desiredrampState+" Position: "+desiredrampPosition);
-            rampMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredRampPosition, 0, 67));//TODO: CHANGE NUMBERS
+            rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, 0, 67));//TODO: CHANGE NUMBERS
         }
     }
     

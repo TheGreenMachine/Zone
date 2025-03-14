@@ -183,50 +183,6 @@ subsystems:
             coralArmMotorRotationsPerDegree: 1
 
             stopOuttakingDelay: 2
-    algaeCatcher:
-        implemented: true
-        motors:
-            algaeCatcherIntakeMotor:
-                motorType: SparkMax
-                motorName: algaeCatcherIntakeMotor
-                id: 14
-                invertMotor: false
-                currentLimit: 20
-                isLowSpeedCanBus: true
-            algaeCatcherPositionMotor:
-                motorType: TalonFX
-                motorName: algaeCatcherPositionMotor
-                id: 15
-                invertMotor: false
-                currentLimit: 20
-                motionMagic:
-                    expoKV: 0.05
-                    expoKA: 0.15
-        pidConfig:
-            slot0: #Position
-                kP: 0.8
-                ki: 0
-                kD: 0.02
-                kV: 0
-                kS: 0
-                kA: 0
-                kG: 0
-                gravityType: cosine
-        constants: # TODO: all of these
-            algaeCollectSpeed: -.60
-            algaeHoldSpeed: -.60
-            algaeReleaseSpeed: 1
-            removeAlgaeSpeed: 1
-
-            algaeSensorChannel: 1
-
-            stowPosition: 0.1
-            intakePosition: 16.8
-            holdPosition: 13
-            outtakePosition: 13
-            removeAlgaePosition: 3   #4.8
-
-            algaeMotorRotationsPerDegree: .25
     elevator:
         implemented: true
         motors:
@@ -261,7 +217,7 @@ subsystems:
             rampMotor:
                 motorType: TalonFX
                 motorName: elevatorMotor
-                id: 16
+                id: 14
                 invertMotor: true
                 currentLimit: 60
                 motionMagic:
@@ -279,9 +235,10 @@ subsystems:
             constants: # TODO: all of these
                 rampStowPosition: 0
                 rampL1FeederPosition: 1
-                rampHoldPosition: 14.2
                 rampOtherFeederPosition: 33.7
                 rampScorePosition: 63.1
+                rampHoldPosition: 14.2
+
 
                 rampMotorRotationsPerUnit: 1
 
