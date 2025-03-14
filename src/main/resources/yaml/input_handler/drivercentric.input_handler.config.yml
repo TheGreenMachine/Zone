@@ -31,12 +31,12 @@ operator:
   buttonpad:
     y:
 buttonboard:
-  upLeft: increaseAlgaePivotOffset
+  upLeft:
   upRight: decreaseCoralArmPivotOffset
   up: increaseElevatorPivotOffset
   center: decreaseElevatorPivotOffset
-  left: decreaseAlgaePivotOffset
+  left:
   right: increaseCoralArmPivotOffset
   downLeft:
-  down:
+  down: ejectCoral
 demoMode: false

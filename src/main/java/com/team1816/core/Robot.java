@@ -295,6 +295,13 @@ public class Robot extends TimedRobot {
                     }
             );
             inputHandler.listenAction(
+                    "ejectCoral",
+                    ActionState.PRESSED,
+                    () -> {
+                       ramp.setDesiredState(Ramp.RAMP_STATE.EJECT_CORAL);
+                    }
+            );
+            inputHandler.listenAction(
                     "activationDeepHanger",
                     ActionState.PRESSED,
                     () -> {

@@ -238,6 +238,7 @@ subsystems:
                 rampOtherFeederPosition: 33.7
                 rampScorePosition: 63.1
                 rampHoldPosition: 14.2
+                rampEjectPosition: 0
 
 
                 rampMotorRotationsPerUnit: 1

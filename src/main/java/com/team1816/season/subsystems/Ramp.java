@@ -43,6 +43,7 @@ public class Ramp extends Subsystem {
     private double rampOtherFeederPosition = factory.getConstant(NAME, "rampOtherPosition", 1.0);
     private double rampScorePosition = factory.getConstant(NAME, "rampScorePosition", 1.0);
     private double rampHoldPosition = factory.getConstant(NAME, "rampHoldPosition", 1.0);
+    private double rampEjectPosition = factory.getConstant(NAME, "rampHoldPosition", 1.0);
 
     /**
      * Base parameters needed to instantiate a subsystem
@@ -118,6 +119,7 @@ public class Ramp extends Subsystem {
             case HOLD -> rampHoldPosition += offsetAmount;
             case OTHER_FEEDER -> rampOtherFeederPosition += offsetAmount;
             case SCORE -> rampScorePosition += offsetAmount;
+            case EJECT_CORAL -> rampEjectPosition += offsetAmount;
         }
         offsetHasBeenApplied = true;
         GreenLogger.log("Ramp " + desiredRampState + " position set to " + getRampPosition(desiredRampState));
@@ -152,6 +154,7 @@ public class Ramp extends Subsystem {
             case HOLD -> rampHoldPosition;
             case OTHER_FEEDER -> rampOtherFeederPosition;
             case SCORE -> rampScorePosition;
+            case EJECT_CORAL -> rampEjectPosition;
         };
     }
 
@@ -172,5 +175,6 @@ public class Ramp extends Subsystem {
         OTHER_FEEDER,
         HOLD,
         SCORE,
+        EJECT_CORAL
     }
 }
