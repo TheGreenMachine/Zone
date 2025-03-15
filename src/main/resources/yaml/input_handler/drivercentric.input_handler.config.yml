@@ -11,7 +11,7 @@ driver:
     a: activationDeepHanger
     b: feeder
     x: outtakeCoral
-    y: removeAlgae
+    y: rampClimbPosition
   axes:
     rightTrigger: L3
     leftTrigger: L4
@@ -19,7 +19,7 @@ driver:
     start:
     back: zeroPose
     leftBumper: L2
-    rightBumper: L1
+    rightBumper:
   dpad:
     right: robotcentricRight
     down: robotcentricDown
@@ -38,5 +38,5 @@ buttonboard:
   left: decreaseRampPivotOffset
   right: increaseCoralArmPivotOffset
   downLeft:
-  down: ejectCoral
+  down: dislodgeCoral
 demoMode: false

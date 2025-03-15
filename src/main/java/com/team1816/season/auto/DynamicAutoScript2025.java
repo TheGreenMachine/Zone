@@ -2,7 +2,6 @@ package com.team1816.season.auto;
 
 import com.team1816.core.Robot;
 import com.team1816.core.auto.AutoModeManager;
-import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Color;
@@ -13,12 +12,10 @@ import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class DynamicAutoScript2025 {
@@ -218,13 +215,13 @@ public class DynamicAutoScript2025 {
         public Elevator.ELEVATOR_STATE getEquivalentElevatorState() {
             switch (this) {
                 case L1 -> {
-                    return Elevator.ELEVATOR_STATE.L1;
+                    return Elevator.ELEVATOR_STATE.FEEDER;
                 }
                 case L2 -> {
-                    return Elevator.ELEVATOR_STATE.L2;
+                    return Elevator.ELEVATOR_STATE.L2_CORAL;
                 }
                 case L3 -> {
-                    return Elevator.ELEVATOR_STATE.L3;
+                    return Elevator.ELEVATOR_STATE.L3_CORAL;
                 }
                 case L4 -> {
                     return Elevator.ELEVATOR_STATE.L4;
@@ -240,10 +237,10 @@ public class DynamicAutoScript2025 {
                     return CoralArm.PIVOT_STATE.L1;
                 }
                 case L2 -> {
-                    return CoralArm.PIVOT_STATE.L2;
+                    return CoralArm.PIVOT_STATE.L2_CORAL;
                 }
                 case L3 -> {
-                    return CoralArm.PIVOT_STATE.L3;
+                    return CoralArm.PIVOT_STATE.L3_CORAL;
                 }
                 case L4 -> {
                     return CoralArm.PIVOT_STATE.L4;

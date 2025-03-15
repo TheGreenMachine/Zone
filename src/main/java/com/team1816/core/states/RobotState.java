@@ -88,12 +88,10 @@ public class RobotState {
      */
 
     //TODO add new subystem states here
-    public AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE actualAlgaeCatcherIntakeState = AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP;
-    public AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE actualAlgaeCatcherPivotState = AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW;
     public CoralArm.INTAKE_STATE actualCoralArmIntakeState = CoralArm.INTAKE_STATE.INTAKE;
     public CoralArm.PIVOT_STATE actualCoralArmPivotState = CoralArm.PIVOT_STATE.FEEDER;
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
-    public Ramp.RAMP_STATE actualRampState = Ramp.RAMP_STATE.STOW;
+    public Ramp.RAMP_STATE actualRampState = Ramp.RAMP_STATE.L234_FEEDER;
     public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
     public boolean isCoralBeamBreakTriggered = false;
@@ -103,19 +101,18 @@ public class RobotState {
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
 
+    public final Mechanism2d rampMech2d = new Mechanism2d(2, 2);
+    public final MechanismRoot2d rampMech2dRoot = rampMech2d.getRoot("root", 1, 1);
+
+    public final MechanismLigament2d rampMechArm = rampMech2dRoot.append(new MechanismLigament2d("rampArm1", 1, 0));
+
+
     public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(3, 3);
     public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 1, 0);
 
     public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
     public final double coralMechArmBaseAngle = 190;
     public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", .7, coralMechArmBaseAngle));
-
-    public final Mechanism2d algaeMech2d = new Mechanism2d(3,3);
-    public final MechanismRoot2d getAlgaeCatcherMech2dRoot = algaeMech2d.getRoot("root", 1, 0);
-
-    public final MechanismLigament2d algaeCatcherBase = getAlgaeCatcherMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
-    public final double algaeBaseAngle = 190;
-    public final MechanismLigament2d algaeCatcherPivot = algaeCatcherBase.append(new MechanismLigament2d("algaePivot", .7, algaeBaseAngle));
 
     /**
      * Autopathing state
@@ -200,10 +197,8 @@ public class RobotState {
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
 
         // TODO: Insert any subsystem state set up here.
-        actualAlgaeCatcherIntakeState = AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP;
-        actualAlgaeCatcherPivotState = AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW;
         actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
-        actualRampState = Ramp.RAMP_STATE.STOW;
+        actualRampState = Ramp.RAMP_STATE.L234_FEEDER;
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;
@@ -312,7 +307,7 @@ public class RobotState {
         }
 
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
-        SmartDashboard.putData("AlgaeCatcher", algaeMech2d);
+        SmartDashboard.putData("Ramp", rampMech2d);
 //        System.out.println(fieldToVehicle);
 
         if (RobotBase.isSimulation()) {

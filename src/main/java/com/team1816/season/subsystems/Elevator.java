@@ -50,10 +50,11 @@ public class Elevator extends Subsystem {
      */
 
     private double elevatorFeederPosition = factory.getConstant(NAME, "elevatorFeederPosition", 1.0);
-    private double elevatorL1Position = factory.getConstant(NAME, "elevatorL1Position", 1.0);
-    private double elevatorL2Position = factory.getConstant(NAME, "elevatorL2Position", 1.0);
-    private double elevatorL3Position = factory.getConstant(NAME, "elevatorL3Position", 1.0);
+    private double elevatorL2CoralPosition = factory.getConstant(NAME, "elevatorL2CoralPosition", 1.0);
+    private double elevatorL3CoralPosition = factory.getConstant(NAME, "elevatorL3CoralPosition", 1.0);
     private double elevatorL4Position = factory.getConstant(NAME, "elevatorL4Position", 1.0);
+    private double elevatorL2AlgaePosition = factory.getConstant(NAME, "elevatorL2AlgaePosition", 1.0);
+    private double elevatorL3AlgaePosition = factory.getConstant(NAME, "elevatorL3AlgaePosition", 1.0);
 
 //    private final boolean opposeLeaderDirection = ((int) factory.getConstant(NAME, "invertFollowerMotor", 0)) == 1;
 
@@ -101,11 +102,6 @@ public class Elevator extends Subsystem {
 
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
-//        System.out.print(robotState.isCoralBeamBreakTriggered);
-        if(!robotState.isCoralBeamBreakTriggered && robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE) {
-            desiredElevatorState = ELEVATOR_STATE.FEEDER;
-        }
-
         if (robotState.actualElevatorState != desiredElevatorState) {
             robotState.actualElevatorState = desiredElevatorState;
             elevatorOutputsChanged = true;
@@ -131,11 +127,12 @@ public class Elevator extends Subsystem {
 
     public void offsetElevator(double offsetAmount){
         switch (desiredElevatorState) {
-            case L1 -> elevatorL1Position += offsetAmount;
-            case L2 -> elevatorL2Position += offsetAmount;
-            case L3 -> elevatorL3Position += offsetAmount;
+            case L2_CORAL -> elevatorL2CoralPosition += offsetAmount;
+            case L3_CORAL -> elevatorL3CoralPosition += offsetAmount;
             case L4 -> elevatorL4Position += offsetAmount;
             case FEEDER -> elevatorFeederPosition += offsetAmount;
+            case L2_ALGAE -> elevatorL2AlgaePosition += offsetAmount;
+            case L3_ALGAE -> elevatorL3AlgaePosition += offsetAmount;
         }
         offsetHasBeenApplied = true;
         GreenLogger.log("Elevator " + desiredElevatorState + " position set to " + getElevatorPosition(desiredElevatorState));
@@ -185,11 +182,12 @@ public class Elevator extends Subsystem {
 
     private double getElevatorPosition(ELEVATOR_STATE elevatorState) {
         return switch (elevatorState) {
-            case L1 -> elevatorL1Position;
-            case L2 -> elevatorL2Position;
-            case L3 -> elevatorL3Position;
+            case L2_CORAL -> elevatorL2CoralPosition;
+            case L3_CORAL -> elevatorL3CoralPosition;
             case L4 -> elevatorL4Position;
             case FEEDER -> elevatorFeederPosition;
+            case L2_ALGAE -> elevatorL2AlgaePosition;
+            case L3_ALGAE -> elevatorL3AlgaePosition;
         };
     }
 
@@ -206,9 +204,10 @@ public class Elevator extends Subsystem {
      */
     public enum ELEVATOR_STATE {
         FEEDER,
-        L1,
-        L2,
-        L3,
-        L4
+        L2_CORAL,
+        L3_CORAL,
+        L4,
+        L2_ALGAE,
+        L3_ALGAE
     }
 }
