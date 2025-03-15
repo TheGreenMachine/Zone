@@ -129,6 +129,16 @@ public class ExampleSubsystem extends Subsystem {
     }
 
     /**
+     * Creates named commands for PathPlanner.
+     *
+     * @see <a href="https://github.com/TheGreenMachine/Zone/blob/master/PATHPLANNER_GUIDE.md">2025 PathPlanner guide</a>
+     */
+    @Override
+    public void implementNamedCommands() {
+
+    }
+
+    /**
      * called for all subsystems when robot is running in Test mode
      *
      * @return whether the test passed

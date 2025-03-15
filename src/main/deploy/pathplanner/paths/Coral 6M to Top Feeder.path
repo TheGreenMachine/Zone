@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.8390625,
+        "y": 5.146803977272728
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.238594142005016,
+        "y": 4.777727992879496
+      },
+      "isLocked": false,
+      "linkedName": "Coral 6M Trough"
+    },
+    {
+      "anchor": {
+        "x": 1.6652556818181818,
+        "y": 7.400383522727273
+      },
+      "prevControl": {
+        "x": 1.4712619973762624,
+        "y": 7.558074519289058
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.09027692082234
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 118.88658176691067
+  },
+  "useDefaultConstraints": true
+}

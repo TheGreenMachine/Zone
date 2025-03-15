@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.255028409090909,
+        "y": 2.963025568181818
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.943250000000001,
+        "y": 2.1919999999999993
+      },
+      "isLocked": false,
+      "linkedName": "Coral 3A Trough"
+    },
+    {
+      "anchor": {
+        "x": 1.645,
+        "y": 0.6496164772727275
+      },
+      "prevControl": {
+        "x": 2.2955291065667183,
+        "y": 1.1681702696669118
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Bottom Feeder"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 27.82409638425329
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 54.78240703180719
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -62.2414593989399
+  },
+  "useDefaultConstraints": true
+}

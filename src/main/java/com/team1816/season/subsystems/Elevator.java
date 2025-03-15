@@ -3,6 +3,7 @@ package com.team1816.season.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.GhostMotor;
@@ -12,6 +13,7 @@ import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 @Singleton
 public class Elevator extends Subsystem {
@@ -151,6 +153,24 @@ public class Elevator extends Subsystem {
     @Override
     public void stop() {
 
+    }
+
+    /**
+     * Registers commands for:
+     * <ul>
+     *     <li>elevator l1</li>
+     *     <li>elevator l2</li>
+     *     <li>elevator l3</li>
+     *     <li>elevator l4</li>
+     *     <li>elevator feeder</li>
+     * </ul>
+     */
+    @Override
+    public void implementNamedCommands() {
+        for (ELEVATOR_STATE elevatorState : ELEVATOR_STATE.values()) {
+            NamedCommands.registerCommand(NAME + " " + elevatorState.toString().toLowerCase(),
+                    Commands.runOnce(() -> setDesiredState(elevatorState)).alongWith(Commands.waitUntil(this::isElevatorInRange)));
+        }
     }
 
     public void setBraking(boolean braking) {

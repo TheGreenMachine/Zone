@@ -2,6 +2,7 @@ package com.team1816.season.subsystems;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 /**
  * A subsystem for the coral arm.
@@ -266,6 +268,35 @@ public class CoralArm extends Subsystem {
     @Override
     public void stop() {
         desiredIntakeState = INTAKE_STATE.REST;
+    }
+
+    /**
+     * Registers commands for:
+     * <ul>
+     *     <li>coralArm intake intake</li>
+     *     <li>coralArm intake outtake</li>
+     *     <li>coralArm intake hold</li>
+     *     <li>coralArm intake rest</li>
+     *     <br>
+     *     <li>coralArm pivot l1</li>
+     *     <li>coralArm pivot l2</li>
+     *     <li>coralArm pivot l3</li>
+     *     <li>coralArm pivot l4</li>
+     *     <li>coralArm pivot feeder</li>
+     *     <li>coralArm pivot up</li>
+     * </ul>
+     */
+    @Override
+    public void implementNamedCommands() {
+        for (INTAKE_STATE intakeState : INTAKE_STATE.values()) {
+            NamedCommands.registerCommand(NAME + " " + intakeState.toString().toLowerCase(),
+                    Commands.runOnce(() -> setDesiredIntakeState(intakeState)).alongWith(Commands.waitUntil(this::isCoralArmIntakeInRange)));
+        }
+
+        for (PIVOT_STATE pivotState : PIVOT_STATE.values()) {
+            NamedCommands.registerCommand(NAME + " " + pivotState.toString().toLowerCase(),
+                    Commands.runOnce(() -> setDesiredPivotState(pivotState)).alongWith(Commands.waitUntil(this::isCoralArmPivotInRange)));
+        }
     }
 
     @Override

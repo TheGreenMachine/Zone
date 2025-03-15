@@ -240,7 +240,7 @@ subsystems:
 
             rampMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: true
+        implemented: false
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6
