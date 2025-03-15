@@ -101,6 +101,12 @@ public class RobotState {
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
 
+    public final Mechanism2d rampMech2d = new Mechanism2d(2, 2);
+    public final MechanismRoot2d rampMech2dRoot = rampMech2d.getRoot("root", 1, 1);
+
+    public final MechanismLigament2d rampMechArm = rampMech2dRoot.append(new MechanismLigament2d("rampArm1", 1, 0));
+
+
     public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(3, 3);
     public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 1, 0);
 
@@ -301,6 +307,7 @@ public class RobotState {
         }
 
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
+        SmartDashboard.putData("Ramp", rampMech2d);
 //        System.out.println(fieldToVehicle);
 
         if (RobotBase.isSimulation()) {

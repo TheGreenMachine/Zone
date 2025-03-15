@@ -8,8 +8,8 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-    a: robotcentricRight
-    b: robotcentricDown
+    a: feeder
+    b: ejectCoral
     x: robotcentricLeft
     y: robotcentricUp
   axes:
