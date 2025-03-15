@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.095482954545455,
+        "x": 5.095,
         "y": 5.166747159090908
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.59225,
-        "y": 5.789750000000001
+        "x": 4.59167876299321,
+        "y": 5.789859293764881
       },
       "isLocked": false,
       "linkedName": "Coral 1A Trough"
@@ -45,7 +45,7 @@
     "rotation": -54.09027692082234
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 60.39554925399514

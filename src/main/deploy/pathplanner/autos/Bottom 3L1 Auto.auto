@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom to Coral 3A"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral 3A to Bottom Feeder"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Feeder to Coral 4M"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral 4M to Bottom Feeder"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Feeder to Coral 4M"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

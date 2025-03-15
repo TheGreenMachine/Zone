@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.365755808084056,
-        "y": 3.4112845787706148
+        "x": 3.2627111672143627,
+        "y": 2.898589620439326
       },
       "isLocked": false,
       "linkedName": "Coral 4M Trough"
@@ -20,8 +20,8 @@
         "y": 0.6496164772727275
       },
       "prevControl": {
-        "x": 1.39728485118692,
-        "y": 0.47636452003249663
+        "x": 1.4282505617392038,
+        "y": 0.5142300323722484
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,10 +45,10 @@
     "rotation": 54.78240703180719
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Bottom Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -121.50426671920414
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

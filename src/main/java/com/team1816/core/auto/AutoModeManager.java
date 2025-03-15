@@ -193,7 +193,7 @@ public class AutoModeManager {
 
         TOP3L1,
 
-//        TEST_DYNAMIC_PATHS
+        OPTIMIZEDTOP3L1
         }
 
 
@@ -212,18 +212,10 @@ public class AutoModeManager {
                 return new DriveStraightMode();
             case PP_NORMAL_BOTTOM:
                 return new PPNormalBottomAutoMode();
-            case PP_NORMAL_TOP:
-                robotState.dIsAutoDynamic = false;
-                return new PPNormalTopAutoMode();
-
-//            case DYNAMIC_TRAJECTORY_ONLY:
-//                robotState.isAutoDynamic = true;
-//                RobotState.dynamicAutoChanged = true;
-//                return new DynamicTrajectoryOnlyAutoMode(robotState);
-//            case TEST_DYNAMIC_PATHS:
-//                return new TestAllDynamicPointsAutoMode();
             case TOP3L1:
                 return new Top3L1AutoMode();
+            case OPTIMIZEDTOP3L1:
+                return new OptimizedTop3L1AutoMode();
             default:
                 GreenLogger.log("Defaulting to DefaultMode");
                 return new DefaultMode();
