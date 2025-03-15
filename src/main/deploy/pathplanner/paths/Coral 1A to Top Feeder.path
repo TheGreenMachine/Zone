@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.660802341764169,
-        "y": 4.922858070832126
+        "x": 4.59225,
+        "y": 5.789750000000001
       },
       "isLocked": false,
       "linkedName": "Coral 1A Trough"
@@ -20,8 +20,8 @@
         "y": 7.400383522727273
       },
       "prevControl": {
-        "x": 1.4375780675906833,
-        "y": 7.503644860989346
+        "x": 1.4188542892324068,
+        "y": 7.442648800814501
       },
       "nextControl": null,
       "isLocked": false,

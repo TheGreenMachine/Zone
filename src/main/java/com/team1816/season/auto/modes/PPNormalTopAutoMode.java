@@ -9,7 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
  * Uses PathPlanner "Normal Top Auto"
  */
 public class PPNormalTopAutoMode extends AutoMode {
-    private final PathPlannerAction action = new PathPlannerAction("Normal Top Auto", PathPlannerAction.ActionType.AUTO);
+    private final PathPlannerAction action = new PathPlannerAction("Copy of Normal Top Auto", PathPlannerAction.ActionType.AUTO);
 
     @Override
     protected void routine() throws AutoModeEndedException {
