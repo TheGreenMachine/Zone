@@ -234,11 +234,11 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            rampL1FeederPosition: -1.428
-            rampL234FeederPosition: -14.69
-            rampScorePosition: -10
-            rampDislodgeCoralPosition: -20
-            rampClimbPosition: -19.714
+            rampL1FeederPosition: 4
+            rampL234FeederPosition: -9.31
+            rampScorePosition: -1.357
+            rampDislodgeCoralPosition: -15
+            rampClimbPosition: -12.357
 
 
             rampMotorRotationsPerUnit: 1
