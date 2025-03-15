@@ -112,6 +112,8 @@ public class Ramp extends Subsystem {
 //            System.out.println("ramp state: "+desiredRampPosition+" Position: "+desiredRampPosition);
             rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -20, 0));
         }
+
+        robotState.rampMechArm.setAngle(rampMotor.getSensorPosition() / (49./180.));
     }
     
     public void offsetRamp(double offsetAmount){
