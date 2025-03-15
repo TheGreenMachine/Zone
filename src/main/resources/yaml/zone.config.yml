@@ -138,7 +138,7 @@ subsystems:
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: true
+        implemented: false
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
@@ -184,7 +184,7 @@ subsystems:
 
             stopOuttakingDelay: 2
     algaeCatcher:
-        implemented: true
+        implemented: false
         motors:
             algaeCatcherIntakeMotor:
                 motorType: SparkMax
@@ -228,7 +228,7 @@ subsystems:
 
             algaeMotorRotationsPerDegree: .25
     elevator:
-        implemented: true
+        implemented: false
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -257,7 +257,7 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 1
     pneumatic:
-        implemented: true
+        implemented: false
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6

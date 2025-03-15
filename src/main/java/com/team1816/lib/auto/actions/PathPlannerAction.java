@@ -18,6 +18,10 @@ import java.util.List;
  * This class represents an action that will move the robot along a PathPlanner trajectory.
  */
 public class PathPlannerAction implements AutoAction {
+    private final Pose2d initialPose;
+    private final Command pathCommand;
+    private final Drive drive;
+
     /**
      * Creates a {@link PathPlannerAction} by loading a {@link PathPlannerPath} from the deploy
      * folder.
@@ -64,10 +68,6 @@ public class PathPlannerAction implements AutoAction {
             pathCommand = null;
         }
     }
-
-    private final Pose2d initialPose;
-    private final Command pathCommand;
-    private final Drive drive;
 
     /**
      * Returns the initial pose of the action. Note that this does not change based on the colour
