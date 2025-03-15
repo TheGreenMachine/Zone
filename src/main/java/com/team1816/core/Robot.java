@@ -276,14 +276,17 @@ public class Robot extends TimedRobot {
                     "slowMode",
                     drive::setSlowMode
             );
-            inputHandler.listenAction(
+            inputHandler.listenActionPressAndRelease(
                     "outtakeCoral",
-                    ActionState.PRESSED,
-                    () -> {
-                        if (robotState.isCoralBeamBreakTriggered)
-                            new OuttakeL234Mode().run();
-                        else
-                            new OuttakeL1Mode().run();
+                    (pressed) -> {
+                        if (pressed) {
+                            if (robotState.isCoralBeamBreakTriggered)
+                                coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.OUTTAKE);
+                            else
+                                ramp.setDesiredState(Ramp.RAMP_STATE.SCORE);
+                        } else {
+                            orchestrator.setFeederStates(false);
+                        }
                     }
             );
             inputHandler.listenAction(
