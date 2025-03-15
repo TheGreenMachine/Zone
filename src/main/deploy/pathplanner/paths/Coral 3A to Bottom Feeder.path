@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.474403409090908,
-        "y": 2.713735795454545
+        "x": 5.255028409090909,
+        "y": 2.963025568181818
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.435992987145611,
-        "y": 2.8052982225261975
+        "x": 6.220057726037799,
+        "y": 3.104977482661316
       },
       "isLocked": false,
-      "linkedName": "Coral 3A"
+      "linkedName": "Coral 3A Trough"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.6496164772727275
       },
       "prevControl": {
-        "x": 2.605448123697009,
-        "y": 1.3105770838125044
+        "x": 2.3778196718772313,
+        "y": 1.4320053706583264
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.13010235415605
+    "rotation": 54.78240703180719
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 122.12499844038744
+    "rotation": -62.2414593989399
   },
   "useDefaultConstraints": true
 }

@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 5.095482954545455,
-        "y": 5.585553977272727
+        "y": 5.166747159090908
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.660802341764169,
-        "y": 5.341664889013944
+        "y": 4.922858070832126
       },
       "isLocked": false,
-      "linkedName": "Coral 1A"
+      "linkedName": "Coral 1A Trough"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 60.39554925399514
   },
   "useDefaultConstraints": true
 }

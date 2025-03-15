@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.60708483624961,
-        "y": 7.998449496799583
+        "x": 7.599919004900843,
+        "y": 8.078243549456738
       },
       "isLocked": false,
       "linkedName": "Top"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 5.095482954545455,
-        "y": 5.585553977272727
+        "y": 5.166747159090908
       },
       "prevControl": {
-        "x": 4.8380550804143,
-        "y": 5.337237736962197
+        "x": 4.85321742031651,
+        "y": 4.887458076312766
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral 1A"
+      "linkedName": "Coral 1A Trough"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 60.39554925399514
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

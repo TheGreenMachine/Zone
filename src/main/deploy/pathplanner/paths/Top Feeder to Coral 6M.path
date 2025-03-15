@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.066911600274598,
-        "y": 6.99500204991496
+        "x": 2.2253081235600165,
+        "y": 6.770227775388521
       },
       "isLocked": false,
       "linkedName": "Top Feeder"
     },
     {
       "anchor": {
-        "x": 3.629659090909091,
-        "y": 5.465894886363635
+        "x": 3.8390625,
+        "y": 5.146803977272728
       },
       "prevControl": {
-        "x": 3.0166796337349764,
-        "y": 6.089976024749591
+        "x": 2.0031052618337464,
+        "y": 6.008210830569382
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral 6M"
+      "linkedName": "Coral 6M Trough"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.26451229807981
+    "rotation": 118.88658176691067
   },
   "reversed": false,
   "folder": null,
