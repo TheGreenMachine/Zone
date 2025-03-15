@@ -21,6 +21,7 @@ import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.DynamicAutoScript2025;
+import com.team1816.season.auto.NamedCommandRegistrar;
 import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
@@ -189,6 +190,9 @@ public class Robot extends TimedRobot {
             pneumatic = Injector.get(Pneumatic.class);
 
             dynamicAutoScript = new DynamicAutoScript2025(5, 3);
+
+            /* Register PathPlanner named commands */
+            NamedCommandRegistrar.registerCommands();
 
             /** Logging */
             if (Constants.kLoggingRobot) {

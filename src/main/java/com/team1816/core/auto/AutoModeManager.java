@@ -228,7 +228,9 @@ public class AutoModeManager {
 //
 //        DYNAMIC_PLACE_3
 
-        CIRCLE_BLAH_MODE,
+        PP_NORMAL_BOTTOM,
+
+        PP_NORMAL_TOP,
 
 //        TEST_DYNAMIC_PATHS
         }
@@ -300,9 +302,13 @@ public class AutoModeManager {
             case TOP_SIDE_1_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
                 return new TopPlace2AutoMode(color);
-            case CIRCLE_BLAH_MODE:
+            case PP_NORMAL_BOTTOM:
                 robotState.dIsAutoDynamic = false;
-                return new CircleAroundReefAndGoBackToInitialPosition1();
+                return new PPNormalBottomAutoMode();
+            case PP_NORMAL_TOP:
+                robotState.dIsAutoDynamic = false;
+                return new PPNormalTopAutoMode();
+
 //            case DYNAMIC_TRAJECTORY_ONLY:
 //                robotState.isAutoDynamic = true;
 //                RobotState.dynamicAutoChanged = true;
