@@ -10,7 +10,9 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
+@Singleton
 public class Ramp extends Subsystem {
     /**Name*/
     private static final String NAME = "ramp";
@@ -104,7 +106,7 @@ public class Ramp extends Subsystem {
 
             desiredRampPosition = getRampPosition(desiredRampState);
 //            System.out.println("ramp state: "+desiredRampPosition+" Position: "+desiredRampPosition);
-            rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -20, 0));
+            rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -15, 5));
         }
 
         robotState.rampMechArm.setAngle(rampMotor.getSensorPosition() / (49./180.));
