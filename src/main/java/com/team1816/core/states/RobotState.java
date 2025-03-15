@@ -91,7 +91,7 @@ public class RobotState {
     public CoralArm.INTAKE_STATE actualCoralArmIntakeState = CoralArm.INTAKE_STATE.INTAKE;
     public CoralArm.PIVOT_STATE actualCoralArmPivotState = CoralArm.PIVOT_STATE.FEEDER;
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
-    public Ramp.RAMP_STATE actualRampState = Ramp.RAMP_STATE.STOW;
+    public Ramp.RAMP_STATE actualRampState = Ramp.RAMP_STATE.L234_FEEDER;
     public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
     public boolean isCoralBeamBreakTriggered = false;
@@ -192,7 +192,7 @@ public class RobotState {
 
         // TODO: Insert any subsystem state set up here.
         actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
-        actualRampState = Ramp.RAMP_STATE.STOW;
+        actualRampState = Ramp.RAMP_STATE.L234_FEEDER;
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;

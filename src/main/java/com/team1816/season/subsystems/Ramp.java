@@ -1,7 +1,5 @@
 package com.team1816.season.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.GhostMotor;
@@ -10,10 +8,7 @@ import com.team1816.lib.hardware.components.motor.configurations.GreenControlMod
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jakarta.inject.Inject;
 
 public class Ramp extends Subsystem {
@@ -24,7 +19,7 @@ public class Ramp extends Subsystem {
     private final IGreenMotor rampMotor;
     
     /**States*/
-    private Ramp.RAMP_STATE desiredRampState = Ramp.RAMP_STATE.STOW;
+    private RAMP_STATE desiredRampState = RAMP_STATE.L234_FEEDER;
 
     private boolean rampOutputsChanged = false;
     private boolean offsetHasBeenApplied = false;
@@ -38,12 +33,11 @@ public class Ramp extends Subsystem {
 
     /**Constants*/
 
-    private double rampStowPosition = factory.getConstant(NAME, "rampStowPosition", 1.0);
     private double rampL1FeederPosition = factory.getConstant(NAME, "rampL1FeederPosition", 1.0);
-    private double rampOtherFeederPosition = factory.getConstant(NAME, "rampOtherFeederPosition", 1.0);
+    private double rampL234FeederPosition = factory.getConstant(NAME, "rampL234FeederPosition", 1.0);
     private double rampScorePosition = factory.getConstant(NAME, "rampScorePosition", 1.0);
-    private double rampHoldPosition = factory.getConstant(NAME, "rampHoldPosition", 1.0);
-    private double rampEjectPosition = factory.getConstant(NAME, "rampHoldPosition", 1.0);
+    private double rampDislodgeCoralPosition = factory.getConstant(NAME, "rampDislodgeCoralPosition", 1.0);
+    private double rampClimbPosition = factory.getConstant(NAME, "rampClimbPosition", 1.0);
 
     /**
      * Base parameters needed to instantiate a subsystem
@@ -116,12 +110,11 @@ public class Ramp extends Subsystem {
     
     public void offsetRamp(double offsetAmount){
         switch (desiredRampState) {
-            case STOW -> rampStowPosition += offsetAmount;
             case L1_FEEDER -> rampL1FeederPosition += offsetAmount;
-            case HOLD -> rampHoldPosition += offsetAmount;
-            case OTHER_FEEDER -> rampOtherFeederPosition += offsetAmount;
+            case L234_FEEDER -> rampL234FeederPosition += offsetAmount;
             case SCORE -> rampScorePosition += offsetAmount;
-            case EJECT_CORAL -> rampEjectPosition += offsetAmount;
+            case DISLODGE_CORAL -> rampDislodgeCoralPosition += offsetAmount;
+            case CLIMB -> rampClimbPosition += offsetAmount;
         }
         offsetHasBeenApplied = true;
         GreenLogger.log("Ramp " + desiredRampState + " position set to " + getRampPosition(desiredRampState));
@@ -149,14 +142,13 @@ public class Ramp extends Subsystem {
         return false;
     }
     
-    private double getRampPosition(Ramp.RAMP_STATE rampState) {
+    private double getRampPosition(RAMP_STATE rampState) {
         return switch (rampState) {
-            case STOW -> rampStowPosition;
             case L1_FEEDER -> rampL1FeederPosition;
-            case HOLD -> rampHoldPosition;
-            case OTHER_FEEDER -> rampOtherFeederPosition;
+            case L234_FEEDER -> rampL234FeederPosition;
             case SCORE -> rampScorePosition;
-            case EJECT_CORAL -> rampEjectPosition;
+            case DISLODGE_CORAL -> rampDislodgeCoralPosition;
+            case CLIMB -> rampClimbPosition;
         };
     }
 
@@ -165,18 +157,16 @@ public class Ramp extends Subsystem {
      *
      * @return desired ramp state
      */
-    public Ramp.RAMP_STATE getDesiredRampState() {return desiredRampState;}
-    public Ramp.RAMP_STATE getDesisetredRampState() {return desiredRampState;}
+    public RAMP_STATE getDesiredRampState() {return desiredRampState;}
 
     /**
      * Ramp enum
      */
     public enum RAMP_STATE{
-        STOW,
         L1_FEEDER,
-        OTHER_FEEDER,
-        HOLD,
+        L234_FEEDER,
         SCORE,
-        EJECT_CORAL
+        DISLODGE_CORAL,
+        CLIMB
     }
 }

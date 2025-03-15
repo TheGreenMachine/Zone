@@ -62,26 +62,24 @@ public class CoralArm extends Subsystem {
     private double desiredPivotPosition = 0;
     private double actualPivotPosition = 0;
 
-    private double beamBreakLastUntriggeredTimestamp = -100;
-    private boolean shouldStopOuttakingSoon = false;
-
     /**
      * Constants
      */
     private final double intakeSpeed = factory.getConstant(NAME, "intakeSpeed", .7);
     private final double outtakeSpeed = factory.getConstant(NAME, "outtakeSpeed", .7);
     private final double holdSpeed = factory.getConstant(NAME, "holdSpeed", 0);
+    private final double removeAlgaeSpeed = factory.getConstant(NAME, "removeAlgaeSpeed", .7);
 
     private double l1Position = factory.getConstant(NAME, "coralArmL1Position", 1.0);
-    private double l2Position = factory.getConstant(NAME, "coralArmL2Position", 1.0);
-    private double l3Position = factory.getConstant(NAME, "coralArmL3Position", 1.0);
+    private double l2CoralPosition = factory.getConstant(NAME, "coralArmL2CoralPosition", 1.0);
+    private double l3CoralPosition = factory.getConstant(NAME, "coralArmL3CoralPosition", 1.0);
     private double l4Position = factory.getConstant(NAME, "coralArmL4Position", 1.0);
     private double feederPosition = factory.getConstant(NAME, "coralArmFeederPosition", 1.0);
     private double upPosition = factory.getConstant(NAME, "coralArmUpPosition", 1.0);
+    private double l2AlgaePosition = factory.getConstant(NAME, "coralArmL2AlgaePosition", 1.0);
+    private double l3AlgaePosition = factory.getConstant(NAME, "coralArmL3AlgaePosition", 1.0);
 
     private final double motorRotationsPerDegree = factory.getConstant(NAME, "coralArmMotorRotationsPerDegree", 1);
-
-    private final double stopOuttakingDelay = factory.getConstant(NAME, "stopOuttakingDelay", 2);
 
     /**
      * Logging
@@ -160,33 +158,30 @@ public class CoralArm extends Subsystem {
         boolean beamBreak = isBeamBreakTriggered();
         if (robotState.isCoralBeamBreakTriggered != beamBreak) {
             robotState.isCoralBeamBreakTriggered = beamBreak;
-            if(!robotState.isCoralBeamBreakTriggered) {
-                beamBreakLastUntriggeredTimestamp = Timer.getFPGATimestamp();
-                shouldStopOuttakingSoon = true;
-            }
         }
 
         //Setting intake motor state
-        if(desiredIntakeState == INTAKE_STATE.OUTTAKE && Timer.getFPGATimestamp() >= (beamBreakLastUntriggeredTimestamp + stopOuttakingDelay/*Delay to make sure coral gets fully off*/) && shouldStopOuttakingSoon) {
-            desiredIntakeState = INTAKE_STATE.INTAKE;
-            shouldStopOuttakingSoon = false;
-        }
-        if(desiredIntakeState != INTAKE_STATE.OUTTAKE) {
+        if(
+                desiredIntakeState != INTAKE_STATE.OUTTAKE
+                        && robotState.actualElevatorState != Elevator.ELEVATOR_STATE.L2_ALGAE
+                        && robotState.actualElevatorState != Elevator.ELEVATOR_STATE.L3_ALGAE
+        ) {
             desiredIntakeState = robotState.isCoralBeamBreakTriggered ? INTAKE_STATE.HOLD : INTAKE_STATE.INTAKE;
         }
 
         //Setting pivot motor state
         if(robotState.isElevatorInRange) {
             desiredPivotState = switch (robotState.actualElevatorState){
-                case L1 -> PIVOT_STATE.L1;
-                case L2 -> PIVOT_STATE.L2;
-                case L3 -> PIVOT_STATE.L3;
+                case L2_CORAL -> PIVOT_STATE.L2_CORAL;
+                case L3_CORAL -> PIVOT_STATE.L3_CORAL;
                 case L4 -> PIVOT_STATE.L4;
                 case FEEDER -> robotState.isCoralBeamBreakTriggered ? PIVOT_STATE.UP : PIVOT_STATE.FEEDER;
+                case L2_ALGAE -> PIVOT_STATE.L2_ALGAE;
+                case L3_ALGAE -> PIVOT_STATE.L3_ALGAE;
             };
         }
         else {
-            desiredPivotState = PIVOT_STATE.UP;
+            desiredPivotState = robotState.isCoralBeamBreakTriggered ? PIVOT_STATE.UP : PIVOT_STATE.FEEDER;
         }
 
         if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
@@ -219,6 +214,7 @@ public class CoralArm extends Subsystem {
                 case OUTTAKE -> desiredIntakePower = outtakeSpeed;
                 case HOLD -> desiredIntakePower = holdSpeed;
                 case REST -> desiredIntakePower = 0;
+                case REMOVE_ALGAE -> desiredIntakePower = removeAlgaeSpeed;
             }
 
             intakeMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredIntakePower);
@@ -240,11 +236,13 @@ public class CoralArm extends Subsystem {
     public void offsetCoralPivot(double offsetAmount){
             switch (desiredPivotState) {
                 case L1 -> l1Position += offsetAmount;
-                case L2 -> l2Position += offsetAmount;
-                case L3 -> l3Position += offsetAmount;
+                case L2_CORAL -> l2CoralPosition += offsetAmount;
+                case L3_CORAL -> l3CoralPosition += offsetAmount;
                 case L4 -> l4Position += offsetAmount;
                 case FEEDER -> feederPosition += offsetAmount;
                 case UP -> upPosition += offsetAmount;
+                case L2_ALGAE -> l2AlgaePosition += offsetAmount;
+                case L3_ALGAE -> l3AlgaePosition += offsetAmount;
         }
         offsetHasBeenApplied = true;
         GreenLogger.log("Coral arm " + desiredPivotState + " pivot position set to " + getPivotPosition(desiredPivotState));
@@ -276,11 +274,13 @@ public class CoralArm extends Subsystem {
     private double getPivotPosition(PIVOT_STATE pivotState) {
         return switch (pivotState) {
             case L1 -> l1Position;
-            case L2 -> l2Position;
-            case L3 -> l3Position;
+            case L2_CORAL -> l2CoralPosition;
+            case L3_CORAL -> l3CoralPosition;
             case L4 -> l4Position;
             case FEEDER -> feederPosition;
             case UP -> upPosition;
+            case L2_ALGAE -> l2AlgaePosition;
+            case L3_ALGAE -> l3AlgaePosition;
         };
     }
 
@@ -294,17 +294,20 @@ public class CoralArm extends Subsystem {
 
     public enum PIVOT_STATE {
         L1,
-        L2,
-        L3,
+        L2_CORAL,
+        L3_CORAL,
         L4,
         FEEDER,
-        UP
+        UP,
+        L2_ALGAE,
+        L3_ALGAE
     }
 
     public enum INTAKE_STATE {
         INTAKE,
         HOLD,
         OUTTAKE,
-        REST
+        REST,
+        REMOVE_ALGAE
     }
 }
