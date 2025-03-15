@@ -21,6 +21,8 @@ import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.DynamicAutoScript2025;
+import com.team1816.season.auto.modes.OuttakeL1Mode;
+import com.team1816.season.auto.modes.OuttakeL234Mode;
 import com.team1816.season.subsystems.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -278,29 +280,17 @@ public class Robot extends TimedRobot {
                     "outtakeCoral",
                     ActionState.PRESSED,
                     () -> {
-                        coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.OUTTAKE);
+                        if (robotState.isCoralBeamBreakTriggered)
+                            new OuttakeL234Mode().run();
+                        else
+                            new OuttakeL1Mode().run();
                     }
             );
             inputHandler.listenAction(
                     "feeder",
                     ActionState.PRESSED,
                     () -> {
-                        if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER) {
-                            ramp.setDesiredState(Ramp.RAMP_STATE.OTHER_FEEDER);
-                        } else {
-                            ramp.setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
-                        }
-                    }
-            );
-            inputHandler.listenAction(
-                    "ejectCoral",
-                    ActionState.PRESSED,
-                    () -> {
-                        if(robotState.actualRampState == Ramp.RAMP_STATE.EJECT_CORAL) {
-                            ramp.setDesiredState(Ramp.RAMP_STATE.OTHER_FEEDER);
-                        } else {
-                            ramp.setDesiredState(Ramp.RAMP_STATE.EJECT_CORAL);
-                        }
+                        orchestrator.setFeederStates(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER);
                     }
             );
             inputHandler.listenAction(
@@ -310,28 +300,40 @@ public class Robot extends TimedRobot {
                         pneumatic.toggle();
                     }
             );
+            inputHandler.listenAction(
+                    "rampClimbPosition",
+                    ActionState.PRESSED,
+                    () -> {
+                        ramp.setDesiredState(Ramp.RAMP_STATE.CLIMB);
+                    }
+            );
 
                   /**Position inputs*/
 
             inputHandler.listenAction(
-                    "L1",
-                    ActionState.PRESSED,
-                    () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
-                    }
-            );
-            inputHandler.listenAction(
                     "L2",
                     ActionState.PRESSED,
                     () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
+                        if (robotState.isCoralBeamBreakTriggered) {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_CORAL);
+                        }
+                        else {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_ALGAE);
+                            coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                        }
                     }
             );
             inputHandler.listenAction(
                     "L3",
                     ActionState.PRESSED,
                     () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
+                        if (robotState.isCoralBeamBreakTriggered) {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_CORAL);
+                        }
+                        else {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_ALGAE);
+                            coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                        }
                     }
             );
             inputHandler.listenAction(
@@ -439,6 +441,17 @@ public class Robot extends TimedRobot {
                         ramp.offsetRamp(-0.1);
                     }
             );
+            inputHandler.listenAction(
+                    "dislodgeCoral",
+                    ActionState.PRESSED,
+                    () -> {
+                        if(robotState.actualRampState == Ramp.RAMP_STATE.DISLODGE_CORAL) {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+                        } else {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.DISLODGE_CORAL);
+                        }
+                    }
+            );
 
 
 
@@ -523,8 +536,8 @@ public class Robot extends TimedRobot {
             infrastructure.startCompressor();
 
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-            ramp.setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
-            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.HOLD);
 
 //            autopather.autopathMaxCalcMilli = 5;
 

@@ -169,20 +169,21 @@ subsystems:
             intakeSpeed: -.80
             outtakeSpeed: .80
             holdSpeed: 0
+            removeAlgaeSpeed: -.80
 
             coralSensorChannel: 9
 
             coralArmL1Position: 36
-            coralArmL2Position: 36
-            coralArmL3Position: 36
+            coralArmL2CoralPosition: 36
+            coralArmL3CoralPosition: 36
             coralArmL4Position: 36
             coralArmUpPosition: 28
+            coralArmL2AlgaePosition: 36
+            coralArmL3AlgaePosition: 36
 
             coralArmFeederPosition: 28
 
             coralArmMotorRotationsPerDegree: 1
-
-            stopOuttakingDelay: 2
     elevator:
         implemented: false
         motors:
@@ -207,9 +208,11 @@ subsystems:
         constants: # TODO: all of these
             elevatorFeederPosition: 0
             elevatorL1Position: 1
-            elevatorL2Position: 14.2
-            elevatorL3Position: 33.7
+            elevatorL2CoralPosition: 14.2
+            elevatorL3CoralPosition: 33.7
             elevatorL4Position: 63.1
+            elevatorL2AlgaePosition: 14.2
+            elevatorL3AlgaePosition: 33.7
 
             elevatorMotorRotationsPerUnit: 1
     ramp:
@@ -231,11 +234,11 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            rampStowPosition: 0
             rampL1FeederPosition: -1.428
-            rampOtherFeederPosition: -14.69
+            rampL234FeederPosition: -14.69
             rampScorePosition: -10
-            rampHoldPosition: -1.428
+            rampDislodgeCoralPosition: -20
+            rampClimbPosition: -19.714
 
 
             rampMotorRotationsPerUnit: 1
