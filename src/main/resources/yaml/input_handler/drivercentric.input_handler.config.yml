@@ -11,7 +11,7 @@ driver:
     a: activationDeepHanger
     b: feeder
     x: outtakeCoral
-    y: removeAlgae
+    y:
   axes:
     rightTrigger: L3
     leftTrigger: L4

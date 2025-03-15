@@ -70,7 +70,6 @@ public class Robot extends TimedRobot {
 //    private Autopath autopather;
     private Elevator elevator;
     private CoralArm coralArm;
-    private AlgaeCatcher algaeCatcher;
     private Ramp ramp;
     private Pneumatic pneumatic;
 
@@ -183,7 +182,6 @@ public class Robot extends TimedRobot {
 //            autopather = Injector.get(Autopath.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
-            algaeCatcher = Injector.get(AlgaeCatcher.class);
             ramp = Injector.get(Ramp.class);
             pneumatic = Injector.get(Pneumatic.class);
 
@@ -229,7 +227,7 @@ public class Robot extends TimedRobot {
 
             drive = (Injector.get(Drive.Factory.class)).getInstance();
 
-            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher,ramp, pneumatic);
+            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, ramp, pneumatic);
 
             subsystemManager.registerEnabledLoops(enabledLoop);
             subsystemManager.registerDisabledLoops(disabledLoop);
@@ -289,7 +287,7 @@ public class Robot extends TimedRobot {
                     () -> {
                         if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER) {
                             ramp.setDesiredState(Ramp.RAMP_STATE.OTHER_FEEDER);
-                        } else if(robotState.actualRampState == Ramp.RAMP_STATE.OTHER_FEEDER) {
+                        } else {
                             ramp.setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
                         }
                     }
@@ -300,7 +298,7 @@ public class Robot extends TimedRobot {
                     () -> {
                         if(robotState.actualRampState == Ramp.RAMP_STATE.EJECT_CORAL) {
                             ramp.setDesiredState(Ramp.RAMP_STATE.OTHER_FEEDER);
-                        } else if(robotState.actualRampState == Ramp.RAMP_STATE.OTHER_FEEDER) {
+                        } else {
                             ramp.setDesiredState(Ramp.RAMP_STATE.EJECT_CORAL);
                         }
                     }
@@ -498,7 +496,7 @@ public class Robot extends TimedRobot {
 
         //TODO add new subsystem inits here
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
+        ramp.setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
         coralArm.setDesiredState(CoralArm.PIVOT_STATE.UP, CoralArm.INTAKE_STATE.HOLD);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
@@ -525,7 +523,7 @@ public class Robot extends TimedRobot {
             infrastructure.startCompressor();
 
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
+            ramp.setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
 //            autopather.autopathMaxCalcMilli = 5;

@@ -55,6 +55,8 @@ public class Ramp extends Subsystem {
     public Ramp(Infrastructure inf, RobotState rs){
         super(NAME, inf, rs);
         rampMotor = factory.getMotor(NAME, "rampMotor");
+        rampMotor.config_PeakOutputForward(0.1);
+        rampMotor.config_PeakOutputReverse(-0.1);
 
         rampMotor.selectPIDSlot(0);
 
@@ -85,7 +87,7 @@ public class Ramp extends Subsystem {
      */
     @Override
     public void readFromHardware() {
-        actualRampPosition = rampMotor.getMotorOutputPercent();
+        actualRampPosition = rampMotor.getSensorPosition();
         rampCurrentDraw = rampMotor.getMotorOutputCurrent();
 
         //TODO: Add Mechanism Ligaments if needed
@@ -107,8 +109,8 @@ public class Ramp extends Subsystem {
             offsetHasBeenApplied = false;
 
             desiredRampPosition = getRampPosition(desiredRampState);
-//            System.out.println("ramp state: "+desiredrampState+" Position: "+desiredrampPosition);
-            rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, 0, 67));//TODO: CHANGE NUMBERS
+//            System.out.println("ramp state: "+desiredRampPosition+" Position: "+desiredRampPosition);
+            rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -20, 0));
         }
     }
     

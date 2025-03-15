@@ -264,9 +264,6 @@ public class AutoModeManager {
             case MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER:
                 robotState.dIsAutoDynamic = false;
                 return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.BOTTOM);
-//            case MIDDLE_SIDE_3_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new MiddlePlace2AutoMode(color);
             case TOP_DRIVE_STRAIGHT:
                 robotState.dIsAutoDynamic = false;
                 return new DriveOffLineTopAutoMode(color);
@@ -282,9 +279,6 @@ public class AutoModeManager {
             case BOTTOM_SIDE_3_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
                 return new BottomPlace1AutoMode(color, true);
-//            case BOTTOM_SIDE_3_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new BottomPlace2AutoMode(color);
 //            case DYNAMIC_PLACE_1:
 //                robotState.dIsAutoDynamic = true;
 //                return new DynamicPlace1();
@@ -299,7 +293,7 @@ public class AutoModeManager {
                 return  new TopPlace1AutoMode(color, false);
             case TOP_SIDE_1_SCORE_1_FEEDER:
                 robotState.dIsAutoDynamic = false;
-                return new TopPlace2AutoMode(color);
+                return new TopPlace1AutoMode(color, true);
             case CIRCLE_BLAH_MODE:
                 robotState.dIsAutoDynamic = false;
                 return new CircleAroundReefAndGoBackToInitialPosition1();

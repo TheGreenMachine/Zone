@@ -102,12 +102,11 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
         if (demand != lastSet || currentControlMode != lastControlMode) {
             lastSet = demand;
             lastControlMode = currentControlMode;
-            set(demand);
-//            closedLoopController.setReference(
-//                demand,
-//                ConfigurationTranslator.toSparkMaxControlType(controlMode),
-//                currentPIDSlot
-//            );
+            getClosedLoopController().setReference(
+                    demand,
+                    ConfigurationTranslator.toSparkMaxControlType(controlMode),
+                    currentPIDSlot
+            );
         }
     }
 
@@ -175,7 +174,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
     @Override
     public void config_PeakOutputForward(double percentOut) {
         peakOutputForward = percentOut;
-        sparkConfig.closedLoop.outputRange(peakOutputForward, peakOutputBackward, currentPIDSlot);
+        sparkConfig.closedLoop.outputRange(peakOutputBackward, peakOutputForward, currentPIDSlot);
         reconfigure();
     }
 
@@ -189,7 +188,7 @@ public class LazySparkMax extends SparkMax implements IGreenMotor {
     public void config_PeakOutputReverse(double percentOut) {
         //Use negative values for backwards range
         peakOutputBackward = percentOut;
-        sparkConfig.closedLoop.outputRange(peakOutputForward, peakOutputBackward, currentPIDSlot);
+        sparkConfig.closedLoop.outputRange(peakOutputBackward, peakOutputForward, currentPIDSlot);
         reconfigure();
     }
 
