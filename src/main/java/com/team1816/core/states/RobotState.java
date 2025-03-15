@@ -4,10 +4,8 @@ import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
-import com.team1816.season.auto.DynamicAutoScript2025;
 import com.team1816.season.subsystems.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -136,16 +134,6 @@ public class RobotState {
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
     public ChassisSpeeds robotChassis = new ChassisSpeeds();
-
-    /**
-     * DynamicAuto2025
-     */
-    public boolean dAutoChanged = false;
-    public boolean dIsAutoDynamic = false;
-    public HashMap<String, Pose2d> dAllDynamicPoints;
-    public Pose2d dStartPose;
-    public ArrayList<TrajectoryAction> dAutoTrajectoryActions;
-    public ArrayList<DynamicAutoScript2025.REEF_LEVEL> dCurrentCoralPlacementChoices;
 
     /**
      * Pigeon state

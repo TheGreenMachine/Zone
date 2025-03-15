@@ -67,13 +67,6 @@ public class Constants {
         EmptyRotation2d
     );
 
-    public static final Pose2d kFlippedZeroingPose = new Pose2d(
-        fieldCenterX * 2 - .5,
-        fieldCenterY,
-        Rotation2d.fromDegrees(180)
-    );
-
-
     public static final double kCameraHeightMeters = 0.601; //FIXME
 
     public static final Pose2d kCameraMountingOffset = new Pose2d( //FIXME
@@ -139,38 +132,4 @@ public class Constants {
      */
     public static final double kPTranslational = 20;
     public static final double kPRotational = 20;
-
-    /**
-     * Simulation
-     */
-    public static final ShuffleboardTab kSimWindow = Shuffleboard.getTab("Simulation");
-
-    /**
-     * AutoAiming stuff
-     */
-    //TODO set to meters, (currently in inches)
-    //Positive
-    public static final double lengthOfArm = Units.inchesToMeters(7.94);
-    //0-180
-    public static final double angleBetweenArmAndShooterDegrees = 180-116.52;
-    //Positive
-    public static final double outputVelocityPerSecond = 13;
-    //10.2 maybe if it don't work right away
-    //Negative
-    public static final double gravityPerSecond = -9.80665;
-    //Nonzero
-    public static final double errorPerUnitDistance = 0.1;
-    //the robot looks down the positive y axis, and the right side is the positive x axis while the left is the negative x axis
-    public static final double axlePositionOffsetX = 0;
-    public static final double axlePositionOffsetY = Units.inchesToMeters(12);
-    public static final double axlePositionOffsetZ = Units.inchesToMeters(24.5);
-    public static final double heightOfTarget = Units.inchesToMeters(80.4375);
-    //2.0431125
-    public static final double blueSpeakerX = Units.inchesToMeters(7);
-    public static final double redSpeakerX = Units.inchesToMeters(642.25+3);
-    //16.27
-    //TODO find out this measurement
-    public static final double speakerY = 5.6597042;
-    //5.6597042
-    public static final double axleRadiansDisplacement = 0;
 }

@@ -1,12 +1,8 @@
-package com.team1816.season.auto;
+package com.team1816.season.auto.actions;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
-import com.team1816.season.subsystems.CoralArm;
-import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Ramp;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public final class NamedCommandRegistrar {

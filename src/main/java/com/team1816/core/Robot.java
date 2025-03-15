@@ -20,11 +20,8 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.season.auto.DynamicAutoScript2025;
-import com.team1816.season.auto.modes.OuttakeL1Mode;
-import com.team1816.season.auto.modes.OuttakeL234Mode;
 import com.team1816.season.subsystems.*;
-import com.team1816.season.auto.NamedCommandRegistrar;
+import com.team1816.season.auto.actions.NamedCommandRegistrar;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -78,8 +75,6 @@ public class Robot extends TimedRobot {
 
     private LedManager ledManager;
     private Camera camera;
-
-    private DynamicAutoScript2025 dynamicAutoScript;
 
     /**
      * Factory
@@ -187,8 +182,6 @@ public class Robot extends TimedRobot {
             elevator = Injector.get(Elevator.class);
             ramp = Injector.get(Ramp.class);
             pneumatic = Injector.get(Pneumatic.class);
-
-            dynamicAutoScript = new DynamicAutoScript2025(5, 3);
 
             /* Register PathPlanner named commands */
             NamedCommandRegistrar.registerCommands();
@@ -654,40 +647,8 @@ public class Robot extends TimedRobot {
             if (RobotBase.isReal()) {}
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
-            boolean autoChanged = autoModeManager.update();
-            if(robotState.dIsAutoDynamic && robotState.dAutoChanged){
+            if(autoModeManager.update())
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
-
-                ArrayList<Trajectory.State> trajectoryStates = new ArrayList<>();
-                var trajectoryActions = robotState.dAutoTrajectoryActions;
-                for(int i = 0; i < trajectoryActions.size(); i++) {
-                    ArrayList<Trajectory.State> trajectoryActionStates = new ArrayList<>(trajectoryActions.get(i).getTrajectory().getStates());
-                    trajectoryStates.addAll(trajectoryActionStates);
-                }
-
-                if(trajectoryStates.isEmpty())
-                    robotState.field
-                            .getObject("Trajectory")
-                            .close();
-                else
-                    robotState.field
-                            .getObject("Trajectory")
-                            .setTrajectory(
-                                    new Trajectory(trajectoryStates)
-                            );
-
-                robotState.dAutoChanged = false;
-            } else if(!robotState.dIsAutoDynamic) {
-                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
-                robotState.field
-                        .getObject("Trajectory")
-                        .setTrajectory(
-                                autoModeManager.getSelectedAuto().getCurrentTrajectory()
-                        );
-            }
-
-            if(robotState.dIsAutoDynamic)
-                dynamicAutoScript.update();
 
             if (drive.isDemoMode()) { // Demo-mode
                 drive.update();
@@ -707,9 +668,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        robotState.field
-                .getObject("Trajectory")
-                .setTrajectory(autoModeManager.getSelectedAuto().getCurrentTrajectory());
+//        robotState.field
+//                .getObject("Trajectory")
+//                .setTrajectory(autoModeManager.getSelectedAuto().getCurrentTrajectory());
 
         if(Constants.kLoggingRobot) {
 //            GreenLogger.updatePeriodicLogs();
