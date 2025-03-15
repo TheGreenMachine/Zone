@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ready l1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top to Coral 1A"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score and ready feeder"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral 1A to Top Feeder"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "get feeder coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ready l1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Feeder to Coral 6M"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score and ready feeder"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral 6M to Top Feeder"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

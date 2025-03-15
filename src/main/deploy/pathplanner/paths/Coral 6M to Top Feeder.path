@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.629659090909091,
+        "y": 5.465894886363635
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.9974649996724603,
+        "y": 5.134883112625385
+      },
+      "isLocked": false,
+      "linkedName": "Coral 6M"
+    },
+    {
+      "anchor": {
+        "x": 1.6652556818181818,
+        "y": 7.400383522727273
+      },
+      "prevControl": {
+        "x": 1.4867633093011818,
+        "y": 7.575427725582587
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.09027692082234
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -59.26451229807981
+  },
+  "useDefaultConstraints": true
+}
