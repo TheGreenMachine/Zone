@@ -1,5 +1,6 @@
 package com.team1816.season.subsystems;
 
+import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.GhostMotor;
@@ -10,7 +11,6 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 
 @Singleton
 public class Ramp extends Subsystem {

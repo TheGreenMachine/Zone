@@ -5,21 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "ready l1"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Top to Coral 1A"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score and ready feeder"
           }
         },
         {
@@ -29,27 +17,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "get feeder coral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ready l1"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Top Feeder to Coral 6M"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score and ready feeder"
           }
         },
         {
