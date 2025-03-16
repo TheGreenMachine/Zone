@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -64,6 +65,8 @@ public class CoralArm extends Subsystem {
     private double desiredPivotPosition = 0;
     private double actualPivotPosition = 0;
 
+    private SendableChooser<Boolean> simBeamBreakChooser = new SendableChooser<>();
+
     /**
      * Constants
      */
@@ -100,6 +103,11 @@ public class CoralArm extends Subsystem {
         pivotMotor.selectPIDSlot(0);
 
         coralSensor = new DigitalInput((int) factory.getConstant(NAME, "coralSensorChannel", 0));
+
+        simBeamBreakChooser.addOption("Triggered", true);
+        simBeamBreakChooser.addOption("Not triggered", false);
+        simBeamBreakChooser.setDefaultOption("Triggered", true);
+        SmartDashboard.putData("Sim coral beam break", simBeamBreakChooser);
 
         super.desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/desiredPivotPosition");
         super.actStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "CoralArm/actualPivotPosition");
@@ -140,7 +148,7 @@ public class CoralArm extends Subsystem {
 
     public boolean isBeamBreakTriggered() {
         if(RobotBase.isSimulation())
-            return true;
+            return simBeamBreakChooser.getSelected();
 //        System.out.println(!coralSensor.get());
 
         return !coralSensor.get();
@@ -219,6 +227,9 @@ public class CoralArm extends Subsystem {
                 case REMOVE_ALGAE -> desiredIntakePower = removeAlgaeSpeed;
             }
 
+            SmartDashboard.putString("Coral arm desired intake state", String.valueOf(desiredIntakeState));
+            SmartDashboard.putNumber("Coral arm desired intake power", desiredIntakePower);
+
             intakeMotor.set(GreenControlMode.PERCENT_OUTPUT, desiredIntakePower);
             desiredIntakePowerLogger.append(desiredIntakePower);
         }
@@ -230,6 +241,8 @@ public class CoralArm extends Subsystem {
             offsetHasBeenApplied = false;
 
             desiredPivotPosition = getPivotPosition(desiredPivotState);
+            SmartDashboard.putString("Coral arm desired pivot state", String.valueOf(desiredPivotState));
+            SmartDashboard.putNumber("Coral arm desired pivot position", desiredPivotPosition);
             pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, 1, 36));
         }
 //        GreenLogger.log("Coral arm intake state: "+desiredIntakeState+" Intake power: "+desiredIntakePower+" Pivot state: "+desiredPivotState+" Pivot position: "+desiredPivotPosition);

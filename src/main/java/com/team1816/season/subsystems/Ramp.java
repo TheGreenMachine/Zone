@@ -10,6 +10,7 @@ import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jakarta.inject.Inject;
 
 @Singleton
@@ -106,6 +107,8 @@ public class Ramp extends Subsystem {
 
             desiredRampPosition = getRampPosition(desiredRampState);
 //            System.out.println("ramp state: "+desiredRampPosition+" Position: "+desiredRampPosition);
+            SmartDashboard.putString("Ramp desired state", String.valueOf(desiredRampState));
+            SmartDashboard.putNumber("Ramp desired position", desiredRampPosition);
             rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -15, 5));
         }
 

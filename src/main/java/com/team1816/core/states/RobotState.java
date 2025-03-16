@@ -112,7 +112,7 @@ public class RobotState {
     public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 10, 10);
 
     public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
-    public final double coralMechArmBaseAngle = 190;
+    public final double coralMechArmBaseAngle = 250;
     public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", 10, coralMechArmBaseAngle));
 
     /**

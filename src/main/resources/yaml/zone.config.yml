@@ -183,7 +183,7 @@ subsystems:
 
             coralArmFeederPosition: 28
 
-            coralArmMotorRotationsPerDegree: 1
+            coralArmMotorRotationsPerDegree: .17
     elevator:
         implemented: false
         motors:

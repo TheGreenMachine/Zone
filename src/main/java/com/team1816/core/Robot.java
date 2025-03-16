@@ -297,7 +297,7 @@ public class Robot extends TimedRobot {
                     "feeder",
                     ActionState.PRESSED,
                     () -> {
-                        orchestrator.setFeederStates(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER);
+                        orchestrator.setFeederStates(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER && robotState.actualElevatorState == Elevator.ELEVATOR_STATE.FEEDER);
                     }
             );
             inputHandler.listenAction(
