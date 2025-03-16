@@ -214,7 +214,7 @@ subsystems:
             elevatorL2AlgaePosition: 14.2
             elevatorL3AlgaePosition: 33.7
 
-            elevatorMotorRotationsPerUnit: 1
+            elevatorMotorRotationsPerUnit: 20
     ramp:
         implemented: true
         motors:
@@ -241,7 +241,7 @@ subsystems:
             rampClimbPosition: -12.357
 
 
-            rampMotorRotationsPerUnit: 1
+            rampMotorRotationsPerUnit: 0.136
     pneumatic:
         implemented: false
         solenoids:

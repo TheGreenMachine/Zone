@@ -59,9 +59,9 @@ public class Ramp extends Subsystem {
 
 
         if (RobotBase.isSimulation()) { //TODO:CHANGE THESE
-            rampMotor.setMotionProfileMaxVelocity(12 / 0.05);
-            rampMotor.setMotionProfileMaxAcceleration(12 / 0.08);
-            ((GhostMotor) rampMotor).setMaxVelRotationsPerSec(240);
+            rampMotor.setMotionProfileMaxVelocity(30);
+            rampMotor.setMotionProfileMaxAcceleration(8);
+            ((GhostMotor) rampMotor).setMaxVelRotationsPerSec(40);
         }
     }
 
@@ -109,7 +109,7 @@ public class Ramp extends Subsystem {
             rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -15, 5));
         }
 
-        robotState.rampMechArm.setAngle(rampMotor.getSensorPosition() / (49./180.));
+        robotState.rampMechArm.setAngle(robotState.rampMechArmBaseAngle + rampMotor.getSensorPosition() / rampMotorRotationsPerUnit);
     }
     
     public void offsetRamp(double offsetAmount){

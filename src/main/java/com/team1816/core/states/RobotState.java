@@ -102,14 +102,15 @@ public class RobotState {
     public final Mechanism2d rampMech2d = new Mechanism2d(2, 2);
     public final MechanismRoot2d rampMech2dRoot = rampMech2d.getRoot("root", 1, 1);
 
+    public final double rampMechArmBaseAngle = 0;
     public final MechanismLigament2d rampMechArm = rampMech2dRoot.append(new MechanismLigament2d("rampArm1", 1, 0));
 
 
-    public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(3, 3);
-    public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 1, 0);
+    public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(4, 4);
+    public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 2, 0);
 
     public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
-    public final double coralMechArmBaseAngle = 190;
+    public final double coralMechArmBaseAngle = 300;
     public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", .7, coralMechArmBaseAngle));
 
     /**

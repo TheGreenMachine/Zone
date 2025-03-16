@@ -109,7 +109,7 @@ public class CoralArm extends Subsystem {
         if (RobotBase.isSimulation()) {
             pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
             pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
-            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(240);
+            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(34);
         }
 
         if (Constants.kLoggingRobot) {
