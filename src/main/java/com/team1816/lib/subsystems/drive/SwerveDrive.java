@@ -159,8 +159,6 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         }
 
         // Initialise PathPlanner autopath builder configured to Swerve Drive
-        PIDSlotConfiguration drivePIDConfig = getPIDConfig();
-        PIDSlotConfiguration azimuthPIDConfig = getAzimuthPIDConfig();
         RobotConfig pathRobotConfig = null;
         try {
             pathRobotConfig = RobotConfig.fromGUISettings();
@@ -322,7 +320,6 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
      * Sets the module states to a desired set of states in closed loop - this is used during autos
      *
      * @param desiredStates desiredModuleStates
-     * @see com.team1816.lib.auto.actions.TrajectoryAction
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         if (controlState != ControlState.TRAJECTORY_FOLLOWING) {
@@ -609,14 +606,6 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
             .getSubsystem(NAME)
             .swerveModules.drivePID.getOrDefault("slot0", defaultPIDConfig)
             : defaultPIDConfig;
-    }
-
-    public PIDSlotConfiguration getAzimuthPIDConfig() {
-        return (factory.getSubsystem(NAME).implemented)
-                ? factory
-                .getSubsystem(NAME)
-                .swerveModules.azimuthPID.get("slot0")
-                : null;
     }
 
     /**
