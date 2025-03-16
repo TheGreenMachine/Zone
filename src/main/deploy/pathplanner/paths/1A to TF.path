@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.022848360655738,
+        "y": 5.265727459016393
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.215565148092686,
+        "y": 5.8303347825758625
+      },
+      "isLocked": false,
+      "linkedName": "Coral 1A Reef"
+    },
+    {
+      "anchor": {
+        "x": 1.6652556818181818,
+        "y": 7.400383522727273
+      },
+      "prevControl": {
+        "x": 3.0412166448277427,
+        "y": 6.421490690022524
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "coral feeder",
+      "waypointRelativePos": 0.09354226020892434,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.09027692082234
+  },
+  "reversed": false,
+  "folder": "Top 4L4 Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}
