@@ -240,8 +240,9 @@ subsystems:
             rampDislodgeCoralPosition: -15
             rampClimbPosition: -12.357
 
-
             rampMotorRotationsPerUnit: 1
+
+            zeroingButtonChannel: 6
     pneumatic:
         implemented: false
         solenoids:
@@ -250,6 +251,14 @@ subsystems:
         constants:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
+    ledmanager:
+        implemented: true
+        candle: 23
+        constants:
+            raveEnabled: 0
+            raveSpeed: 0.05
+            maxLevel: 200
+            ledStripCount: 0
     camera:
         implemented: false
         constants:
