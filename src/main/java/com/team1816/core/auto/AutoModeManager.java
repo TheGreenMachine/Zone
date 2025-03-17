@@ -169,6 +169,11 @@ public class AutoModeManager {
         OPTIMIZED_TOP_3L1(new PathPlannerAutoMode("Optimized Top 3L1 Auto")),
         OPTIMIZED_BOTTOM_3L1(new PathPlannerAutoMode("Optimized Top 3L1 Auto", true)),
         
+        MIDDLE_1L4(new PathPlannerAutoMode("Middle 1L4 Auto")),
+        
+        TOP_4L4(new PathPlannerAutoMode("Top 4L4 Auto")),
+        BOTTOM_4L4(new PathPlannerAutoMode("Top 4L4 Auto", true)),
+        
         ;
         
         DesiredAuto(AutoMode autoMode) {
