@@ -72,9 +72,9 @@ public class Elevator extends Subsystem {
         elevatorMotor.selectPIDSlot(0);
 
         if (RobotBase.isSimulation()) {
-            elevatorMotor.setMotionProfileMaxVelocity(12 / 0.05);
-            elevatorMotor.setMotionProfileMaxAcceleration(12 / 0.08);
-            ((GhostMotor) elevatorMotor).setMaxVelRotationsPerSec(240);
+            elevatorMotor.setMotionProfileMaxVelocity(12);
+            elevatorMotor.setMotionProfileMaxAcceleration(6);
+            ((GhostMotor) elevatorMotor).setMaxVelRotationsPerSec(30);
         }
     }
 

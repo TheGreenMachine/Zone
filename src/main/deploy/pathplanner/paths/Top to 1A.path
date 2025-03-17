@@ -8,30 +8,43 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.552591468067446,
-        "y": 8.014023299276419
+        "x": 6.456055258608236,
+        "y": 6.755359110034861
       },
       "isLocked": false,
-      "linkedName": "Top Facing Up"
+      "linkedName": "Top Facing Down"
     },
     {
       "anchor": {
-        "x": 5.095482954545455,
-        "y": 5.166747159090908
+        "x": 5.022848360655738,
+        "y": 5.265727459016393
       },
       "prevControl": {
-        "x": 5.325111593548434,
-        "y": 5.508429581329977
+        "x": 5.743903725735598,
+        "y": 6.1194300289209025
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral 1A Trough"
+      "linkedName": "Coral 1A Reef"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "coral ready",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "coral l4",
+      "waypointRelativePos": 0.8190883190883176,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Top Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

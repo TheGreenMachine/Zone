@@ -3,35 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 2.9131676136363636
+        "x": 1.6652556818181818,
+        "y": 7.400383522727273
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.2627111672143627,
-        "y": 2.898589620439326
+        "x": 2.054356274101628,
+        "y": 6.9202802271645005
       },
       "isLocked": false,
-      "linkedName": "Coral 4M Trough"
+      "linkedName": "Top Feeder"
     },
     {
       "anchor": {
-        "x": 1.6453125,
-        "y": 0.6496164772727275
+        "x": 3.6802254098360656,
+        "y": 5.097899590163934
       },
       "prevControl": {
-        "x": 1.4282505617392038,
-        "y": 0.5142300323722484
+        "x": 3.2211933518291263,
+        "y": 5.661848434632972
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Bottom Feeder"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "coral ready",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "coral l4",
+      "waypointRelativePos": 0.8209876543209873,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.78240703180719
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "Bottom Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -54.09027692082234
   },
   "useDefaultConstraints": true
 }

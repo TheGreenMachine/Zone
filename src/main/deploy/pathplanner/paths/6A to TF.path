@@ -3,40 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.255028409090909,
-        "y": 2.963025568181818
+        "x": 3.6802254098360656,
+        "y": 5.097899590163934
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.943250000000001,
-        "y": 2.1919999999999993
+        "x": 2.922195303220133,
+        "y": 6.0235193819325925
       },
       "isLocked": false,
-      "linkedName": "Coral 3A Trough"
+      "linkedName": "Coral 6A Reef"
     },
     {
       "anchor": {
-        "x": 1.645,
-        "y": 0.6496164772727275
+        "x": 1.6652556818181818,
+        "y": 7.400383522727273
       },
       "prevControl": {
-        "x": 2.2955291065667183,
-        "y": 1.1681702696669118
+        "x": 2.3305613074421627,
+        "y": 6.601320860522379
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Bottom Feeder"
+      "linkedName": "Top Feeder"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 27.82409638425329
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "coral feeder",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -47,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.78240703180719
+    "rotation": -54.09027692082234
   },
   "reversed": false,
-  "folder": "Bottom Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -62.2414593989399
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

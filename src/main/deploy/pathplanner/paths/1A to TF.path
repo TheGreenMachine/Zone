@@ -3,35 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6453125,
-        "y": 0.6496164772727275
+        "x": 5.022848360655738,
+        "y": 5.265727459016393
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4753293291450125,
-        "y": 1.5096152961117606
+        "x": 4.215565148092686,
+        "y": 5.8303347825758625
       },
       "isLocked": false,
-      "linkedName": "Bottom Feeder"
+      "linkedName": "Coral 1A Reef"
     },
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 2.9131676136363636
+        "x": 1.6652556818181818,
+        "y": 7.400383522727273
       },
       "prevControl": {
-        "x": 2.0583176779018926,
-        "y": 2.04984121105352
+        "x": 3.0412166448277427,
+        "y": 6.421490690022524
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral 4M Trough"
+      "linkedName": "Top Feeder"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "coral feeder",
+      "waypointRelativePos": 0.09354226020892434,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -54.09027692082234
   },
   "reversed": false,
-  "folder": "Bottom Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 54.782
+    "velocity": 0,
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

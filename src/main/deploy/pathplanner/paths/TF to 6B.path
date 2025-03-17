@@ -8,30 +8,43 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.600013689510337,
-        "y": 5.919218807039088
+        "x": 1.8977761067661694,
+        "y": 7.088690036644834
       },
       "isLocked": false,
       "linkedName": "Top Feeder"
     },
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 5.146803977272728
+        "x": 3.955942622950819,
+        "y": 5.241752049180327
       },
       "prevControl": {
-        "x": 3.6752255411734347,
-        "y": 5.6077823871785
+        "x": 3.8597832671232575,
+        "y": 5.472518984174984
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Coral 6B Reef"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "coral ready",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "coral l4",
+      "waypointRelativePos": 0.7602089268755949,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,10 +55,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "Top Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -54.09027692082234
