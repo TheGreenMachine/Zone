@@ -22,4 +22,6 @@ ctre_sim
 *.log
 # Heap dump log
 *.hprof
+#PathPlanner
+**/pathplanner/settings.json
 
