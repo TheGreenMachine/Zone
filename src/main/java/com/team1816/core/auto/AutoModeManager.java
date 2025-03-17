@@ -158,7 +158,7 @@ public class AutoModeManager {
     /**
      * Enum for AutoModes
      */
-    enum DesiredAuto {
+    public enum DesiredAuto {
         DEFAULT(new NoopAutoMode()),
         
         DRIVE_STRAIGHT(new PathPlannerAutoMode("Drive Straight Auto")),
