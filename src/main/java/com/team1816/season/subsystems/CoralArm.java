@@ -275,25 +275,28 @@ public class CoralArm extends Subsystem {
      *     <li>coralArm intake outtake</li>
      *     <li>coralArm intake hold</li>
      *     <li>coralArm intake rest</li>
+     *     <li>coralArm intake removeAlgae</li>
      *     <br>
      *     <li>coralArm pivot l1</li>
-     *     <li>coralArm pivot l2</li>
-     *     <li>coralArm pivot l3</li>
+     *     <li>coralArm pivot l2_coral</li>
+     *     <li>coralArm pivot l3_coral</li>
      *     <li>coralArm pivot l4</li>
      *     <li>coralArm pivot feeder</li>
      *     <li>coralArm pivot up</li>
+     *     <li>coralArm pivot l2_algae</li>
+     *     <li>coralArm pivot l3_algae</li>
      * </ul>
      */
     @Override
     public void implementNamedCommands() {
         for (INTAKE_STATE intakeState : INTAKE_STATE.values()) {
             NamedCommands.registerCommand(NAME + " " + intakeState.toString().toLowerCase(),
-                    Commands.runOnce(() -> setDesiredIntakeState(intakeState)).alongWith(Commands.waitUntil(this::isCoralArmIntakeInRange)));
+                    Commands.runOnce(() -> setDesiredIntakeState(intakeState)));
         }
 
         for (PIVOT_STATE pivotState : PIVOT_STATE.values()) {
             NamedCommands.registerCommand(NAME + " " + pivotState.toString().toLowerCase(),
-                    Commands.runOnce(() -> setDesiredPivotState(pivotState)).alongWith(Commands.waitUntil(this::isCoralArmPivotInRange)));
+                    Commands.runOnce(() -> setDesiredPivotState(pivotState)));
         }
     }
 
