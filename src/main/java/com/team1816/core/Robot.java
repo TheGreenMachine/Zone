@@ -506,7 +506,7 @@ public class Robot extends TimedRobot {
         ledManager.setDefaultStatus(LedManager.RobotStatus.AUTONOMOUS);
         ledManager.indicateStatus(LedManager.RobotStatus.AUTONOMOUS);
 
-        drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
+        drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
         //TODO add new subsystem inits here
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
@@ -648,7 +648,7 @@ public class Robot extends TimedRobot {
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
             if(autoModeManager.update())
-                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
+                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
             if (drive.isDemoMode()) { // Demo-mode
                 drive.update();

@@ -3,6 +3,7 @@ package com.team1816.lib.auto.modes;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.AutoModeEndedException;
+import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.AutoAction;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -116,6 +117,10 @@ public abstract class AutoMode implements Runnable {
             return Constants.kDefaultZeroingPose;
         }
         return initialPose;
+    }
+
+    public Pose2d getInitialPose(Color allianceColor) {
+        return getInitialPose();
     }
     
     public String getName() {
