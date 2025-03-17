@@ -4,35 +4,6 @@ A guide on how to use PathPlanner in our code!
 
 For a guide on using PathPlanner GUI, go to <a href='https://pathplanner.dev/pathplanner-gui.html'>Official PathPlanner GUI Guide</a>
 
-## Named Command List
-
-A list of all Named Commands that have been implemented in code.
-
-### Placeholders
-- `<level>`: l1, l2, l3, l4, feeder
-- `<reef level>`: l1, l2, l3, l4
-- `<coral arm pivot level>`: l1, l2, l3, l4, feeder, up
-- `<coral arm intake mode>`: intake, outtake, hold, rest
-
-### Misc
-|          Name          | Operation                                                                                                                                            |
-|:----------------------:|------------------------------------------------------------------------------------------------------------------------------------------------------|
-|  score `<reef level>`  | Lines up elevator and pivot to `<reef level>` and outtakes. If the robot is already lined up, it just outtakes.                                      |
-|    ready `<level>`     | Lines up elevator and pivot to `<level>`                                                                                                             |
-| score and ready feeder | Waits for everything to be in position, outtakes coral, and gets ready to intake (brings elevator, coral pivot to FEEDER and coral intake to INTAKE) |
-|    get feeder coral    | Sets elevator and coral to FEEDER mode and waits until the coral beam break is triggered                                                             |
-
-### Coral Arm
-|                   Name                    | Operation                                        |
-|:-----------------------------------------:|--------------------------------------------------|
-| coralArm intake `<coral arm intake mode>` | Desired intake state → `<coral arm intake mode>` |
-|  coralArm pivot <coral arm pivot level>   | Desired pivot state → `<coral arm pivot level>`  |
-
-### Elevator
-|        Name        | Operation                          |
-|:------------------:|------------------------------------|
-| elevator `<level>` | Desired elevator state → `<level>` |
-
 ## Programming Named Commands
 
 To make creating autos as easy as possible, we use PathPlanner to make the robot do most of its

@@ -12,18 +12,15 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import org.photonvision.EstimatedRobotPose;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,8 +38,6 @@ public class RobotState {
     public Color allianceColor = Color.BLUE;
     public Pose2d fieldToVehicle = Constants.EmptyPose2d;
     public Pose2d driverRelativeFieldToVehicle = Constants.EmptyPose2d;
-    public Pose2d extrapolatedFieldToVehicle = Constants.EmptyPose2d;
-    public Pose2d target = Constants.fieldCenterPose;
     public ChassisSpeeds deltaVehicle = new ChassisSpeeds(); // velocities of vehicle
     public ChassisSpeeds calculatedVehicleAccel = new ChassisSpeeds(); // calculated acceleration of vehicle
     public Double[] triAxialAcceleration = new Double[]{0d, 0d, 0d};
@@ -116,21 +111,7 @@ public class RobotState {
     /**
      * Autopathing state
      */
-
     public boolean autopathing = false;
-    public boolean printAutopathing = false;  //Change this one to see the obstacle boundaries //As of 2/8/2025, does nothing because of commented code in outputToSmartDashboard()
-    public boolean printAutopathFieldTest = false;
-    public Trajectory autopathTrajectory = null;
-    public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();
-    public boolean autopathTrajectoryChanged = false;
-    public boolean autopathTrajectoryPossibilitiesChanged = false;
-    public ArrayList<Pose2d> autopathCollisionStarts = new ArrayList<>();
-    public ArrayList<Pose2d> autopathCollisionEnds = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypoints = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypointsSuccess = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypointsFail = new ArrayList<>();
-    public int autopathMaxBranches = 0;
-    public ArrayList<Pose2d> autopathInputWaypoints = new ArrayList<>();
     public double robotVelocity = 0;
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
@@ -234,66 +215,6 @@ public class RobotState {
      */
     public synchronized void outputToSmartDashboard() {
         field.setRobotPose(fieldToVehicle);
-
-//        if (printAutopathing) {
-//            if (Autopath.fieldMap != null && Autopath.fieldMap.outputToSmartDashboardChanged) {
-//                ArrayList<Pose2d> obstaclesExpanded = new ArrayList<>();
-//
-//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-//                        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
-//                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 / Autopath.mapResolution1DPerMeter), new Rotation2d()));
-//                        }
-//                    }
-//                }
-//
-//                field.getObject("ExpandedObstacles").setPoses(obstaclesExpanded);
-//
-//                ArrayList<Pose2d> obstacles = new ArrayList<>();
-//
-//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-//                        if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
-//                            obstacles.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 /Autopath.mapResolution1DPerMeter), new Rotation2d()));
-//                        }
-//                    }
-//                }
-//
-//                field.getObject("Obstacles").setPoses(obstacles);
-//
-//                Autopath.fieldMap.outputToSmartDashboardChanged = false;
-//            }
-//
-//            if(autopathTrajectoryPossibilitiesChanged) {
-//                for (int i = 0; i < autopathTrajectoryPossibilities.size(); i++) {
-//                    if (autopathTrajectoryPossibilities.get(i) != null) {
-//                        field.getObject("AutopathTrajectory: " + i).setTrajectory(autopathTrajectoryPossibilities.get(i));
-//                    }
-//                }
-//                autopathMaxBranches = Math.max(autopathTrajectoryPossibilities.size(), autopathMaxBranches);
-//                autopathTrajectoryPossibilitiesChanged = false;
-//            }
-//
-//            field.getObject("StartCollisionPoints").setPoses(autopathCollisionStarts);
-//            field.getObject("EndCollisionPoints").setPoses(autopathCollisionEnds);
-//            field.getObject("AutopathWaypoints").setPoses(autopathWaypoints);
-//        }
-
-        if (autopathTrajectoryChanged && printAutopathing) {
-            if(autopathTrajectory != null){
-                for (int i = 0; i < autopathMaxBranches; i++) {
-                    field.getObject("AutopathTrajectory: " + i).close();
-                }
-                field.getObject("AutopathTrajectory").setTrajectory(autopathTrajectory);
-            } else
-                field.getObject("AutopathTrajectory").setPoses(List.of(new Pose2d(new Translation2d(-1, -1), new Rotation2d())));
-            autopathTrajectoryChanged = false;
-        }
-
-        if(printAutopathFieldTest) {
-            field.getObject("AutopathSuccessfulPoints").setPoses(autopathWaypointsSuccess);
-            field.getObject("AutopathFailPoints").setPoses(autopathWaypointsFail);
-        }
 
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
         SmartDashboard.putData("Ramp", rampMech2d);

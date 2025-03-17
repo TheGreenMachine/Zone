@@ -2,85 +2,36 @@ package com.team1816.lib.auto.modes;
 
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
-import com.team1816.lib.DriveFactory;
-import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.AutoAction;
-import com.team1816.lib.auto.actions.PathPlannerAction;
-import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
-
-import java.util.List;
 
 /**
  * An abstract class that is the basis of a robot's autonomous routines.
  * Actions can be implemented in the routine and can be performed  (which are routines that do actions).
  */
-public abstract class AutoMode implements Runnable{
+public abstract class AutoMode implements Runnable {
+    public AutoMode(String name) {
+        this.name = name;
+    }
 
     public static RobotState robotState;
 
     private static final long looperDtInMS = (long) (Constants.kLooperDt * 1000);
+    
+    private final String name;
 
     /**
      * State: if mode needs to be stopped
      */
     private boolean needsStop;
-
-    /**
-     * State: Trajectory Actions to be run
-     */
-    protected List<PathPlannerAction> pathPlannerActionList;
     /**
      * State: Initial Pose that robot starts at
      */
     protected Pose2d initialPose;
-
-    /**
-     * Empty constructor for driveStraight and doNothing modes which don't require trajectories
-     *
-     * @see DriveStraightMode
-     */
-    protected AutoMode() {
-        robotState = Injector.get(RobotState.class);
-
-        if (robotState.allianceColor == Color.BLUE) {
-            initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-        } else {
-            initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(180));
-        }
-
-    }
-
-    /**
-     * Instantiates an AutoMode from a list of trajectory actions
-     *
-     */
-    protected AutoMode(List<PathPlannerAction> pathPlannerActionList) {
-        robotState = Injector.get(RobotState.class);
-
-        this.pathPlannerActionList = pathPlannerActionList;
-        boolean isSwerve = Injector.get(DriveFactory.class).getInstance() instanceof EnhancedSwerveDrive;
-
-        if (pathPlannerActionList.isEmpty()) {
-            if (robotState.allianceColor == Color.BLUE) {
-                initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-            } else {
-                initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(180));
-            }
-        } else {
-            if (robotState.allianceColor == Color.BLUE) {
-                initialPose = pathPlannerActionList.get(0).getPathInitialPose();
-            } else {
-                initialPose = pathPlannerActionList.get(0).getPathInitialPose().rotateAround(Constants.fieldCenterPose.getTranslation(), Rotation2d.fromDegrees(180));
-            }
-        }
-    }
 
     /**
      * Runs the autoMode routine actions
@@ -166,5 +117,21 @@ public abstract class AutoMode implements Runnable{
             return Constants.kDefaultZeroingPose;
         }
         return initialPose;
+    }
+
+    public Pose2d getInitialPose(Color allianceColor) {
+        return getInitialPose();
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public String toString() {
+        return "AutoMode{" +
+                "name='" + name + '\'' +
+                ", initialPose=" + initialPose +
+                '}';
     }
 }
