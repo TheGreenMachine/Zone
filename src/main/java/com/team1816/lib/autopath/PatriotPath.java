@@ -7,16 +7,15 @@ import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.actions.PathPlannerAction;
+import com.team1816.lib.auto.actions.PatriotPathAction;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 
 @Singleton
 public class PatriotPath {
     public RobotState robotState;
-
-    private final long looperDtInMS = (long) (Constants.kLooperDt * 1000);
-
-    private PathPlannerAction pathPlannerAction;
+    
+    private PatriotPathAction pathPlannerAction;
 
     /**
      * State: if path needs to be stopped
@@ -44,7 +43,7 @@ public class PatriotPath {
 
         robotState.autopathBeforeTime = (double) System.nanoTime() / 1000000;
 
-        pathPlannerAction = new PathPlannerAction(robotState.fieldToVehicle, autopathTargetPosition, 0);
+        pathPlannerAction = new PatriotPathAction(robotState.fieldToVehicle, autopathTargetPosition, 0);
 
         pathPlannerAction.start();
     }
@@ -80,7 +79,6 @@ public class PatriotPath {
      * Stops the auto path
      */
     public void stop() {
-        System.out.println("Stop");
         pathPlannerAction.done();
         robotState.autopathing = false;
     }

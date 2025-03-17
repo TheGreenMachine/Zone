@@ -23,90 +23,41 @@ import java.util.List;
  * This class represents an action that will move the robot along a PathPlanner trajectory,
  * follow a PathPlanner auto, or dynamically generate a patriot path
  */
-public class PathPlannerAction implements AutoAction {
-    private Pose2d initialPose;
+public class PatriotPathAction implements AutoAction {
+    private final Pose2d initialPose;
     private final Command pathCommand;
     private final Drive drive;
     private boolean valid;
     
     /**
-     * Creates a {@link PathPlannerAction} by loading a {@link PathPlannerPath} from the deploy
-     * folder.
+     * Creates a {@link PathPlannerAction} by dynamically creating one.
      * <p>
      * Visit <a href="https://pathplanner.dev/">pathplanner.dev</a> for more information.
-     *
-     * @param actionType Whether to load an auto or a path
-     * @throws RuntimeException when the path failed to load
      */
-    public PathPlannerAction(String actionName, ActionType actionType) {
-        this(actionName, actionType, false);
-    }
-    
-    /**
-     * Creates a {@link PathPlannerAction} by loading a {@link PathPlannerPath} from the deploy
-     * folder.
-     * <p>
-     * Visit <a href="https://pathplanner.dev/">pathplanner.dev</a> for more information.
-     *
-     * @param actionType Whether to load an auto or a path
-     * @param mirror     Whether to mirror the path
-     * @throws RuntimeException when the path failed to load
-     */
-    public PathPlannerAction(String actionName, ActionType actionType, boolean mirror) {
+    public PatriotPathAction(Pose2d initialPose, Pose2d targetPose, double endVelocity) {
+        this.initialPose = initialPose;
         this.drive = Injector.get(Drive.Factory.class).getInstance();
         this.valid = true;
         
         if (drive instanceof TankDrive) {
             GreenLogger.log("Tank Drive is not supported by our PathPlanner implementation.");
-            this.pathCommand = Commands.none();
-            this.initialPose = Pose2d.kZero;
+            this.pathCommand = null;
             this.valid = false;
         } else if (drive instanceof EnhancedSwerveDrive) {
-            switch (actionType) {
-                case PATH -> {
-                    PathPlannerPath path;
-                    try {
-                        path = PathPlannerPath.fromPathFile(actionName);
-                    } catch (Exception e) {
-                        GreenLogger.log("Could not load path " + actionName + "!");
-                        this.pathCommand = Commands.none();
-                        this.initialPose = Pose2d.kZero;
-                        this.valid = false;
-                        return;
-                    }
-                    
-                    if (mirror) path = path.mirrorPath();
-                    
-                    this.pathCommand = AutoBuilder.followPath(path);
-                    this.initialPose = path.getPathPoses().get(0);
-                }
-                
-                case AUTO -> {
-                    this.pathCommand = new PathPlannerAuto(actionName, mirror);
-                    this.initialPose = ((PathPlannerAuto) pathCommand).getStartingPose();
-                    
-                    // if the auto failed to load, its initial rotation will be null, making it an invalid pose.
-                    // this is a failsafe preventing a complete crash of the robot.
-                    try {
-                        this.initialPose.getRotation();
-                    } catch (NullPointerException ignored) {
-                        this.initialPose = Pose2d.kZero;
-                        this.valid = false;
-                    }
-                }
-                
-                default -> throw new IllegalStateException("Unknown action type: " + actionType);
-            }
+            PathConstraints constraints = new PathConstraints( // TODO: change this to actual values
+                    3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+            this.pathCommand = AutoBuilder.pathfindToPose(
+                    targetPose, constraints, endVelocity
+            );
         } else {
             GreenLogger.log(
                     " oh man oh god I'm neither swerve nor tank! " + drive.toString()
             );
-            this.initialPose = Pose2d.kZero;
-            this.pathCommand = Commands.none();
+            this.pathCommand = null;
             this.valid = false;
         }
     }
-
+    
     
     /**
      * Returns the initial pose of the action. Note that this does not change based on the colour
@@ -168,9 +119,5 @@ public class PathPlannerAction implements AutoAction {
     public void done() {
         pathCommand.end(false);
         drive.stop();
-    }
-    
-    public enum ActionType {
-        PATH, AUTO
     }
 }
