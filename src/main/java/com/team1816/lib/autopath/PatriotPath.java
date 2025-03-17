@@ -21,18 +21,12 @@ public class PatriotPath {
      * State: if path needs to be stopped
      */
     private boolean needsStop;
-
-    /**
-     * Initializes Autopath
-     */
+    
     @Inject
     public PatriotPath() {
         robotState = Injector.get(RobotState.class);
     }
-
-    /**
-     * Starts the Autopath and relevant actions
-     */
+    
     public void start(Pose2d autopathTargetPosition) {
         if (robotState.autopathing && (double) System.nanoTime() / 1000000 - robotState.autopathBeforeTime < robotState.autopathPathCancelBufferMilli)
             return;
