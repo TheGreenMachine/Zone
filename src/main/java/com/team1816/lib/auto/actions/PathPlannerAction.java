@@ -137,10 +137,6 @@ public class PathPlannerAction implements AutoAction {
         }
     }
 
-    private final Pose2d initialPose;
-    private final Command pathCommand;
-    private final Drive drive;
-
     
     /**
      * Returns the initial pose of the action. Note that this does not change based on the colour
