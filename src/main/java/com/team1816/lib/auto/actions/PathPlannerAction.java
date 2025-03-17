@@ -1,6 +1,7 @@
 package com.team1816.lib.auto.actions;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
@@ -11,6 +12,7 @@ import com.team1816.lib.subsystems.drive.TankDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -18,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import java.util.List;
 
 /**
- * This class represents an action that will move the robot along a PathPlanner trajectory or
- * follow a PathPlanner auto
+ * This class represents an action that will move the robot along a PathPlanner trajectory,
+ * follow a PathPlanner auto, or dynamically generate a patriot path
  */
 public class PathPlannerAction implements AutoAction {
     private Pose2d initialPose;
@@ -104,6 +106,41 @@ public class PathPlannerAction implements AutoAction {
             this.valid = false;
         }
     }
+
+    /**
+     * Creates a {@link PathPlannerAction} by dynamically creating one.
+     * <p>
+     * Visit <a href="https://pathplanner.dev/">pathplanner.dev</a> for more information.
+     */
+    public PathPlannerAction(Pose2d initialPose, Pose2d targetPose, double endVelocity) {
+        this.initialPose = initialPose;
+        this.drive = Injector.get(Drive.Factory.class).getInstance();
+
+        if (drive instanceof TankDrive) {
+            GreenLogger.log("Tank Drive is no longer supported.");
+            pathCommand = null;
+        } else if (drive instanceof EnhancedSwerveDrive) {
+            PathConstraints constraints = new PathConstraints( // TODO: change this to actual values
+                    3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+            long startTime = System.nanoTime();
+            this.pathCommand = AutoBuilder.pathfindToPose(
+                targetPose, constraints, endVelocity
+            );
+            long timeTaken = System.nanoTime() - startTime;
+            System.out.println("Time taken to generate path: " + timeTaken);
+
+        } else {
+            GreenLogger.log(
+                    " oh man oh god I'm neither swerve nor tank! " + drive.toString()
+            );
+            pathCommand = null;
+        }
+    }
+
+    private final Pose2d initialPose;
+    private final Command pathCommand;
+    private final Drive drive;
+
     
     /**
      * Returns the initial pose of the action. Note that this does not change based on the colour
