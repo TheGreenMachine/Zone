@@ -1,8 +1,35 @@
 # PathPlanner Guide
 
-A guide on how to use PathPlanner in our code!
+A guide on how to use PathPlanner!
 
 For a guide on using PathPlanner GUI, go to <a href='https://pathplanner.dev/pathplanner-gui.html'>Official PathPlanner GUI Guide</a>
+
+## Configuring the Robot
+
+There are several parameters that must be inputted into the PathPlanner GUI to create the most
+accurate and optimised path.
+
+These parameters can be made/changed by navigating to the left sidebar and clicking on
+**Settings**.
+
+> **❗ Warning:**
+> The settings of a robot should only ever be touched by **one person** per season. For some
+> reason, PathPlanner's GUI for displaying settings is very finicky, and you can often lose
+> precision. If you accidentally touch the settings.json file, make sure to replace its contents
+> with data from the original GitHub repo. Don't ever push your settings.json to the repo if you
+> see it as an option, unless you know what you're doing.
+
+### MOI (Moment of Inertia)
+
+The MOI **can be calculated in SolidWorks**. However, the build/CAD team may not have time to
+calculate this, as it involves collecting the masses of various components on the robot. Here's
+the equation we use to approximate robot MOI. To prevent PathPlanner from overestimating the
+capabilities of our robot, we overestimate the MOI, which places a cap on how quickly we can turn.
+
+$$ MOI=\frac{1}{2}M(R^2+r^2) $$
+
+Where $MOI$ is moment of inertia, $M$ is mass in kg, $R$ is width of the robot including in bumpers
+in metres, and $r$ is the width of the robot not including bumpers in metres.
 
 ## Programming Named Commands
 
