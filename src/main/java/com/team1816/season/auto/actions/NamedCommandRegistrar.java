@@ -37,6 +37,7 @@ public final class NamedCommandRegistrar {
 
         NamedCommands.registerCommand("coral l4", Commands.runOnce(() -> {
             Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.L4);
+            System.out.println("moved to l4 position");
         }));
 
         NamedCommands.registerCommand("coral outtake", Commands.runOnce(() -> {

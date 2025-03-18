@@ -36,13 +36,23 @@
       "name": "coral l4",
       "waypointRelativePos": 0.7773029439696122,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral l4"
+        }
+      }
     },
     {
       "name": "coral outtake",
       "waypointRelativePos": 0.9406457739791056,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral outtake"
+        }
+      }
     }
   ],
   "globalConstraints": {

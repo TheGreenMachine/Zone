@@ -36,7 +36,12 @@
       "name": "coral feeder",
       "waypointRelativePos": 0.09354226020892434,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral feeder"
+        }
+      }
     }
   ],
   "globalConstraints": {

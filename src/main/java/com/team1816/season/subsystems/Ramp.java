@@ -22,7 +22,7 @@ public class Ramp extends Subsystem {
     
     /**Componenets*/
     private final IGreenMotor rampMotor;
-    private final DigitalInput zeroingButton;
+//    private final DigitalInput zeroingButton;
 
     /**States*/
     private RAMP_STATE desiredRampState = RAMP_STATE.L234_FEEDER;
@@ -55,7 +55,7 @@ public class Ramp extends Subsystem {
     public Ramp(Infrastructure inf, RobotState rs){
         super(NAME, inf, rs);
         rampMotor = factory.getMotor(NAME, "rampMotor");
-        zeroingButton = new DigitalInput((int) factory.getConstant(NAME, "zeroingButtonChannel", 0));
+//        zeroingButton = new DigitalInput((int) factory.getConstant(NAME, "zeroingButtonChannel", 0));
         rampMotor.config_PeakOutputForward(0.1);
         rampMotor.config_PeakOutputReverse(-0.1);
 
@@ -164,9 +164,9 @@ public class Ramp extends Subsystem {
         };
     }
 
-    public boolean isZeroingButtonPressed() {
-        return !zeroingButton.get();
-    }
+//    public boolean isZeroingButtonPressed() {
+//        return !zeroingButton.get();
+//    }
 
     /**
      * Returns the desired ramp state

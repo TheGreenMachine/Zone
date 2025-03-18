@@ -73,9 +73,9 @@ public class Elevator extends Subsystem {
         elevatorMotor.selectPIDSlot(0);
 
         if (RobotBase.isSimulation()) {
-            elevatorMotor.setMotionProfileMaxVelocity(12);
-            elevatorMotor.setMotionProfileMaxAcceleration(6);
-            ((GhostMotor) elevatorMotor).setMaxVelRotationsPerSec(30);
+            elevatorMotor.setMotionProfileMaxVelocity(5);
+            elevatorMotor.setMotionProfileMaxAcceleration(10);
+            ((GhostMotor) elevatorMotor).setMaxVelRotationsPerSec(1);
         }
     }
 
@@ -104,6 +104,7 @@ public class Elevator extends Subsystem {
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
         if (robotState.actualElevatorState != desiredElevatorState) {
+            System.out.println("changed");
             robotState.actualElevatorState = desiredElevatorState;
             elevatorOutputsChanged = true;
         }

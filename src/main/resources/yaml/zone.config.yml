@@ -1,6 +1,6 @@
 subsystems:
     drivetrain:
-        implemented: true
+        implemented: false
         motors:
             RRDr:
                 motorType: TalonFX
@@ -185,7 +185,7 @@ subsystems:
 
             coralArmMotorRotationsPerDegree: .136
     elevator:
-        implemented: false
+        implemented: true
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -214,9 +214,9 @@ subsystems:
             elevatorL2AlgaePosition: 14.2
             elevatorL3AlgaePosition: 33.7
 
-            elevatorMotorRotationsPerUnit: 1
+            elevatorMotorRotationsPerUnit: 20
     ramp:
-        implemented: true
+        implemented: false
         motors:
             rampMotor:
                 motorType: SparkMax
@@ -252,7 +252,7 @@ subsystems:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
     ledmanager:
-        implemented: true
+        implemented: false
         candle: 22
         constants:
             raveEnabled: 0

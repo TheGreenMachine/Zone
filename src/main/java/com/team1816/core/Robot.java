@@ -647,22 +647,22 @@ public class Robot extends TimedRobot {
             }
 
             if (RobotBase.isReal()) { // Ramp zeroing button logic
-                boolean zeroingButtonPressed = ramp.isZeroingButtonPressed();
-                if (zeroingButtonPressed != zeroingButtonWasPressed && zeroingButtonPressed) { // When zeroing button becomes pressed
-                    if (!rampZeroed) { // Zero position the first time the zeroing button is pressed
-                        ramp.zeroSensors();
-                        ledManager.indicateStatus(LedManager.RobotStatus.ZEROING, LedManager.ControlState.BLINK);
-                        ledManager.writeToHardware(); // Need to manually call writeToHardware because it is not normally called when disabled
-                        rampZeroed = true;
-                    }
-                    else { // Set to brake mode the second time the zeroing button is pressed
-                        ramp.setBraking(true);
-                        ledManager.indicateStatus(LedManager.RobotStatus.DISABLED, LedManager.ControlState.SOLID);
-                        ledManager.writeToHardware(); // Need to manually call writeToHardware because it is not normally called when disabled
-                        rampZeroed = false; // Allows for re-zeroing if it was zeroed incorrectly the first time
-                    }
-                }
-                zeroingButtonWasPressed = zeroingButtonPressed;
+//                boolean zeroingButtonPressed = ramp.isZeroingButtonPressed();
+//                if (zeroingButtonPressed != zeroingButtonWasPressed && zeroingButtonPressed) { // When zeroing button becomes pressed
+//                    if (!rampZeroed) { // Zero position the first time the zeroing button is pressed
+//                        ramp.zeroSensors();
+//                        ledManager.indicateStatus(LedManager.RobotStatus.ZEROING, LedManager.ControlState.BLINK);
+//                        ledManager.writeToHardware(); // Need to manually call writeToHardware because it is not normally called when disabled
+//                        rampZeroed = true;
+//                    }
+//                    else { // Set to brake mode the second time the zeroing button is pressed
+//                        ramp.setBraking(true);
+//                        ledManager.indicateStatus(LedManager.RobotStatus.DISABLED, LedManager.ControlState.SOLID);
+//                        ledManager.writeToHardware(); // Need to manually call writeToHardware because it is not normally called when disabled
+//                        rampZeroed = false; // Allows for re-zeroing if it was zeroed incorrectly the first time
+//                    }
+//                }
+//                zeroingButtonWasPressed = zeroingButtonPressed;
             }
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
