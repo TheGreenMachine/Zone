@@ -3,32 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6652556818181818,
-        "y": 7.400383522727273
+        "x": 7.576229508196722,
+        "y": 4.066956967213113
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0197507943152018,
-        "y": 7.276496714238199
+        "x": 5.007235998591412,
+        "y": 5.185380679091082
       },
       "isLocked": false,
-      "linkedName": "Top Feeder"
+      "linkedName": "MIddle Facing Right"
     },
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 5.146803977272728
+        "x": 5.095,
+        "y": 5.167
       },
       "prevControl": {
-        "x": 4.37209680318533,
-        "y": 5.411194416777712
+        "x": 5.309047642405077,
+        "y": 5.037834963009225
       },
       "nextControl": {
-        "x": 3.2230021901990575,
-        "y": 4.841231793462981
+        "x": 2.921961455231077,
+        "y": 6.478299675453922
       },
       "isLocked": false,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Coral 1A Trough"
     },
     {
       "anchor": {
@@ -36,8 +36,8 @@
         "y": 7.400383522727273
       },
       "prevControl": {
-        "x": 1.5578339320265218,
-        "y": 7.084218759290802
+        "x": 1.8851111350949035,
+        "y": 7.281372684294434
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,16 +46,35 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 119.99999999999999
+      "waypointRelativePos": 0.5461417322834702,
+      "rotationDegrees": 59.99999999999999
+    },
+    {
+      "waypointRelativePos": 0.992125984251969,
+      "rotationDegrees": 59.99999999999999
+    },
+    {
+      "waypointRelativePos": 1.0828346456692899,
+      "rotationDegrees": 59.99999999999999
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "ramp hold l1",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp hold l1"
+        }
+      }
+    },
+    {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.6315289648623024,
+      "waypointRelativePos": 0.17568850902184394,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -66,7 +85,7 @@
     },
     {
       "name": "ramp hold l1",
-      "waypointRelativePos": 1.254510921177586,
+      "waypointRelativePos": 1.1443494776828105,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -92,7 +111,7 @@
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.09027692082234
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

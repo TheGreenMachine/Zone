@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 5.146803977272728
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 3.2826748920160056,
-        "y": 6.093727149621462
-      },
-      "isLocked": false,
-      "linkedName": "Coral 6M Trough"
-    },
-    {
-      "anchor": {
         "x": 1.6652556818181818,
         "y": 7.400383522727273
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.5460945332965483,
+        "y": 5.848109816541291
+      },
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    },
+    {
+      "anchor": {
+        "x": 3.8390625,
+        "y": 5.146803977272728
+      },
       "prevControl": {
-        "x": 1.7434923208779973,
-        "y": 7.162940838467209
+        "x": 3.6586610504621833,
+        "y": 5.583920094005911
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Top Feeder"
+      "linkedName": "Coral 6M Trough"
     }
   ],
   "rotationTargets": [],
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.09027692082234
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -54.09027692082234
   },
   "useDefaultConstraints": true
 }
