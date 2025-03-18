@@ -253,7 +253,7 @@ subsystems:
             pneumaticOff: 0.0
     ledmanager:
         implemented: true
-        candle: 23
+        candle: 22
         constants:
             raveEnabled: 0
             raveSpeed: 0.05
