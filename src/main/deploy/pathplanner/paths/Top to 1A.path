@@ -33,14 +33,14 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "coral ready",
-      "waypointRelativePos": 0.0,
+      "name": "coral l4",
+      "waypointRelativePos": 0.8190883190883186,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "coral l4",
-      "waypointRelativePos": 0.8190883190883176,
+      "name": "coral outtake",
+      "waypointRelativePos": 0.9786324786324788,
       "endWaypointRelativePos": null,
       "command": null
     }
