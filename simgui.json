@@ -99,7 +99,9 @@
       "/SmartDashboard/Playlist": "String Chooser",
       "/SmartDashboard/Ramp": "Mechanism2d",
       "/SmartDashboard/Robot color": "String Chooser",
+      "/SmartDashboard/Sim coral beam break": "String Chooser",
       "/SmartDashboard/Starting Position": "String Chooser",
+      "/SmartDashboard/Test mech": "Mechanism2d",
       "/SmartDashboard/TrajectoryAction 0": "String Chooser",
       "/SmartDashboard/TrajectoryAction 1": "String Chooser",
       "/SmartDashboard/TrajectoryAction 2": "String Chooser",
@@ -108,56 +110,6 @@
     },
     "windows": {
       "/SmartDashboard/Auto mode": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Controller layout": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DCoralPlacement 0": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DCoralPlacement 1": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DCoralPlacement 2": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DStartingPosition": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 0": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 1": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 2": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 3": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 4": {
         "window": {
           "visible": true
         }
@@ -349,6 +301,11 @@
           "visible": true
         }
       },
+      "/SmartDashboard/Sim coral beam break": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/VisionSystemSim-SimVision/Sim Field": {
         "apriltag": {
           "arrows": false,
@@ -399,8 +356,10 @@
       "Drive": {
         "open": true
       },
-      "Field": {
-        "open": true
+      "Ramp": {
+        "root": {
+          "open": true
+        }
       },
       "Starting Position": {
         "open": true
@@ -424,5 +383,34 @@
   },
   "NetworkTables View": {
     "visible": false
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 332,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Hello"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    }
   }
 }

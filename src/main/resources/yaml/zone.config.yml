@@ -180,10 +180,10 @@ subsystems:
             coralArmUpPosition: 28
             coralArmL2AlgaePosition: 36
             coralArmL3AlgaePosition: 36
-
             coralArmFeederPosition: 28
+            coralArmClimbPosition: 36
 
-            coralArmMotorRotationsPerDegree: 1
+            coralArmMotorRotationsPerDegree: .136
     elevator:
         implemented: false
         motors:
@@ -214,7 +214,7 @@ subsystems:
             elevatorL2AlgaePosition: 14.2
             elevatorL3AlgaePosition: 33.7
 
-            elevatorMotorRotationsPerUnit: 20
+            elevatorMotorRotationsPerUnit: 1
     ramp:
         implemented: true
         motors:
@@ -242,6 +242,7 @@ subsystems:
 
 
             rampMotorRotationsPerUnit: 0.136
+            zeroingButtonChannel: 6
     pneumatic:
         implemented: false
         solenoids:
@@ -250,6 +251,14 @@ subsystems:
         constants:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
+    ledmanager:
+        implemented: true
+        candle: 22
+        constants:
+            raveEnabled: 0
+            raveSpeed: 0.05
+            maxLevel: 200
+            ledStripCount: 0
     camera:
         implemented: false
         constants:

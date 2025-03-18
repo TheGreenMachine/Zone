@@ -13,6 +13,7 @@ import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 @Singleton
@@ -121,6 +122,8 @@ public class Elevator extends Subsystem {
 
             desiredElevatorPosition = getElevatorPosition(desiredElevatorState);
 //            System.out.println("Elevator state: "+desiredElevatorState+" Position: "+desiredElevatorPosition);
+            SmartDashboard.putString("Elevator desired state", String.valueOf(desiredElevatorState));
+            SmartDashboard.putNumber("Elevator desired position", desiredElevatorPosition);
             elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
         }
     }

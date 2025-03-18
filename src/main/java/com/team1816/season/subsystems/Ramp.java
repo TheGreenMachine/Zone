@@ -1,5 +1,6 @@
 package com.team1816.season.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
@@ -9,7 +10,9 @@ import com.team1816.lib.hardware.components.motor.configurations.GreenControlMod
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jakarta.inject.Inject;
 
 @Singleton
@@ -19,7 +22,8 @@ public class Ramp extends Subsystem {
     
     /**Componenets*/
     private final IGreenMotor rampMotor;
-    
+    private final DigitalInput zeroingButton;
+
     /**States*/
     private RAMP_STATE desiredRampState = RAMP_STATE.L234_FEEDER;
 
@@ -51,6 +55,7 @@ public class Ramp extends Subsystem {
     public Ramp(Infrastructure inf, RobotState rs){
         super(NAME, inf, rs);
         rampMotor = factory.getMotor(NAME, "rampMotor");
+        zeroingButton = new DigitalInput((int) factory.getConstant(NAME, "zeroingButtonChannel", 0));
         rampMotor.config_PeakOutputForward(0.1);
         rampMotor.config_PeakOutputReverse(-0.1);
 
@@ -106,10 +111,13 @@ public class Ramp extends Subsystem {
 
             desiredRampPosition = getRampPosition(desiredRampState);
 //            System.out.println("ramp state: "+desiredRampPosition+" Position: "+desiredRampPosition);
+            SmartDashboard.putString("Ramp desired state", String.valueOf(desiredRampState));
+            SmartDashboard.putNumber("Ramp desired position", desiredRampPosition);
             rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -15, 5));
         }
 
         robotState.rampMechArm.setAngle(robotState.rampMechArmBaseAngle + rampMotor.getSensorPosition() / rampMotorRotationsPerUnit);
+        robotState.rampMechArmFunnelSide.setAngle(robotState.rampMechArm.getAngle() + 90);
     }
     
     public void offsetRamp(double offsetAmount){
@@ -136,9 +144,9 @@ public class Ramp extends Subsystem {
 
     }
 
-//    public void setBraking(boolean braking) {
-//        rampMotor.setNeutralMode(braking ? NeutralMode.Brake : NeutralMode.Coast);
-//    }
+    public void setBraking(boolean braking) {
+        rampMotor.setNeutralMode(braking ? NeutralMode.Brake : NeutralMode.Coast);
+    }
     
     @Override
     public boolean testSubsystem() {
@@ -154,6 +162,10 @@ public class Ramp extends Subsystem {
             case DISLODGE_CORAL -> rampDislodgeCoralPosition;
             case CLIMB -> rampClimbPosition;
         };
+    }
+
+    public boolean isZeroingButtonPressed() {
+        return !zeroingButton.get();
     }
 
     /**
