@@ -28,8 +28,8 @@ capabilities of our robot, we overestimate the MOI, which places a cap on how qu
 
 $$ MOI=\frac{1}{2}M(R^2+r^2) $$
 
-Where $MOI$ is moment of inertia, $M$ is mass in kg, $R$ is width of the robot including in bumpers
-in metres, and $r$ is the width of the robot not including bumpers in metres.
+Where $MOI$ is moment of inertia, $M$ is mass in kg, $R$ is the outer radius of the robot (including in bumpers
+bumpers), and $r$ is the inner radius of the robot (not including bumpers) in metres.
 
 ## Programming Named Commands
 
