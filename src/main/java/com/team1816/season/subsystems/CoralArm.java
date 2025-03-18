@@ -164,9 +164,10 @@ public class CoralArm extends Subsystem {
 
         //Setting intake motor state
         if(
-                desiredIntakeState != INTAKE_STATE.OUTTAKE
+                (desiredIntakeState != INTAKE_STATE.OUTTAKE
                         && robotState.actualElevatorState != Elevator.ELEVATOR_STATE.L2_ALGAE
-                        && robotState.actualElevatorState != Elevator.ELEVATOR_STATE.L3_ALGAE
+                        && robotState.actualElevatorState != Elevator.ELEVATOR_STATE.L3_ALGAE)
+                || desiredPivotState == PIVOT_STATE.FEEDER
         ) {
             desiredIntakeState = robotState.isCoralBeamBreakTriggered ? INTAKE_STATE.HOLD : INTAKE_STATE.INTAKE;
         }
