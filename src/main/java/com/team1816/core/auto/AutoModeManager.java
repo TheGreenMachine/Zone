@@ -209,13 +209,11 @@ public class AutoModeManager {
             case DEFAULT:
                 return new DefaultMode();
             case DRIVE_STRAIGHT:
-                return new DriveStraightMode();
-            case PP_NORMAL_BOTTOM:
-                return new PPNormalBottomAutoMode();
+                return new PathPlannerAutoMode("Drive Straight Auto");
             case TOP3L1:
-                return new Top3L1AutoMode();
+                return new PathPlannerAutoMode("Top 3L1 Auto");
             case OPTIMIZEDTOP3L1:
-                return new OptimizedTop3L1AutoMode();
+                return new PathPlannerAutoMode("Optimized Top 3L1 Auto");
             default:
                 GreenLogger.log("Defaulting to DefaultMode");
                 return new DefaultMode();
