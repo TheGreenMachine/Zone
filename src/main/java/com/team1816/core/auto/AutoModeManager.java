@@ -189,11 +189,19 @@ public class AutoModeManager {
 
         DRIVE_STRAIGHT,
 
-        PP_NORMAL_BOTTOM,
+        TUNE_DRIVETRAIN,
 
-        TOP3L1,
+        TOP_3L1,
 
-        OPTIMIZEDTOP3L1
+        OPTIMIZED_TOP_4L1,
+
+        Top_4L4,
+
+        MIDDLE_1L4,
+
+        FAST_MIDDLE_1L1_2L4,
+
+        FAST_MIDDLE_4L1
         }
 
 
@@ -210,10 +218,20 @@ public class AutoModeManager {
                 return new DefaultMode();
             case DRIVE_STRAIGHT:
                 return new PathPlannerAutoMode("Drive Straight Auto");
-            case TOP3L1:
+            case TUNE_DRIVETRAIN:
+                return new PathPlannerAutoMode("Tune Drivetrain Auto");
+            case TOP_3L1:
                 return new PathPlannerAutoMode("Top 3L1 Auto");
-            case OPTIMIZEDTOP3L1:
-                return new PathPlannerAutoMode("Optimized Top 3L1 Auto");
+            case OPTIMIZED_TOP_4L1:
+                return new PathPlannerAutoMode("Optimized Top 4L1 Auto");
+            case Top_4L4:
+                return new PathPlannerAutoMode("Top 4L4 Auto");
+            case MIDDLE_1L4:
+                return new PathPlannerAutoMode("Middle 1L4 Auto");
+            case FAST_MIDDLE_1L1_2L4:
+                return new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto");
+            case FAST_MIDDLE_4L1:
+                return new PathPlannerAutoMode("Fast Middle 4L1 Auto");
             default:
                 GreenLogger.log("Defaulting to DefaultMode");
                 return new DefaultMode();
