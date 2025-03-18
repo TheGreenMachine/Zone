@@ -162,6 +162,8 @@ public class AutoModeManager {
         DEFAULT(new NoopAutoMode()),
         
         DRIVE_STRAIGHT(new PathPlannerAutoMode("Drive Straight Auto")),
+
+        TUNE_DRIVETRAIN(new PathPlannerAutoMode("Tune Drivetrain Auto")),
         
         TOP_3L1(new PathPlannerAutoMode("Top 3L1 Auto")),
         BOTTOM_3L1(new PathPlannerAutoMode("Top 3L1 Auto", true)),
@@ -169,10 +171,17 @@ public class AutoModeManager {
         OPTIMIZED_TOP_4L1(new PathPlannerAutoMode("Optimized Top 4L1 Auto")),
         OPTIMIZED_BOTTOM_4L1(new PathPlannerAutoMode("Optimized Top 4L1 Auto", true)),
         
-        MIDDLE_1L4(new PathPlannerAutoMode("Middle 1L4 Auto")),
-        
+        MIDDLE_TOP_1L4(new PathPlannerAutoMode("Middle 1L4 Auto")),
+        MIDDLE_BOTTOM_1L4(new PathPlannerAutoMode("Middle 1L4 Auto", true)),
+
         TOP_4L4(new PathPlannerAutoMode("Top 4L4 Auto")),
         BOTTOM_4L4(new PathPlannerAutoMode("Top 4L4 Auto", true)),
+
+        FAST_MIDDLE_TOP_1L1_2L4(new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto")),
+        FAST_MIDDLE_BOTTOM_1L1_2L4(new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto", true)),
+
+        FAST_MIDDLE_TOP_4L1(new PathPlannerAutoMode("Fast Middle 4L1 Auto")),
+        FAST_MIDDLE_BOTTOM_4L1(new PathPlannerAutoMode("Fast Middle 4L1 Auto", true)),
         
         ;
         
