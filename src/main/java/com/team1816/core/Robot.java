@@ -306,7 +306,14 @@ public class Robot extends TimedRobot {
                     "rampClimbPosition",
                     ActionState.PRESSED,
                     () -> {
-                        ramp.setDesiredState(Ramp.RAMP_STATE.CLIMB);
+                        if(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER && robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER){
+                            ramp.setDesiredState(Ramp.RAMP_STATE.CLIMB);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.CLIMB);
+                        } else {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
+                        }
+
                     }
             );
 

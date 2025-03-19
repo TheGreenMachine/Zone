@@ -244,7 +244,7 @@ subsystems:
             rampMotorRotationsPerUnit: 0.136
             zeroingButtonChannel: 6
     pneumatic:
-        implemented: false
+        implemented: true
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6
@@ -260,7 +260,7 @@ subsystems:
             maxLevel: 200
             ledStripCount: 0
     camera:
-        implemented: false
+        implemented: true
         constants:
             useMultiTargetOdometry: 0
 infrastructure:

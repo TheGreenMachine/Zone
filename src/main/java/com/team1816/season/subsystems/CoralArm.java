@@ -182,7 +182,7 @@ public class CoralArm extends Subsystem {
         if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
             desiredPivotState = PIVOT_STATE.FEEDER;
 
-        if(robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE && !robotState.isCoralBeamBreakTriggered && desiredPivotState != PIVOT_STATE.L2_ALGAE && desiredPivotState != PIVOT_STATE.L3_ALGAE)
+        if(desiredPivotState != PIVOT_STATE.CLIMB && robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE && !robotState.isCoralBeamBreakTriggered && desiredPivotState != PIVOT_STATE.L2_ALGAE && desiredPivotState != PIVOT_STATE.L3_ALGAE)
             desiredPivotState = PIVOT_STATE.FEEDER;
 
 
