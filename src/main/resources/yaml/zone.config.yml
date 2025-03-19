@@ -170,6 +170,7 @@ subsystems:
             outtakeSpeed: -.8
             holdSpeed: 0
             removeAlgaeSpeed: .80
+            activeHoldSpeed: 0.1
 
             coralSensorChannel: 9
 
