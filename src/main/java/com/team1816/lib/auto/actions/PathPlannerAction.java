@@ -3,6 +3,7 @@ package com.team1816.lib.auto.actions;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FlippingUtil;
 import com.team1816.lib.Injector;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
@@ -12,7 +13,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class represents an action that will move the robot along a PathPlanner trajectory.
@@ -22,6 +25,13 @@ public class PathPlannerAction implements AutoAction {
     private final Command pathCommand;
     private final Drive drive;
 
+    // list of all poses of action from blue perspective for logging purposes
+    private final List<Pose2d> bluePoses;
+
+    public PathPlannerAction(String actionName, ActionType actionType) {
+        this(actionName, actionType, false);
+    }
+
     /**
      * Creates a {@link PathPlannerAction} by loading a {@link PathPlannerPath} from the deploy
      * folder.
@@ -29,16 +39,16 @@ public class PathPlannerAction implements AutoAction {
      * Visit <a href="https://pathplanner.dev/">pathplanner.dev</a> for more information.
      *
      * @param actionType Whether to load an auto or a path
-     *
      * @throws RuntimeException when the path failed to load
      */
-    public PathPlannerAction(String actionName, ActionType actionType) {
+    public PathPlannerAction(String actionName, ActionType actionType, boolean mirror) {
         this.drive = Injector.get(Drive.Factory.class).getInstance();
 
         if (drive instanceof TankDrive) {
             GreenLogger.log("Tank Drive is not supported by our PathPlanner implementation.");
             this.pathCommand = null;
             this.initialPose = null;
+            bluePoses = List.of();
         } else if (drive instanceof EnhancedSwerveDrive) {
             switch (actionType) {
                 case PATH -> {
@@ -49,13 +59,36 @@ public class PathPlannerAction implements AutoAction {
                         throw new RuntimeException(e);
                     }
 
+                    if (mirror) path = path.flipPath();
+
                     this.pathCommand = AutoBuilder.followPath(path);
                     this.initialPose = path.getPathPoses().get(0);
+                    this.bluePoses = path.getPathPoses();
                 }
 
                 case AUTO -> {
-                    this.pathCommand = new PathPlannerAuto(actionName);
+                    this.pathCommand = new PathPlannerAuto(actionName, mirror);
                     this.initialPose = ((PathPlannerAuto) pathCommand).getStartingPose();
+
+                    List<Pose2d> poses;
+
+                    try {
+                        poses = PathPlannerAuto.getPathGroupFromAutoFile(actionName).stream()
+                                .map(PathPlannerPath::getPathPoses)
+                                .flatMap(Collection::stream)
+                                .collect(Collectors.toList());
+
+                        if (mirror) {
+                            poses.replaceAll(PathPlannerAction::mirrorPose);
+                        }
+
+                        System.out.println("Constructor poses: " + poses);
+                    } catch (Exception ignored) {
+                        GreenLogger.log("Could not get auto poses for " + actionName + "!");
+                        poses = List.of();
+                    }
+
+                    this.bluePoses = poses;
                 }
 
                 default -> throw new IllegalStateException("Unknown action type: " + actionType);
@@ -66,15 +99,15 @@ public class PathPlannerAction implements AutoAction {
             );
             initialPose = null;
             pathCommand = null;
+            bluePoses = List.of();
         }
     }
 
     /**
-     * Returns the initial pose of the action. Note that this does not change based on the colour
-     * of the alliance.
+     * Returns the initial pose of the action.
      */
     public Pose2d getPathInitialPose() {
-        return initialPose;
+        return AutoBuilder.shouldFlip() ? FlippingUtil.flipFieldPose(initialPose) : initialPose;
     }
 
     /**
@@ -86,7 +119,6 @@ public class PathPlannerAction implements AutoAction {
      */
     @Override
     public void start() {
-        drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         pathCommand.initialize();
     }
 
@@ -127,7 +159,18 @@ public class PathPlannerAction implements AutoAction {
         drive.stop();
     }
 
+    /**
+     * @return a list of non-flipped poses that the action will follow for logging purposes
+     */
+    public List<Pose2d> getBluePoses() {
+        return bluePoses;
+    }
+
     public enum ActionType {
         PATH, AUTO
+    }
+
+    private static Pose2d mirrorPose(Pose2d pose) {
+        return new Pose2d(pose.getX(), FlippingUtil.fieldSizeY -  pose.getY(), pose.getRotation());
     }
 }
