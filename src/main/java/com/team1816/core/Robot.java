@@ -603,6 +603,7 @@ public class Robot extends TimedRobot {
             loopStart = Timer.getFPGATimestamp();
 
             robotState.isElevatorInRange = elevator.isElevatorInRange();
+            robotState.isCoralArmPivotInRange = coralArm.isCoralArmPivotInRange();
             if (Constants.kLoggingRobot) {
                 looperLogger.append(looperDt);
                 robotLoopLogger.append(robotDt);

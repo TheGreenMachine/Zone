@@ -106,6 +106,8 @@ public class Ramp extends Subsystem {
             rampOutputsChanged = false;
             offsetHasBeenApplied = false;
 
+            if ((!(robotState.actualElevatorState == Elevator.ELEVATOR_STATE.FEEDER) || !robotState.isElevatorInRange || !(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER) || !robotState.isCoralArmPivotInRange) && desiredRampState == RAMP_STATE.L1_FEEDER)
+                desiredRampState = RAMP_STATE.L234_FEEDER;
             desiredRampPosition = getRampPosition(desiredRampState);
 //            System.out.println("ramp state: "+desiredRampPosition+" Position: "+desiredRampPosition);
             rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -15, 5));

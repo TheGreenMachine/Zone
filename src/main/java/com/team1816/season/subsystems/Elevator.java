@@ -121,7 +121,10 @@ public class Elevator extends Subsystem {
 
             desiredElevatorPosition = getElevatorPosition(desiredElevatorState);
 //            System.out.println("Elevator state: "+desiredElevatorState+" Position: "+desiredElevatorPosition);
-            elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
+            if (robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
+                elevatorOutputsChanged = true;
+            else
+                elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
         }
     }
 

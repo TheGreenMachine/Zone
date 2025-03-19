@@ -90,6 +90,7 @@ public class RobotState {
     public boolean isCoralBeamBreakTriggered = false;
 
     public boolean isElevatorInRange = false;
+    public boolean isCoralArmPivotInRange = false;
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
