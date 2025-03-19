@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6652556818181818,
+        "x": 1.665,
         "y": 7.400383522727273
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8977761067661694,
+        "x": 1.8975204249479876,
         "y": 7.088690036644834
       },
       "isLocked": false,
@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.96,
-        "y": 5.26
+        "x": 3.859,
+        "y": 5.456
       },
       "prevControl": {
-        "x": 3.863840644172438,
-        "y": 5.490766934994657
+        "x": 3.7628406441724382,
+        "y": 5.686766934994657
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "coral l4",
-      "waypointRelativePos": 0.7659069325735987,
+      "waypointRelativePos": 0.24422899353647162,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,19 +45,26 @@
     },
     {
       "name": "coral outtake",
-      "waypointRelativePos": 0.9634377967711292,
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "named",
+        "type": "parallel",
         "data": {
-          "name": "coral outtake"
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "coral outtake"
+              }
+            }
+          ]
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.2,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,

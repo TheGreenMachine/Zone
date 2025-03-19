@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6802254098360656,
-        "y": 5.097899590163934
+        "x": 3.579,
+        "y": 5.274
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.922195303220133,
-        "y": 6.0235193819325925
+        "x": 2.8209698933840675,
+        "y": 6.199619791768659
       },
       "isLocked": false,
       "linkedName": "Coral 6A Reef"
@@ -45,8 +45,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.2,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,

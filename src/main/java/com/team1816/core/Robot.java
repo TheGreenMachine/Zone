@@ -505,9 +505,6 @@ public class Robot extends TimedRobot {
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
         //TODO add new subsystem inits here
-        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-        ramp.setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
-        coralArm.setDesiredState(CoralArm.PIVOT_STATE.UP, CoralArm.INTAKE_STATE.HOLD);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();

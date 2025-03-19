@@ -110,7 +110,7 @@ public class Elevator extends Subsystem {
             desiredElevatorState = ELEVATOR_STATE.FEEDER;
 
         if (robotState.actualElevatorState != desiredElevatorState ) {
-            System.out.println("changed");
+//            System.out.println("changed");
             robotState.actualElevatorState = desiredElevatorState;
             elevatorOutputsChanged = true;
         }

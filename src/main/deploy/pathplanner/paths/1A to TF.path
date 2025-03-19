@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.01,
-        "y": 5.28
+        "x": 5.121,
+        "y": 5.456
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.202716787436948,
-        "y": 5.84460732355947
+        "x": 5.562295081967213,
+        "y": 6.20076844262295
       },
       "isLocked": false,
       "linkedName": "Coral 1A Reef"
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "coral feeder",
-      "waypointRelativePos": 0.09354226020892434,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,8 +45,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.2,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,

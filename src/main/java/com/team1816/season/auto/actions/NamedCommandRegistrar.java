@@ -33,15 +33,28 @@ public final class NamedCommandRegistrar {
 
         NamedCommands.registerCommand("coral feeder", Commands.runOnce(() -> {
             Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+            Injector.get(CoralArm.class).setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
         }));
 
         NamedCommands.registerCommand("coral l4", Commands.runOnce(() -> {
             Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.L4);
-            System.out.println("moved to l4 position");
+            Injector.get(CoralArm.class).setDesiredState(CoralArm.PIVOT_STATE.L4, CoralArm.INTAKE_STATE.HOLD);
         }));
 
         NamedCommands.registerCommand("coral outtake", Commands.runOnce(() -> {
             Injector.get(CoralArm.class).setDesiredIntakeState(CoralArm.INTAKE_STATE.OUTTAKE);
+        }));
+
+        NamedCommands.registerCommand("coral l234 initialize", Commands.runOnce(() -> {
+            Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+            Injector.get(CoralArm.class).setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.HOLD);
+            Injector.get(Ramp.class).setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+        }));
+
+        NamedCommands.registerCommand("coral l1 initialize", Commands.runOnce(() -> {
+            Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+            Injector.get(CoralArm.class).setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.HOLD);
+            Injector.get(Ramp.class).setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
         }));
     }
 }

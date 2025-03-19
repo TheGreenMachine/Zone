@@ -201,7 +201,10 @@ public class AutoModeManager {
 
         FAST_MIDDLE_1L1_2L4,
 
-        FAST_MIDDLE_4L1
+        FAST_MIDDLE_4L1,
+
+        ONE_THING,
+        TWO_THING
         }
 
 
@@ -232,6 +235,10 @@ public class AutoModeManager {
                 return new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto");
             case FAST_MIDDLE_4L1:
                 return new PathPlannerAutoMode("Fast Middle 4L1 Auto");
+            case ONE_THING:
+                return new PathPlannerAutoMode("One Thing");
+            case TWO_THING:
+                return new PathPlannerAutoMode("Two Thing");
             default:
                 GreenLogger.log("Defaulting to DefaultMode");
                 return new DefaultMode();

@@ -33,19 +33,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "coral l4",
-      "waypointRelativePos": 0.0,
+      "name": "coral l234 initialize",
+      "waypointRelativePos": 0.8608736942070223,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "coral l4"
+          "name": "coral l234 initialize"
         }
       }
     },
     {
       "name": "coral outtake",
-      "waypointRelativePos": 0.8665716999050324,
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -56,8 +56,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.2,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
