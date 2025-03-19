@@ -74,6 +74,7 @@ public class CoralArm extends Subsystem {
     private final double outtakeSpeed = factory.getConstant(NAME, "outtakeSpeed", .7);
     private final double holdSpeed = factory.getConstant(NAME, "holdSpeed", 0);
     private final double removeAlgaeSpeed = factory.getConstant(NAME, "removeAlgaeSpeed", .7);
+    private final double activeHoldSpeed = factory.getConstant(NAME, "activeHoldSpeed", .1);
 
     private double l1Position = factory.getConstant(NAME, "coralArmL1Position", 1.0);
     private double l2CoralPosition = factory.getConstant(NAME, "coralArmL2CoralPosition", 1.0);
@@ -167,22 +168,29 @@ public class CoralArm extends Subsystem {
 
         //Setting beam break state
         boolean beamBreak = isBeamBreakTriggered();
-        if (robotState.isCoralBeamBreakTriggered != beamBreak) {
-            if(beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.INTAKE)
-                desiredIntakeState = INTAKE_STATE.HOLD;
-            else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.HOLD)
-                desiredIntakeState = INTAKE_STATE.INTAKE;
-            else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.REST)
-                desiredIntakeState = INTAKE_STATE.INTAKE;
-
-            robotState.isCoralBeamBreakTriggered = beamBreak;
-        }
+        robotState.isCoralBeamBreakTriggered = beamBreak;
 
         //Setting intake motor state
+        if (desiredIntakeState != INTAKE_STATE.OUTTAKE && robotState.actualCoralArmIntakeState != INTAKE_STATE.REMOVE_ALGAE) {
+            if (beamBreak) {
+                if (robotState.isCoralArmPivotInRange) {
+                    desiredIntakeState = INTAKE_STATE.HOLD;
+                }
+                else {
+                    desiredIntakeState = INTAKE_STATE.ACTIVE_HOLD;
+                }
+            }
+            else {
+                desiredIntakeState = INTAKE_STATE.INTAKE;
+            }
+        }
+
+
+        // Setting pivot motor state
         if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
             desiredPivotState = PIVOT_STATE.FEEDER;
 
-        if(robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE && !robotState.isCoralBeamBreakTriggered && desiredPivotState != PIVOT_STATE.L2_ALGAE && desiredPivotState != PIVOT_STATE.L3_ALGAE)
+        if(desiredIntakeState != CoralArm.INTAKE_STATE.OUTTAKE && !robotState.isCoralBeamBreakTriggered && desiredPivotState != PIVOT_STATE.L2_ALGAE && desiredPivotState != PIVOT_STATE.L3_ALGAE)
             desiredPivotState = PIVOT_STATE.FEEDER;
 
 
@@ -217,6 +225,7 @@ public class CoralArm extends Subsystem {
                 case HOLD -> desiredIntakePower = holdSpeed;
                 case REST -> desiredIntakePower = 0;
                 case REMOVE_ALGAE -> desiredIntakePower = removeAlgaeSpeed;
+                case ACTIVE_HOLD -> desiredIntakePower = activeHoldSpeed;
             }
 
             SmartDashboard.putString("Coral arm desired intake state", String.valueOf(desiredIntakeState));
@@ -349,6 +358,7 @@ public class CoralArm extends Subsystem {
         HOLD,
         OUTTAKE,
         REST,
-        REMOVE_ALGAE
+        REMOVE_ALGAE,
+        ACTIVE_HOLD
     }
 }
