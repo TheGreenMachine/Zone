@@ -8,10 +8,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 public class PathPlannerAutoMode extends AutoMode {
     private final PathPlannerAction action;
 
-    public PathPlannerAutoMode(String name){
+    public PathPlannerAutoMode(String actionName) {
+        this(actionName, false);
+    }
+
+    public PathPlannerAutoMode(String name, boolean mirror) {
         super();
 
-        action = new PathPlannerAction(name, PathPlannerAction.ActionType.AUTO);
+        action = new PathPlannerAction(name, PathPlannerAction.ActionType.AUTO, mirror);
     }
 
     @Override

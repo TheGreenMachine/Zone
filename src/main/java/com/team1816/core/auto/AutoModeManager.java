@@ -119,7 +119,7 @@ public class AutoModeManager {
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
 
-            autoMode = generateAutoMode(selectedAuto, selectedColor);
+            autoMode = autoModeChooser.getSelected().autoMode;
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
@@ -128,7 +128,7 @@ public class AutoModeManager {
     }
 
     public void updateAutoMode(){
-        autoMode = generateAutoMode(autoModeChooser.getSelected(), getSelectedColor());
+        autoMode = autoModeChooser.getSelected().autoMode;
         autoModeThread = new Thread(autoMode::run);
     }
 
@@ -185,56 +185,28 @@ public class AutoModeManager {
      * Enum for AutoModes
      */
     enum DesiredAuto {
-        DEFAULT,
+        DEFAULT(new DefaultMode()),
 
-        DRIVE_STRAIGHT,
+        DRIVE_STRAIGHT(new DriveStraightMode()),
 
-        TUNE_DRIVETRAIN,
+        TUNE_DRIVETRAIN(new PathPlannerAutoMode("Tune Drivetrain Auto")),
 
-        TOP_3L1,
+        TOP_3L1(new PathPlannerAutoMode("Top 3L1 Auto")),
+        BOTTOM_3L1(new PathPlannerAutoMode("Top 3L1 Auto", true)),
 
-        OPTIMIZED_TOP_4L1,
+        TOP_4L4(new PathPlannerAutoMode("Top 4L4 Auto")),
+        BOTTOM_4L4(new PathPlannerAutoMode("Top 4L4 Auto", true)),
 
-        Top_4L4,
+        MIDDLE_1L4(new PathPlannerAutoMode("Middle 1L4 Auto")),
 
-        MIDDLE_1L4,
+        FAST_MIDDLE_1L1_2L4(new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto")),
 
-        FAST_MIDDLE_1L1_2L4,
+        FAST_MIDDLE_4L1(new PathPlannerAutoMode("Fast Middle 4L1 Auto"));
 
-        FAST_MIDDLE_4L1
-        }
+        public final AutoMode autoMode;
 
-
-    /**
-     * Generates each AutoMode by demand
-     *
-     * @param mode desiredMode
-     * @return AutoMode
-     * @see AutoMode
-     */
-    private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
-        switch (mode) {
-            case DEFAULT:
-                return new DefaultMode();
-            case DRIVE_STRAIGHT:
-                return new PathPlannerAutoMode("Drive Straight Auto");
-            case TUNE_DRIVETRAIN:
-                return new PathPlannerAutoMode("Tune Drivetrain Auto");
-            case TOP_3L1:
-                return new PathPlannerAutoMode("Top 3L1 Auto");
-            case OPTIMIZED_TOP_4L1:
-                return new PathPlannerAutoMode("Optimized Top 4L1 Auto");
-            case Top_4L4:
-                return new PathPlannerAutoMode("Top 4L4 Auto");
-            case MIDDLE_1L4:
-                return new PathPlannerAutoMode("Middle 1L4 Auto");
-            case FAST_MIDDLE_1L1_2L4:
-                return new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto");
-            case FAST_MIDDLE_4L1:
-                return new PathPlannerAutoMode("Fast Middle 4L1 Auto");
-            default:
-                GreenLogger.log("Defaulting to DefaultMode");
-                return new DefaultMode();
+        DesiredAuto(AutoMode autoMode) {
+            this.autoMode = autoMode;
         }
     }
 }

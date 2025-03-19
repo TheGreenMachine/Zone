@@ -3,6 +3,7 @@ package com.team1816.lib.auto.actions;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FlippingUtil;
 import com.team1816.lib.Injector;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
@@ -22,6 +23,10 @@ public class PathPlannerAction implements AutoAction {
     private final Command pathCommand;
     private final Drive drive;
 
+    public PathPlannerAction(String actionName, ActionType actionType) {
+        this(actionName, actionType, false);
+    }
+
     /**
      * Creates a {@link PathPlannerAction} by loading a {@link PathPlannerPath} from the deploy
      * folder.
@@ -32,7 +37,7 @@ public class PathPlannerAction implements AutoAction {
      *
      * @throws RuntimeException when the path failed to load
      */
-    public PathPlannerAction(String actionName, ActionType actionType) {
+    public PathPlannerAction(String actionName, ActionType actionType, boolean mirror) {
         this.drive = Injector.get(Drive.Factory.class).getInstance();
 
         if (drive instanceof TankDrive) {
@@ -49,13 +54,17 @@ public class PathPlannerAction implements AutoAction {
                         throw new RuntimeException(e);
                     }
 
+                    if (mirror) path = path.flipPath();
+
                     this.pathCommand = AutoBuilder.followPath(path);
                     this.initialPose = path.getPathPoses().get(0);
                 }
 
                 case AUTO -> {
-                    this.pathCommand = new PathPlannerAuto(actionName);
+                    this.pathCommand = new PathPlannerAuto(actionName, mirror);
                     this.initialPose = ((PathPlannerAuto) pathCommand).getStartingPose();
+
+                    PathPlannerAuto thing = (PathPlannerAuto) pathCommand;
                 }
 
                 default -> throw new IllegalStateException("Unknown action type: " + actionType);
@@ -70,11 +79,10 @@ public class PathPlannerAction implements AutoAction {
     }
 
     /**
-     * Returns the initial pose of the action. Note that this does not change based on the colour
-     * of the alliance.
+     * Returns the initial pose of the action.
      */
     public Pose2d getPathInitialPose() {
-        return initialPose;
+        return AutoBuilder.shouldFlip() ? FlippingUtil.flipFieldPose(initialPose) : initialPose;
     }
 
     /**
@@ -86,7 +94,6 @@ public class PathPlannerAction implements AutoAction {
      */
     @Override
     public void start() {
-        drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         pathCommand.initialize();
     }
 
