@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.util.function.Supplier;
+
 /**
  * An integrated and optimized manager for autonomous mode selection and configuration
  */
@@ -119,7 +121,7 @@ public class AutoModeManager {
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
 
-            autoMode = autoModeChooser.getSelected().autoMode;
+            autoMode = autoModeChooser.getSelected().getAutoMode();
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
@@ -128,7 +130,7 @@ public class AutoModeManager {
     }
 
     public void updateAutoMode(){
-        autoMode = autoModeChooser.getSelected().autoMode;
+        autoMode = autoModeChooser.getSelected().getAutoMode();
         autoModeThread = new Thread(autoMode::run);
     }
 
@@ -185,28 +187,32 @@ public class AutoModeManager {
      * Enum for AutoModes
      */
     enum DesiredAuto {
-        DEFAULT(new DefaultMode()),
+        DEFAULT(DefaultMode::new),
 
-        DRIVE_STRAIGHT(new DriveStraightMode()),
+        DRIVE_STRAIGHT(DriveStraightMode::new),
 
-        TUNE_DRIVETRAIN(new PathPlannerAutoMode("Tune Drivetrain Auto")),
+        TUNE_DRIVETRAIN(() -> new PathPlannerAutoMode("Tune Drivetrain Auto")),
 
-        TOP_3L1(new PathPlannerAutoMode("Top 3L1 Auto")),
-        BOTTOM_3L1(new PathPlannerAutoMode("Top 3L1 Auto", true)),
+        TOP_3L1(() -> new PathPlannerAutoMode("Top 3L1 Auto")),
+        BOTTOM_3L1(() -> new PathPlannerAutoMode("Top 3L1 Auto", true)),
 
-        TOP_4L4(new PathPlannerAutoMode("Top 4L4 Auto")),
-        BOTTOM_4L4(new PathPlannerAutoMode("Top 4L4 Auto", true)),
+        TOP_4L4(() -> new PathPlannerAutoMode("Top 4L4 Auto")),
+        BOTTOM_4L4(() -> new PathPlannerAutoMode("Top 4L4 Auto", true)),
 
-        MIDDLE_1L4(new PathPlannerAutoMode("Middle 1L4 Auto")),
+        MIDDLE_1L4(() -> new PathPlannerAutoMode("Middle 1L4 Auto")),
 
-        FAST_MIDDLE_1L1_2L4(new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto")),
+        FAST_MIDDLE_1L1_2L4(() -> new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto")),
 
-        FAST_MIDDLE_4L1(new PathPlannerAutoMode("Fast Middle 4L1 Auto"));
+        FAST_MIDDLE_4L1(() -> new PathPlannerAutoMode("Fast Middle 4L1 Auto"));
 
-        public final AutoMode autoMode;
+        private final Supplier<AutoMode> autoMode;
 
-        DesiredAuto(AutoMode autoMode) {
+        DesiredAuto(Supplier<AutoMode> autoMode) {
             this.autoMode = autoMode;
+        }
+
+        public AutoMode getAutoMode() {
+            return autoMode.get();
         }
     }
 }
