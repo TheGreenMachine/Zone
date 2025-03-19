@@ -2,17 +2,14 @@ package com.team1816.lib.auto.modes;
 
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
-import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.AutoAction;
 import com.team1816.lib.auto.actions.PathPlannerAction;
-import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import java.util.List;
@@ -58,31 +55,6 @@ public abstract class AutoMode implements Runnable{
     }
 
     /**
-     * Instantiates an AutoMode from a list of trajectory actions
-     *
-     */
-    protected AutoMode(List<PathPlannerAction> pathPlannerActionList) {
-        robotState = Injector.get(RobotState.class);
-
-        this.pathPlannerActionList = pathPlannerActionList;
-        boolean isSwerve = Injector.get(DriveFactory.class).getInstance() instanceof EnhancedSwerveDrive;
-
-        if (pathPlannerActionList.isEmpty()) {
-            if (robotState.allianceColor == Color.BLUE) {
-                initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-            } else {
-                initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(180));
-            }
-        } else {
-            if (robotState.allianceColor == Color.BLUE) {
-                initialPose = pathPlannerActionList.get(0).getPathInitialPose();
-            } else {
-                initialPose = pathPlannerActionList.get(0).getPathInitialPose().rotateAround(Constants.fieldCenterPose.getTranslation(), Rotation2d.fromDegrees(180));
-            }
-        }
-    }
-
-    /**
      * Runs the autoMode routine actions
      *
      * @see #routine()
@@ -119,6 +91,7 @@ public abstract class AutoMode implements Runnable{
      */
     protected void done() {
         GreenLogger.log(this.getClass().getName() + " Done");
+        robotState.field.getObject("trajectory").setPoses(List.of());
     }
 
     /**
@@ -154,6 +127,10 @@ public abstract class AutoMode implements Runnable{
         }
 
         action.done();
+    }
+
+    public List<Pose2d> getPoses() {
+        return List.of();
     }
 
     /**

@@ -186,8 +186,6 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
                         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
                     }
             );
-
-            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
         }
     }
 

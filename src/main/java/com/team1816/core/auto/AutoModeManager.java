@@ -123,6 +123,8 @@ public class AutoModeManager {
 
             autoMode = autoModeChooser.getSelected().getAutoMode();
             autoModeThread = new Thread(autoMode::run);
+
+            robotState.field.getObject("trajectory").setPoses(autoMode.getPoses());
         }
         robotState.allianceColor = teamColor;
 
