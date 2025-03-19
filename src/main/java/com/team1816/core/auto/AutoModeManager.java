@@ -173,6 +173,7 @@ public class AutoModeManager {
      */
     public void startAuto() {
         autoModeThread.start();
+        robotState.field.getObject("trajectory").setPoses(autoMode.getPoses());
     }
 
     /**
