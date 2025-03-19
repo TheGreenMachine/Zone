@@ -4,34 +4,31 @@ A guide on how to use PathPlanner in our code!
 
 For a guide on using PathPlanner GUI, go to <a href='https://pathplanner.dev/pathplanner-gui.html'>Official PathPlanner GUI Guide</a>
 
-## Named Command List
+## Adding an auto
 
-A list of all Named Commands that have been implemented in code.
+Adding a PathPlanner auto to the code is very simple. Navigate to `AutoModeManager` and find the
+`DesiredAuto` enum. Just drop in a supplier for a `PathPlannerAutoMode` with a descriptive name for
+the enum value like so:
 
-### Placeholders
-- `<level>`: l1, l2, l3, l4, feeder
-- `<reef level>`: l1, l2, l3, l4
-- `<coral arm pivot level>`: l1, l2, l3, l4, feeder, up
-- `<coral arm intake mode>`: intake, outtake, hold, rest
+```java
+enum DesiredAuto {
+    // ...
+    
+    MIDDLE_SCORE_2(() -> new PathPlannerAutoMode("Middle Score 2 Auto")),
+    
+    // ...
+}
+```
 
-### Misc
-|          Name          | Operation                                                                                                                                            |
-|:----------------------:|------------------------------------------------------------------------------------------------------------------------------------------------------|
-|  score `<reef level>`  | Lines up elevator and pivot to `<reef level>` and outtakes. If the robot is already lined up, it just outtakes.                                      |
-|    ready `<level>`     | Lines up elevator and pivot to `<level>`                                                                                                             |
-| score and ready feeder | Waits for everything to be in position, outtakes coral, and gets ready to intake (brings elevator, coral pivot to FEEDER and coral intake to INTAKE) |
-|    get feeder coral    | Sets elevator and coral to FEEDER mode and waits until the coral beam break is triggered                                                             |
+It will automatically grab the specified auto that PathPlanner generated and create it.
 
-### Coral Arm
-|                   Name                    | Operation                                        |
-|:-----------------------------------------:|--------------------------------------------------|
-| coralArm intake `<coral arm intake mode>` | Desired intake state → `<coral arm intake mode>` |
-|  coralArm pivot <coral arm pivot level>   | Desired pivot state → `<coral arm pivot level>`  |
+To mirror the auto (in case you created an auto from the top of the field and want to reflect it to
+the bottom of the field), just set the `mirror` parameter to true in the `PathPlannerAutoMode`
+constructor:
 
-### Elevator
-|        Name        | Operation                          |
-|:------------------:|------------------------------------|
-| elevator `<level>` | Desired elevator state → `<level>` |
+```java
+new PathPlannerAutoMode("Top Score 1", true)
+```
 
 ## Programming Named Commands
 
