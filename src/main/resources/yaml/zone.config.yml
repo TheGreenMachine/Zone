@@ -1,6 +1,6 @@
 subsystems:
     drivetrain:
-        implemented: false
+        implemented: true
         motors:
             RRDr:
                 motorType: TalonFX
@@ -138,7 +138,7 @@ subsystems:
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: false
+        implemented: true
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
@@ -216,7 +216,7 @@ subsystems:
 
             elevatorMotorRotationsPerUnit: 20
     ramp:
-        implemented: false
+        implemented: true
         motors:
             rampMotor:
                 motorType: SparkMax
@@ -244,7 +244,7 @@ subsystems:
             rampMotorRotationsPerUnit: 0.136
             zeroingButtonChannel: 6
     pneumatic:
-        implemented: false
+        implemented: true
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6
