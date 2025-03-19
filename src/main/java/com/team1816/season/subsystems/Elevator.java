@@ -123,10 +123,12 @@ public class Elevator extends Subsystem {
 
             desiredElevatorPosition = getElevatorPosition(desiredElevatorState);
 //            System.out.println("Elevator state: "+desiredElevatorState+" Position: "+desiredElevatorPosition);
+            if (robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
+                elevatorOutputsChanged = true;
+            else
+                elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
             SmartDashboard.putString("Elevator desired state", String.valueOf(desiredElevatorState));
-            SmartDashboard.putNumber("Elevator desired position", desiredElevatorPosition);
-            elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
-        }
+            SmartDashboard.putNumber("Elevator desired position", desiredElevatorPosition);}
     }
 
     public void offsetElevator(double offsetAmount){
