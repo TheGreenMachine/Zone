@@ -92,6 +92,8 @@ public class Ramp extends Subsystem {
         rampCurrentDraw = rampMotor.getMotorOutputCurrent();
 
         //TODO: Add Mechanism Ligaments if needed
+        if ((!(robotState.actualElevatorState == Elevator.ELEVATOR_STATE.FEEDER) || !robotState.isElevatorInRange || !(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER) || !robotState.isCoralArmPivotInRange) && desiredRampState == RAMP_STATE.L1_FEEDER)
+            desiredRampState = RAMP_STATE.L234_FEEDER;
 
         if (robotState.actualRampState != desiredRampState) {
             robotState.actualRampState = desiredRampState;
@@ -109,13 +111,11 @@ public class Ramp extends Subsystem {
             rampOutputsChanged = false;
             offsetHasBeenApplied = false;
 
-            if ((!(robotState.actualElevatorState == Elevator.ELEVATOR_STATE.FEEDER) || !robotState.isElevatorInRange || !(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER) || !robotState.isCoralArmPivotInRange) && desiredRampState == RAMP_STATE.L1_FEEDER)
-                desiredRampState = RAMP_STATE.L234_FEEDER;
             desiredRampPosition = getRampPosition(desiredRampState);
 //            System.out.println("ramp state: "+desiredRampPosition+" Position: "+desiredRampPosition);
             SmartDashboard.putString("Ramp desired state", String.valueOf(desiredRampState));
             SmartDashboard.putNumber("Ramp desired position", desiredRampPosition);
-            rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -15, 5));
+            rampMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredRampPosition, -27, -7));
         }
 
         robotState.rampMechArm.setAngle(robotState.rampMechArmBaseAngle + rampMotor.getSensorPosition() / rampMotorRotationsPerUnit);

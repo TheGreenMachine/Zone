@@ -166,10 +166,10 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: -.80
-            outtakeSpeed: .80
+            intakeSpeed: 0.8
+            outtakeSpeed: -.8
             holdSpeed: 0
-            removeAlgaeSpeed: -.80
+            removeAlgaeSpeed: .80
 
             coralSensorChannel: 9
 
@@ -244,7 +244,7 @@ subsystems:
             rampMotorRotationsPerUnit: 0.136
             zeroingButtonChannel: 6
     pneumatic:
-        implemented: true
+        implemented: false
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6

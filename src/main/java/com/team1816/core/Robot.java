@@ -292,7 +292,7 @@ public class Robot extends TimedRobot {
                     "feeder",
                     ActionState.PRESSED,
                     () -> {
-                        orchestrator.setFeederStates(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER && robotState.actualElevatorState == Elevator.ELEVATOR_STATE.FEEDER);
+                        ramp.setDesiredState(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER ? Ramp.RAMP_STATE.L1_FEEDER : Ramp.RAMP_STATE.L234_FEEDER);
                     }
             );
             inputHandler.listenAction(
@@ -318,10 +318,7 @@ public class Robot extends TimedRobot {
                     () -> {
                         if (robotState.isCoralBeamBreakTriggered) {
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_CORAL);
-                        }
-                        else {
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_ALGAE);
-                            coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2_CORAL);
                         }
                     }
             );
@@ -331,10 +328,7 @@ public class Robot extends TimedRobot {
                     () -> {
                         if (robotState.isCoralBeamBreakTriggered) {
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_CORAL);
-                        }
-                        else {
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_ALGAE);
-                            coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3_CORAL);
                         }
                     }
             );
@@ -343,6 +337,7 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
                     }
             );
 

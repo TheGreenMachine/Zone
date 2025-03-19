@@ -103,7 +103,13 @@ public class Elevator extends Subsystem {
 
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
-        if (robotState.actualElevatorState != desiredElevatorState) {
+        if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
+            desiredElevatorState = ELEVATOR_STATE.FEEDER;
+
+        if(robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE && !robotState.isCoralBeamBreakTriggered && desiredElevatorState != ELEVATOR_STATE.L2_ALGAE && desiredElevatorState != ELEVATOR_STATE.L3_ALGAE)
+            desiredElevatorState = ELEVATOR_STATE.FEEDER;
+
+        if (robotState.actualElevatorState != desiredElevatorState ) {
             System.out.println("changed");
             robotState.actualElevatorState = desiredElevatorState;
             elevatorOutputsChanged = true;
