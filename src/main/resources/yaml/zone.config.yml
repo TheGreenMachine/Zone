@@ -150,15 +150,15 @@ subsystems:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
                 id: 13
-                invertMotor: true
+                invertMotor: false
                 currentLimit: 20
                 isLowSpeedCanBus: true
                 motionMagic:
-                    expoKV: 0.12
+                    expoKV: 0.1
                     expoKA: 0.1
         pidConfig:
             slot0: #Pivot
-                kP: 0.05
+                kP: 1
                 kI: 0
                 kD: 0
                 kV: 0
@@ -194,13 +194,13 @@ subsystems:
                 invertMotor: true
                 currentLimit: 60
                 motionMagic:
-                    expoKV: 0.1
-                    expoKA: 0.2
+                    expoKV: 0.05
+                    expoKA: 0.04
         pidConfig:
             slot0:
                 kP: 1
                 kI: 0
-                kD: 0.02
+                kD: 0
                 kV: 0
                 kS: 0
                 kA: 0
