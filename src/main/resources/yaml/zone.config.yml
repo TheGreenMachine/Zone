@@ -173,15 +173,15 @@ subsystems:
 
             coralSensorChannel: 9
 
-            coralArmL1Position: 36
-            coralArmL2CoralPosition: 36
-            coralArmL3CoralPosition: 36
-            coralArmL4Position: 36
-            coralArmUpPosition: 28
-            coralArmL2AlgaePosition: 36
-            coralArmL3AlgaePosition: 36
-            coralArmFeederPosition: 28
-            coralArmClimbPosition: 36
+            coralArmL1Position: -43.501
+            coralArmL2CoralPosition: -43.501
+            coralArmL3CoralPosition: -37.427
+            coralArmL4Position: -40.925
+            coralArmUpPosition: -30.856
+            coralArmL2AlgaePosition: -43.501
+            coralArmL3AlgaePosition: -37.427
+            coralArmFeederPosition: -4.068
+            coralArmClimbPosition: -39.14
 
             coralArmMotorRotationsPerDegree: .136
     elevator:
@@ -207,12 +207,12 @@ subsystems:
                 kG: 0
         constants: # TODO: all of these
             elevatorFeederPosition: 0
-            elevatorL1Position: 1
-            elevatorL2CoralPosition: 14.2
-            elevatorL3CoralPosition: 33.7
-            elevatorL4Position: 63.1
-            elevatorL2AlgaePosition: 14.2
-            elevatorL3AlgaePosition: 33.7
+            elevatorL1Position: 0.131
+            elevatorL2CoralPosition: 0.131
+            elevatorL3CoralPosition: 12.129
+            elevatorL4Position: 62.308
+            elevatorL2AlgaePosition: 0.131
+            elevatorL3AlgaePosition: 12.129
 
             elevatorMotorRotationsPerUnit: 20
     ramp:
