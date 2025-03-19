@@ -132,7 +132,7 @@ public class Elevator extends Subsystem {
             if (robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
                 elevatorOutputsChanged = true;
             else
-                elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 67));
+                elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 74));
             SmartDashboard.putString("Elevator desired state", String.valueOf(desiredElevatorState));
             SmartDashboard.putNumber("Elevator desired position", desiredElevatorPosition);}
     }
