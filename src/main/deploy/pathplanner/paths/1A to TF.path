@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.121,
-        "y": 5.456
+        "x": 5.14,
+        "y": 5.49
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.562295081967213,
-        "y": 6.20076844262295
+        "x": 5.5812950819672125,
+        "y": 6.23476844262295
       },
       "isLocked": false,
       "linkedName": "Coral 1A Reef"
     },
     {
       "anchor": {
-        "x": 1.6652556818181818,
-        "y": 7.400383522727273
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": {
-        "x": 3.0412166448277427,
-        "y": 6.421490690022524
+        "x": 2.995960963009561,
+        "y": 6.361107167295251
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.09027692082234
+    "rotation": -53.760000000000005
   },
   "reversed": false,
   "folder": "Top 4L4 Auto",

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.859,
-        "y": 5.456
+        "x": 3.829,
+        "y": 5.49
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.101634506166744,
-        "y": 7.112487758864073
+        "x": 1.9361537706449035,
+        "y": 7.161937191062693
       },
       "isLocked": false,
       "linkedName": "Coral 6B Reef"
     },
     {
       "anchor": {
-        "x": 1.6652556818181818,
-        "y": 7.400383522727273
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": {
-        "x": 2.5970194246161675,
-        "y": 6.5424611398332395
+        "x": 2.536440346745123,
+        "y": 6.532482291652833
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.09027692082234
+    "rotation": -53.760000000000005
   },
   "reversed": false,
   "folder": "Top 4L4 Auto",

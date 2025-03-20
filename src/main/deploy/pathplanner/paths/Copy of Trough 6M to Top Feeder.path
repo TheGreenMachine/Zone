@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 1.7684472493947538,
-        "y": 6.048649587752624
+        "y": 6.0486495877526245
       },
       "isLocked": false,
       "linkedName": "Coral 6M Trough"
     },
     {
       "anchor": {
-        "x": 1.6652556818181818,
-        "y": 7.400383522727273
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": {
-        "x": 2.759089779783668,
-        "y": 6.395797413241872
+        "x": 2.7138340979654867,
+        "y": 6.335413890514599
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.09027692082234
+    "rotation": -53.760000000000005
   },
   "reversed": false,
   "folder": "Top Auto",

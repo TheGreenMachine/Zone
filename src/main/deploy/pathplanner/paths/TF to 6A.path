@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6652556818181818,
-        "y": 7.400383522727273
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.054356274101628,
-        "y": 6.9202802271645005
+        "x": 2.0091005922834464,
+        "y": 6.859896704437228
       },
       "isLocked": false,
       "linkedName": "Top Feeder"
     },
     {
       "anchor": {
-        "x": 3.579,
-        "y": 5.274
+        "x": 3.55,
+        "y": 5.32
       },
       "prevControl": {
-        "x": 3.119967941993061,
-        "y": 5.837948844469039
+        "x": 3.0909679419930605,
+        "y": 5.883948844469039
       },
       "nextControl": null,
       "isLocked": false,
@@ -78,7 +78,7 @@
   "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.09027692082234
+    "rotation": -53.760000000000005
   },
   "useDefaultConstraints": true
 }
