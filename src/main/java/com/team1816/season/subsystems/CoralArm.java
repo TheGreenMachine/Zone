@@ -69,6 +69,8 @@ public class CoralArm extends Subsystem {
 
     private double lastL4CommandReceivedTime = 0;
     private boolean hasLoggedAfterReachingL4 = true;
+    private double lastFeederCommandReceivedTime = 0;
+    private boolean hasLoggedAfterReachingFeeder = true;
 
     /**
      * Constants
@@ -176,6 +178,10 @@ public class CoralArm extends Subsystem {
             GreenLogger.log("Coral arm time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
             hasLoggedAfterReachingL4 = true;
         }
+        if (Math.abs(actualPivotPosition - feederPosition) < 0.5 && !hasLoggedAfterReachingFeeder) {
+            GreenLogger.log("Coral arm time to reach feeder: " + (Timer.getFPGATimestamp() - lastFeederCommandReceivedTime));
+            hasLoggedAfterReachingFeeder = true;
+        }
 
         //Setting beam break state
         boolean beamBreak = isBeamBreakTriggered();
@@ -214,6 +220,10 @@ public class CoralArm extends Subsystem {
             if (desiredPivotState == PIVOT_STATE.L4) {
                 lastL4CommandReceivedTime = Timer.getFPGATimestamp();
                 hasLoggedAfterReachingL4 = false;
+            }
+            if (desiredPivotState == PIVOT_STATE.FEEDER) {
+                lastFeederCommandReceivedTime = Timer.getFPGATimestamp();
+                hasLoggedAfterReachingFeeder = false;
             }
             robotState.actualCoralArmPivotState = desiredPivotState;
             desiredPivotStateChanged = true;
