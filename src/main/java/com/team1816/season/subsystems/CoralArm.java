@@ -94,6 +94,10 @@ public class CoralArm extends Subsystem {
 
     private BooleanLogEntry beamBreakLogger;
 
+    private double outtakeCommandReceivedTime = 0;
+
+    private boolean outtakeCommandReceived = false;
+
     @Inject
     public CoralArm(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
@@ -185,8 +189,15 @@ public class CoralArm extends Subsystem {
         if(desiredPivotState != PIVOT_STATE.CLIMB && robotState.actualCoralArmIntakeState != CoralArm.INTAKE_STATE.OUTTAKE && !robotState.isCoralBeamBreakTriggered && desiredPivotState != PIVOT_STATE.L2_ALGAE && desiredPivotState != PIVOT_STATE.L3_ALGAE)
             desiredPivotState = PIVOT_STATE.FEEDER;
 
+        if (outtakeCommandReceived && !robotState.isCoralBeamBreakTriggered){
+            GreenLogger.log("Outtake Time: " + String.valueOf(Timer.getFPGATimestamp() - outtakeCommandReceivedTime));
+        }
 
         if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
+            if(desiredIntakeState == INTAKE_STATE.OUTTAKE && robotState.isCoralBeamBreakTriggered) {
+                outtakeCommandReceived = true;
+                outtakeCommandReceivedTime = Timer.getFPGATimestamp();
+            }
             robotState.actualCoralArmIntakeState = desiredIntakeState;
             desiredIntakeStateChanged = true;
         }
