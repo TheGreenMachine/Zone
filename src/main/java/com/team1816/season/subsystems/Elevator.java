@@ -109,11 +109,11 @@ public class Elevator extends Subsystem {
 
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
-        if (Math.abs(actualElevatorPosition - elevatorL4Position) < 0.5 && !hasLoggedAfterReachingL4) {
+        if (Math.abs(actualElevatorPosition - elevatorL4Position) < 1 && !hasLoggedAfterReachingL4) {
             GreenLogger.log("Elevator time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
             hasLoggedAfterReachingL4 = true;
         }
-        if (Math.abs(actualElevatorPosition - elevatorFeederPosition) < 0.5 && !hasLoggedAfterReachingFeeder) {
+        if (Math.abs(actualElevatorPosition - elevatorFeederPosition) < 1 && !hasLoggedAfterReachingFeeder) {
             GreenLogger.log("Elevator time to reach feeder: " + (Timer.getFPGATimestamp() - lastFeederCommandReceivedTime));
             hasLoggedAfterReachingFeeder = true;
         }

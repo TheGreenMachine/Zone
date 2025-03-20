@@ -174,11 +174,11 @@ public class CoralArm extends Subsystem {
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
-        if (Math.abs(actualPivotPosition - l4Position) < 0.5 && !hasLoggedAfterReachingL4) {
+        if (Math.abs(actualPivotPosition - l4Position) < 1 && !hasLoggedAfterReachingL4) {
             GreenLogger.log("Coral arm time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
             hasLoggedAfterReachingL4 = true;
         }
-        if (Math.abs(actualPivotPosition - feederPosition) < 0.5 && !hasLoggedAfterReachingFeeder) {
+        if (Math.abs(actualPivotPosition - feederPosition) < 1 && !hasLoggedAfterReachingFeeder) {
             GreenLogger.log("Coral arm time to reach feeder: " + (Timer.getFPGATimestamp() - lastFeederCommandReceivedTime));
             hasLoggedAfterReachingFeeder = true;
         }
@@ -205,6 +205,7 @@ public class CoralArm extends Subsystem {
 
         if (outtakeCommandReceived && !robotState.isCoralBeamBreakTriggered){
             GreenLogger.log("Outtake Time: " + String.valueOf(Timer.getFPGATimestamp() - outtakeCommandReceivedTime));
+            outtakeCommandReceived = false;
         }
 
         if (robotState.actualCoralArmIntakeState != desiredIntakeState) {
