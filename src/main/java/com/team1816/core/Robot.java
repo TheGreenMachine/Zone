@@ -293,6 +293,7 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         ramp.setDesiredState(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER ? Ramp.RAMP_STATE.L1_FEEDER : Ramp.RAMP_STATE.L234_FEEDER);
+                        coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.HOLD);
                     }
             );
             inputHandler.listenAction(
@@ -308,10 +309,10 @@ public class Robot extends TimedRobot {
                     () -> {
                         if(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER && robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER){
                             ramp.setDesiredState(Ramp.RAMP_STATE.CLIMB);
-                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.CLIMB);
+                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.CLIMB, CoralArm.INTAKE_STATE.HOLD);
                         } else {
                             ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
-                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
+                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
                         }
 
                     }
@@ -538,7 +539,7 @@ public class Robot extends TimedRobot {
 
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
             ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
-            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.HOLD);
+            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
 
 //            autopather.autopathMaxCalcMilli = 5;
 
