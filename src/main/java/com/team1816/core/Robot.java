@@ -293,7 +293,7 @@ public class Robot extends TimedRobot {
                     ActionState.PRESSED,
                     () -> {
                         ramp.setDesiredState(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER ? Ramp.RAMP_STATE.L1_FEEDER : Ramp.RAMP_STATE.L234_FEEDER);
-                        coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.HOLD);
+                        coralArm.setDesiredIntakeState(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER ? CoralArm.INTAKE_STATE.HOLD : CoralArm.INTAKE_STATE.INTAKE);
                     }
             );
             inputHandler.listenAction(
