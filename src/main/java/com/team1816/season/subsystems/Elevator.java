@@ -13,6 +13,7 @@ import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -45,6 +46,11 @@ public class Elevator extends Subsystem {
     private double actualElevatorPosition = 0;
 
     private double elevatorMotorRotationsPerUnit = factory.getConstant(NAME, "elevatorMotorRotationsPerUnit", 1);
+
+    private double lastL4CommandReceivedTime = 0;
+    private boolean hasLoggedAfterReachingL4 = true;
+    private double lastFeederCommandReceivedTime = 0;
+    private boolean hasLoggedAfterReachingFeeder = true;
 
     /**
      * Constants
@@ -103,6 +109,15 @@ public class Elevator extends Subsystem {
 
         robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
+        if (Math.abs(actualElevatorPosition - elevatorL4Position) < 0.5 && !hasLoggedAfterReachingL4) {
+            GreenLogger.log("Elevator time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
+            hasLoggedAfterReachingL4 = true;
+        }
+        if (Math.abs(actualElevatorPosition - elevatorFeederPosition) < 0.5 && !hasLoggedAfterReachingFeeder) {
+            GreenLogger.log("Elevator time to reach feeder: " + (Timer.getFPGATimestamp() - lastFeederCommandReceivedTime));
+            hasLoggedAfterReachingFeeder = true;
+        }
+
         if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
             desiredElevatorState = ELEVATOR_STATE.FEEDER;
 
@@ -110,6 +125,14 @@ public class Elevator extends Subsystem {
             desiredElevatorState = ELEVATOR_STATE.FEEDER;
 
         if (robotState.actualElevatorState != desiredElevatorState ) {
+            if (desiredElevatorState == ELEVATOR_STATE.L4) {
+                lastL4CommandReceivedTime = Timer.getFPGATimestamp();
+                hasLoggedAfterReachingL4 = false;
+            }
+            if (desiredElevatorState == ELEVATOR_STATE.FEEDER) {
+                lastFeederCommandReceivedTime = Timer.getFPGATimestamp();
+                hasLoggedAfterReachingFeeder = false;
+            }
 //            System.out.println("changed");
             robotState.actualElevatorState = desiredElevatorState;
             elevatorOutputsChanged = true;

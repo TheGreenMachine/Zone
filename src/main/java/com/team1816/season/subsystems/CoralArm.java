@@ -173,7 +173,7 @@ public class CoralArm extends Subsystem {
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
         if (Math.abs(actualPivotPosition - l4Position) < 0.5 && !hasLoggedAfterReachingL4) {
-            GreenLogger.log("Time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
+            GreenLogger.log("Coral arm time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
             hasLoggedAfterReachingL4 = true;
         }
 
