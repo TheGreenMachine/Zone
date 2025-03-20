@@ -77,7 +77,7 @@
   "reversed": false,
   "folder": "Top 4L4 Auto",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": -53.760000000000005
   },
   "useDefaultConstraints": true
