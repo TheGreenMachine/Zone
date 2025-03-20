@@ -67,6 +67,9 @@ public class CoralArm extends Subsystem {
 
     private SendableChooser<Boolean> simBeamBreakChooser = new SendableChooser<>();
 
+    private double lastL4CommandReceivedTime = 0;
+    private boolean hasLoggedAfterReachingL4 = true;
+
     /**
      * Constants
      */
@@ -169,6 +172,11 @@ public class CoralArm extends Subsystem {
         pivotCurrentDraw = pivotMotor.getMotorOutputCurrent();
         intakeCurrentDraw = intakeMotor.getMotorOutputCurrent();
 
+        if (Math.abs(actualPivotPosition - l4Position) < 0.5 && !hasLoggedAfterReachingL4) {
+            GreenLogger.log("Time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
+            hasLoggedAfterReachingL4 = true;
+        }
+
         //Setting beam break state
         boolean beamBreak = isBeamBreakTriggered();
         if (robotState.isCoralBeamBreakTriggered != beamBreak) {
@@ -203,6 +211,10 @@ public class CoralArm extends Subsystem {
         }
 
         if (robotState.actualCoralArmPivotState != desiredPivotState) {
+            if (desiredPivotState == PIVOT_STATE.L4) {
+                lastL4CommandReceivedTime = Timer.getFPGATimestamp();
+                hasLoggedAfterReachingL4 = false;
+            }
             robotState.actualCoralArmPivotState = desiredPivotState;
             desiredPivotStateChanged = true;
         }
