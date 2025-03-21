@@ -292,8 +292,11 @@ public class Robot extends TimedRobot {
                     "feeder",
                     ActionState.PRESSED,
                     () -> {
-                        ramp.setDesiredState(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER ? Ramp.RAMP_STATE.L1_FEEDER : Ramp.RAMP_STATE.L234_FEEDER);
-                        coralArm.setDesiredIntakeState(robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER ? CoralArm.INTAKE_STATE.HOLD : CoralArm.INTAKE_STATE.INTAKE);
+                        orchestrator.setFeederStates(
+                                robotState.actualElevatorState == Elevator.ELEVATOR_STATE.FEEDER &&
+                                        robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER &&
+                                        robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER
+                        );
                     }
             );
             inputHandler.listenAction(
@@ -328,6 +331,10 @@ public class Robot extends TimedRobot {
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_CORAL);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2_CORAL);
                         }
+                        else {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_ALGAE);
+                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.L2_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                        }
                     }
             );
             inputHandler.listenAction(
@@ -337,6 +344,10 @@ public class Robot extends TimedRobot {
                         if (robotState.isCoralBeamBreakTriggered) {
                             elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_CORAL);
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3_CORAL);
+                        }
+                        else {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_ALGAE);
+                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.L3_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
                         }
                     }
             );
@@ -606,6 +617,8 @@ public class Robot extends TimedRobot {
 
             robotState.isElevatorInRange = elevator.isElevatorInRange();
             robotState.isCoralArmPivotInRange = coralArm.isCoralArmPivotInRange();
+            SmartDashboard.putBoolean("Elevator in range", robotState.isElevatorInRange);
+            SmartDashboard.putBoolean("Coral arm pivot in range", robotState.isCoralArmPivotInRange);
             if (Constants.kLoggingRobot) {
                 looperLogger.append(looperDt);
                 robotLoopLogger.append(robotDt);

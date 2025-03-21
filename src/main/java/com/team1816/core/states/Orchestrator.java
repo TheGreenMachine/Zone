@@ -227,7 +227,7 @@ public class Orchestrator {
     }
 
     public void setFeederStates(boolean setToL1Feeder) {
-        coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.INTAKE);
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, setToL1Feeder ? CoralArm.INTAKE_STATE.HOLD : CoralArm.INTAKE_STATE.INTAKE);
         elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
         ramp.setDesiredState(setToL1Feeder ? Ramp.RAMP_STATE.L1_FEEDER : Ramp.RAMP_STATE.L234_FEEDER);
     }
