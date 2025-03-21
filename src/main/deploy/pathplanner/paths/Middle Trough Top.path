@@ -74,7 +74,7 @@
     },
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.07479224376731053,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
