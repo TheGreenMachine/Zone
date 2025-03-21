@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.095,
-        "y": 5.167
+        "x": 5.18,
+        "y": 5.19
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.4831833273890265,
-        "y": 5.901585841896805
+        "x": 4.568183327389026,
+        "y": 5.924585841896805
       },
       "isLocked": false,
       "linkedName": "Coral 1A Trough"

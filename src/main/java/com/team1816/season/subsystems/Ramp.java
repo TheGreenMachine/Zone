@@ -10,7 +10,6 @@ import com.team1816.lib.hardware.components.motor.configurations.GreenControlMod
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jakarta.inject.Inject;
@@ -40,6 +39,7 @@ public class Ramp extends Subsystem {
     /**Constants*/
 
     private double rampL1FeederPosition = factory.getConstant(NAME, "rampL1FeederPosition", 1.0);
+    private double rampScoreDeepPosition = factory.getConstant(NAME, "rampL1FeederDeepPosition", 1.0);
     private double rampL234FeederPosition = factory.getConstant(NAME, "rampL234FeederPosition", 1.0);
     private double rampScorePosition = factory.getConstant(NAME, "rampScorePosition", 1.0);
     private double rampDislodgeCoralPosition = factory.getConstant(NAME, "rampDislodgeCoralPosition", 1.0);
@@ -125,6 +125,7 @@ public class Ramp extends Subsystem {
     public void offsetRamp(double offsetAmount){
         switch (desiredRampState) {
             case L1_FEEDER -> rampL1FeederPosition += offsetAmount;
+            case SCORE_DEEP -> rampScoreDeepPosition += offsetAmount;
             case L234_FEEDER -> rampL234FeederPosition += offsetAmount;
             case SCORE -> rampScorePosition += offsetAmount;
             case DISLODGE_CORAL -> rampDislodgeCoralPosition += offsetAmount;
@@ -159,6 +160,7 @@ public class Ramp extends Subsystem {
     private double getRampPosition(RAMP_STATE rampState) {
         return switch (rampState) {
             case L1_FEEDER -> rampL1FeederPosition;
+            case SCORE_DEEP -> rampScoreDeepPosition;
             case L234_FEEDER -> rampL234FeederPosition;
             case SCORE -> rampScorePosition;
             case DISLODGE_CORAL -> rampDislodgeCoralPosition;
@@ -182,6 +184,7 @@ public class Ramp extends Subsystem {
      */
     public enum RAMP_STATE{
         L1_FEEDER,
+        SCORE_DEEP,
         L234_FEEDER,
         SCORE,
         DISLODGE_CORAL,

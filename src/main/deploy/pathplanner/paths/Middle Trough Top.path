@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.576229508196722,
+        "x": 7.13,
         "y": 4.066956967213113
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.007235998591412,
-        "y": 5.185380679091082
+        "x": 4.389308654754172,
+        "y": 5.644839801508512
       },
       "isLocked": false,
       "linkedName": "MIddle Facing Right"
     },
     {
       "anchor": {
-        "x": 5.095,
-        "y": 5.167
+        "x": 5.18,
+        "y": 5.19
       },
       "prevControl": {
-        "x": 5.309047642405077,
-        "y": 5.037834963009225
+        "x": 5.574040646159964,
+        "y": 4.974338387271544
       },
       "nextControl": {
-        "x": 2.921961455231077,
-        "y": 6.478299675453922
+        "x": 3.789290132925868,
+        "y": 5.951146688021694
       },
       "isLocked": false,
       "linkedName": "Coral 1A Trough"
@@ -36,8 +36,8 @@
         "y": 7.34
       },
       "prevControl": {
-        "x": 1.8398554532767217,
-        "y": 7.220989161567161
+        "x": 1.7334690757246694,
+        "y": 7.116468388571867
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5461417322834702,
+      "waypointRelativePos": 0.18196017180788934,
       "rotationDegrees": 59.99999999999999
     },
     {
@@ -54,7 +54,7 @@
       "rotationDegrees": 59.99999999999999
     },
     {
-      "waypointRelativePos": 1.0828346456692899,
+      "waypointRelativePos": 1.1940648184302973,
       "rotationDegrees": 59.99999999999999
     }
   ],
@@ -74,12 +74,12 @@
     },
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.17568850902184394,
+      "waypointRelativePos": 0.07479224376731053,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp score l1"
+          "name": "ramp score l1 deep"
         }
       }
     },

@@ -235,6 +235,7 @@ subsystems:
                 kG: 0
         constants: # TODO: all of these
             rampL1FeederPosition: -7.048
+            rampL1FeederDeepPosition: -17.5
             rampL234FeederPosition: -19
             rampScorePosition: -12.405
             rampDislodgeCoralPosition: -26.048

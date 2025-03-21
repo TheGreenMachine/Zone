@@ -23,6 +23,10 @@ public final class NamedCommandRegistrar {
             Injector.get(Ramp.class).setDesiredState(Ramp.RAMP_STATE.SCORE);
         }));
 
+        NamedCommands.registerCommand("ramp score l1 deep", Commands.runOnce(() -> {
+            Injector.get(Ramp.class).setDesiredState(Ramp.RAMP_STATE.SCORE_DEEP);
+        }));
+
         NamedCommands.registerCommand("ramp hold l1", Commands.runOnce(() -> {
             Injector.get(Ramp.class).setDesiredState(Ramp.RAMP_STATE.L1_FEEDER);
         }));
