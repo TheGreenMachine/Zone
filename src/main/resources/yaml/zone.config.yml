@@ -178,8 +178,8 @@ subsystems:
             coralArmL3CoralPosition: -37.427
             coralArmL4Position: -40.925
             coralArmUpPosition: -30.856
-            coralArmL2AlgaePosition: -43.501
-            coralArmL3AlgaePosition: -37.427
+            coralArmL2AlgaePosition: -46
+            coralArmL3AlgaePosition: -45.469
             coralArmFeederPosition: -4.068
             coralArmClimbPosition: -39.14
 
@@ -211,8 +211,8 @@ subsystems:
             elevatorL2CoralPosition: 0.131
             elevatorL3CoralPosition: 12.129
             elevatorL4Position: 68
-            elevatorL2AlgaePosition: 0.131
-            elevatorL3AlgaePosition: 12.129
+            elevatorL2AlgaePosition: 9.213
+            elevatorL3AlgaePosition: 37.452
 
             elevatorMotorRotationsPerUnit: 20
     ramp:

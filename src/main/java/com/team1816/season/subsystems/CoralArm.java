@@ -270,7 +270,7 @@ public class CoralArm extends Subsystem {
             if (robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
                 desiredPivotStateChanged = true;
             else
-                pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, -44, -4));
+                pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, -46, -4));
             SmartDashboard.putString("Coral arm desired pivot state", String.valueOf(desiredPivotState));
             SmartDashboard.putNumber("Coral arm desired pivot position", desiredPivotPosition);}
 //        GreenLogger.log("Coral arm intake state: "+desiredIntakeState+" Intake power: "+desiredIntakePower+" Pivot state: "+desiredPivotState+" Pivot position: "+desiredPivotPosition);
