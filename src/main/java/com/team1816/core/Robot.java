@@ -332,8 +332,13 @@ public class Robot extends TimedRobot {
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2_CORAL);
                         }
                         else {
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_ALGAE);
-                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.L2_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            if (robotState.actualElevatorState == Elevator.ELEVATOR_STATE.L2_ALGAE) {
+                                orchestrator.setFeederStates(false);
+                            }
+                            else {
+                                elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_ALGAE);
+                                coralArm.setDesiredState(CoralArm.PIVOT_STATE.L2_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            }
                         }
                     }
             );
@@ -346,8 +351,13 @@ public class Robot extends TimedRobot {
                             coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3_CORAL);
                         }
                         else {
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_ALGAE);
-                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.L3_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            if (robotState.actualElevatorState == Elevator.ELEVATOR_STATE.L3_ALGAE) {
+                                orchestrator.setFeederStates(false);
+                            }
+                            else {
+                                elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_ALGAE);
+                                coralArm.setDesiredState(CoralArm.PIVOT_STATE.L3_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            }
                         }
                     }
             );
