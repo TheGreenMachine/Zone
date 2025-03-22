@@ -56,8 +56,8 @@ public class Ramp extends Subsystem {
         super(NAME, inf, rs);
         rampMotor = factory.getMotor(NAME, "rampMotor");
 //        zeroingButton = new DigitalInput((int) factory.getConstant(NAME, "zeroingButtonChannel", 0));
-        rampMotor.config_PeakOutputForward(0.1);
-        rampMotor.config_PeakOutputReverse(-0.1);
+        rampMotor.config_PeakOutputForward(0.25);
+        rampMotor.config_PeakOutputReverse(-0.25);
 
         rampMotor.selectPIDSlot(0);
 

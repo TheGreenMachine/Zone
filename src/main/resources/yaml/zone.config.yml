@@ -226,7 +226,7 @@ subsystems:
                 currentLimit: 20
         pidConfig:
             slot0:
-                kP: 0.22
+                kP: 0.3
                 kI: 0
                 kD: 0
                 kV: 0
