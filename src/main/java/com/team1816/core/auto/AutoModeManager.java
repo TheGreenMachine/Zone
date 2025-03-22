@@ -31,7 +31,7 @@ public class AutoModeManager {
     /**
      * Properties: Execution
      */
-    private AutoMode autoMode = DesiredAuto.DRIVE_STRAIGHT.autoMode;
+    private AutoMode autoMode = new PathPlannerAutoMode("Drive Straight Auto");
     private static Thread autoModeThread;
     
     /**
@@ -67,7 +67,7 @@ public class AutoModeManager {
      * Resets properties to default and resets the thread
      */
     public void reset() {
-        autoMode = DesiredAuto.DEFAULT.autoMode;
+        autoMode = new PathPlannerAutoMode(DesiredAuto.DEFAULT.autoMode, DesiredAuto.DEFAULT.mirror);
         autoModeThread = new Thread(autoMode::run);
         desiredAuto = DesiredAuto.DRIVE_STRAIGHT;
         teamColor = sideChooser.getSelected();
@@ -108,7 +108,7 @@ public class AutoModeManager {
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
             
-            autoMode = selectedAuto.autoMode;
+            autoMode = new PathPlannerAutoMode(selectedAuto.autoMode, selectedAuto.mirror);
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
@@ -159,36 +159,43 @@ public class AutoModeManager {
      * Enum for AutoModes
      */
     public enum DesiredAuto {
-        DEFAULT(new NoopAutoMode()),
+        DEFAULT("Drive Straight Auto", false),
         
-        DRIVE_STRAIGHT(new PathPlannerAutoMode("Drive Straight Auto")),
+        DRIVE_STRAIGHT("Drive Straight Auto", false),
 
-        TUNE_DRIVETRAIN(new PathPlannerAutoMode("Tune Drivetrain Auto")),
+        TUNE_DRIVETRAIN("Tune Drivetrain Auto"),
         
-        TOP_3L1(new PathPlannerAutoMode("Top 3L1 Auto")),
-        BOTTOM_3L1(new PathPlannerAutoMode("Top 3L1 Auto", true)),
+        TOP_3L1("Top 3L1 Auto"),
+        BOTTOM_3L1("Top 3L1 Auto", true),
         
-        OPTIMIZED_TOP_4L1(new PathPlannerAutoMode("Optimized Top 4L1 Auto")),
-        OPTIMIZED_BOTTOM_4L1(new PathPlannerAutoMode("Optimized Top 4L1 Auto", true)),
+        OPTIMIZED_TOP_4L1("Optimized Top 4L1 Auto"),
+        OPTIMIZED_BOTTOM_4L1("Optimized Top 4L1 Auto", true),
         
-        MIDDLE_TOP_1L4(new PathPlannerAutoMode("Middle 1L4 Auto")),
-        MIDDLE_BOTTOM_1L4(new PathPlannerAutoMode("Middle 1L4 Auto", true)),
+        MIDDLE_TOP_1L4("Middle 1L4 Auto"),
+        MIDDLE_BOTTOM_1L4("Middle 1L4 Auto", true),
 
-        TOP_4L4(new PathPlannerAutoMode("Top 4L4 Auto")),
-        BOTTOM_4L4(new PathPlannerAutoMode("Top 4L4 Auto", true)),
+        TOP_4L4("Top 4L4 Auto"),
+        BOTTOM_4L4("Top 4L4 Auto", true),
 
-        FAST_MIDDLE_TOP_1L1_2L4(new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto")),
-        FAST_MIDDLE_BOTTOM_1L1_2L4(new PathPlannerAutoMode("Fast Middle 1L1 2L4 Auto", true)),
+        FAST_MIDDLE_TOP_1L1_2L4("Fast Middle 1L1 2L4 Auto"),
+        FAST_MIDDLE_BOTTOM_1L1_2L4("Fast Middle 1L1 2L4 Auto", true),
 
-        FAST_MIDDLE_TOP_4L1(new PathPlannerAutoMode("Fast Middle 4L1 Auto")),
-        FAST_MIDDLE_BOTTOM_4L1(new PathPlannerAutoMode("Fast Middle 4L1 Auto", true)),
+        FAST_MIDDLE_TOP_4L1("Fast Middle 4L1 Auto"),
+        FAST_MIDDLE_BOTTOM_4L1("Fast Middle 4L1 Auto", true),
         
         ;
-        
-        DesiredAuto(AutoMode autoMode) {
+
+        DesiredAuto(String autoMode, boolean mirror) {
             this.autoMode = autoMode;
+            this.mirror = mirror;
+        }
+
+        DesiredAuto(String autoMode) {
+            this.autoMode = autoMode;
+            this.mirror = false;
         }
         
-        public final AutoMode autoMode;
+        public final String autoMode;
+        public final boolean mirror;
     }
 }
