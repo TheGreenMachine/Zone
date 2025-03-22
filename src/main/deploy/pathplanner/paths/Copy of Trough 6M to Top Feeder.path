@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7684472493947538,
-        "y": 6.0486495877526245
+        "x": 1.6721345498890474,
+        "y": 5.623825300614982
       },
       "isLocked": false,
       "linkedName": "Coral 6M Trough"
@@ -20,8 +20,8 @@
         "y": 7.34
       },
       "prevControl": {
-        "x": 2.7138340979654867,
-        "y": 6.335413890514599
+        "x": 2.649557765191509,
+        "y": 6.270645535782991
       },
       "nextControl": null,
       "isLocked": false,
