@@ -74,12 +74,12 @@
     },
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.045,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp score l1 deep"
+          "name": "ramp score l1"
         }
       }
     },
