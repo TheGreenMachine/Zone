@@ -3,48 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.62,
-        "y": 7.34
+        "x": 5.1675,
+        "y": 5.16575
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.325437006916485,
-        "y": 4.708876517440808
+        "x": 4.555683327389027,
+        "y": 5.900335841896805
       },
       "isLocked": false,
-      "linkedName": "Top Feeder"
+      "linkedName": "Coral 1A Trough"
     },
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 5.146803977272728
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": {
-        "x": 3.090848155330073,
-        "y": 6.273102103837925
+        "x": 1.7627051171567347,
+        "y": 7.095443075507043
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Top Feeder"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8840944881889722,
-      "rotationDegrees": 119.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ramp score l1",
-      "waypointRelativePos": 0.9564748201438859,
+      "name": "ramp hold l1",
+      "waypointRelativePos": 0.2312949640287777,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp score l1"
+          "name": "ramp hold l1"
         }
       }
     }
@@ -59,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -53.760000000000005
   },
   "reversed": false,
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }
