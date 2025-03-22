@@ -190,18 +190,19 @@ public class Elevator extends Subsystem {
     /**
      * Registers commands for:
      * <ul>
-     *     <li>elevator l1</li>
-     *     <li>elevator l2</li>
-     *     <li>elevator l3</li>
+     *     <li>elevator l2_coral</li>
+     *     <li>elevator l3_coral</li>
      *     <li>elevator l4</li>
      *     <li>elevator feeder</li>
+     *     <li>l2_algae</li>
+     *     <li>l3_algae</li>
      * </ul>
      */
     @Override
     public void implementNamedCommands() {
         for (ELEVATOR_STATE elevatorState : ELEVATOR_STATE.values()) {
             NamedCommands.registerCommand(NAME + " " + elevatorState.toString().toLowerCase(),
-                    Commands.runOnce(() -> setDesiredState(elevatorState)).alongWith(Commands.waitUntil(this::isElevatorInRange)));
+                    Commands.runOnce(() -> setDesiredState(elevatorState)));
         }
     }
 

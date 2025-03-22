@@ -1,37 +1,35 @@
 # PathPlanner Guide
 
-A guide on how to use PathPlanner in our code!
+A guide on how to use PathPlanner!
 
 For a guide on using PathPlanner GUI, go to <a href='https://pathplanner.dev/pathplanner-gui.html'>Official PathPlanner GUI Guide</a>
 
-## Named Command List
+## Configuring the Robot
 
-A list of all Named Commands that have been implemented in code.
+There are several parameters that must be inputted into the PathPlanner GUI to create the most
+accurate and optimised path.
 
-### Placeholders
-- `<level>`: l1, l2, l3, l4, feeder
-- `<reef level>`: l1, l2, l3, l4
-- `<coral arm pivot level>`: l1, l2, l3, l4, feeder, up
-- `<coral arm intake mode>`: intake, outtake, hold, rest
+These parameters can be made/changed by navigating to the left sidebar and clicking on
+**Settings**.
 
-### Misc
-|          Name          | Operation                                                                                                                                            |
-|:----------------------:|------------------------------------------------------------------------------------------------------------------------------------------------------|
-|  score `<reef level>`  | Lines up elevator and pivot to `<reef level>` and outtakes. If the robot is already lined up, it just outtakes.                                      |
-|    ready `<level>`     | Lines up elevator and pivot to `<level>`                                                                                                             |
-| score and ready feeder | Waits for everything to be in position, outtakes coral, and gets ready to intake (brings elevator, coral pivot to FEEDER and coral intake to INTAKE) |
-|    get feeder coral    | Sets elevator and coral to FEEDER mode and waits until the coral beam break is triggered                                                             |
+> **❗ Warning:**
+> The settings of a robot should only ever be touched by **one person** per season. For some
+> reason, PathPlanner's GUI for displaying settings is very finicky, and you can often lose
+> precision. If you accidentally touch the settings.json file, make sure to replace its contents
+> with data from the original GitHub repo. Don't ever push your settings.json to the repo if you
+> see it as an option, unless you know what you're doing.
 
-### Coral Arm
-|                   Name                    | Operation                                        |
-|:-----------------------------------------:|--------------------------------------------------|
-| coralArm intake `<coral arm intake mode>` | Desired intake state → `<coral arm intake mode>` |
-|  coralArm pivot <coral arm pivot level>   | Desired pivot state → `<coral arm pivot level>`  |
+### MOI (Moment of Inertia)
 
-### Elevator
-|        Name        | Operation                          |
-|:------------------:|------------------------------------|
-| elevator `<level>` | Desired elevator state → `<level>` |
+The MOI **can be calculated in SolidWorks**. However, the build/CAD team may not have time to
+calculate this, as it involves collecting the masses of various components on the robot. Here's
+the equation we use to approximate robot MOI. To prevent PathPlanner from overestimating the
+capabilities of our robot, we overestimate the MOI, which places a cap on how quickly we can turn.
+
+$$ MOI=\frac{1}{2}M(R^2+r^2) $$
+
+Where $MOI$ is moment of inertia, $M$ is mass in kg, $R$ is the outer radius of the robot 
+(including bumpers), and $r$ is the inner radius of the robot (not including bumpers) in metres.
 
 ## Programming Named Commands
 

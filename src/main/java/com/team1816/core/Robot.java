@@ -9,7 +9,7 @@ import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.Color;
-//import com.team1816.lib.autopath.Autopath;
+import com.team1816.lib.autopath.PatriotPath;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.InputHandler;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
@@ -20,10 +20,12 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
+import com.team1816.season.subsystems.CoralArm;
+import com.team1816.season.subsystems.Elevator;
+import com.team1816.season.subsystems.Pneumatic;
 import com.team1816.season.subsystems.*;
 import com.team1816.season.auto.actions.NamedCommandRegistrar;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,7 +33,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Robot extends TimedRobot {
@@ -67,7 +68,7 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     //TODO add new subsystems here
-//    private Autopath autopather;
+    private PatriotPath autopather;
     private Elevator elevator;
     private CoralArm coralArm;
     private Ramp ramp;
@@ -179,7 +180,7 @@ public class Robot extends TimedRobot {
             subsystemManager = Injector.get(SubsystemLooper.class);
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
-//            autopather = Injector.get(Autopath.class);
+            autopather = Injector.get(PatriotPath.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             ramp = Injector.get(Ramp.class);
@@ -531,7 +532,7 @@ public class Robot extends TimedRobot {
         ledManager.setDefaultStatus(LedManager.RobotStatus.AUTONOMOUS);
         ledManager.indicateStatus(LedManager.RobotStatus.AUTONOMOUS);
 
-        drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
+        drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
         //TODO add new subsystem inits here
 
@@ -619,7 +620,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         try {
-//            System.out.println(robotState.fieldToVehicle);
             // updating loop timers
             Robot.looperDt = getLastSubsystemLoop();
             Robot.robotDt = getLastRobotLoop();
@@ -691,7 +691,7 @@ public class Robot extends TimedRobot {
 
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
             if(autoModeManager.update())
-                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
+                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
             if (drive.isDemoMode()) { // Demo-mode
                 drive.update();
@@ -739,11 +739,12 @@ public class Robot extends TimedRobot {
             }
 
             manualControl();
-//            if(robotState.autopathing)
-//                autopather.routine();
+            if(robotState.autopathing) {
+                autopather.routine();
+            }
+
         } catch (Throwable t) {
             faulted = true;
-            throw t;
         }
     }
 
@@ -759,7 +760,7 @@ public class Robot extends TimedRobot {
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
         if(robotState.autopathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.autopathBeforeTime > robotState.autopathPathCancelBufferMilli){
-//            autopather.stop();
+            autopather.stop();
         }
 
         if (robotState.rotatingClosedLoop) {

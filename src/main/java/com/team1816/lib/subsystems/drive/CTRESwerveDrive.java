@@ -223,8 +223,6 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
         }
 
         // Initialise PathPlanner autopath builder configured to CTRE Swerve Drive
-        PIDSlotConfiguration drivePIDConfig = getPIDConfig();
-        PIDSlotConfiguration azimuthPIDConfig = getAzimuthPIDConfig();
         RobotConfig pathRobotConfig = null;
         try {
             pathRobotConfig = RobotConfig.fromGUISettings();
@@ -597,14 +595,6 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 .getSubsystem(NAME)
                 .swerveModules.drivePID.getOrDefault("slot0", defaultPIDConfig)
                 : defaultPIDConfig;
-    }
-
-    public PIDSlotConfiguration getAzimuthPIDConfig() {
-        return (factory.getSubsystem(NAME).implemented)
-                ? factory
-                .getSubsystem(NAME)
-                .swerveModules.azimuthPID.get("slot0")
-                : null;
     }
 
     /**
