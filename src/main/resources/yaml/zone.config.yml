@@ -209,7 +209,7 @@ subsystems:
             elevatorFeederPosition: 0
             elevatorL1Position: 0.131
             elevatorL2CoralPosition: 0.131
-            elevatorL3CoralPosition: 8.5
+            elevatorL3CoralPosition: 10.2
             elevatorL4Position: 64.5
             elevatorL2AlgaePosition: 9.213
             elevatorL3AlgaePosition: 37.452
