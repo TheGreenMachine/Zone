@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.62,
-        "y": 7.34
+        "x": 5.14,
+        "y": 5.49
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.325437006916485,
-        "y": 4.708876517440808
+        "x": 5.5812950819672125,
+        "y": 6.23476844262295
       },
       "isLocked": false,
-      "linkedName": "Top Feeder"
+      "linkedName": "Coral 1A Reef"
     },
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 5.146803977272728
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": {
-        "x": 3.090848155330073,
-        "y": 6.273102103837925
+        "x": 2.995960963009561,
+        "y": 6.361107167295251
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Top Feeder"
     }
   ],
   "rotationTargets": [],
@@ -33,13 +33,24 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ramp score l1",
-      "waypointRelativePos": 0.9422899353647257,
+      "name": "coral feeder",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp score l1"
+          "name": "coral feeder"
+        }
+      }
+    },
+    {
+      "name": "ramp hold l1",
+      "waypointRelativePos": 0.8979686057248368,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp hold l1"
         }
       }
     }
@@ -54,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -53.760000000000005
   },
   "reversed": false,
-  "folder": "Top Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

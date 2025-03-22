@@ -120,7 +120,7 @@ subsystems:
             ## Velocity Constraints ##
             maxRotVel: 0.8 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
-            wheelDiameter: 4
+            wheelDiameter: 3.9707
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
@@ -235,7 +235,7 @@ subsystems:
                 kG: 0
         constants: # TODO: all of these
             rampL1FeederPosition: -7.048
-            rampL1FeederDeepPosition: -17.5
+            rampL1FeederDeepPosition: -15
             rampL234FeederPosition: -19
             rampScorePosition: -12.405
             rampDislodgeCoralPosition: -26.048
