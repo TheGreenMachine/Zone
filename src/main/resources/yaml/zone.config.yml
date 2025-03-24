@@ -120,7 +120,7 @@ subsystems:
             ## Velocity Constraints ##
             maxRotVel: 0.8 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
-            wheelDiameter: 3.9707
+            wheelDiameter: 3.8
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
