@@ -124,8 +124,8 @@ subsystems:
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
-            maxVelPathFollowing: 1 # meters/s
-            maxAccel: 1 # meters/s^2
+            maxVelPathFollowing: 3 # meters/s
+            maxAccel: 3 # meters/s^2
             #FR OUT, RL OUT, FL IN, BR IN
             isDemoMode: 0
             ## Swerve Characterization ##

@@ -190,7 +190,9 @@ public class AutoModeManager {
         BOTTOM_1L4_2L1("Top 1L4 2L1 Auto", true),
 
         TOP_1L4_3L1("Top 1L4 3L1 Auto"),
-        BOTTOM_1L4_3L1("Top 1L4 3L1 Auto", true)
+        BOTTOM_1L4_3L1("Top 1L4 3L1 Auto", true),
+
+        TOP_FULL_REEF_SIDE_1("Full Reef Side 1 Auto")
         
         ;
 

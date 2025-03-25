@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9099098707085214,
-        "y": -0.004853995309139825
+        "x": 1.7697145505642662,
+        "y": 7.102437856964496
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Top Feeder"
     },
     {
       "anchor": {
-        "x": 5.0,
-        "y": 0.0
+        "x": 5.18,
+        "y": 5.19
       },
       "prevControl": {
-        "x": 4.0252039997405396,
-        "y": -0.007555124254382639
+        "x": 4.970898745622069,
+        "y": 5.327027973120733
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Coral 1A Trough"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 0.8301462317210324,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Full Reef Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -53.760000000000005
   },
   "useDefaultConstraints": true
 }
