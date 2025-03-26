@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.18,
-        "y": 5.19
+        "x": 5.14,
+        "y": 5.17
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.568183327389026,
-        "y": 5.924585841896805
+        "x": 4.528183327389026,
+        "y": 5.904585841896805
       },
       "isLocked": false,
       "linkedName": "Coral 1A Trough"
@@ -31,10 +31,22 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ramp hold l1",
+      "waypointRelativePos": 0.29778393351800575,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp hold l1"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,

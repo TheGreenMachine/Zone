@@ -31,13 +31,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Top Feeder to Trough 6M"
+            "pathName": "Top Feeder to Trough 6M"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Trough 6M to Top Feeder"
+            "pathName": "Trough 6M to Top Feeder"
           }
         },
         {
@@ -49,13 +49,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Top Feeder to Trough 6M"
+            "pathName": "Top Feeder to Trough 6M"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Trough 6M to Top Feeder"
+            "pathName": "Trough 6M to Top Feeder"
           }
         }
       ]

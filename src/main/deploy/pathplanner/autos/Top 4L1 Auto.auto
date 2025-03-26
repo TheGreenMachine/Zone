@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Trough Top"
+            "pathName": "Copy of Top to Trough 1A"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Trough 1A to Top Feeder"
           }
         },
         {
@@ -62,6 +68,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Middle",
+  "folder": "Top",
   "choreoAuto": false
 }

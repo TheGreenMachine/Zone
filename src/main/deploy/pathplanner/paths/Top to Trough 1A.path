@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.520162532251185,
-        "y": 6.782126072266558
+        "x": 6.466285793616144,
+        "y": 6.827776498922537
       },
       "isLocked": false,
       "linkedName": "Top Facing Up"
     },
     {
       "anchor": {
-        "x": 5.18,
-        "y": 5.19
+        "x": 5.14,
+        "y": 5.16
       },
       "prevControl": {
-        "x": 5.359000863232551,
-        "y": 5.442133767955158
+        "x": 5.284640685835199,
+        "y": 5.441705406942349
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,10 +31,44 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "coral l1 initialize",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral l1 initialize"
+        }
+      }
+    },
+    {
+      "name": "ramp hold l1",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp hold l1"
+        }
+      }
+    },
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 0.9256694367497678,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,

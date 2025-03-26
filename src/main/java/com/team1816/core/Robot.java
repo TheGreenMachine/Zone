@@ -534,6 +534,8 @@ public class Robot extends TimedRobot {
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
+        ramp.setBraking(true);
+
         //TODO add new subsystem inits here
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);

@@ -118,7 +118,7 @@ subsystems:
             isSwerve: 1
             isCTRSwerve: 1 #TODO IF ALL ELSE FAILS
             ## Velocity Constraints ##
-            maxRotVel: 0.8 # Pi radians/sec
+            maxRotVel: 1.2 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
             wheelDiameter: 3.8
             trackWidth: 22.75 # inches
@@ -180,7 +180,7 @@ subsystems:
             coralArmUpPosition: -30.856
             coralArmL2AlgaePosition: -46
             coralArmL3AlgaePosition: -45.469
-            coralArmFeederPosition: -4.068
+            coralArmFeederPosition: -3.7
             coralArmClimbPosition: -39.14
 
             coralArmMotorRotationsPerDegree: .24
@@ -209,8 +209,8 @@ subsystems:
             elevatorFeederPosition: 0
             elevatorL1Position: 0.131
             elevatorL2CoralPosition: 0.131
-            elevatorL3CoralPosition: 10.2
-            elevatorL4Position: 64.5
+            elevatorL3CoralPosition: 14.2
+            elevatorL4Position: 68
             elevatorL2AlgaePosition: 9.213
             elevatorL3AlgaePosition: 37.452
 
