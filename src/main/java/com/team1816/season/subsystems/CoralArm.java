@@ -125,9 +125,9 @@ public class CoralArm extends Subsystem {
         zeroSensors();
 
         if (RobotBase.isSimulation()) {
-            pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
-            pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
-            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(34);
+            pivotMotor.setMotionProfileMaxVelocity(200);
+            pivotMotor.setMotionProfileMaxAcceleration(300);
+            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(70);
         }
 
         if (Constants.kLoggingRobot) {
@@ -182,6 +182,9 @@ public class CoralArm extends Subsystem {
             GreenLogger.log("Coral arm time to reach feeder: " + (Timer.getFPGATimestamp() - lastFeederCommandReceivedTime));
             hasLoggedAfterReachingFeeder = true;
         }
+
+        robotState.coralMechArm.setAngle(robotState.coralMechArmBaseAngle - pivotMotor.getSensorPosition() / motorRotationsPerDegree);
+
 
         //Setting beam break state
         boolean beamBreak = isBeamBreakTriggered();
@@ -260,8 +263,6 @@ public class CoralArm extends Subsystem {
             desiredIntakePowerLogger.append(desiredIntakePower);
         }
 
-        robotState.coralMechArm.setAngle(robotState.coralMechArmBaseAngle + pivotMotor.getSensorPosition() / motorRotationsPerDegree);
-
         if (desiredPivotStateChanged || offsetHasBeenApplied) {
             desiredPivotStateChanged = false;
             offsetHasBeenApplied = false;
@@ -270,7 +271,10 @@ public class CoralArm extends Subsystem {
             if (robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
                 desiredPivotStateChanged = true;
             else
-                pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, -46, -4));
+                if(RobotBase.isReal())
+                    pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, -46, -4));
+                else
+                    pivotMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredPivotPosition, -46, -4));
             SmartDashboard.putString("Coral arm desired pivot state", String.valueOf(desiredPivotState));
             SmartDashboard.putNumber("Coral arm desired pivot position", desiredPivotPosition);}
 //        GreenLogger.log("Coral arm intake state: "+desiredIntakeState+" Intake power: "+desiredIntakePower+" Pivot state: "+desiredPivotState+" Pivot position: "+desiredPivotPosition);
