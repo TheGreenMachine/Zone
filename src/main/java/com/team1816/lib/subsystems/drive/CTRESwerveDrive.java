@@ -565,10 +565,9 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
         } else if (request instanceof ModuleRequest) {
             ChassisSpeeds moduleSpeeds = swerveKinematics.toChassisSpeeds(((ModuleRequest) request).moduleStates);
             return new double[] {
-                    //This conversion is super scuffed but it's accurate enough
-                    (moduleSpeeds.vxMetersPerSecond) / driveGearRatio ,
-                    (moduleSpeeds.vyMetersPerSecond) / driveGearRatio,
-                    (moduleSpeeds.omegaRadiansPerSecond) / driveGearRatio
+                    moduleSpeeds.vxMetersPerSecond,
+                    moduleSpeeds.vyMetersPerSecond,
+                    moduleSpeeds.omegaRadiansPerSecond
             };
         } else {
             return new double[3];
