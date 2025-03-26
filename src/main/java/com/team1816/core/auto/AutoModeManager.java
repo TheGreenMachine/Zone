@@ -164,6 +164,7 @@ public class AutoModeManager {
         DRIVE_STRAIGHT("Drive Straight Auto", false),
 
         TUNE_DRIVETRAIN("Tune Drivetrain Auto"),
+        TUNE_DRIVETRAIN_STRAIGHT("Tune Drivetrain Straight Auto"),
         
         TOP_3L1("Top 3L1 Auto"),
         BOTTOM_3L1("Top 3L1 Auto", true),
