@@ -218,6 +218,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Top",
   "choreoAuto": false
 }

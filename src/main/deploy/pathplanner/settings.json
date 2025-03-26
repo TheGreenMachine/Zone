@@ -8,7 +8,10 @@
     "Full Reef Auto",
     "Middle Auto"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Middle",
+    "Top"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 720.0,
