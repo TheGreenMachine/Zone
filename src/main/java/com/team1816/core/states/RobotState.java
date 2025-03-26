@@ -107,8 +107,9 @@ public class RobotState {
     public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 2, 0);
 
     public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 2, 90));
-    public final double coralMechArmBaseAngle = 210;
+    public final double coralMechArmBaseAngle = 195;
     public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", 2, coralMechArmBaseAngle));
+    public final MechanismLigament2d coralMechArm2 = coralMechArm.append(new MechanismLigament2d("coralArm", .8, 127.5));
 
     /**
      * Autopathing state

@@ -183,7 +183,7 @@ subsystems:
             coralArmFeederPosition: -4.068
             coralArmClimbPosition: -39.14
 
-            coralArmMotorRotationsPerDegree: .136
+            coralArmMotorRotationsPerDegree: .24
     elevator:
         implemented: true
         motors:

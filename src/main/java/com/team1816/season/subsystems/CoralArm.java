@@ -185,7 +185,6 @@ public class CoralArm extends Subsystem {
 
         robotState.coralMechArm.setAngle(robotState.coralMechArmBaseAngle - pivotMotor.getSensorPosition() / motorRotationsPerDegree);
 
-
         //Setting beam break state
         boolean beamBreak = isBeamBreakTriggered();
         if (robotState.isCoralBeamBreakTriggered != beamBreak) {
