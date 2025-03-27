@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import org.photonvision.EstimatedRobotPose;
@@ -222,6 +223,8 @@ public class RobotState {
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
         SmartDashboard.putData("Ramp", rampMech2d);
 //        System.out.println(fieldToVehicle);
+
+        SmartDashboard.putString("fieldToVehicle", fieldToVehicle.toString());
 
         if (RobotBase.isSimulation()) {
             // TODO: Display any stats here

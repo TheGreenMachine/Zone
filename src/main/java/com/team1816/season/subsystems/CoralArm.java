@@ -48,7 +48,7 @@ public class CoralArm extends Subsystem {
      * States
      */
     private PIVOT_STATE desiredPivotState = PIVOT_STATE.FEEDER;
-    private INTAKE_STATE desiredIntakeState = INTAKE_STATE.REST;
+    private INTAKE_STATE desiredIntakeState = INTAKE_STATE.HOLD;
 
     private boolean desiredPivotStateChanged = false;
     private boolean desiredIntakeStateChanged = false;
@@ -187,14 +187,13 @@ public class CoralArm extends Subsystem {
 
         //Setting beam break state
         boolean beamBreak = isBeamBreakTriggered();
+        if(beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.INTAKE)
+            desiredIntakeState = INTAKE_STATE.HOLD;
+        else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.HOLD)
+            desiredIntakeState = INTAKE_STATE.INTAKE;
+//        else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.REST)
+//            desiredIntakeState = INTAKE_STATE.INTAKE;
         if (robotState.isCoralBeamBreakTriggered != beamBreak) {
-            if(beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.INTAKE)
-                desiredIntakeState = INTAKE_STATE.HOLD;
-            else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.HOLD)
-                desiredIntakeState = INTAKE_STATE.INTAKE;
-            else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.REST)
-                desiredIntakeState = INTAKE_STATE.INTAKE;
-
             robotState.isCoralBeamBreakTriggered = beamBreak;
         }
 
