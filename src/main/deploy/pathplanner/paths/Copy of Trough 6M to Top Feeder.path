@@ -11,7 +11,7 @@
         "x": 2.2367681167972697,
         "y": 5.450080119076695
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Coral 6M Trough"
     },
     {
@@ -24,7 +24,7 @@
         "y": 5.602663413556723
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Top Feeder"
     }
   ],

@@ -8,10 +8,10 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7697145505642662,
-        "y": 7.102437856964496
+        "x": 6.667287589522437,
+        "y": 4.182186453174484
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Top Feeder"
     },
     {
@@ -20,15 +20,20 @@
         "y": 5.17
       },
       "prevControl": {
-        "x": 4.930898745622069,
-        "y": 5.307027973120732
+        "x": 4.633838758184917,
+        "y": 5.520856702773119
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Coral 1A Trough"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.34088246778602377,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [

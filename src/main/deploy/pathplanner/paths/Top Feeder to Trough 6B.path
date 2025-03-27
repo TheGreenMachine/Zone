@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3532487962552784,
-        "y": 5.219332112556932
+        "x": 2.4910862026292504,
+        "y": 5.313810153975426
       },
       "isLocked": true,
       "linkedName": "Top Feeder"
     },
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 5.146803977272728
+        "x": 3.7161885245901636,
+        "y": 5.097899590163934
       },
       "prevControl": {
-        "x": 3.840136699945846,
-        "y": 5.605422682241255
+        "x": 3.6820892997075614,
+        "y": 5.549205027807272
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Trough 6B"
     }
   ],
   "rotationTargets": [
@@ -50,10 +50,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -67,5 +67,5 @@
     "velocity": 0,
     "rotation": -53.760000000000005
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

@@ -11,7 +11,7 @@
         "x": 2.4427901679580817,
         "y": 6.0133272934405335
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Top Feeder"
     },
     {
@@ -24,7 +24,7 @@
         "y": 5.979005007462742
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Coral 5B Trough"
     }
   ],

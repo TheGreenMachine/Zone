@@ -11,7 +11,7 @@
         "x": 4.528183327389026,
         "y": 5.904585841896805
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Coral 1A Trough"
     },
     {
@@ -24,7 +24,7 @@
         "y": 7.095443075507043
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Top Feeder"
     }
   ],

@@ -3,69 +3,64 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.62,
-        "y": 7.34
+        "x": 3.7161885245901636,
+        "y": 5.097899590163934
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3532487962552784,
-        "y": 5.219332112556932
+        "x": 2.7852402416278146,
+        "y": 5.550581650210472
       },
       "isLocked": true,
-      "linkedName": "Top Feeder"
+      "linkedName": "Trough 6B"
     },
     {
       "anchor": {
-        "x": 3.8390625,
-        "y": 5.146803977272728
+        "x": 1.62,
+        "y": 7.34
       },
       "prevControl": {
-        "x": 3.840136699945846,
-        "y": 5.605422682241255
+        "x": 2.3511267462591436,
+        "y": 6.404388345611579
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Top Feeder"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.842249121436937,
-      "rotationDegrees": 119.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ramp score l1",
-      "waypointRelativePos": 0.9090489381348118,
+      "name": "ramp hold l1",
+      "waypointRelativePos": 0.28116343490304785,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp score l1"
+          "name": "ramp hold l1"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -53.760000000000005
   },
   "reversed": false,
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": 119.99999999999999
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

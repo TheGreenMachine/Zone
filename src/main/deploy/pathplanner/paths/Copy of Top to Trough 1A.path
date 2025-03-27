@@ -11,20 +11,20 @@
         "x": 6.466285793616144,
         "y": 6.827776498922537
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Top Facing Up"
     },
     {
       "anchor": {
         "x": 5.14,
-        "y": 5.16
+        "y": 5.17
       },
       "prevControl": {
         "x": 5.284640685835199,
-        "y": 5.441705406942349
+        "y": 5.451705406942349
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Coral 1A Trough"
     }
   ],
