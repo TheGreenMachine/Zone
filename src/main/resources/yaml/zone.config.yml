@@ -180,7 +180,7 @@ subsystems:
             coralArmUpPosition: -30.856
             coralArmL2AlgaePosition: -46
             coralArmL3AlgaePosition: -45.469
-            coralArmFeederPosition: -3.7
+            coralArmFeederPosition: -4.7
             coralArmClimbPosition: -39.14
 
             coralArmMotorRotationsPerDegree: .24
