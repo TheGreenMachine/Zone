@@ -1,7 +1,5 @@
 package com.team1816.lib;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.util.logUtil.GreenLogger;

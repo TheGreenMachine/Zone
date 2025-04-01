@@ -1,6 +1,6 @@
 package com.team1816.core.configuration;
 
-import com.google.inject.Singleton;
+import com.team1816.lib.Singleton;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;

@@ -2,8 +2,7 @@ package com.team1816.lib.loops;
 
 import edu.wpi.first.wpilibj.Timer;
 
-import javax.annotation.Nullable;
-
+import com.team1816.lib.Nullable;
 /**
  * This is a timer that allows for asynchronous timing separate from a loop i.e. it will not halt a thread
  */

@@ -1,7 +1,7 @@
 package com.team1816.core.auto;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.team1816.lib.Singleton;
+import com.team1816.lib.Inject;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;

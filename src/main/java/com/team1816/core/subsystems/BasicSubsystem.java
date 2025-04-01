@@ -1,6 +1,6 @@
 package com.team1816.core.subsystems;
 
-import com.google.inject.Inject;
+import com.team1816.lib.Inject;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.subsystems.Subsystem;

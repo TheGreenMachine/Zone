@@ -1,6 +1,5 @@
 package com.team1816.lib;
 
-import com.google.inject.Singleton;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.subsystems.drive.*;
 import com.team1816.lib.util.logUtil.GreenLogger;

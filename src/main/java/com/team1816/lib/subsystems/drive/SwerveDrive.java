@@ -1,7 +1,7 @@
 package com.team1816.lib.subsystems.drive;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.team1816.lib.Singleton;
+import com.team1816.lib.Inject;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;

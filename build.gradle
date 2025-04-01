@@ -117,9 +117,6 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     implementation 'org.yaml:snakeyaml:2.2'
-    implementation 'com.google.inject:guice:7.0.0'
-    implementation 'com.google.inject.extensions:guice-assistedinject:7.0.0'
-
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'

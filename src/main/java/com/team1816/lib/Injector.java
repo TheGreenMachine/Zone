@@ -1,18 +1,21 @@
 package com.team1816.lib;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Module;
+//import com.google.inject.AbstractModule;
+//import com.google.inject.Guice;
+//import com.google.inject.Module;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * A wrapper for the GUICE injector to register modules and straighten instantiation pathways for run-time optimization
  */
 public class Injector {
+    private static final HashMap<Class<?>, Object> instances = new HashMap<>();
+    private static final HashMap<Class<?>, Class<?>> classBindings = new HashMap<>();
 
-    private static com.google.inject.Injector _injector;
+    private static Inject _injector;
 
     private static List<Module> _modules = new ArrayList<>();
 
@@ -33,14 +36,7 @@ public class Injector {
      * @param <T>
      */
     public static <T> void register(T instance) {
-        _modules.add(
-            new AbstractModule() {
-                @Override
-                protected void configure() {
-                    bind((Class) instance.getClass()).toInstance(instance);
-                }
-            }
-        );
+        instances.put(instance.getClass(), instance);
     }
 
     /**
@@ -51,14 +47,7 @@ public class Injector {
      * @param <T>
      */
     public static <T> void register(Class<T> type, Class<? extends T> instance) {
-        _modules.add(
-            new AbstractModule() {
-                @Override
-                protected void configure() {
-                    bind(type).to(instance);
-                }
-            }
-        );
+        classBindings.put(type, instance);
     }
 
     /**
@@ -70,10 +59,18 @@ public class Injector {
      */
     public static <T> T get(Class<T> type) {
         // on first retrieval lock in the modules and create injector
-        if (_injector == null) {
-            _modules.add(new LibModule());
-            _injector = Guice.createInjector(_modules);
+        if (instances.containsKey(type)) {
+            return type.cast(instances.get(type));
         }
-        return _injector.getInstance(type);
+
+        Class<?> implementation = classBindings.getOrDefault(type, type);
+        try {
+            T instance = type.cast(implementation.getDeclaredConstructor().newInstance());
+            register(instance);
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate class: " + implementation.getName(), e);
+        }
+
     }
 }

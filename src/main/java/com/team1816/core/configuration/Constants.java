@@ -1,6 +1,6 @@
 package com.team1816.core.configuration;
 
-import com.google.inject.Singleton;
+import com.team1816.lib.Singleton;
 import com.team1816.lib.Injector;
 import com.team1816.lib.auto.Symmetry;
 import com.team1816.lib.hardware.factory.RobotFactory;

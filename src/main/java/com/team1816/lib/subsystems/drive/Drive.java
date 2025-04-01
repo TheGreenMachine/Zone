@@ -1,7 +1,7 @@
 package com.team1816.lib.subsystems.drive;
 
 import com.ctre.phoenix6.Orchestra;
-import com.google.inject.Inject;
+import com.team1816.lib.Inject;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;

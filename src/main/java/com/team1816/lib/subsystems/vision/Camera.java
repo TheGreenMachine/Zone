@@ -1,6 +1,6 @@
 package com.team1816.lib.subsystems.vision;
 
-import com.google.inject.Inject;
+import com.team1816.lib.Inject;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.core.states.RobotState;

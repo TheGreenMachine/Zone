@@ -1,5 +1,7 @@
 package com.team1816.lib.hardware.factory;
 
+import com.team1816.lib.Singleton;
+import com.team1816.lib.Nonnull;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -9,8 +11,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-import com.google.common.io.Resources;
-import com.google.inject.Singleton;
+//import com.google.common.io.Resources;
 import com.team1816.lib.hardware.*;
 import com.team1816.lib.hardware.components.gyro.GhostPigeonIMU;
 import com.team1816.lib.hardware.components.gyro.IPigeonIMU;
@@ -35,7 +36,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 
-import javax.annotation.Nonnull;
+//import javax.annotation.Nonnull;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -86,13 +88,11 @@ public class RobotFactory {
      */
     public static String getGitHash() {
         String gitHashStr;
-        try {
-            URL input = Resources.getResource("git_hash");
-
+        try (InputStream input = RobotFactory.class.getResourceAsStream("/git_hash")) {
             if (input == null) {
                 gitHashStr = "UNABLE TO FIND THE GIT HASH.";
             } else {
-                gitHashStr = Resources.toString(input, Charset.defaultCharset());
+                gitHashStr = new String(input.readAllBytes(), Charset.defaultCharset());
             }
         } catch (Exception e) {
             GreenLogger.log("Exception occurred: " + e.toString());

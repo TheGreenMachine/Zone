@@ -1,7 +1,7 @@
 package com.team1816.lib.input_handler;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.team1816.lib.Singleton;
+import com.team1816.lib.Inject;
 import com.team1816.lib.input_handler.bindings.ButtonBoardControllerBinding;
 import com.team1816.lib.input_handler.bindings.ControllerBinding;
 import com.team1816.lib.input_handler.controlOptions.*;

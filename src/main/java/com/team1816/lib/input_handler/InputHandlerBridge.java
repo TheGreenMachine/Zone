@@ -1,6 +1,6 @@
 package com.team1816.lib.input_handler;
 
-import com.google.inject.Inject;
+import com.team1816.lib.Inject;
 import com.team1816.core.configuration.AddInputHandlersHere;
 import com.team1816.lib.Injector;
 import com.team1816.lib.hardware.factory.RobotFactory;

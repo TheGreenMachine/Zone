@@ -1,8 +1,8 @@
 package com.team1816.season.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.team1816.lib.Singleton;
+import com.team1816.lib.Inject;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.GhostMotor;

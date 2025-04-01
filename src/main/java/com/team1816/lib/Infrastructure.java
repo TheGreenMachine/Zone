@@ -1,7 +1,5 @@
 package com.team1816.lib;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.team1816.lib.hardware.components.pcm.ICompressor;
 import com.team1816.lib.hardware.components.sensor.IProximitySensor;
 import com.team1816.lib.hardware.factory.RobotFactory;
