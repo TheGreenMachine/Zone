@@ -179,9 +179,6 @@ public class AutoModeManager {
         TOP_4L4("Top 4L4 Auto"),
         BOTTOM_4L4("Top 4L4 Auto", true),
 
-        FAST_MIDDLE_TOP_1L1_2L4("Fast Middle 1L1 2L4 Auto"),
-        FAST_MIDDLE_BOTTOM_1L1_2L4("Fast Middle 1L1 2L4 Auto", true),
-
         ONE_THING_TOP("One Thing"),
         ONE_THING_BOTTOM("One Thing", true),
 
@@ -191,8 +188,8 @@ public class AutoModeManager {
         TOP_1L4_2L1("Top 1L4 2L1 Auto"),
         BOTTOM_1L4_2L1("Top 1L4 2L1 Auto", true),
 
-        TOP_1L4_3L1("Top 1L4 3L1 Auto"),
-        BOTTOM_1L4_3L1("Top 1L4 3L1 Auto", true),
+        SAFE_TOP_1L4_2L1("Copy of Top 1L4 2L1 Auto"),
+        SAFE_BOTTOM_1L4_2L1("Copy of Top 1L4 2L1 Auto", true),
 
         TOP_FULL_REEF_SIDE_1("Full Reef Side 1 Auto")
         

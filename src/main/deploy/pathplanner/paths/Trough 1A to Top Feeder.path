@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.14,
-        "y": 5.17
+        "y": 5.2
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.528183327389026,
-        "y": 5.904585841896805
+        "y": 5.934585841896805
       },
       "isLocked": true,
       "linkedName": "Coral 1A Trough"
@@ -46,7 +46,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
@@ -60,7 +60,7 @@
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 62.0
   },
   "useDefaultConstraints": true
 }

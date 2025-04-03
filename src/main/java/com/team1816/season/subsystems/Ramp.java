@@ -61,7 +61,7 @@ public class Ramp extends Subsystem {
 
         rampMotor.selectPIDSlot(0);
 
-
+        setBraking(true);
 
         if (RobotBase.isSimulation()) { //TODO:CHANGE THESE
             rampMotor.setMotionProfileMaxVelocity(30);

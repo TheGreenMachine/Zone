@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 5.14,
-        "y": 5.17
+        "y": 5.2
       },
       "prevControl": {
         "x": 4.633838758184917,
-        "y": 5.520856702773119
+        "y": 5.550856702773119
       },
       "nextControl": null,
       "isLocked": true,
@@ -51,7 +51,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
@@ -59,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 62.0
   },
   "reversed": false,
   "folder": "Full Reef Auto",

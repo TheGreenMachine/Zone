@@ -26,7 +26,9 @@ import com.team1816.season.subsystems.Pneumatic;
 import com.team1816.season.subsystems.*;
 import com.team1816.season.auto.actions.NamedCommandRegistrar;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -640,6 +642,8 @@ public class Robot extends TimedRobot {
                 }
                 lowSpeedTrafficLogger.append(CANBus.getStatus(Constants.kLowSpeedBusName).BusUtilization);
             }
+
+            GreenLogger.log(String.valueOf(robotState.fieldToVehicle));
 
             subsystemManager.outputToSmartDashboard(); // update shuffleboard for subsystem values
             robotState.outputToSmartDashboard(); // update robot state on field for Field2D widget

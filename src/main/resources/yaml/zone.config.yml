@@ -261,7 +261,7 @@ subsystems:
             maxLevel: 200
             ledStripCount: 0
     camera:
-        implemented: true
+        implemented: false
         constants:
             useMultiTargetOdometry: 0
 infrastructure:

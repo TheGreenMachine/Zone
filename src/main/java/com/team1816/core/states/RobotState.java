@@ -99,7 +99,7 @@ public class RobotState {
     public final Mechanism2d rampMech2d = new Mechanism2d(2, 2);
     public final MechanismRoot2d rampMech2dRoot = rampMech2d.getRoot("root", 1, 1);
 
-    public final double rampMechArmBaseAngle = 80;
+    public final double rampMechArmBaseAngle = 170;
     public final MechanismLigament2d rampMechArm = rampMech2dRoot.append(new MechanismLigament2d("rampArm1", 1, rampMechArmBaseAngle));
     public final MechanismLigament2d rampMechArmFunnelSide = rampMech2dRoot.append(new MechanismLigament2d("rampArm2", 1, rampMechArmBaseAngle + 90));
 

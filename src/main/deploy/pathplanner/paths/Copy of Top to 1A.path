@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.800102459016393,
-        "y": 5.181813524590163
+        "x": 7.13,
+        "y": 7.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9859541622000028,
-        "y": 5.78712335529434
+        "x": 6.686937608582617,
+        "y": 7.033062326297363
       },
-      "isLocked": true,
-      "linkedName": "Coral 6M Trough"
+      "isLocked": false,
+      "linkedName": "Top Facing Down"
     },
     {
       "anchor": {
-        "x": 1.62,
-        "y": 7.34
+        "x": 5.14,
+        "y": 5.49
       },
       "prevControl": {
-        "x": 2.3624512240219233,
-        "y": 6.406724570719913
+        "x": 5.88510711446143,
+        "y": 6.302644959061041
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "Top Feeder"
+      "isLocked": false,
+      "linkedName": "Coral 1A Reef"
     }
   ],
   "rotationTargets": [],
@@ -33,13 +33,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ramp hold l1",
-      "waypointRelativePos": 0.28116343490304785,
+      "name": "coral l234 initialize",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "coral l4",
+      "waypointRelativePos": 0.1832871652816258,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp hold l1"
+          "name": "coral l4"
         }
       }
     }
@@ -54,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Top Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 118.00000000000001
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
