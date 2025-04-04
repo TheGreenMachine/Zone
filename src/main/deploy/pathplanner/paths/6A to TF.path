@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 1.62,
+        "x": 1.46,
         "y": 7.34
       },
       "prevControl": {
-        "x": 2.285305625623981,
+        "x": 2.125305625623981,
         "y": 6.540937337795106
       },
       "nextControl": null,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -48.26
   },
   "reversed": false,
   "folder": "Top 4L4 Auto",

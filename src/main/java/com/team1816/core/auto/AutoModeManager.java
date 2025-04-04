@@ -170,6 +170,9 @@ public class AutoModeManager {
         TOP_3L1("Top 3L1 Auto"),
         BOTTOM_3L1("Top 3L1 Auto", true),
 
+        SAFE_TOP_3L1("Copy of Top 3L1 Auto"),
+        SAFE_BOTTOM_3L1("Copy of Top 3L1 Auto", true),
+
         TOP_4L1("Top 4L1 Auto"),
         BOTTOM_4L1("Top 4L1 Auto", true),
         

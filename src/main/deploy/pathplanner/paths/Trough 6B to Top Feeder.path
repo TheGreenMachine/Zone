@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 1.62,
+        "x": 1.46,
         "y": 7.34
       },
       "prevControl": {
-        "x": 2.3511267462591436,
+        "x": 2.1911267462591435,
         "y": 6.404388345611579
       },
       "nextControl": null,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -48.26
   },
   "reversed": false,
   "folder": "Top Auto",

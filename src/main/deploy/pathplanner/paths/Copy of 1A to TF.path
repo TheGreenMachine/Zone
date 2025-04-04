@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.14,
-        "y": 5.49
+        "x": 5.12,
+        "y": 5.46
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.5812950819672125,
-        "y": 6.23476844262295
+        "x": 5.561295081967213,
+        "y": 6.2047684426229495
       },
       "isLocked": false,
       "linkedName": "Coral 1A Reef"
     },
     {
       "anchor": {
-        "x": 1.62,
+        "x": 1.46,
         "y": 7.34
       },
       "prevControl": {
-        "x": 2.995960963009561,
+        "x": 2.835960963009561,
         "y": 6.361107167295251
       },
       "nextControl": null,
@@ -45,7 +45,7 @@
     },
     {
       "name": "ramp hold l1",
-      "waypointRelativePos": 0.8979686057248368,
+      "waypointRelativePos": 0.7963988919667611,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -65,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -48.26
   },
   "reversed": false,
   "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -120.03000000000002
   },
   "useDefaultConstraints": true
 }

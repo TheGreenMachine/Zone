@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.466285793616144,
-        "y": 6.827776498922537
+        "x": 6.921454911932148,
+        "y": 7.277208017726765
       },
       "isLocked": true,
       "linkedName": "Top Facing Up"
     },
     {
       "anchor": {
-        "x": 5.14,
-        "y": 5.2
+        "x": 5.15,
+        "y": 5.13
       },
       "prevControl": {
-        "x": 5.284640685835199,
-        "y": 5.481705406942349
+        "x": 5.437118217188379,
+        "y": 5.563293719607085
       },
       "nextControl": null,
       "isLocked": false,
@@ -56,7 +56,7 @@
     },
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.9256694367497678,
+      "waypointRelativePos": 0.9626038781163428,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

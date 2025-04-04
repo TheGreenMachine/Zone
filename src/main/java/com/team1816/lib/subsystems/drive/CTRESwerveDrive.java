@@ -239,8 +239,8 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                     (ChassisSpeeds speeds, DriveFeedforwards feedforwards) ->
                             setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
                             new PPHolonomicDriveController(
-                                    new PIDConstants(5, 0, 0),
-                                    new PIDConstants(5, 0, 0)
+                                    new PIDConstants(7.5, 0, 0),
+                                    new PIDConstants(7.5, 0, 0)
                             ),
                     pathRobotConfig,
                     () -> robotState.allianceColor == Color.RED
