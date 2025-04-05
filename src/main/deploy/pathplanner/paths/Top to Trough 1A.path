@@ -56,7 +56,7 @@
     },
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.9626038781163428,
+      "waypointRelativePos": 0.9439713133124151,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -76,7 +76,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 62.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Top Auto",

@@ -59,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 62.0
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Full Reef Auto",

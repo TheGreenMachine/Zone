@@ -50,26 +50,12 @@
       "rotationDegrees": 119.99999999999999
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.9417301658449093,
-      "maxWaypointRelativePos": 2.0,
-      "constraints": {
-        "maxVelocity": 0.1,
-        "maxAcceleration": 0.1,
-        "maxAngularVelocity": 720.0,
-        "maxAngularAcceleration": 0.1,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 1.96,
+      "waypointRelativePos": 1.9166293142088744,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

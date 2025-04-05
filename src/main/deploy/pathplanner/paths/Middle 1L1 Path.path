@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.119715909090909,
-        "y": 7.530014204545455
+        "x": 7.1686475409836055,
+        "y": 4.026
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.466285793616144,
-        "y": 6.827776498922537
+        "x": 6.168647540983605,
+        "y": 4.026
       },
-      "isLocked": true,
-      "linkedName": "Top Facing Up"
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.15,
-        "y": 5.13
+        "x": 5.586270491803279,
+        "y": 4.026
       },
       "prevControl": {
-        "x": 5.2946406858352,
-        "y": 5.411705406942349
+        "x": 6.586270491803279,
+        "y": 4.026
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "Coral 1A Trough"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -44,19 +44,8 @@
       }
     },
     {
-      "name": "ramp hold l1",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ramp hold l1"
-        }
-      }
-    },
-    {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.9072022160664825,
+      "waypointRelativePos": 0.8112953832362172,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -67,22 +56,22 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0,
+    "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Top Auto",
+  "folder": "Middle Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
