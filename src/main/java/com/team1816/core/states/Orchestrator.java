@@ -13,6 +13,9 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.visionUtil.VisionPoint;
+import com.team1816.season.subsystems.CoralArm;
+import com.team1816.season.subsystems.Elevator;
+import com.team1816.season.subsystems.Ramp;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -40,6 +43,9 @@ public class Orchestrator {
     private LedManager ledManager;
     //TODO add new subsystems here
     private InputHandler inputHandler;
+    private CoralArm coralArm;
+    private Elevator elevator;
+    private Ramp ramp;
 
     /**
      * Properties
@@ -74,6 +80,9 @@ public class Orchestrator {
         ledManager = led;
         //TODO init new subsystems here
         inputHandler = Injector.get(InputHandler.class);
+        coralArm = Injector.get(CoralArm.class);
+        elevator = Injector.get(Elevator.class);
+        ramp = Injector.get(Ramp.class);
     }
 
     /**
@@ -159,6 +168,12 @@ public class Orchestrator {
                     robotState.visionStdDevs.get(i)
             );
         }
+    }
+
+    public void setFeederStates(boolean setToL1Feeder) {
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, setToL1Feeder ? CoralArm.INTAKE_STATE.HOLD : CoralArm.INTAKE_STATE.INTAKE);
+        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+        ramp.setDesiredState(setToL1Feeder ? Ramp.RAMP_STATE.L1_FEEDER : Ramp.RAMP_STATE.L234_FEEDER);
     }
 
     //Just a wrapper to keep paradigm

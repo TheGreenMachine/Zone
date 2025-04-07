@@ -1,0 +1,117 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.13,
+        "y": 4.066956967213113
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.389308654754172,
+        "y": 5.644839801508512
+      },
+      "isLocked": false,
+      "linkedName": "MIddle Facing Right"
+    },
+    {
+      "anchor": {
+        "x": 5.18,
+        "y": 5.19
+      },
+      "prevControl": {
+        "x": 5.574040646159964,
+        "y": 4.974338387271544
+      },
+      "nextControl": {
+        "x": 3.789290132925868,
+        "y": 5.951146688021694
+      },
+      "isLocked": false,
+      "linkedName": "Coral 1A Trough"
+    },
+    {
+      "anchor": {
+        "x": 1.62,
+        "y": 7.34
+      },
+      "prevControl": {
+        "x": 1.7334690757246694,
+        "y": 7.116468388571867
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.18196017180788934,
+      "rotationDegrees": 59.99999999999999
+    },
+    {
+      "waypointRelativePos": 0.992125984251969,
+      "rotationDegrees": 59.99999999999999
+    },
+    {
+      "waypointRelativePos": 1.1940648184302973,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "coral l1 initialize",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral l1 initialize"
+        }
+      }
+    },
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 0.045,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
+        }
+      }
+    },
+    {
+      "name": "ramp hold l1",
+      "waypointRelativePos": 1.1443494776828105,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp hold l1"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.760000000000005
+  },
+  "reversed": false,
+  "folder": "Top Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}

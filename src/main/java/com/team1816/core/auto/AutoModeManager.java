@@ -5,13 +5,9 @@ import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
-//import com.team1816.lib.auto.modes.AutopathMode;
-import com.team1816.lib.auto.modes.DefaultMode;
-import com.team1816.lib.auto.modes.DriveStraightMode;
-//import com.team1816.lib.autopath.Autopath;
-import com.team1816.lib.auto.modes.TuneDrivetrainMode;
+import com.team1816.lib.auto.modes.NoopAutoMode;
+import com.team1816.lib.auto.modes.PathPlannerAutoMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.season.auto.modes.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,13 +29,9 @@ public class AutoModeManager {
     private Color teamColor;
 
     /**
-     * Properties: Dynamic Auto
-     */
-
-    /**
      * Properties: Execution
      */
-    private AutoMode autoMode = new DriveStraightMode();
+    private AutoMode autoMode = new PathPlannerAutoMode("Drive Straight Auto");
     private static Thread autoModeThread;
 
     /**
@@ -51,26 +43,22 @@ public class AutoModeManager {
     public AutoModeManager(RobotState rs) {
         robotState = rs;
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
-        sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
 
         SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard=
+        sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
 
         for (DesiredAuto desiredAuto : DesiredAuto.values()) {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
         autoModeChooser.setDefaultOption(
-            DesiredAuto.DEFAULT.name(),
-            DesiredAuto.DEFAULT
+                DesiredAuto.DEFAULT.name(),
+                DesiredAuto.DEFAULT
         );
 
         SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
 
         sideChooser.setDefaultOption(Color.BLUE.name(), Color.BLUE); // initialize options
         sideChooser.addOption(Color.RED.name(), Color.RED); // initialize options
-
-        /**
-         * Dynamic Auto
-         */
 
         reset();
     }
@@ -79,7 +67,7 @@ public class AutoModeManager {
      * Resets properties to default and resets the thread
      */
     public void reset() {
-        autoMode = new DriveStraightMode();
+        autoMode = new PathPlannerAutoMode(DesiredAuto.DEFAULT.autoMode, DesiredAuto.DEFAULT.mirror);
         autoModeThread = new Thread(autoMode::run);
         desiredAuto = DesiredAuto.DRIVE_STRAIGHT;
         teamColor = sideChooser.getSelected();
@@ -112,7 +100,7 @@ public class AutoModeManager {
             if (autoChanged) {
                 desiredAuto = selectedAuto;
                 GreenLogger.log(
-                    "Auto changed from: " + desiredAuto + ", to: " + selectedAuto.name()
+                        "Auto changed from: " + desiredAuto + ", to: " + selectedAuto.name()
                 );
             }
             if (colorChanged) {
@@ -120,17 +108,12 @@ public class AutoModeManager {
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
 
-            autoMode = generateAutoMode(selectedAuto, selectedColor);
+            autoMode = new PathPlannerAutoMode(selectedAuto.autoMode, selectedAuto.mirror);
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
 
         return autoChanged || colorChanged;
-    }
-
-    public void updateAutoMode(){
-        autoMode = generateAutoMode(autoModeChooser.getSelected(), getSelectedColor());
-        autoModeThread = new Thread(autoMode::run);
     }
 
     /**
@@ -156,16 +139,6 @@ public class AutoModeManager {
     }
 
     /**
-     * Returns the selected color
-     *
-     * @return Color
-     * @see Color
-     */
-    public Color getSelectedColor() {
-        return sideChooser.getSelected();
-    }
-
-    /**
      * Executes the auto mode and respective thread
      */
     public void startAuto() {
@@ -185,137 +158,44 @@ public class AutoModeManager {
     /**
      * Enum for AutoModes
      */
-    enum DesiredAuto {
-        DEFAULT,
+    public enum DesiredAuto {
+        DEFAULT("Drive Straight Auto", false),
 
-        DRIVE_STRAIGHT,
+        DRIVE_STRAIGHT("Drive Straight Auto", false),
 
-        TUNE_DRIVETRAIN,
+        TUNE_DRIVETRAIN("Tune Drivetrain Auto"),
 
-//        AUTOPATH,
+        TOP_3L1("Top 3L1 Auto"),
+        BOTTOM_3L1("Top 3L1 Auto", true),
 
-        TOP_SIDE_1_SCORE_1,
+        OPTIMIZED_TOP_4L1("Optimized Top 4L1 Auto"),
+        OPTIMIZED_BOTTOM_4L1("Optimized Top 4L1 Auto", true),
 
-        TOP_SIDE_1_SCORE_1_FEEDER,
+        MIDDLE_TOP_1L4("Middle 1L4 Auto"),
+        MIDDLE_BOTTOM_1L4("Middle 1L4 Auto", true),
 
-//        TOP_SIDE_1_SCORE_2,
+        TOP_4L4("Top 4L4 Auto"),
+        BOTTOM_4L4("Top 4L4 Auto", true),
 
-        MIDDLE_SIDE_2_SCORE_1,
+        FAST_MIDDLE_TOP_1L1_2L4("Fast Middle 1L1 2L4 Auto"),
+        FAST_MIDDLE_BOTTOM_1L1_2L4("Fast Middle 1L1 2L4 Auto", true),
 
-        MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER,
+        FAST_MIDDLE_TOP_4L1("Fast Middle 4L1 Auto"),
+        FAST_MIDDLE_BOTTOM_4L1("Fast Middle 4L1 Auto", true),
 
-        MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER,
+        ;
 
-//        MIDDLE_SIDE_3_SCORE_2,
-
-        BOTTOM_SIDE_3_SCORE_1,
-
-        BOTTOM_SIDE_3_SCORE_1_FEEDER,
-
-//        BOTTOM_SIDE_3_SCORE_2,
-
-        TOP_DRIVE_STRAIGHT,
-
-        MIDDLE_DRIVE_STRAIGHT,
-
-        BOTTOM_DRIVE_STRAIGHT,
-
-        VISION_TEST,
-
-//        DYNAMIC_TRAJECTORY_ONLY,
-
-//        DYNAMIC_PLACE_1,
-//
-//        DYNAMIC_PLACE_2,
-//
-//        DYNAMIC_PLACE_3
-
-//        TEST_DYNAMIC_PATHS
+        DesiredAuto(String autoMode, boolean mirror) {
+            this.autoMode = autoMode;
+            this.mirror = mirror;
         }
 
-
-    /**
-     * Generates each AutoMode by demand
-     *
-     * @param mode desiredMode
-     * @return AutoMode
-     * @see AutoMode
-     */
-    private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
-        switch (mode) {
-            case DEFAULT:
-                robotState.dIsAutoDynamic = false;
-                return new DefaultMode();
-            case DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveStraightMode();
-            case TUNE_DRIVETRAIN:
-                robotState.dIsAutoDynamic = false;
-                return new TuneDrivetrainMode();
-//            case AUTOPATH:
-//                robotState.dIsAutoDynamic = false;
-//                return new AutopathMode();
-            case MIDDLE_SIDE_2_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.NONE);
-            case MIDDLE_SIDE_2_SCORE_1_TOP_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.TOP);
-            case MIDDLE_SIDE_2_SCORE_1_BOTTOM_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color, MiddlePlace1AutoMode.ENDING_FEEDER.BOTTOM);
-//            case MIDDLE_SIDE_3_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new MiddlePlace2AutoMode(color);
-            case TOP_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveOffLineTopAutoMode(color);
-            case MIDDLE_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveOffLineMiddleAutoMode(color);
-            case BOTTOM_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveOffLineBottomAutoMode(color);
-            case BOTTOM_SIDE_3_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color, false);
-            case BOTTOM_SIDE_3_SCORE_1_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color, true);
-//            case BOTTOM_SIDE_3_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new BottomPlace2AutoMode(color);
-//            case DYNAMIC_PLACE_1:
-//                robotState.dIsAutoDynamic = true;
-//                return new DynamicPlace1();
-//            case DYNAMIC_PLACE_2:
-//                robotState.dIsAutoDynamic = true;
-//                return new DynamicPlace2();
-//            case DYNAMIC_PLACE_3:
-//                robotState.dIsAutoDynamic = true;
-//                return new DynamicPlace3();
-            case TOP_SIDE_1_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color, false);
-            case TOP_SIDE_1_SCORE_1_FEEDER:
-                robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color, true);
-            case VISION_TEST:
-                robotState.dIsAutoDynamic = false;
-                return new VisionTestingMode(color);
-//            case TOP_SIDE_1_SCORE_2:
-//                robotState.dIsAutoDynamic = false;
-//                return new TopPlace2AutoMode(color);
-//            case DYNAMIC_TRAJECTORY_ONLY:
-//                robotState.isAutoDynamic = true;
-//                RobotState.dynamicAutoChanged = true;
-//                return new DynamicTrajectoryOnlyAutoMode(robotState);
-//            case TEST_DYNAMIC_PATHS:
-//                return new TestAllDynamicPointsAutoMode();
-            default:
-            robotState.dIsAutoDynamic = false;
-                GreenLogger.log("Defaulting to DefaultMode");
-                return new DefaultMode();
+        DesiredAuto(String autoMode) {
+            this.autoMode = autoMode;
+            this.mirror = false;
         }
+
+        public final String autoMode;
+        public final boolean mirror;
     }
 }

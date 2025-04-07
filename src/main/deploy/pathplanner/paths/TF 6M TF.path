@@ -1,0 +1,98 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.62,
+        "y": 7.34
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.9744951124970203,
+        "y": 7.216113191510926
+      },
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    },
+    {
+      "anchor": {
+        "x": 3.8390625,
+        "y": 5.146803977272728
+      },
+      "prevControl": {
+        "x": 4.37209680318533,
+        "y": 5.411194416777712
+      },
+      "nextControl": {
+        "x": 3.2230021901990575,
+        "y": 4.841231793462981
+      },
+      "isLocked": false,
+      "linkedName": "Coral 6M Trough"
+    },
+    {
+      "anchor": {
+        "x": 1.62,
+        "y": 7.34
+      },
+      "prevControl": {
+        "x": 1.51257825020834,
+        "y": 7.023835236563529
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 0.6315289648623024,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
+        }
+      }
+    },
+    {
+      "name": "ramp hold l1",
+      "waypointRelativePos": 1.254510921177586,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp hold l1"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.760000000000005
+  },
+  "reversed": false,
+  "folder": "Top Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -53.760000000000005
+  },
+  "useDefaultConstraints": true
+}

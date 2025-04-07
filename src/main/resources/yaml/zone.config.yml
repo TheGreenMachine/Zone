@@ -150,15 +150,15 @@ subsystems:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
                 id: 13
-                invertMotor: true
+                invertMotor: false
                 currentLimit: 20
                 isLowSpeedCanBus: true
                 motionMagic:
-                    expoKV: 0.12
+                    expoKV: 0.1
                     expoKA: 0.1
         pidConfig:
             slot0: #Pivot
-                kP: 0.05
+                kP: 1
                 kI: 0
                 kD: 0
                 kV: 0
@@ -166,67 +166,24 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: -.80
-            outtakeSpeed: .80
-            holdSpeed: 0
+            intakeSpeed: 0.8
+            outtakeSpeed: -.8
+            holdSpeed: .1
+            removeAlgaeSpeed: .80
 
             coralSensorChannel: 9
 
-            coralArmL1Position: 36
-            coralArmL2Position: 36
-            coralArmL3Position: 36
-            coralArmL4Position: 36
-            coralArmUpPosition: 28
+            coralArmL1Position: -43.501
+            coralArmL2CoralPosition: -43.501
+            coralArmL3CoralPosition: -37.427
+            coralArmL4Position: -40.925
+            coralArmUpPosition: -30.856
+            coralArmL2AlgaePosition: -46
+            coralArmL3AlgaePosition: -45.469
+            coralArmFeederPosition: -4.068
+            coralArmClimbPosition: -39.14
 
-            coralArmFeederPosition: 28
-
-            coralArmMotorRotationsPerDegree: 1
-
-            stopOuttakingDelay: 2
-    algaeCatcher:
-        implemented: true
-        motors:
-            algaeCatcherIntakeMotor:
-                motorType: SparkMax
-                motorName: algaeCatcherIntakeMotor
-                id: 14
-                invertMotor: false
-                currentLimit: 20
-                isLowSpeedCanBus: true
-            algaeCatcherPositionMotor:
-                motorType: TalonFX
-                motorName: algaeCatcherPositionMotor
-                id: 15
-                invertMotor: false
-                currentLimit: 20
-                motionMagic:
-                    expoKV: 0.05
-                    expoKA: 0.15
-        pidConfig:
-            slot0: #Position
-                kP: 0.8
-                ki: 0
-                kD: 0.02
-                kV: 0
-                kS: 0
-                kA: 0
-                kG: 0
-                gravityType: cosine
-        constants: # TODO: all of these
-            algaeCollectSpeed: -.60
-            algaeHoldSpeed: -.60
-            algaeReleaseSpeed: 1
-            removeAlgaeSpeed: 1
-
-            algaeSensorChannel: 1
-
-            stowPosition: 0.1
-            intakePosition: 16.8
-            holdPosition: 13
-            outtakePosition: 13
-            removeAlgaePosition: 3   #4.8
-
-            algaeMotorRotationsPerDegree: .25
+            coralArmMotorRotationsPerDegree: .136
     elevator:
         implemented: true
         motors:
@@ -237,25 +194,56 @@ subsystems:
                 invertMotor: true
                 currentLimit: 60
                 motionMagic:
-                    expoKV: 0.1
-                    expoKA: 0.2
+                    expoKV: 0.05
+                    expoKA: 0.04
         pidConfig:
             slot0:
                 kP: 1
                 kI: 0
-                kD: 0.02
+                kD: 0
                 kV: 0
                 kS: 0
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
             elevatorFeederPosition: 0
-            elevatorL1Position: 1
-            elevatorL2Position: 14.2
-            elevatorL3Position: 33.7
-            elevatorL4Position: 63.1
+            elevatorL1Position: 0.131
+            elevatorL2CoralPosition: 0.131
+            elevatorL3CoralPosition: 8.5
+            elevatorL4Position: 64.5
+            elevatorL2AlgaePosition: 9.213
+            elevatorL3AlgaePosition: 37.452
 
-            elevatorMotorRotationsPerUnit: 1
+            elevatorMotorRotationsPerUnit: 20
+    ramp:
+        implemented: true
+        motors:
+            rampMotor:
+                motorType: SparkMax
+                motorName: rampMotor
+                id: 14
+                invertMotor: false
+                currentLimit: 20
+        pidConfig:
+            slot0:
+                kP: 0.3
+                kI: 0
+                kD: 0
+                kV: 0
+                kS: 0
+                kA: 0
+                kG: 0
+        constants: # TODO: all of these
+            rampL1FeederPosition: -7.048
+            rampL1FeederDeepPosition: -17.5
+            rampL234FeederPosition: -19
+            rampScorePosition: -12.405
+            rampDislodgeCoralPosition: -26.048
+            rampClimbPosition: -23.405
+
+
+            rampMotorRotationsPerUnit: 0.136
+            zeroingButtonChannel: 6
     pneumatic:
         implemented: true
         solenoids:
@@ -264,6 +252,14 @@ subsystems:
         constants:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
+    ledmanager:
+        implemented: false
+        candle: 22
+        constants:
+            raveEnabled: 0
+            raveSpeed: 0.05
+            maxLevel: 200
+            ledStripCount: 0
     camera:
         implemented: true
         constants:

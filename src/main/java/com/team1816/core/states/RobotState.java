@@ -4,33 +4,25 @@ import com.google.inject.Singleton;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.lib.auto.Color;
-import com.team1816.lib.auto.actions.TrajectoryAction;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.subsystems.drive.TankDrive;
 import com.team1816.lib.util.visionUtil.VisionPoint;
-import com.team1816.season.auto.DynamicAutoScript2025;
-import com.team1816.season.subsystems.AlgaeCatcher;
-import com.team1816.season.subsystems.CoralArm;
-import com.team1816.season.subsystems.Elevator;
-import com.team1816.season.subsystems.Pneumatic;
+import com.team1816.season.subsystems.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import org.photonvision.EstimatedRobotPose;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -49,8 +41,6 @@ public class RobotState {
     public Pose2d fieldToVehicle = Constants.EmptyPose2d;
     public Pose2d simActualFieldToVehicle = Constants.EmptyPose2d;
     public Pose2d driverRelativeFieldToVehicle = Constants.EmptyPose2d;
-    public Pose2d extrapolatedFieldToVehicle = Constants.EmptyPose2d;
-    public Pose2d target = Constants.fieldCenterPose;
     public ChassisSpeeds deltaVehicle = new ChassisSpeeds(); // velocities of vehicle
     public ChassisSpeeds calculatedVehicleAccel = new ChassisSpeeds(); // calculated acceleration of vehicle
     public Double[] triAxialAcceleration = new Double[]{0d, 0d, 0d};
@@ -106,66 +96,43 @@ public class RobotState {
      */
 
     //TODO add new subystem states here
-    public AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE actualAlgaeCatcherIntakeState = AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP;
-    public AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE actualAlgaeCatcherPivotState = AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW;
     public CoralArm.INTAKE_STATE actualCoralArmIntakeState = CoralArm.INTAKE_STATE.INTAKE;
     public CoralArm.PIVOT_STATE actualCoralArmPivotState = CoralArm.PIVOT_STATE.FEEDER;
     public Elevator.ELEVATOR_STATE actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
+    public Ramp.RAMP_STATE actualRampState = Ramp.RAMP_STATE.L234_FEEDER;
     public Pneumatic.PNEUMATIC_STATE actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
     public boolean isCoralBeamBreakTriggered = false;
 
     public boolean isElevatorInRange = false;
+    public boolean isCoralArmPivotInRange = false;
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
 
-    public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(3, 3);
-    public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 1, 0);
+    public final Mechanism2d rampMech2d = new Mechanism2d(2, 2);
+    public final MechanismRoot2d rampMech2dRoot = rampMech2d.getRoot("root", 1, 1);
+
+    public final double rampMechArmBaseAngle = 80;
+    public final MechanismLigament2d rampMechArm = rampMech2dRoot.append(new MechanismLigament2d("rampArm1", 1, rampMechArmBaseAngle));
+    public final MechanismLigament2d rampMechArmFunnelSide = rampMech2dRoot.append(new MechanismLigament2d("rampArm2", 1, rampMechArmBaseAngle + 90));
+
+
+    public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(4, 4);
+    public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 2, 0);
 
     public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
-    public final double coralMechArmBaseAngle = 190;
+    public final double coralMechArmBaseAngle = 300;
     public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", .7, coralMechArmBaseAngle));
-
-    public final Mechanism2d algaeMech2d = new Mechanism2d(3,3);
-    public final MechanismRoot2d getAlgaeCatcherMech2dRoot = algaeMech2d.getRoot("root", 1, 0);
-
-    public final MechanismLigament2d algaeCatcherBase = getAlgaeCatcherMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
-    public final double algaeBaseAngle = 190;
-    public final MechanismLigament2d algaeCatcherPivot = algaeCatcherBase.append(new MechanismLigament2d("algaePivot", .7, algaeBaseAngle));
 
     /**
      * Autopathing state
      */
-
     public boolean autopathing = false;
-    public boolean printAutopathing = false;  //Change this one to see the obstacle boundaries //As of 2/8/2025, does nothing because of commented code in outputToSmartDashboard()
-    public boolean printAutopathFieldTest = false;
-    public Trajectory autopathTrajectory = null;
-    public ArrayList<Trajectory> autopathTrajectoryPossibilities = new ArrayList<>();
-    public boolean autopathTrajectoryChanged = false;
-    public boolean autopathTrajectoryPossibilitiesChanged = false;
-    public ArrayList<Pose2d> autopathCollisionStarts = new ArrayList<>();
-    public ArrayList<Pose2d> autopathCollisionEnds = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypoints = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypointsSuccess = new ArrayList<>();
-    public ArrayList<Pose2d> autopathWaypointsFail = new ArrayList<>();
-    public int autopathMaxBranches = 0;
-    public ArrayList<Pose2d> autopathInputWaypoints = new ArrayList<>();
     public double robotVelocity = 0;
     public double autopathBeforeTime = 0;
     public double autopathPathCancelBufferMilli = 500;
     public ChassisSpeeds robotChassis = new ChassisSpeeds();
-
-    /**
-     * DynamicAuto2025
-     */
-    public boolean dAutoChanged = false;
-    public boolean dIsAutoDynamic = false;
-    public HashMap<String, Pose2d> dAllDynamicPoints;
-    public Pose2d dStartPose;
-    public ArrayList<TrajectoryAction> dAutoTrajectoryActions;
-    public ArrayList<DynamicAutoScript2025.REEF_LEVEL> dCurrentCoralPlacementChoices;
 
     /**
      * Pigeon state
@@ -216,9 +183,8 @@ public class RobotState {
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
 
         // TODO: Insert any subsystem state set up here.
-        actualAlgaeCatcherIntakeState = AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP;
-        actualAlgaeCatcherPivotState = AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW;
         actualElevatorState = Elevator.ELEVATOR_STATE.FEEDER;
+        actualRampState = Ramp.RAMP_STATE.L234_FEEDER;
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;
@@ -256,68 +222,8 @@ public class RobotState {
     public synchronized void outputToSmartDashboard() {
         field.setRobotPose(fieldToVehicle);
 
-//        if (printAutopathing) {
-//            if (Autopath.fieldMap != null && Autopath.fieldMap.outputToSmartDashboardChanged) {
-//                ArrayList<Pose2d> obstaclesExpanded = new ArrayList<>();
-//
-//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-//                        if (Autopath.fieldMap.getCurrentMap().checkPixelHasObjectOrOffMap(i, i2)) {
-//                            obstaclesExpanded.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 / Autopath.mapResolution1DPerMeter), new Rotation2d()));
-//                        }
-//                    }
-//                }
-//
-//                field.getObject("ExpandedObstacles").setPoses(obstaclesExpanded);
-//
-//                ArrayList<Pose2d> obstacles = new ArrayList<>();
-//
-//                for (int i = 0; i < Autopath.fieldMap.getCurrentMap().getMapX(); i++) {
-//                    for (int i2 = 0; i2 < Autopath.fieldMap.getCurrentMap().getMapY(); i2++) {
-//                        if (Autopath.fieldMap.getStableMapCheckPixelHasObjectOrOffMap(i, i2)) {
-//                            obstacles.add(new Pose2d(new Translation2d(i / Autopath.mapResolution1DPerMeter, i2 /Autopath.mapResolution1DPerMeter), new Rotation2d()));
-//                        }
-//                    }
-//                }
-//
-//                field.getObject("Obstacles").setPoses(obstacles);
-//
-//                Autopath.fieldMap.outputToSmartDashboardChanged = false;
-//            }
-//
-//            if(autopathTrajectoryPossibilitiesChanged) {
-//                for (int i = 0; i < autopathTrajectoryPossibilities.size(); i++) {
-//                    if (autopathTrajectoryPossibilities.get(i) != null) {
-//                        field.getObject("AutopathTrajectory: " + i).setTrajectory(autopathTrajectoryPossibilities.get(i));
-//                    }
-//                }
-//                autopathMaxBranches = Math.max(autopathTrajectoryPossibilities.size(), autopathMaxBranches);
-//                autopathTrajectoryPossibilitiesChanged = false;
-//            }
-//
-//            field.getObject("StartCollisionPoints").setPoses(autopathCollisionStarts);
-//            field.getObject("EndCollisionPoints").setPoses(autopathCollisionEnds);
-//            field.getObject("AutopathWaypoints").setPoses(autopathWaypoints);
-//        }
-
-        if (autopathTrajectoryChanged && printAutopathing) {
-            if(autopathTrajectory != null){
-                for (int i = 0; i < autopathMaxBranches; i++) {
-                    field.getObject("AutopathTrajectory: " + i).close();
-                }
-                field.getObject("AutopathTrajectory").setTrajectory(autopathTrajectory);
-            } else
-                field.getObject("AutopathTrajectory").setPoses(List.of(new Pose2d(new Translation2d(-1, -1), new Rotation2d())));
-            autopathTrajectoryChanged = false;
-        }
-
-        if(printAutopathFieldTest) {
-            field.getObject("AutopathSuccessfulPoints").setPoses(autopathWaypointsSuccess);
-            field.getObject("AutopathFailPoints").setPoses(autopathWaypointsFail);
-        }
-
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
-        SmartDashboard.putData("AlgaeCatcher", algaeMech2d);
+        SmartDashboard.putData("Ramp", rampMech2d);
 //        System.out.println(fieldToVehicle);
 
         if (RobotBase.isSimulation()) {
