@@ -79,9 +79,9 @@ public class Elevator extends Subsystem {
         elevatorMotor.selectPIDSlot(0);
 
         if (RobotBase.isSimulation()) {
-            elevatorMotor.setMotionProfileMaxVelocity(5);
-            elevatorMotor.setMotionProfileMaxAcceleration(10);
-            ((GhostMotor) elevatorMotor).setMaxVelRotationsPerSec(1);
+            elevatorMotor.setMotionProfileMaxVelocity(70);
+            elevatorMotor.setMotionProfileMaxAcceleration(20);
+            ((GhostMotor) elevatorMotor).setMaxVelRotationsPerSec(120);
         }
     }
 
@@ -107,8 +107,6 @@ public class Elevator extends Subsystem {
 
         elevatorCurrentDraw = elevatorMotor.getMotorOutputCurrent();
 
-        robotState.elevatorMechArm.setLength(elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
-
         if (Math.abs(actualElevatorPosition - elevatorL4Position) < 1 && !hasLoggedAfterReachingL4) {
             GreenLogger.log("Elevator time to reach L4: " + (Timer.getFPGATimestamp() - lastL4CommandReceivedTime));
             hasLoggedAfterReachingL4 = true;
@@ -117,6 +115,8 @@ public class Elevator extends Subsystem {
             GreenLogger.log("Elevator time to reach feeder: " + (Timer.getFPGATimestamp() - lastFeederCommandReceivedTime));
             hasLoggedAfterReachingFeeder = true;
         }
+
+        robotState.elevatorMechArm.setLength(2+elevatorMotor.getSensorPosition() / elevatorMotorRotationsPerUnit);
 
         if(robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
             desiredElevatorState = ELEVATOR_STATE.FEEDER;
@@ -155,7 +155,11 @@ public class Elevator extends Subsystem {
             if (robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
                 elevatorOutputsChanged = true;
             else
-                elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 74));
+                if(RobotBase.isReal())
+                    elevatorMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredElevatorPosition, 0, 74));
+                else
+                    elevatorMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredElevatorPosition, 0, 74));
+
             SmartDashboard.putString("Elevator desired state", String.valueOf(desiredElevatorState));
             SmartDashboard.putNumber("Elevator desired position", desiredElevatorPosition);}
     }

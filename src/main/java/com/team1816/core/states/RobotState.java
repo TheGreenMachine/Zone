@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import org.photonvision.EstimatedRobotPose;
@@ -118,12 +119,13 @@ public class RobotState {
     public final MechanismLigament2d rampMechArmFunnelSide = rampMech2dRoot.append(new MechanismLigament2d("rampArm2", 1, rampMechArmBaseAngle + 90));
 
 
-    public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(4, 4);
+    public final Mechanism2d elevatorAndCoralArmMech2d = new Mechanism2d(4, 8);
     public final MechanismRoot2d elevatorAndCoralArmMech2dRoot = elevatorAndCoralArmMech2d.getRoot("root", 2, 0);
 
-    public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 1, 90));
-    public final double coralMechArmBaseAngle = 300;
-    public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", .7, coralMechArmBaseAngle));
+    public final MechanismLigament2d elevatorMechArm = elevatorAndCoralArmMech2dRoot.append(new MechanismLigament2d("stand", 2, 90));
+    public final double coralMechArmBaseAngle = 195;
+    public final MechanismLigament2d coralMechArm = elevatorMechArm.append(new MechanismLigament2d("pivot", 2, coralMechArmBaseAngle));
+    public final MechanismLigament2d coralMechArm2 = coralMechArm.append(new MechanismLigament2d("coralArm", .8, 127.5));
 
     /**
      * Autopathing state
@@ -225,6 +227,8 @@ public class RobotState {
         SmartDashboard.putData("Elevator+CoralArm", elevatorAndCoralArmMech2d);
         SmartDashboard.putData("Ramp", rampMech2d);
 //        System.out.println(fieldToVehicle);
+
+        SmartDashboard.putString("fieldToVehicle", fieldToVehicle.toString());
 
         if (RobotBase.isSimulation()) {
             // TODO: Display any stats here

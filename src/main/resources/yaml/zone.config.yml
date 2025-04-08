@@ -118,14 +118,14 @@ subsystems:
             isSwerve: 1
             isCTRSwerve: 1 #TODO IF ALL ELSE FAILS
             ## Velocity Constraints ##
-            maxRotVel: 0.8 # Pi radians/sec
+            maxRotVel: 1.2 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
-            wheelDiameter: 4
+            wheelDiameter: 3.8
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
-            maxVelPathFollowing: 1 # meters/s
-            maxAccel: 1 # meters/s^2
+            maxVelPathFollowing: 3 # meters/s
+            maxAccel: 3 # meters/s^2
             #FR OUT, RL OUT, FL IN, BR IN
             isDemoMode: 0
             ## Swerve Characterization ##
@@ -168,7 +168,7 @@ subsystems:
         constants: # TODO: all of these
             intakeSpeed: 0.8
             outtakeSpeed: -.8
-            holdSpeed: .1
+            holdSpeed: .06
             removeAlgaeSpeed: .80
 
             coralSensorChannel: 9
@@ -180,10 +180,10 @@ subsystems:
             coralArmUpPosition: -30.856
             coralArmL2AlgaePosition: -46
             coralArmL3AlgaePosition: -45.469
-            coralArmFeederPosition: -4.068
+            coralArmFeederPosition: -4.7
             coralArmClimbPosition: -39.14
 
-            coralArmMotorRotationsPerDegree: .136
+            coralArmMotorRotationsPerDegree: .24
     elevator:
         implemented: true
         motors:
@@ -209,8 +209,8 @@ subsystems:
             elevatorFeederPosition: 0
             elevatorL1Position: 0.131
             elevatorL2CoralPosition: 0.131
-            elevatorL3CoralPosition: 8.5
-            elevatorL4Position: 64.5
+            elevatorL3CoralPosition: 14.2
+            elevatorL4Position: 67.3
             elevatorL2AlgaePosition: 9.213
             elevatorL3AlgaePosition: 37.452
 
@@ -226,7 +226,7 @@ subsystems:
                 currentLimit: 20
         pidConfig:
             slot0:
-                kP: 0.3
+                kP: 0.2
                 kI: 0
                 kD: 0
                 kV: 0
@@ -235,8 +235,8 @@ subsystems:
                 kG: 0
         constants: # TODO: all of these
             rampL1FeederPosition: -7.048
-            rampL1FeederDeepPosition: -17.5
-            rampL234FeederPosition: -19
+            rampL1FeederDeepPosition: -15
+            rampL234FeederPosition: -18.3
             rampScorePosition: -12.405
             rampDislodgeCoralPosition: -26.048
             rampClimbPosition: -23.405
@@ -261,7 +261,7 @@ subsystems:
             maxLevel: 200
             ledStripCount: 0
     camera:
-        implemented: true
+        implemented: false
         constants:
             useMultiTargetOdometry: 0
 infrastructure:

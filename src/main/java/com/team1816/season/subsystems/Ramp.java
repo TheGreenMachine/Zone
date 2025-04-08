@@ -61,7 +61,7 @@ public class Ramp extends Subsystem {
 
         rampMotor.selectPIDSlot(0);
 
-
+        setBraking(true);
 
         if (RobotBase.isSimulation()) { //TODO:CHANGE THESE
             rampMotor.setMotionProfileMaxVelocity(30);
@@ -92,11 +92,12 @@ public class Ramp extends Subsystem {
         rampCurrentDraw = rampMotor.getMotorOutputCurrent();
 
         //TODO: Add Mechanism Ligaments if needed
-//        if ((robotState.actualElevatorState != Elevator.ELEVATOR_STATE.FEEDER || robotState.actualCoralArmPivotState != CoralArm.PIVOT_STATE.FEEDER) && desiredRampState == RAMP_STATE.L1_FEEDER)
+//        if ((robotState.actualElevatorState != Elevator.ELEVATOR_STATE.FEEDER || robotState.actualCoralArmPivotState != CoralArm.PIVOT_STATE.FEEDER || robotState.isCoralBeamBreakTriggered) && desiredRampState == RAMP_STATE.L1_FEEDER)
 //            desiredRampState = RAMP_STATE.L234_FEEDER;
 
         if (robotState.actualRampState != desiredRampState) {
             robotState.actualRampState = desiredRampState;
+
             rampOutputsChanged = true;
         }
     }

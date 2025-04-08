@@ -30,7 +30,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -317,7 +319,7 @@ public class Robot extends TimedRobot {
                     () -> {
                         if(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER && robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER){
                             ramp.setDesiredState(Ramp.RAMP_STATE.CLIMB);
-                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.CLIMB, CoralArm.INTAKE_STATE.HOLD);
+                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.CLIMB, CoralArm.INTAKE_STATE.REST);
                         } else {
                             ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
                             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
@@ -547,6 +549,8 @@ public class Robot extends TimedRobot {
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
+        ramp.setBraking(true);
+
         //TODO add new subsystem inits here
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
@@ -659,6 +663,8 @@ public class Robot extends TimedRobot {
                 }
                 lowSpeedTrafficLogger.append(CANBus.getStatus(Constants.kLowSpeedBusName).BusUtilization);
             }
+
+            GreenLogger.log(String.valueOf(robotState.fieldToVehicle));
 
             subsystemManager.outputToSmartDashboard(); // update shuffleboard for subsystem values
             robotState.outputToSmartDashboard(); // update robot state on field for Field2D widget

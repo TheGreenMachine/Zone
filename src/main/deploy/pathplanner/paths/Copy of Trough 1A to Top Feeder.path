@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.812090163934426,
-        "y": 5.229764344262294
+        "x": 5.15,
+        "y": 5.13
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9979418671180356,
-        "y": 5.83507417496647
+        "x": 4.538183327389027,
+        "y": 5.864585841896805
       },
       "isLocked": true,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Coral 1A Trough"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 7.34
       },
       "prevControl": {
-        "x": 2.202451224021923,
-        "y": 6.406724570719913
+        "x": 1.6027051171567346,
+        "y": 7.095443075507043
       },
       "nextControl": null,
       "isLocked": true,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "ramp hold l1",
-      "waypointRelativePos": 0.28116343490304785,
+      "waypointRelativePos": 0.29778393351800575,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,10 +45,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 540.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -59,8 +59,8 @@
   "reversed": false,
   "folder": "Top Auto",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 119.99999999999999
+    "velocity": 0,
+    "rotation": 59.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

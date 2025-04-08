@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 @Singleton
 public class AutoModeManager {
-
+    
     /**
      * Properties: Selection
      */
@@ -27,13 +27,13 @@ public class AutoModeManager {
     private final SendableChooser<Color> sideChooser;
     private DesiredAuto desiredAuto;
     private Color teamColor;
-
+    
     /**
      * Properties: Execution
      */
     private AutoMode autoMode = new PathPlannerAutoMode("Drive Straight Auto");
     private static Thread autoModeThread;
-
+    
     /**
      * Instantiates and AutoModeManager with a default option and selective computation
      *
@@ -43,10 +43,10 @@ public class AutoModeManager {
     public AutoModeManager(RobotState rs) {
         robotState = rs;
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
-
+        
         SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard=
         sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
-
+        
         for (DesiredAuto desiredAuto : DesiredAuto.values()) {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
@@ -54,15 +54,15 @@ public class AutoModeManager {
                 DesiredAuto.DEFAULT.name(),
                 DesiredAuto.DEFAULT
         );
-
+        
         SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
-
+        
         sideChooser.setDefaultOption(Color.BLUE.name(), Color.BLUE); // initialize options
         sideChooser.addOption(Color.RED.name(), Color.RED); // initialize options
-
+        
         reset();
     }
-
+    
     /**
      * Resets properties to default and resets the thread
      */
@@ -73,7 +73,7 @@ public class AutoModeManager {
         teamColor = sideChooser.getSelected();
         robotState.allianceColor = teamColor;
     }
-
+    
     /**
      * Updates the choosers in realtime
      *
@@ -81,20 +81,20 @@ public class AutoModeManager {
      */
     public boolean update() {
         DesiredAuto selectedAuto = autoModeChooser.getSelected();
-
+        
         Color selectedColor = Color.BLUE;
-
+        
         if (RobotBase.isSimulation()) {
             selectedColor = sideChooser.getSelected();
         } else if (RobotBase.isReal()) {
             var dsAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : sideChooser.getSelected(); //ternary hell
             selectedColor = (dsAlliance == DriverStation.Alliance.Red) ? Color.RED : Color.BLUE;
         }
-
+        
         boolean autoChanged = desiredAuto != selectedAuto;
         boolean startPosChanged = false;
         boolean colorChanged = teamColor != selectedColor;
-
+        
         // if auto has been changed, update selected auto mode + thread
         if (autoChanged || colorChanged || startPosChanged) {
             if (autoChanged) {
@@ -107,15 +107,15 @@ public class AutoModeManager {
                 teamColor = selectedColor;
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
-
+            
             autoMode = new PathPlannerAutoMode(selectedAuto.autoMode, selectedAuto.mirror);
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
-
+        
         return autoChanged || colorChanged;
     }
-
+    
     /**
      * Outputs values to SmartDashboard
      */
@@ -127,7 +127,7 @@ public class AutoModeManager {
             SmartDashboard.putString("RobotColorSelected", teamColor.name());
         }
     }
-
+    
     /**
      * Returns the selected autonomous mode
      *
@@ -137,14 +137,14 @@ public class AutoModeManager {
     public AutoMode getSelectedAuto() {
         return autoMode;
     }
-
+    
     /**
      * Executes the auto mode and respective thread
      */
     public void startAuto() {
         autoModeThread.start();
     }
-
+    
     /**
      * Stops the auto mode
      */
@@ -154,35 +154,50 @@ public class AutoModeManager {
             autoModeThread = new Thread(autoMode::run);
         }
     }
-
+    
     /**
      * Enum for AutoModes
      */
     public enum DesiredAuto {
         DEFAULT("Drive Straight Auto", false),
-
+        
         DRIVE_STRAIGHT("Drive Straight Auto", false),
 
         TUNE_DRIVETRAIN("Tune Drivetrain Auto"),
-
+        TUNE_DRIVETRAIN_STRAIGHT("Tune Drivetrain Straight Auto"),
+        TUNE_DRIVETRAIN_STRAIGHT_FAST("Tune Drivetrain Straight Fast Auto"),
+        
         TOP_3L1("Top 3L1 Auto"),
         BOTTOM_3L1("Top 3L1 Auto", true),
 
-        OPTIMIZED_TOP_4L1("Optimized Top 4L1 Auto"),
-        OPTIMIZED_BOTTOM_4L1("Optimized Top 4L1 Auto", true),
+        SAFE_TOP_3L1("Safe Top 3L1 Auto"),
+        SAFE_BOTTOM_3L1("Safe Top 3L1 Auto", true),
 
+        TOP_4L1("Top 4L1 Auto"),
+        BOTTOM_4L1("Top 4L1 Auto", true),
+        
         MIDDLE_TOP_1L4("Middle 1L4 Auto"),
         MIDDLE_BOTTOM_1L4("Middle 1L4 Auto", true),
+
+        MIDDLE_1L1("Middle 1L1 Auto"),
 
         TOP_4L4("Top 4L4 Auto"),
         BOTTOM_4L4("Top 4L4 Auto", true),
 
-        FAST_MIDDLE_TOP_1L1_2L4("Fast Middle 1L1 2L4 Auto"),
-        FAST_MIDDLE_BOTTOM_1L1_2L4("Fast Middle 1L1 2L4 Auto", true),
+        ONE_THING_TOP("One Thing"),
+        ONE_THING_BOTTOM("One Thing", true),
 
-        FAST_MIDDLE_TOP_4L1("Fast Middle 4L1 Auto"),
-        FAST_MIDDLE_BOTTOM_4L1("Fast Middle 4L1 Auto", true),
+        TWO_THING_TOP("Two Thing"),
+        TWO_THING_BOTTOM("Two Thing", true),
 
+        TOP_1L4_2L1("Top 1L4 2L1 Auto"),
+        BOTTOM_1L4_2L1("Top 1L4 2L1 Auto", true),
+
+        SAFE_TOP_1L4_2L1("Safe Top 1L4 2L1 Auto"),
+        SAFE_BOTTOM_1L4_2L1("Safe Top 1L4 2L1 Auto", true),
+
+        TOP_FULL_REEF_SIDE_1("Full Reef Side 1 Auto")
+        
         ;
 
         DesiredAuto(String autoMode, boolean mirror) {
@@ -194,7 +209,7 @@ public class AutoModeManager {
             this.autoMode = autoMode;
             this.mirror = false;
         }
-
+        
         public final String autoMode;
         public final boolean mirror;
     }

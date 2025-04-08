@@ -50,8 +50,10 @@ public class Pneumatic extends Subsystem {
     }
 
     public void setDesiredState(Pneumatic.PNEUMATIC_STATE desiredPneumaticState) {
-        this.desiredPneumaticState = desiredPneumaticState;
-        pneumaticOutputsChanged = true;
+        if(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.CLIMB && robotState.actualRampState == Ramp.RAMP_STATE.CLIMB){
+            this.desiredPneumaticState = desiredPneumaticState;
+            pneumaticOutputsChanged = true;
+        }
     }
 
     public void toggle() {

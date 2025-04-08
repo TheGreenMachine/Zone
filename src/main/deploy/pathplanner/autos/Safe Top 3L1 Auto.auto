@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top to 1A"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1A to TF"
+            "pathName": "Top to Trough 1A"
           }
         },
         {
@@ -31,19 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TF to 6B"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "6B to TF"
+            "pathName": "Trough 1A to Top Feeder"
           }
         },
         {
@@ -55,19 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TF to 6A"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "6A to TF"
+            "pathName": "Top Feeder to Trough 6M"
           }
         },
         {
@@ -79,13 +43,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TF to 5B"
+            "pathName": "Trough 6M to Top Feeder"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Feeder to Trough 6M"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Trough 6M to Top Feeder"
           }
         }
       ]

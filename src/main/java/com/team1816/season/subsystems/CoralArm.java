@@ -48,7 +48,7 @@ public class CoralArm extends Subsystem {
      * States
      */
     private PIVOT_STATE desiredPivotState = PIVOT_STATE.FEEDER;
-    private INTAKE_STATE desiredIntakeState = INTAKE_STATE.REST;
+    private INTAKE_STATE desiredIntakeState = INTAKE_STATE.HOLD;
 
     private boolean desiredPivotStateChanged = false;
     private boolean desiredIntakeStateChanged = false;
@@ -125,9 +125,9 @@ public class CoralArm extends Subsystem {
         zeroSensors();
 
         if (RobotBase.isSimulation()) {
-            pivotMotor.setMotionProfileMaxVelocity(12 / 0.05);
-            pivotMotor.setMotionProfileMaxAcceleration(12 / 0.08);
-            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(34);
+            pivotMotor.setMotionProfileMaxVelocity(200);
+            pivotMotor.setMotionProfileMaxAcceleration(300);
+            ((GhostMotor) pivotMotor).setMaxVelRotationsPerSec(70);
         }
 
         if (Constants.kLoggingRobot) {
@@ -183,16 +183,17 @@ public class CoralArm extends Subsystem {
             hasLoggedAfterReachingFeeder = true;
         }
 
+        robotState.coralMechArm.setAngle(robotState.coralMechArmBaseAngle - pivotMotor.getSensorPosition() / motorRotationsPerDegree);
+
         //Setting beam break state
         boolean beamBreak = isBeamBreakTriggered();
+        if(beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.INTAKE)
+            desiredIntakeState = INTAKE_STATE.HOLD;
+        else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.HOLD)
+            desiredIntakeState = INTAKE_STATE.INTAKE;
+//        else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.REST)
+//            desiredIntakeState = INTAKE_STATE.INTAKE;
         if (robotState.isCoralBeamBreakTriggered != beamBreak) {
-            if(beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.INTAKE)
-                desiredIntakeState = INTAKE_STATE.HOLD;
-            else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.HOLD)
-                desiredIntakeState = INTAKE_STATE.INTAKE;
-            else if(!beamBreak && robotState.actualCoralArmIntakeState == INTAKE_STATE.REST)
-                desiredIntakeState = INTAKE_STATE.INTAKE;
-
             robotState.isCoralBeamBreakTriggered = beamBreak;
         }
 
@@ -260,8 +261,6 @@ public class CoralArm extends Subsystem {
             desiredIntakePowerLogger.append(desiredIntakePower);
         }
 
-        robotState.coralMechArm.setAngle(robotState.coralMechArmBaseAngle + pivotMotor.getSensorPosition() / motorRotationsPerDegree);
-
         if (desiredPivotStateChanged || offsetHasBeenApplied) {
             desiredPivotStateChanged = false;
             offsetHasBeenApplied = false;
@@ -270,7 +269,10 @@ public class CoralArm extends Subsystem {
             if (robotState.actualRampState == Ramp.RAMP_STATE.L1_FEEDER)
                 desiredPivotStateChanged = true;
             else
-                pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, -46, -4));
+                if(RobotBase.isReal())
+                    pivotMotor.set(GreenControlMode.MOTION_MAGIC_EXPO, MathUtil.clamp(desiredPivotPosition, -46, -4));
+                else
+                    pivotMotor.set(GreenControlMode.POSITION_CONTROL, MathUtil.clamp(desiredPivotPosition, -46, -4));
             SmartDashboard.putString("Coral arm desired pivot state", String.valueOf(desiredPivotState));
             SmartDashboard.putNumber("Coral arm desired pivot position", desiredPivotPosition);}
 //        GreenLogger.log("Coral arm intake state: "+desiredIntakeState+" Intake power: "+desiredIntakePower+" Pivot state: "+desiredPivotState+" Pivot position: "+desiredPivotPosition);

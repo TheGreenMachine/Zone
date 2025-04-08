@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top to 1A"
+            "pathName": "Copy of Top to 1A"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Top",
   "choreoAuto": false
 }

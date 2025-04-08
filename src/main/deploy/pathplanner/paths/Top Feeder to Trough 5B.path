@@ -3,15 +3,15 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.62,
+        "x": 1.46,
         "y": 7.34
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4427901679580817,
+        "x": 2.2827901679580815,
         "y": 6.0133272934405335
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Top Feeder"
     },
     {
@@ -24,7 +24,7 @@
         "y": 5.979005007462742
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Coral 5B Trough"
     }
   ],
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.9501424501424487,
+      "waypointRelativePos": 0.9681440443213297,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,10 +45,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 540.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -60,7 +60,7 @@
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -48.26
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

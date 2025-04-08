@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {
@@ -31,19 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TF to 6B"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "6B to TF"
+            "pathName": "Top Feeder to 1A L3"
           }
         },
         {
@@ -55,19 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TF to 6A"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "6A to TF"
+            "pathName": "1A to TF"
           }
         },
         {
@@ -79,13 +55,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TF to 5B"
+            "pathName": "Top Feeder to 1A L2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of 1A to TF"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Feeder to 1A L1"
           }
         }
       ]

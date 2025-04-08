@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.812090163934426,
-        "y": 5.229764344262294
+        "x": 3.7161885245901636,
+        "y": 5.097899590163934
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9979418671180356,
-        "y": 5.83507417496647
+        "x": 2.7852402416278146,
+        "y": 5.550581650210472
       },
       "isLocked": true,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Trough 6B"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 7.34
       },
       "prevControl": {
-        "x": 2.202451224021923,
-        "y": 6.406724570719913
+        "x": 2.1911267462591435,
+        "y": 6.404388345611579
       },
       "nextControl": null,
       "isLocked": true,
@@ -59,7 +59,7 @@
   "reversed": false,
   "folder": "Top Auto",
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true

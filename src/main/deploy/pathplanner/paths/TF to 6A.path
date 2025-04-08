@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.62,
+        "x": 1.46,
         "y": 7.34
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0091005922834464,
+        "x": 1.8491005922834463,
         "y": 6.859896704437228
       },
       "isLocked": false,
@@ -78,7 +78,7 @@
   "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -48.26
   },
   "useDefaultConstraints": true
 }

@@ -36,8 +36,19 @@ public final class NamedCommandRegistrar {
         }));
 
         NamedCommands.registerCommand("coral feeder", Commands.runOnce(() -> {
+            Injector.get(Ramp.class).setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
             Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
             Injector.get(CoralArm.class).setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
+        }));
+
+        NamedCommands.registerCommand("coral l2", Commands.runOnce(() -> {
+            Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.L2_CORAL);
+            Injector.get(CoralArm.class).setDesiredState(CoralArm.PIVOT_STATE.L2_CORAL, CoralArm.INTAKE_STATE.HOLD);
+        }));
+
+        NamedCommands.registerCommand("coral l3", Commands.runOnce(() -> {
+            Injector.get(Elevator.class).setDesiredState(Elevator.ELEVATOR_STATE.L3_CORAL);
+            Injector.get(CoralArm.class).setDesiredState(CoralArm.PIVOT_STATE.L3_CORAL, CoralArm.INTAKE_STATE.HOLD);
         }));
 
         NamedCommands.registerCommand("coral l4", Commands.runOnce(() -> {

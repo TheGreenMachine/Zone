@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.812090163934426,
-        "y": 5.229764344262294
+        "x": 7.119715909090909,
+        "y": 7.530014204545455
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.209795780731696,
-        "y": 5.533040486066261
+        "x": 6.466285793616144,
+        "y": 6.827776498922537
       },
       "isLocked": true,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Top Facing Up"
     },
     {
       "anchor": {
-        "x": 1.46,
-        "y": 7.34
+        "x": 5.15,
+        "y": 5.13
       },
       "prevControl": {
-        "x": 2.2145977463194857,
-        "y": 5.602663413556723
+        "x": 5.2946406858352,
+        "y": 5.411705406942349
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "Top Feeder"
+      "linkedName": "Coral 1A Trough"
     }
   ],
   "rotationTargets": [],
@@ -33,13 +33,35 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "coral l1 initialize",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral l1 initialize"
+        }
+      }
+    },
+    {
       "name": "ramp hold l1",
-      "waypointRelativePos": 0.28116343490304785,
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
           "name": "ramp hold l1"
+        }
+      }
+    },
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 0.9072022160664825,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
         }
       }
     }
@@ -54,13 +76,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -48.26
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 90.0
   },
   "useDefaultConstraints": false
 }

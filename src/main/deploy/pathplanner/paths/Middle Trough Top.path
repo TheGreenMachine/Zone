@@ -16,27 +16,27 @@
     },
     {
       "anchor": {
-        "x": 5.18,
-        "y": 5.19
+        "x": 5.15,
+        "y": 5.13
       },
       "prevControl": {
-        "x": 5.574040646159964,
-        "y": 4.974338387271544
+        "x": 5.544040646159966,
+        "y": 4.914338387271544
       },
       "nextControl": {
-        "x": 3.789290132925868,
-        "y": 5.951146688021694
+        "x": 3.7592901329258686,
+        "y": 5.891146688021694
       },
       "isLocked": false,
       "linkedName": "Coral 1A Trough"
     },
     {
       "anchor": {
-        "x": 1.62,
+        "x": 1.46,
         "y": 7.34
       },
       "prevControl": {
-        "x": 1.7334690757246694,
+        "x": 1.5734690757246692,
         "y": 7.116468388571867
       },
       "nextControl": null,
@@ -74,12 +74,12 @@
     },
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.045,
+      "waypointRelativePos": 0.15235457063712013,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp score l1"
+          "name": "ramp score l1 deep"
         }
       }
     },
@@ -105,10 +105,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -48.26
   },
   "reversed": false,
-  "folder": "Top Auto",
+  "folder": "Middle Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

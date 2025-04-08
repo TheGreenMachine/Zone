@@ -3,74 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.119715909090909,
-        "y": 7.530014204545455
+        "x": 5.12,
+        "y": 5.46
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.359240509223296,
-        "y": 7.458404387261651
+        "x": 5.561295081967213,
+        "y": 6.2047684426229495
       },
       "isLocked": false,
-      "linkedName": "Top Facing Up"
+      "linkedName": "Coral 1A Reef"
     },
     {
       "anchor": {
-        "x": 5.18,
-        "y": 5.19
-      },
-      "prevControl": {
-        "x": 6.354569672131147,
-        "y": 4.473816365499255
-      },
-      "nextControl": {
-        "x": 3.893794888408462,
-        "y": 5.974252372072324
-      },
-      "isLocked": false,
-      "linkedName": "Coral 1A Trough"
-    },
-    {
-      "anchor": {
-        "x": 1.62,
+        "x": 1.46,
         "y": 7.34
       },
       "prevControl": {
-        "x": 1.9566910394932935,
-        "y": 7.135364428092399
+        "x": 2.835960963009561,
+        "y": 6.361107167295251
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Top Feeder"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 59.99999999999999
-    },
-    {
-      "waypointRelativePos": 1.1683326669332235,
-      "rotationDegrees": 59.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ramp score l1",
-      "waypointRelativePos": 0.66951566951567,
+      "name": "coral feeder",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ramp score l1"
+          "name": "coral feeder"
         }
       }
     },
     {
       "name": "ramp hold l1",
-      "waypointRelativePos": 1.1633428300094968,
+      "waypointRelativePos": 0.7963988919667611,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -90,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.760000000000005
+    "rotation": -48.26
   },
   "reversed": false,
-  "folder": "Top Auto",
+  "folder": "Top 4L4 Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -120.03000000000002
   },
   "useDefaultConstraints": true
 }
