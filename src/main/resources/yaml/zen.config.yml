@@ -110,7 +110,7 @@ subsystems:
             ## Positional Configurations ##
             openLoopRampRate: 0.1
             isSwerve: 1
-            isCTRSwerve: 0 #TODO IF ALL ELSE FAILS
+            isCTRSwerve: 1 #TODO IF ALL ELSE FAILS
             wheelDiameter: 3.81 #inches
             kTrackScrubFactor: 1.0
             ## Velocity Constraints ##

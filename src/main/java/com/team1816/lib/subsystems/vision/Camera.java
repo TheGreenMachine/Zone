@@ -37,9 +37,9 @@ public class Camera extends Subsystem{
      * Properties
      */
     private static final String NAME = "camera";
-    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera");
+    private static final List<String> CAMS = List.of("Microsoft_LifeCam_HD-3000");
     private static final List<AprilTag> aprilTags = List.of(
-            new AprilTag(20, new Pose3d(2.1336, 0, 1.0033, new Rotation3d(0,0,Math.PI)))
+            new AprilTag(20, new Pose3d(1, 0, 0.1525, new Rotation3d(0,0,Math.PI)))
     );
     public static final AprilTagFieldLayout kTagLayout =
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -132,7 +132,7 @@ public class Camera extends Subsystem{
      */
     public Matrix<N3, N1> getEstimationStdDevs(
             EstimatedRobotPose estimatedPose) {
-        // Ignore estimates that are too far off of our current estimate they are
+        // Ignore estimates that are too far off of our current estimate they ares
         // probably not correct
         if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
                 - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
@@ -168,7 +168,7 @@ public class Camera extends Subsystem{
     @Override
     public void readFromHardware() {
         if (RobotBase.isSimulation()) {
-            visionSim.update(robotState.simActualFieldToVehicle);
+            visionSim.update(robotState.fieldToVehicle);
         }
     }
 

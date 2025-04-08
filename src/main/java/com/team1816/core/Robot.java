@@ -664,7 +664,7 @@ public class Robot extends TimedRobot {
                 lowSpeedTrafficLogger.append(CANBus.getStatus(Constants.kLowSpeedBusName).BusUtilization);
             }
 
-            GreenLogger.log(String.valueOf(robotState.fieldToVehicle));
+//            GreenLogger.log(String.valueOf(robotState.fieldToVehicle));
 
             subsystemManager.outputToSmartDashboard(); // update shuffleboard for subsystem values
             robotState.outputToSmartDashboard(); // update robot state on field for Field2D widget

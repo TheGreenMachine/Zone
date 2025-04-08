@@ -128,7 +128,6 @@
             0.0,
             255.0
           ],
-          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-green.png",
           "length": 0.6000000238418579,
           "style": "Box/Image",
           "width": 0.5
@@ -326,7 +325,6 @@
           "style": "Line"
         },
         "visibleTargetPoses": {
-          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-blue.png",
           "length": 0.4000000059604645,
           "width": 0.5
         },
@@ -408,8 +406,6 @@
           "width": 0.800000011920929
         },
         "apriltag": {
-          "arrows": false,
-          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-green.png",
           "length": 0.6000000238418579,
           "width": 0.5
         },
@@ -431,7 +427,6 @@
         "right": 3466,
         "top": 291,
         "visibleTargetPoses": {
-          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-blue.png",
           "length": 0.4000000059604645,
           "width": 0.5
         },
