@@ -79,9 +79,9 @@ public class Camera extends Subsystem{
             }
             photonEstimators.add(new PhotonPoseEstimator(kTagLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCams.get(i)));
             photonEstimators.get(i).setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
-//            if (Constants.kLoggingRobot) {
-//                visionPoseLoggers.add(StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose" + i, Pose2d.struct));
-//            }
+            if (Constants.kLoggingRobot) {
+                visionPoseLoggers.add(StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose" + i, Pose2d.struct));
+            }
         }
     }
 
@@ -135,28 +135,31 @@ public class Camera extends Subsystem{
             EstimatedRobotPose estimatedPose) {
         // Ignore estimates that are too far off of our current estimate they ares
         // probably not correct
-//        if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
-//                - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
-//                || robotState.fieldToVehicle.getTranslation().getDistance(
-//                        estimatedPose.estimatedPose.toPose2d().getTranslation()) >= 1.5 // Position difference in meters
-//        )
-//            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
+                - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
+                || robotState.fieldToVehicle.getTranslation().getDistance(
+                        estimatedPose.estimatedPose.toPose2d().getTranslation()) >= 1.5 // Position difference in meters
+        )
+            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         var estStdDevs = robotState.kSingleTagStdDevs;
         int numTags = 0;
         double avgDist = 0;
+        double closestDist = Double.MAX_VALUE;
         for (var tgt : estimatedPose.targetsUsed) {
             var tagPose = kTagLayout.getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue;
             numTags++;
-            avgDist +=
-                    tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
+            double distance = tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
+            avgDist += distance;
+            if (distance < closestDist)
+                closestDist = distance;
         }
         if (numTags == 0) return estStdDevs;
         avgDist /= numTags;
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = robotState.kMultiTagStdDevs;
         // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 4)
+        if (closestDist > 1.5)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 

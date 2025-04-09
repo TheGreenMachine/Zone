@@ -168,7 +168,7 @@ subsystems:
         constants: # TODO: all of these
             intakeSpeed: 0.8
             outtakeSpeed: -.8
-            holdSpeed: .06
+            holdSpeed: .1
             removeAlgaeSpeed: .80
 
             coralSensorChannel: 9
@@ -210,7 +210,7 @@ subsystems:
             elevatorL1Position: 0.131
             elevatorL2CoralPosition: 0.131
             elevatorL3CoralPosition: 14.2
-            elevatorL4Position: 67.3
+            elevatorL4Position: 64.7
             elevatorL2AlgaePosition: 9.213
             elevatorL3AlgaePosition: 37.452
 
@@ -236,7 +236,7 @@ subsystems:
         constants: # TODO: all of these
             rampL1FeederPosition: -7.048
             rampL1FeederDeepPosition: -15
-            rampL234FeederPosition: -18.3
+            rampL234FeederPosition: -17.2
             rampScorePosition: -12.405
             rampDislodgeCoralPosition: -26.048
             rampClimbPosition: -23.405
