@@ -621,7 +621,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 deadbander = 0;
             }
 
-            double rotationalSpeed = thetaController.calculate(robotState.fieldToVehicle.getRotation().getRadians(), robotState.targetRotationRadians);
+            double rotationalSpeed = thetaController.calculate(robotState.fieldToVehicle.getRotation().getDegrees(), robotState.targetRotationRadians);
 
             setModuleStates(swerveKinematics.toSwerveModuleStates(new ChassisSpeeds(robotState.throttleInput  * maxVel12MPS * driveScalar * deadbander, robotState.strafeInput  * maxVel12MPS * driveScalar * deadbander, rotationalSpeed)));
 

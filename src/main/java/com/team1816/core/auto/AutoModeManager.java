@@ -69,6 +69,7 @@ public class AutoModeManager {
     public void reset() {
         autoMode = new PathPlannerAutoMode(DesiredAuto.DEFAULT.autoMode, DesiredAuto.DEFAULT.mirror);
         autoModeThread = new Thread(autoMode::run);
+
         desiredAuto = DesiredAuto.DRIVE_STRAIGHT;
         teamColor = sideChooser.getSelected();
         robotState.allianceColor = teamColor;

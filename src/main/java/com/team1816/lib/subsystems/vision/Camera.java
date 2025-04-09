@@ -37,7 +37,7 @@ public class Camera extends Subsystem{
      * Properties
      */
     private static final String NAME = "camera";
-    private static final List<String> CAMS = List.of("Microsoft_LifeCam_HD-3000");
+    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera");
     private static final List<AprilTag> aprilTags = List.of(
             new AprilTag(20, new Pose3d(1, 0, 0.1525, new Rotation3d(0,0,Math.PI)))
     );
@@ -79,9 +79,9 @@ public class Camera extends Subsystem{
             }
             photonEstimators.add(new PhotonPoseEstimator(kTagLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCams.get(i)));
             photonEstimators.get(i).setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
-            if (Constants.kLoggingRobot) {
-                visionPoseLoggers.add(StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose" + i, Pose2d.struct));
-            }
+//            if (Constants.kLoggingRobot) {
+//                visionPoseLoggers.add(StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose" + i, Pose2d.struct));
+//            }
         }
     }
 
@@ -100,6 +100,7 @@ public class Camera extends Subsystem{
         boolean hasNewCameraResults = false;
         for (int i = 0; i < cams.size(); i++) {
             for (var change : cams.get(i).getAllUnreadResults()) {
+
                 hasNewCameraResults = true;
                 visionEst = photonEstimators.get(i).update(change);
                 int finalI = i;
@@ -115,12 +116,12 @@ public class Camera extends Subsystem{
                                 seenTargetPoses.add(est.estimatedPose.plus(robotToCams.get(finalI)).plus(target.bestCameraToTarget).toPose2d());
                         });
             }
-            FieldConfig.field.getObject("camera"+i).setPose(
-                    robotState.fieldToVehicle.plus(new Transform2d(robotToCams.get(i).getTranslation().toTranslation2d(), robotToCams.get(i).getRotation().toRotation2d()))
-            );
+//            FieldConfig.field.getObject("camera"+i).setPose(
+//                    robotState.fieldToVehicle.plus(new Transform2d(robotToCams.get(i).getTranslation().toTranslation2d(), robotToCams.get(i).getRotation().toRotation2d()))
+//            );
         }
-        if(hasNewCameraResults)
-            FieldConfig.field.getObject("visibleTargetPoses").setPoses(seenTargetPoses);
+//        if(hasNewCameraResults)
+//            FieldConfig.field.getObject("visibleTargetPoses").setPoses(seenTargetPoses);
     }
 
     /**
@@ -134,12 +135,12 @@ public class Camera extends Subsystem{
             EstimatedRobotPose estimatedPose) {
         // Ignore estimates that are too far off of our current estimate they ares
         // probably not correct
-        if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
-                - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
-                || robotState.fieldToVehicle.getTranslation().getDistance(
-                        estimatedPose.estimatedPose.toPose2d().getTranslation()) >= 1.5 // Position difference in meters
-        )
-            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+//        if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
+//                - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
+//                || robotState.fieldToVehicle.getTranslation().getDistance(
+//                        estimatedPose.estimatedPose.toPose2d().getTranslation()) >= 1.5 // Position difference in meters
+//        )
+//            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         var estStdDevs = robotState.kSingleTagStdDevs;
         int numTags = 0;
         double avgDist = 0;
