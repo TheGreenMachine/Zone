@@ -168,7 +168,7 @@ subsystems:
         constants: # TODO: all of these
             intakeSpeed: 0.8
             outtakeSpeed: -.8
-            holdSpeed: .1
+            holdSpeed: .08
             removeAlgaeSpeed: .80
 
             coralSensorChannel: 9
