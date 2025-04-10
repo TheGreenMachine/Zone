@@ -172,7 +172,7 @@ public class Camera extends Subsystem{
     @Override
     public void readFromHardware() {
         if (RobotBase.isSimulation()) {
-            visionSim.update(robotState.fieldToVehicle);
+            visionSim.update(robotState.simActualFieldToVehicle);
         }
     }
 
