@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.46,
-        "y": 7.34
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
       },
       "prevControl": {
-        "x": 2.835960963009561,
-        "y": 6.361107167295251
+        "x": 2.9220379958198306,
+        "y": 6.278739121646178
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,8 +45,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -48.26
+    "rotation": -53.972626614896356
   },
   "reversed": false,
   "folder": "Top 4L4 Auto",

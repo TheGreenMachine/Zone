@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.46,
-        "y": 7.34
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.507287589522437,
-        "y": 4.182186453174484
+        "x": 6.5933646223327065,
+        "y": 4.099818407525412
       },
       "isLocked": true,
       "linkedName": "Top Feeder"
@@ -50,8 +50,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
@@ -65,7 +65,7 @@
   "folder": "Full Reef Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -48.26
+    "rotation": -53.972626614896356
   },
   "useDefaultConstraints": true
 }

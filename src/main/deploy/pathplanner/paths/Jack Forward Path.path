@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 0.2943651925866122,
+        "y": 0.31005706134153455
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9365452381154414,
-        "y": 0.0
+        "x": 1.1934430614390712,
+        "y": 0.909442307243173
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Jack Start"
     },
     {
       "anchor": {
-        "x": 5.0,
-        "y": 0.0
+        "x": 3.069,
+        "y": 2.424641393442623
       },
       "prevControl": {
-        "x": 4.054191173505581,
-        "y": 1.1582817519717047e-16
+        "x": 2.5295532786885246,
+        "y": 2.005071721311474
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Jack End"
     }
   ],
   "rotationTargets": [],
@@ -36,7 +36,7 @@
     "maxVelocity": 1.0,
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 360.0,
+    "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

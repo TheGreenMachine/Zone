@@ -37,7 +37,7 @@ public class Camera extends Subsystem{
      * Properties
      */
     private static final String NAME = "camera";
-    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera");
+    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera"/*, "Microsoft_LifeCam_HD-3000"*/);
     private static final List<AprilTag> aprilTags = List.of(
             new AprilTag(20, new Pose3d(1, 0, 0.1525, new Rotation3d(0,0,Math.PI)))
     );
@@ -79,9 +79,9 @@ public class Camera extends Subsystem{
             }
             photonEstimators.add(new PhotonPoseEstimator(kTagLayout, PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCams.get(i)));
             photonEstimators.get(i).setMultiTagFallbackStrategy(PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
-//            if (Constants.kLoggingRobot) {
-//                visionPoseLoggers.add(StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose" + i, Pose2d.struct));
-//            }
+            if (Constants.kLoggingRobot) {
+                visionPoseLoggers.add(StructLogEntry.create(DataLogManager.getLog(), "Camera/visionPose" + i, Pose2d.struct));
+            }
         }
     }
 
@@ -133,31 +133,39 @@ public class Camera extends Subsystem{
      */
     public Matrix<N3, N1> getEstimationStdDevs(
             EstimatedRobotPose estimatedPose) {
-        // Ignore estimates that are too far off of our current estimate they ares
+        // Ignore estimates that are too far off of our current estimate as they are
         // probably not correct
-//        if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
-//                - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
-//                || robotState.fieldToVehicle.getTranslation().getDistance(
-//                        estimatedPose.estimatedPose.toPose2d().getTranslation()) >= 1.5 // Position difference in meters
-//        )
-//            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        if (Math.abs(robotState.fieldToVehicle.getRotation().getDegrees()
+                - estimatedPose.estimatedPose.getRotation().toRotation2d().getDegrees()) >= 15 // Angle difference in degrees
+                || robotState.fieldToVehicle.getTranslation().getDistance(
+                        estimatedPose.estimatedPose.toPose2d().getTranslation()) >= 1.5 // Position difference in meters
+        )
+            return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         var estStdDevs = robotState.kSingleTagStdDevs;
         int numTags = 0;
         double avgDist = 0;
+        double closestDist = Double.MAX_VALUE;
+        double lowestAmbiguity = 1;
         for (var tgt : estimatedPose.targetsUsed) {
             var tagPose = kTagLayout.getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue;
             numTags++;
-            avgDist +=
-                    tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
+            double distance = tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
+            avgDist += distance;
+            if (distance < closestDist)
+                closestDist = distance;
+            double ambiguity = tgt.getPoseAmbiguity();
+            if (ambiguity < lowestAmbiguity)
+                lowestAmbiguity = ambiguity;
         }
         if (numTags == 0) return estStdDevs;
         avgDist /= numTags;
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = robotState.kMultiTagStdDevs;
-        // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 4)
+        // Ignore estimates when the tags are too far from the camera or the ambiguities are all too high
+        if (closestDist > 1.5 || lowestAmbiguity > 0.2)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+        // Increase std devs based on (average) distance
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
         // Set rotation std dev to max value because we trust our gyro over vision correction
@@ -169,7 +177,7 @@ public class Camera extends Subsystem{
     @Override
     public void readFromHardware() {
         if (RobotBase.isSimulation()) {
-            visionSim.update(robotState.fieldToVehicle);
+            visionSim.update(robotState.simActualFieldToVehicle);
         }
     }
 

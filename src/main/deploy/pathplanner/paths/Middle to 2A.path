@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 6.08,
-        "y": 4.186834016393442
+        "x": 6.116547788873038,
+        "y": 4.180028530670469
       },
       "prevControl": {
-        "x": 7.184978411535379,
-        "y": 4.097997842023648
+        "x": 7.221526200408417,
+        "y": 4.091192356300675
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "coral l234 initialize",
-      "waypointRelativePos": 0.8608736942070223,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -42,6 +42,12 @@
           "name": "coral l234 initialize"
         }
       }
+    },
+    {
+      "name": "coral l4",
+      "waypointRelativePos": 0.09884751773049688,
+      "endWaypointRelativePos": null,
+      "command": null
     },
     {
       "name": "coral outtake",

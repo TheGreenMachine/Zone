@@ -2,9 +2,6 @@ package com.team1816.lib.auto.actions;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.FlippingUtil;
 import com.team1816.lib.Injector;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
@@ -13,9 +10,7 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 
 import java.util.List;
 
@@ -24,6 +19,8 @@ import java.util.List;
  * follow a PathPlanner auto, or dynamically generate a patriot path
  */
 public class PatriotPathAction implements AutoAction {
+    private static final PathConstraints CONSTRAINTS = new PathConstraints(.5, 1, Units.degreesToRadians(720), Units.degreesToRadians(540));
+
     private final Pose2d initialPose;
     private final Command pathCommand;
     private final Drive drive;
@@ -44,11 +41,7 @@ public class PatriotPathAction implements AutoAction {
             this.pathCommand = null;
             this.valid = false;
         } else if (drive instanceof EnhancedSwerveDrive) {
-            PathConstraints constraints = new PathConstraints( // TODO: change this to actual values
-                    3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
-            this.pathCommand = AutoBuilder.pathfindToPose(
-                    targetPose, constraints, endVelocity
-            );
+            this.pathCommand = AutoBuilder.pathfindToPose(targetPose, CONSTRAINTS, endVelocity);
         } else {
             GreenLogger.log(
                     " oh man oh god I'm neither swerve nor tank! " + drive.toString()
