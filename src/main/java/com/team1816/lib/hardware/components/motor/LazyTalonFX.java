@@ -37,7 +37,7 @@ public class LazyTalonFX extends TalonFX implements IGreenMotor {
     protected VelocityDutyCycle velocity = new VelocityDutyCycle(0);
     protected PositionDutyCycle position = new PositionDutyCycle(0);
     protected MotionMagicDutyCycle motionMagic = new MotionMagicDutyCycle(0);
-    protected MotionMagicExpoDutyCycle motionMagicExpo = new MotionMagicExpoDutyCycle(0);
+    protected MotionMagicExpoVoltage motionMagicExpo = new MotionMagicExpoVoltage(0);
 
     protected NeutralOut neutral = new NeutralOut();
     protected StaticBrake brake = new StaticBrake();

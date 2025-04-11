@@ -77,6 +77,7 @@
       "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/drivetrain": "Gyro",
+      "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/AlgaeCatcher": "Mechanism2d",
       "/SmartDashboard/Alliance color": "String Chooser",
       "/SmartDashboard/Auto mode": "String Chooser",
@@ -96,8 +97,11 @@
       "/SmartDashboard/Elevator+CoralArm": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Playlist": "String Chooser",
+      "/SmartDashboard/Ramp": "Mechanism2d",
       "/SmartDashboard/Robot color": "String Chooser",
+      "/SmartDashboard/Sim coral beam break": "String Chooser",
       "/SmartDashboard/Starting Position": "String Chooser",
+      "/SmartDashboard/Test mech": "Mechanism2d",
       "/SmartDashboard/TrajectoryAction 0": "String Chooser",
       "/SmartDashboard/TrajectoryAction 1": "String Chooser",
       "/SmartDashboard/TrajectoryAction 2": "String Chooser",
@@ -105,62 +109,7 @@
       "/SmartDashboard/VisionSystemSim-photonvision/Sim Field": "Field2d"
     },
     "windows": {
-      "/SmartDashboard/AlgaeCatcher": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Auto mode": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Controller layout": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DCoralPlacement 0": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DCoralPlacement 1": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DCoralPlacement 2": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DStartingPosition": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 0": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 1": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 2": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 3": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/DTrajectoryAction 4": {
         "window": {
           "visible": true
         }
@@ -174,15 +123,14 @@
         "April Tags": {
           "arrows": false,
           "color": [
-            0.800000011920929,
-            0.20000000298023224,
             1.0,
+            0.0,
+            0.0,
             255.0
           ],
-          "length": 0.05000000074505806,
+          "length": 0.6000000238418579,
           "style": "Box/Image",
-          "weight": 2.5,
-          "width": 0.3499999940395355
+          "width": 0.5
         },
         "AutopathFailPoints": {
           "arrows": false,
@@ -247,9 +195,9 @@
         },
         "EstimatedRobot": {
           "arrowColor": [
-            0.5980392098426819,
-            0.5247501134872437,
-            0.5247501134872437,
+            0.0,
+            1.0,
+            0.0,
             55.0
           ],
           "arrowWeight": 0.20000000298023224,
@@ -281,15 +229,39 @@
         },
         "Robot": {
           "arrowColor": [
-            0.5980392098426819,
-            0.5247501134872437,
-            0.5247501134872437,
+            0.0,
+            1.0,
+            0.0,
             255.0
           ],
           "arrowWeight": 2.0,
-          "length": 0.8381999731063843,
-          "weight": 1.0,
-          "width": 0.8381999731063843
+          "color": [
+            1.0,
+            0.0,
+            0.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "weight": 3.0,
+          "width": 0.800000011920929
+        },
+        "SimActualRobotPosition": {
+          "arrowColor": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "arrowWeight": 2.0,
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "weight": 2.0,
+          "width": 0.800000011920929
         },
         "StartCollisionPoints": {
           "arrows": false,
@@ -312,7 +284,6 @@
           "width": 0.8889999985694885
         },
         "bottom": 1638,
-        "builtin": "2025 Reefscape",
         "camera": {
           "arrowSize": 0,
           "arrows": false,
@@ -325,9 +296,36 @@
           "length": 0.010000001639127731,
           "width": 0.010000001639127731
         },
+        "camera0": {
+          "arrowColor": [
+            0.29411765933036804,
+            1.0,
+            0.9921568632125854,
+            255.0
+          ],
+          "arrowSize": 19,
+          "arrowWeight": 3.0,
+          "style": "Hidden"
+        },
+        "camera1": {
+          "arrowColor": [
+            0.29411765933036804,
+            1.0,
+            0.9921568632125854,
+            255.0
+          ],
+          "arrowSize": 19,
+          "arrowWeight": 3.0,
+          "style": "Hidden"
+        },
         "height": 8.051901817321777,
         "left": 534,
         "right": 3466,
+        "seenTargetPoses": {
+          "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-blue.png",
+          "length": 0.4000000059604645,
+          "width": 0.5
+        },
         "top": 291,
         "trajectory": {
           "arrows": false,
@@ -337,7 +335,72 @@
           "arrowWeight": 3.0,
           "style": "Line"
         },
+        "visibleTargetPoses": {
+          "length": 0.4000000059604645,
+          "width": 0.5
+        },
+        "vision": {
+          "arrowColor": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "arrowWeight": 2.0,
+          "color": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "selectable": false,
+          "weight": 2.0,
+          "width": 0.800000011920929
+        },
+        "vision0": {
+          "arrowColor": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "arrowWeight": 2.0,
+          "color": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "selectable": false,
+          "weight": 2.0,
+          "width": 0.800000011920929
+        },
+        "vision1": {
+          "arrowColor": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "arrowWeight": 2.0,
+          "color": [
+            0.0,
+            0.6078431606292725,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "weight": 2.0,
+          "width": 0.800000011920929
+        },
         "width": 17.54825210571289,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Ramp": {
         "window": {
           "visible": true
         }
@@ -347,24 +410,55 @@
           "visible": true
         }
       },
+      "/SmartDashboard/Sim coral beam break": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/VisionSystemSim-SimVision/Sim Field": {
-        "apriltag": {
-          "arrows": false,
-          "color": [
-            225.94937133789063,
-            0.0,
-            255.0,
+        "Robot": {
+          "arrowColor": [
+            1.0,
+            1.0,
+            1.0,
             255.0
           ],
-          "length": 0.10000000149011612,
-          "style": "Box/Image"
+          "arrowWeight": 2.0,
+          "color": [
+            1.0,
+            1.0,
+            1.0,
+            255.0
+          ],
+          "length": 0.800000011920929,
+          "weight": 2.0,
+          "width": 0.800000011920929
+        },
+        "apriltag": {
+          "length": 0.6000000238418579,
+          "width": 0.5
         },
         "bottom": 1638,
-        "builtin": "2025 Reefscape",
+        "cameras": {
+          "arrowColor": [
+            0.29411765933036804,
+            1.0,
+            0.9921568632125854,
+            255.0
+          ],
+          "arrowSize": 19,
+          "arrowWeight": 3.0,
+          "style": "Hidden",
+          "weight": 1.0
+        },
         "height": 8.051901817321777,
         "left": 534,
         "right": 3466,
         "top": 291,
+        "visibleTargetPoses": {
+          "length": 0.4000000059604645,
+          "width": 0.5
+        },
         "width": 17.54825210571289,
         "window": {
           "visible": true
@@ -373,6 +467,21 @@
     }
   },
   "NetworkTables": {
+    "CameraPublisher": {
+      "Arducam_OV9281_USB_Camera (1)-processed": {
+        "open": true,
+        "string[]##v_/CameraPublisher/Arducam_OV9281_USB_Camera (1)-processed/streams": {
+          "open": true
+        }
+      },
+      "lynel_crusher_Port_1181_Input_MJ-raw": {
+        "open": true,
+        "string[]##v_/CameraPublisher/lynel_crusher_Port_1181_Input_MJ-raw/streams": {
+          "open": true
+        }
+      },
+      "open": true
+    },
     "LiveWindow": {
       "drivetrain": {
         "open": true
@@ -397,8 +506,10 @@
       "Drive": {
         "open": true
       },
-      "Field": {
-        "open": true
+      "Ramp": {
+        "root": {
+          "open": true
+        }
       },
       "Starting Position": {
         "open": true
@@ -410,6 +521,9 @@
     },
     "combined": true,
     "photonvision": {
+      "lynel_crusher_Port_1181_Input_MJ": {
+        "open": true
+      },
       "open": true,
       "zed": {
         "open": true
@@ -422,5 +536,34 @@
   },
   "NetworkTables View": {
     "visible": false
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 332,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Hello"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    }
   }
 }

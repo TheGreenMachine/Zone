@@ -5,13 +5,9 @@ import com.team1816.lib.Inject;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.modes.AutoMode;
-//import com.team1816.lib.auto.modes.AutopathMode;
-import com.team1816.lib.auto.modes.DefaultMode;
-import com.team1816.lib.auto.modes.DriveStraightMode;
-//import com.team1816.lib.autopath.Autopath;
-import com.team1816.lib.auto.modes.TuneDrivetrainMode;
+import com.team1816.lib.auto.modes.NoopAutoMode;
+import com.team1816.lib.auto.modes.PathPlannerAutoMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.season.auto.modes.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 @Singleton
 public class AutoModeManager {
-
+    
     /**
      * Properties: Selection
      */
@@ -31,17 +27,13 @@ public class AutoModeManager {
     private final SendableChooser<Color> sideChooser;
     private DesiredAuto desiredAuto;
     private Color teamColor;
-
-    /**
-     * Properties: Dynamic Auto
-     */
-
+    
     /**
      * Properties: Execution
      */
-    private AutoMode autoMode = new DriveStraightMode();
+    private AutoMode autoMode = new PathPlannerAutoMode("Drive Straight Auto");
     private static Thread autoModeThread;
-
+    
     /**
      * Instantiates and AutoModeManager with a default option and selective computation
      *
@@ -51,41 +43,38 @@ public class AutoModeManager {
     public AutoModeManager(RobotState rs) {
         robotState = rs;
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
-        sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
-
+        
         SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard=
-
+        sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
+        
         for (DesiredAuto desiredAuto : DesiredAuto.values()) {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
         autoModeChooser.setDefaultOption(
-            DesiredAuto.DEFAULT.name(),
-            DesiredAuto.DEFAULT
+                DesiredAuto.DEFAULT.name(),
+                DesiredAuto.DEFAULT
         );
-
+        
         SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
-
+        
         sideChooser.setDefaultOption(Color.BLUE.name(), Color.BLUE); // initialize options
         sideChooser.addOption(Color.RED.name(), Color.RED); // initialize options
-
-        /**
-         * Dynamic Auto
-         */
-
+        
         reset();
     }
-
+    
     /**
      * Resets properties to default and resets the thread
      */
     public void reset() {
-        autoMode = new DriveStraightMode();
+        autoMode = new PathPlannerAutoMode(DesiredAuto.DEFAULT.autoMode, DesiredAuto.DEFAULT.mirror);
         autoModeThread = new Thread(autoMode::run);
+
         desiredAuto = DesiredAuto.DRIVE_STRAIGHT;
         teamColor = sideChooser.getSelected();
         robotState.allianceColor = teamColor;
     }
-
+    
     /**
      * Updates the choosers in realtime
      *
@@ -93,46 +82,41 @@ public class AutoModeManager {
      */
     public boolean update() {
         DesiredAuto selectedAuto = autoModeChooser.getSelected();
-
+        
         Color selectedColor = Color.BLUE;
-
+        
         if (RobotBase.isSimulation()) {
             selectedColor = sideChooser.getSelected();
         } else if (RobotBase.isReal()) {
             var dsAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : sideChooser.getSelected(); //ternary hell
             selectedColor = (dsAlliance == DriverStation.Alliance.Red) ? Color.RED : Color.BLUE;
         }
-
+        
         boolean autoChanged = desiredAuto != selectedAuto;
         boolean startPosChanged = false;
         boolean colorChanged = teamColor != selectedColor;
-
+        
         // if auto has been changed, update selected auto mode + thread
         if (autoChanged || colorChanged || startPosChanged) {
             if (autoChanged) {
                 desiredAuto = selectedAuto;
                 GreenLogger.log(
-                    "Auto changed from: " + desiredAuto + ", to: " + selectedAuto.name()
+                        "Auto changed from: " + desiredAuto + ", to: " + selectedAuto.name()
                 );
             }
             if (colorChanged) {
                 teamColor = selectedColor;
                 GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
             }
-
-            autoMode = generateAutoMode(selectedAuto, selectedColor);
+            
+            autoMode = new PathPlannerAutoMode(selectedAuto.autoMode, selectedAuto.mirror);
             autoModeThread = new Thread(autoMode::run);
         }
         robotState.allianceColor = teamColor;
-
+        
         return autoChanged || colorChanged;
     }
-
-    public void updateAutoMode(){
-        autoMode = generateAutoMode(autoModeChooser.getSelected(), getSelectedColor());
-        autoModeThread = new Thread(autoMode::run);
-    }
-
+    
     /**
      * Outputs values to SmartDashboard
      */
@@ -144,7 +128,7 @@ public class AutoModeManager {
             SmartDashboard.putString("RobotColorSelected", teamColor.name());
         }
     }
-
+    
     /**
      * Returns the selected autonomous mode
      *
@@ -154,24 +138,14 @@ public class AutoModeManager {
     public AutoMode getSelectedAuto() {
         return autoMode;
     }
-
-    /**
-     * Returns the selected color
-     *
-     * @return Color
-     * @see Color
-     */
-    public Color getSelectedColor() {
-        return sideChooser.getSelected();
-    }
-
+    
     /**
      * Executes the auto mode and respective thread
      */
     public void startAuto() {
         autoModeThread.start();
     }
-
+    
     /**
      * Stops the auto mode
      */
@@ -181,116 +155,65 @@ public class AutoModeManager {
             autoModeThread = new Thread(autoMode::run);
         }
     }
-
+    
     /**
      * Enum for AutoModes
      */
-    enum DesiredAuto {
-        DEFAULT,
+    public enum DesiredAuto {
+        DEFAULT("Drive Straight Auto", false),
+        
+        DRIVE_STRAIGHT("Drive Straight Auto", false),
 
-        DRIVE_STRAIGHT,
+        TUNE_DRIVETRAIN("Tune Drivetrain Auto"),
+        TUNE_DRIVETRAIN_STRAIGHT("Tune Drivetrain Straight Auto"),
+        TUNE_DRIVETRAIN_STRAIGHT_FAST("Tune Drivetrain Straight Fast Auto"),
+        
+        TOP_3L1("Top 3L1 Auto"),
+        BOTTOM_3L1("Top 3L1 Auto", true),
 
-        TUNE_DRIVETRAIN,
+        SAFE_TOP_3L1("Safe Top 3L1 Auto"),
+        SAFE_BOTTOM_3L1("Safe Top 3L1 Auto", true),
 
-//        AUTOPATH,
+        TOP_4L1("Top 4L1 Auto"),
+        BOTTOM_4L1("Top 4L1 Auto", true),
+        
+        MIDDLE_TOP_1L4("Middle 1L4 Auto"),
+        MIDDLE_BOTTOM_1L4("Middle 1L4 Auto", true),
 
-        TOP_SIDE_1_SCORE_1,
+        MIDDLE_1L1("Middle 1L1 Auto"),
 
-        TOP_SIDE_1_SCORE_2,
+        TOP_4L4("Top 4L4 Auto"),
+        BOTTOM_4L4("Top 4L4 Auto", true),
 
-        MIDDLE_SIDE_3_SCORE_1,
+        ONE_THING_TOP("One Thing"),
+        ONE_THING_BOTTOM("One Thing", true),
 
-        MIDDLE_SIDE_3_SCORE_2,
+        TWO_THING_TOP("Two Thing"),
+        TWO_THING_BOTTOM("Two Thing", true),
 
-        BOTTOM_SIDE_3_SCORE_1,
+//        MIDDLE_1L4_ALGAE_MIDDLE("Middle 1L4 Algae Auto"),
 
-        BOTTOM_SIDE_3_SCORE_2,
+        TOP_1L4_2L1("Top 1L4 2L1 Auto"),
+        BOTTOM_1L4_2L1("Top 1L4 2L1 Auto", true),
 
-        TOP_DRIVE_STRAIGHT,
+        SAFE_TOP_1L4_2L1("Safe Top 1L4 2L1 Auto"),
+        SAFE_BOTTOM_1L4_2L1("Safe Top 1L4 2L1 Auto", true),
 
-        MIDDLE_DRIVE_STRAIGHT,
+        TOP_FULL_REEF_SIDE_1("Full Reef Side 1 Auto")
+        
+        ;
 
-        BOTTOM_DRIVE_STRAIGHT,
-
-//        DYNAMIC_TRAJECTORY_ONLY,
-
-        DYNAMIC_PLACE_1,
-
-        DYNAMIC_PLACE_2,
-
-        DYNAMIC_PLACE_3
-
-//        TEST_DYNAMIC_PATHS
+        DesiredAuto(String autoMode, boolean mirror) {
+            this.autoMode = autoMode;
+            this.mirror = mirror;
         }
 
-
-    /**
-     * Generates each AutoMode by demand
-     *
-     * @param mode desiredMode
-     * @return AutoMode
-     * @see AutoMode
-     */
-    private AutoMode generateAutoMode(DesiredAuto mode, Color color) {
-        switch (mode) {
-            case DEFAULT:
-                robotState.dIsAutoDynamic = false;
-                return new DefaultMode();
-            case DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveStraightMode();
-            case TUNE_DRIVETRAIN:
-                robotState.dIsAutoDynamic = false;
-                return new TuneDrivetrainMode();
-//            case AUTOPATH:
-//                robotState.dIsAutoDynamic = false;
-//                return new AutopathMode();
-            case MIDDLE_SIDE_3_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace1AutoMode(color);
-            case MIDDLE_SIDE_3_SCORE_2:
-                robotState.dIsAutoDynamic = false;
-                return new MiddlePlace2AutoMode(color);
-            case TOP_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveOffLineTopAutoMode(color);
-            case MIDDLE_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveOffLineMiddleAutoMode(color);
-            case BOTTOM_DRIVE_STRAIGHT:
-                robotState.dIsAutoDynamic = false;
-                return new DriveOffLineBottomAutoMode(color);
-            case BOTTOM_SIDE_3_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return new BottomPlace1AutoMode(color);
-            case BOTTOM_SIDE_3_SCORE_2:
-                robotState.dIsAutoDynamic = false;
-                return new BottomPlace2AutoMode(color);
-            case DYNAMIC_PLACE_1:
-                robotState.dIsAutoDynamic = true;
-                return new DynamicPlace1();
-            case DYNAMIC_PLACE_2:
-                robotState.dIsAutoDynamic = true;
-                return new DynamicPlace2();
-            case DYNAMIC_PLACE_3:
-                robotState.dIsAutoDynamic = true;
-                return new DynamicPlace3();
-            case TOP_SIDE_1_SCORE_1:
-                robotState.dIsAutoDynamic = false;
-                return  new TopPlace1AutoMode(color);
-            case TOP_SIDE_1_SCORE_2:
-                robotState.dIsAutoDynamic = false;
-                return new TopPlace2AutoMode(color);
-//            case DYNAMIC_TRAJECTORY_ONLY:
-//                robotState.isAutoDynamic = true;
-//                RobotState.dynamicAutoChanged = true;
-//                return new DynamicTrajectoryOnlyAutoMode(robotState);
-//            case TEST_DYNAMIC_PATHS:
-//                return new TestAllDynamicPointsAutoMode();
-            default:
-            robotState.dIsAutoDynamic = false;
-                GreenLogger.log("Defaulting to DefaultMode");
-                return new DefaultMode();
+        DesiredAuto(String autoMode) {
+            this.autoMode = autoMode;
+            this.mirror = false;
         }
+        
+        public final String autoMode;
+        public final boolean mirror;
     }
 }

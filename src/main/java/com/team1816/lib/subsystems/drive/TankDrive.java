@@ -5,6 +5,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.team1816.lib.Singleton;
 import com.team1816.lib.Inject;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PPLTVController;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
@@ -19,15 +24,22 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.team254.CheesyDriveHelper;
 import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.lib.util.team254.SwerveDriveSignal;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.RobotState;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
 import static com.team1816.lib.util.driveUtil.DriveConversions.*;
@@ -44,9 +56,10 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
     /**
      * Odometry
      */
-    private DifferentialDriveOdometry tankOdometry;
-    private static final DifferentialDriveKinematics tankKinematics = new DifferentialDriveKinematics(
-        kDriveWheelTrackWidthMeters
+    private final DifferentialDriveOdometry simActualTankOdometry;
+    private final DifferentialDrivePoseEstimator tankEstimator;
+    public static final DifferentialDriveKinematics tankKinematics = new DifferentialDriveKinematics(
+            kDriveWheelTrackWidthMeters
     );
     private final CheesyDriveHelper driveHelper = new CheesyDriveHelper();
     private final double tickRatioPerLoop = Constants.kLooperDt / .1d; // Convert Ticks/100MS into Ticks/Robot Loop
@@ -111,12 +124,14 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
 
         setOpenLoop(DriveSignal.NEUTRAL);
 
-        tankOdometry =
+        simActualTankOdometry =
             new DifferentialDriveOdometry(
                 getActualHeading(),
                 leftActualDistance,
                 rightActualDistance
             );
+
+        tankEstimator = robotState.tankEstimator;
 
         if (Constants.kLoggingDrivetrain) {
             desStatesLogger = new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/Tank/DesStates");
@@ -124,6 +139,39 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
             gyroPitchLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Tank/Pitch");
             gyroRollLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Tank/Roll");
         }
+
+        // Initialise PathPlanner autopath builder configured to Differential Drive
+        // Not enabled. In order to enable, please provide an implementation for the fourth
+        // parameter.
+        /*
+        RobotConfig pathRobotConfig = null;
+        try {
+            pathRobotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            DriverStation.reportWarning("Unable to configure PathPlanner!", e.getStackTrace());
+        }
+
+        if (pathRobotConfig != null) {
+            // https://pathplanner.dev/pplib-getting-started.html#ltv-differential
+            AutoBuilder.configure(
+                    this::getPose,
+                    this::resetOdometry,
+                    () -> chassisSpeed,
+                    (speeds, feedforwards) -> {
+                        // no-op
+                    },
+                    new PPLTVController(0.02),
+                    pathRobotConfig,
+                    () -> {
+                        var alliance = DriverStation.getAlliance();
+                        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                    }
+            );
+        }
+
+        PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
+        */
+        GreenLogger.log("PathPlanner autos disabled for Tank Drive.");
     }
 
     /**
@@ -187,7 +235,8 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
         }
         actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
 
-        tankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
+        simActualTankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
+        tankEstimator.update(actualHeading, leftActualDistance, rightActualDistance);
 
         if (Constants.kLoggingDrivetrain) {
             ((DoubleArrayLogEntry) desStatesLogger).append(new double[]{leftVelDemand, rightVelDemand});
@@ -257,14 +306,41 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
      */
     @Override
     public void resetOdometry(Pose2d pose) {
-        tankOdometry.resetPosition(
+        tankEstimator.resetPosition(
             getActualHeading(),
             leftActualDistance,
             rightActualDistance,
             pose
         );
-        tankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
+        tankEstimator.update(actualHeading, leftActualDistance, rightActualDistance);
+        simActualTankOdometry.resetPosition(
+                getActualHeading(),
+                leftActualDistance,
+                rightActualDistance,
+                pose
+        );
+        simActualTankOdometry.update(actualHeading, leftActualDistance, rightActualDistance);
         updateRobotState();
+    }
+
+    /**
+     * Resets the odometry to a certain pose without resetting simulated "actual" positions
+     *
+     * @param pose Pose2d
+     */
+    @Override
+    public void resetEstimatedOdometry(Pose2d pose) {
+        tankEstimator.resetPosition(
+                getActualHeading(),
+                leftActualDistance,
+                rightActualDistance,
+                pose
+        );
+        tankEstimator.update(actualHeading, leftActualDistance, rightActualDistance);
+    }
+
+    public void updateOdometryWithVision(Pose2d estimatedPose2D, double timestamp, Matrix<N3, N1> stdDevs) {
+        tankEstimator.addVisionMeasurement(estimatedPose2D, timestamp, stdDevs);
     }
 
     /**
@@ -274,7 +350,8 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
      */
     @Override
     public void updateRobotState() {
-        robotState.fieldToVehicle = tankOdometry.getPoseMeters();
+        robotState.simActualFieldToVehicle = simActualTankOdometry.getPoseMeters();
+        robotState.fieldToVehicle = tankEstimator.getEstimatedPosition();
 
         var cs = new ChassisSpeeds(
             chassisSpeed.vxMetersPerSecond,
@@ -294,7 +371,7 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
         robotState.vehicleToFloorProximityCentimeters = infrastructure.getMaximumProximity();
 
         if (Constants.kLoggingDrivetrain) {
-            drivetrainPoseLogger.append(new double[]{robotState.fieldToVehicle.getX(), robotState.fieldToVehicle.getY(), robotState.fieldToVehicle.getRotation().getRadians()});
+            drivetrainPoseLogger.append(robotState.fieldToVehicle);
             drivetrainChassisSpeedsLogger.append(new double[]{robotState.deltaVehicle.vxMetersPerSecond, robotState.deltaVehicle.vyMetersPerSecond, robotState.deltaVehicle.omegaRadiansPerSecond});
             gyroPitchLogger.append(pigeon.getPitchValue());
             gyroRollLogger.append(pigeon.getRollValue());

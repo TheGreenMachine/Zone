@@ -1,0 +1,87 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.06251904254236,
+        "y": 5.617159907030075
+      },
+      "isLocked": true,
+      "linkedName": "Top Feeder"
+    },
+    {
+      "anchor": {
+        "x": 3.4884221311475407,
+        "y": 5.877100409836065
+      },
+      "prevControl": {
+        "x": 3.2491517057356973,
+        "y": 6.241858725955772
+      },
+      "nextControl": {
+        "x": 4.014826182290259,
+        "y": 5.074618218554329
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.812090163934426,
+        "y": 5.229764344262294
+      },
+      "prevControl": {
+        "x": 3.6541694603819437,
+        "y": 5.4235710814761715
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral 6M Trough"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.540804373291675,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 1.9166293142088744,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Top Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -53.972626614896356
+  },
+  "useDefaultConstraints": true
+}

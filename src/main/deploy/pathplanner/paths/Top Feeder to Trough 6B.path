@@ -1,0 +1,71 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.41716323543952,
+        "y": 5.231442108326354
+      },
+      "isLocked": true,
+      "linkedName": "Top Feeder"
+    },
+    {
+      "anchor": {
+        "x": 3.7161885245901636,
+        "y": 5.097899590163934
+      },
+      "prevControl": {
+        "x": 3.6820892997075614,
+        "y": 5.549205027807272
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": "Trough 6B"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.842249121436937,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 0.9090489381348118,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Top Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -53.972626614896356
+  },
+  "useDefaultConstraints": true
+}

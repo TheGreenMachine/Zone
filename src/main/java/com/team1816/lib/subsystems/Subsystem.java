@@ -2,6 +2,7 @@ package com.team1816.lib.subsystems;
 
 import com.team1816.lib.Singleton;
 import com.team1816.lib.Inject;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
@@ -55,6 +56,8 @@ public abstract class Subsystem implements Sendable {
         this.name = name;
         robotState = rs;
         infrastructure = inf;
+
+        implementNamedCommands();
     }
 
     /** Read/Write Periodic */
@@ -89,6 +92,13 @@ public abstract class Subsystem implements Sendable {
      * Stops the subsystem
      */
     public abstract void stop();
+
+    /**
+     * Registers named commands usable in PathPlanner auto builder
+     *
+     * @see NamedCommands
+     */
+    public void implementNamedCommands() {}
 
     /**
      * Tests the subsystem based on various criteria

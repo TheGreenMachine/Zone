@@ -1,0 +1,84 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6267889108696962,
+        "y": 7.021019205877561
+      },
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    },
+    {
+      "anchor": {
+        "x": 2.9,
+        "y": 4.19
+      },
+      "prevControl": {
+        "x": 2.8090752840523954,
+        "y": 4.522184415139972
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral 5B Reef"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "coral l4",
+      "waypointRelativePos": 0.37349953831948624,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral l4"
+        }
+      }
+    },
+    {
+      "name": "coral outtake",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "coral outtake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Top 4L4 Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -53.972626614896356
+  },
+  "useDefaultConstraints": true
+}

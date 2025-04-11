@@ -65,6 +65,7 @@ public class RobotFactory {
                     false
             );
         }
+        robotName = robotName.toLowerCase();
         System.out.println("Loading Config for " + robotName);
         try {
             config =

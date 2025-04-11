@@ -1,6 +1,6 @@
 subsystems:
     drivetrain:
-        implemented: false
+        implemented: true
         motors:
             RRDr:
                 motorType: TalonFX
@@ -118,46 +118,47 @@ subsystems:
             isSwerve: 1
             isCTRSwerve: 1 #TODO IF ALL ELSE FAILS
             ## Velocity Constraints ##
-            maxRotVel: 0.8 # Pi radians/sec
+            maxRotVel: 1.2 # Pi radians/sec
             maxRotVelClosedLoop: 2 # Pi radians/sec
-            wheelDiameter: 4
+            wheelDiameter: 3.8
             trackWidth: 22.75 # inches
             wheelbaseLength: 22.75 # inches
             maxVelOpenLoop: 3 # meters/s
-            maxVelPathFollowing: 4 # meters/s
-            maxAccel: 2 # meters/s^2
+            maxVelPathFollowing: 3 # meters/s
+            maxAccel: 3 # meters/s^2
+            #FR OUT, RL OUT, FL IN, BR IN
             isDemoMode: 0
             ## Swerve Characterization ##
             azimuthEncPPR: 2048
             ## Control Configurations ##
-            slowModeScalar: 0.4
+            slowModeScalar: 0.3
             turboModeScalar: 1.73
             driveDeadband: 0.1
             rotationalDeadband: 0.1
             inputDeadband: 0.15 # Deadband of the normalized input
             snapDivisor: 30
     coralArm:
-        implemented: false
+        implemented: true
         motors:
             coralArmIntakeMotor:
                 motorType: SparkMax
                 motorName: coralArmIntakeMotor
                 id: 12
                 invertMotor: false
-                currentLimit: 20
+                currentLimit: 25
             coralArmPivotMotor:
                 motorType: TalonFX
                 motorName: coralArmPivotMotor
                 id: 13
-                invertMotor: true
+                invertMotor: false
                 currentLimit: 20
                 isLowSpeedCanBus: true
                 motionMagic:
-                    expoKV: 0.12
+                    expoKV: 0.1
                     expoKA: 0.1
         pidConfig:
             slot0: #Pivot
-                kP: 0.05
+                kP: 1
                 kI: 0
                 kD: 0
                 kV: 0
@@ -165,66 +166,26 @@ subsystems:
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
-            intakeSpeed: -.60
-            outtakeSpeed: .30
-            holdSpeed: 0
+            intakeSpeed: 0.8
+            outtakeSpeed: -.8
+            holdSpeed: .08
+            removeAlgaeSpeed: .80
 
-            coralSensorChannel: 9
+            coralSensorChannel: 7
 
-            coralArmL1Position: 36
-            coralArmL2Position: 36
-            coralArmL3Position: 36
-            coralArmL4Position: 35
+            coralArmL1Position: -43.501
+            coralArmL2CoralPosition: -43.501
+            coralArmL3CoralPosition: -37.427
+            coralArmL4Position: -40.925
+            coralArmUpPosition: -30.856
+            coralArmL2AlgaePosition: -46
+            coralArmL3AlgaePosition: -45.469
+            coralArmFeederPosition: -4.7
+            coralArmClimbPosition: -39.14
 
-            coralArmFeederPosition: 26.3
-
-            coralArmMotorRotationsPerDegree: 1
-    algaeCatcher:
-        implemented: true
-        motors:
-            algaeCatcherIntakeMotor:
-                motorType: SparkMax
-                motorName: algaeCatcherIntakeMotor
-                id: 14
-                invertMotor: false
-                currentLimit: 20
-                isLowSpeedCanBus: true
-            algaeCatcherPositionMotor:
-                motorType: TalonFX
-                motorName: algaeCatcherPositionMotor
-                id: 15
-                invertMotor: false
-                currentLimit: 20
-                motionMagic:
-                    expoKV: 0.05
-                    expoKA: 0.15
-        pidConfig:
-            slot0: #Position
-                kP: 0.8
-                ki: 0
-                kD: 0.02
-                kV: 0
-                kS: 0
-                kA: 0
-                kG: 0
-                gravityType: cosine
-        constants: # TODO: all of these
-            algaeCollectSpeed: .15
-            algaeHoldSpeed: 0
-            algaeReleaseSpeed: -.30
-
-            algaeSensorChannel: 1
-
-            stowPosition: 0.1
-            intakePosition: 16.8
-            holdPosition: 13.67
-            outtakePosition: 14.07
-            algaeL2Position: 25
-            algaeL3Position: 38
-
-            algaeMotorRotationsPerDegree: .25
+            coralArmMotorRotationsPerDegree: .24
     elevator:
-        implemented: false
+        implemented: true
         motors:
             elevatorMotor:
                 motorType: TalonFX
@@ -233,35 +194,74 @@ subsystems:
                 invertMotor: true
                 currentLimit: 60
                 motionMagic:
-                    expoKV: 0.1
-                    expoKA: 0.2
+                    expoKV: 0.05
+                    expoKA: 0.04
         pidConfig:
             slot0:
                 kP: 1
                 kI: 0
-                kD: 0.02
+                kD: 0
                 kV: 0
                 kS: 0
                 kA: 0
                 kG: 0
         constants: # TODO: all of these
             elevatorFeederPosition: 0
-            elevatorL1Position: 1
-            elevatorL2Position: 8.6
-            elevatorL3Position: 28.3
-            elevatorL4Position: 58.8
+            elevatorL1Position: 0.131
+            elevatorL2CoralPosition: 0.131
+            elevatorL3CoralPosition: 14.2
+            elevatorL4Position: 64.7
+            elevatorL2AlgaePosition: 9.213
+            elevatorL3AlgaePosition: 37.452
 
-            elevatorMotorRotationsPerUnit: 1
+            elevatorMotorRotationsPerUnit: 20
+    ramp:
+        implemented: true
+        motors:
+            rampMotor:
+                motorType: SparkMax
+                motorName: rampMotor
+                id: 14
+                invertMotor: false
+                currentLimit: 20
+        pidConfig:
+            slot0:
+                kP: 0.2
+                kI: 0
+                kD: 0
+                kV: 0
+                kS: 0
+                kA: 0
+                kG: 0
+        constants: # TODO: all of these
+            rampL1FeederPosition: -7.048
+            rampL1FeederDeepPosition: -15
+            rampL234FeederPosition: -17.2
+            rampScorePosition: -12.405
+            rampDislodgeCoralPosition: -26.048
+            rampClimbPosition: -23.405
+
+
+            rampMotorRotationsPerUnit: 0.136
+            zeroingButtonChannel: 6
     pneumatic:
-        implemented: false
+        implemented: true
         solenoids:
             pneumatic: 7 #idk wtf this is ngl
             pneumatic2: 6
         constants:
             pneumaticOn: 1.0
             pneumaticOff: 0.0
-    camera:
+    ledmanager:
         implemented: false
+        candle: 22
+        constants:
+            raveEnabled: 0
+            raveSpeed: 0.05
+            maxLevel: 200
+            ledStripCount: 0
+    camera:
+        implemented: true
         constants:
             useMultiTargetOdometry: 0
 infrastructure:
@@ -290,7 +290,7 @@ constants:
     logDrivetrain: 1 # 0 or 1
     configStatusFrames: 0 # 0 or 1
     ## General ##
-    usingVision: 0
+    usingVision: 1
     teleopFieldCentric: 1 # 0 or 1
     kLooperDt: .025 # seconds
     isProLicensed: 0

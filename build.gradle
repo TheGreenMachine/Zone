@@ -2,8 +2,8 @@ import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2025.3.1"
-    //id 'org.jsonschema2dataclass' version '4.0.1'
+    id "edu.wpi.first.GradleRIO" version "2025.3.2"
+    id 'org.jsonschema2dataclass' version '4.0.1'
 }
 
 java {
@@ -140,19 +140,19 @@ jar {
 
 }
 
-//jsonSchema2Pojo {
-//    targetPackage = 'com.team1816.lib'
-//    useTitleAsClassname = true
-//    includeGetters = false
-//    includeSetters = false
-//    removeOldOutput = true
-//    includeAdditionalProperties = false
-//    includeToString = true
-//    includeHashcodeAndEquals = false
-//    source.setFrom files(
-//        "${project.rootDir}/src/main/resources/schemas"
-//    )
-//}
+jsonSchema2Pojo {
+    targetPackage = 'com.team1816.lib'
+    useTitleAsClassname = true
+    includeGetters = false
+    includeSetters = false
+    removeOldOutput = true
+    includeAdditionalProperties = false
+    includeToString = true
+    includeHashcodeAndEquals = false
+    source.setFrom files(
+        "${project.rootDir}/src/main/resources/schemas"
+    )
+}
 
 task robotCADToAdvantageScope (type: Copy) {
     String currUserName = System.getProperty("user.name");
@@ -226,6 +226,23 @@ task runZone(type: JavaExec) {
     }
     environment "HALSIM_EXTENSIONS", hal
     environment "ROBOT_NAME", "zone"
+    dependsOn(jar, simulateExternalJavaRelease)
+    classpath = files(jar)
+    jvmArgs "-Djava.library.path=${jniDir}"
+}
+
+task runZingi(type: JavaExec) {
+    String jniDir = "${project.buildDir}/jni/release"
+    environment "PATH", jniDir
+    String hal = fileTree(dir: "${project.buildDir}/jni/release", include: '*halsim_*.*').asPath
+    if (!DefaultNativePlatform.currentOperatingSystem.isWindows()) {
+        environment "LD_LIBRARY_PATH", jniDir
+        environment "DYLD_FALLBACK_LIBRARY_PATH", jniDir
+        environment "DYLD_LIBRARY_PATH", jniDir
+        jvmArgs "-XstartOnFirstThread"
+    }
+    environment "HALSIM_EXTENSIONS", hal
+    environment "ROBOT_NAME", "Zingi"
     dependsOn(jar, simulateExternalJavaRelease)
     classpath = files(jar)
     jvmArgs "-Djava.library.path=${jniDir}"

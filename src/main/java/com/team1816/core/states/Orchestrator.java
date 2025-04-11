@@ -13,10 +13,14 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.visionUtil.VisionPoint;
+import com.team1816.season.subsystems.CoralArm;
+import com.team1816.season.subsystems.Elevator;
+import com.team1816.season.subsystems.Ramp;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -39,6 +43,9 @@ public class Orchestrator {
     private LedManager ledManager;
     //TODO add new subsystems here
     private InputHandler inputHandler;
+    private CoralArm coralArm;
+    private Elevator elevator;
+    private Ramp ramp;
 
     /**
      * Properties
@@ -73,6 +80,9 @@ public class Orchestrator {
         ledManager = led;
         //TODO init new subsystems here
         inputHandler = Injector.get(InputHandler.class);
+        coralArm = Injector.get(CoralArm.class);
+        elevator = Injector.get(Elevator.class);
+        ramp = Injector.get(Ramp.class);
     }
 
     /**
@@ -146,75 +156,24 @@ public class Orchestrator {
          */
     }
 
-    /** Superseded Odometry Handling */
-
     /**
-     * Calculates the absolute pose of the drivetrain based on a single target
-     *
-     * @param target VisionPoint
-     * @return Pose2d
-     * @see VisionPoint
-     */
-    public Pose2d calculateSingleTargetTranslation(VisionPoint target) {
-        if (FieldConfig.fiducialTargets.containsKey(target.id)) {
-            Pose2d targetPos = FieldConfig.fiducialTargets.get(target.id).toPose2d();
-            double X = target.getX(), Y = target.getY();
-
-            Translation2d cameraToTarget = new Translation2d(X, Y).rotateBy(robotState.getLatestFieldToCamera());
-            Translation2d robotToTarget = cameraToTarget.plus(
-                Constants.kCameraMountingOffset.getTranslation().rotateBy(
-                    robotState.fieldToVehicle.getRotation()
-                )
-            );
-            Translation2d targetToRobot = robotToTarget.unaryMinus();
-
-            Translation2d targetTranslation = targetToRobot.rotateBy(targetPos.getRotation());
-            Pose2d p = targetPos.plus(
-                new Transform2d(
-                    targetTranslation,
-                    targetPos.getRotation().rotateBy(Rotation2d.fromDegrees(180))
-                )
-            ); // inverse axis angle
-
-            GreenLogger.log("Updated Pose: " + p);
-            return p;
-        } else {
-            return robotState.fieldToVehicle;
-        }
-    }
-
-    /**
-     * Calculates the absolute pose of the drivetrain based on a single target using PhotonVision's library
-     *
-     * @param target VisionPoint
-     * @return Pose2d
-     * @see org.photonvision.targeting.PhotonTrackedTarget
-     */
-    public Pose2d photonCalculateSingleTargetTranslation(PhotonTrackedTarget target) {
-        Pose2d targetPos = new Pose2d(
-            FieldConfig.fiducialTargets.get(target.getFiducialId()).getX(),
-            FieldConfig.fiducialTargets.get(target.getFiducialId()).getY(),
-            new Rotation2d()
-        );
-        Translation2d targetTranslation = target.getBestCameraToTarget().getTranslation().toTranslation2d();
-        Transform2d targetTransform = new Transform2d(targetTranslation, robotState.getLatestFieldToCamera());
-        return PhotonUtils.estimateFieldToCamera(targetTransform, targetPos);
-    }
-
-    /**
-     *Theoretically updates the robot pose, returns true if updated, returns false if the camera couldn't find anything
-     * @return
+     *Updates the robot pose with vision data
      */
     public void updatePoseWithVisionData() {
-        //We'll want a toggle for wether or not this method is called every loop, and then a separate call to it for autoaim eventually
-        //Kinda issue, idk what std dev we are supposed to use
-        if (robotState.currentCamFind) {
+        camera.updateVisionEstimatedPoses();
+        for (int i = 0; i < robotState.visionEstimatedPoses.size(); i++) {
             drive.updateOdometryWithVision(
-                    robotState.currentVisionEstimatedPose.estimatedPose.toPose2d(),
-                    robotState.currentVisionEstimatedPose.timestampSeconds,
-                    camera.getEstimationStdDevs(robotState.currentVisionEstimatedPose.estimatedPose.toPose2d())
+                    robotState.visionEstimatedPoses.get(i).estimatedPose.toPose2d(),
+                    robotState.visionEstimatedPoses.get(i).timestampSeconds,
+                    robotState.visionStdDevs.get(i)
             );
         }
+    }
+
+    public void setFeederStates(boolean setToL1Feeder) {
+        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, setToL1Feeder ? CoralArm.INTAKE_STATE.HOLD : CoralArm.INTAKE_STATE.INTAKE);
+        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
+        ramp.setDesiredState(setToL1Feeder ? Ramp.RAMP_STATE.L1_FEEDER : Ramp.RAMP_STATE.L234_FEEDER);
     }
 
     //Just a wrapper to keep paradigm

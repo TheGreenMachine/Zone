@@ -2,87 +2,36 @@ package com.team1816.lib.auto.modes;
 
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
-import com.team1816.lib.DriveFactory;
-import com.team1816.lib.Injector;
 import com.team1816.lib.auto.AutoModeEndedException;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.auto.actions.AutoAction;
-import com.team1816.lib.auto.actions.TrajectoryAction;
-import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
-
-import java.util.List;
 
 /**
  * An abstract class that is the basis of a robot's autonomous routines.
  * Actions can be implemented in the routine and can be performed  (which are routines that do actions).
  */
-public abstract class AutoMode implements Runnable{
+public abstract class AutoMode implements Runnable {
+    public AutoMode(String name) {
+        this.name = name;
+    }
 
     public static RobotState robotState;
 
     private static final long looperDtInMS = (long) (Constants.kLooperDt * 1000);
+    
+    private final String name;
 
     /**
      * State: if mode needs to be stopped
      */
     private boolean needsStop;
-
-    /**
-     * State: Trajectory Actions to be run
-     */
-    protected List<TrajectoryAction> trajectoryActions;
     /**
      * State: Initial Pose that robot starts at
      */
     protected Pose2d initialPose;
-
-    /**
-     * Empty constructor for driveStraight and doNothing modes which don't require trajectories
-     *
-     * @see DriveStraightMode
-     */
-    protected AutoMode() {
-        robotState = Injector.get(RobotState.class);
-
-        if (robotState.allianceColor == Color.BLUE) {
-            initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-        } else {
-            initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(180));
-        }
-
-    }
-
-    /**
-     * Instantiates an AutoMode from a list of trajectory actions
-     *
-     * @param trajectoryActions
-     * @see TrajectoryAction
-     */
-    protected AutoMode(List<TrajectoryAction> trajectoryActions) {
-        robotState = Injector.get(RobotState.class);
-
-        this.trajectoryActions = trajectoryActions;
-        boolean isSwerve = Injector.get(DriveFactory.class).getInstance() instanceof EnhancedSwerveDrive;
-
-        if (trajectoryActions.isEmpty()) {
-            if (robotState.allianceColor == Color.BLUE) {
-                initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-            } else {
-                initialPose = new Pose2d(0, 0, Rotation2d.fromDegrees(180));
-            }
-        } else {
-            if (trajectoryActions.get(0).getTrajectoryHeadings() != null && isSwerve) {
-                initialPose = new Pose2d(trajectoryActions.get(0).getTrajectory().getInitialPose().getTranslation(), trajectoryActions.get(0).getTrajectoryHeadings().get(0));
-            } else {
-                initialPose = trajectoryActions.get(0).getTrajectory().getInitialPose();
-            }
-        }
-    }
 
     /**
      * Runs the autoMode routine actions
@@ -159,23 +108,6 @@ public abstract class AutoMode implements Runnable{
     }
 
     /**
-     * Gets current running Trajectory
-     *
-     * @return trajectory
-     * @see Trajectory
-     */
-    public Trajectory getCurrentTrajectory() {
-        if (trajectoryActions != null && trajectoryActions.size() > 0) {
-            for (int i = 0; i < trajectoryActions.size(); i++) {
-                if (!trajectoryActions.get(i).isFinished()) {
-                    return trajectoryActions.get(i).getTrajectory();
-                }
-            }
-        }
-        return new Trajectory();
-    }
-
-    /**
      * Returns the initial pose of the robot
      *
      * @return initialPose
@@ -185,5 +117,21 @@ public abstract class AutoMode implements Runnable{
             return Constants.kDefaultZeroingPose;
         }
         return initialPose;
+    }
+
+    public Pose2d getInitialPose(Color allianceColor) {
+        return getInitialPose();
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public String toString() {
+        return "AutoMode{" +
+                "name='" + name + '\'' +
+                ", initialPose=" + initialPose +
+                '}';
     }
 }

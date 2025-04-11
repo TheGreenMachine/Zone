@@ -10,13 +10,21 @@ import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.team1816.lib.Singleton;
 import com.team1816.lib.Inject;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.auto.Color;
 import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.components.gyro.Pigeon2Wrapper;
 import com.team1816.lib.hardware.factory.MotorFactory;
 import com.team1816.lib.subsystems.LedManager;
-import com.team1816.lib.util.driveUtil.DriveConversions;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.core.Robot;
@@ -37,6 +45,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.util.datalog.StructArrayLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -71,6 +80,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
      */
     private LegacySwerveRequest request;
     private LegacySwerveRequest.FieldCentric fieldCentricRequest;
+    private LegacySwerveRequest.RobotCentric robotCentricRequest;
     private LegacySwerveRequest.SwerveDriveBrake brakeRequest;
     private ModuleRequest autoRequest;
 
@@ -85,9 +95,9 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
     public static final int kBackLeft = 2;
     public static final int kBackRight = 3;
 
-    private static final double maxVel12MPS = factory.getConstant(NAME,"maxVel12VMPS", 5.2);
+    private static final double maxVel12MPS = TunerConstants.kSpeedAt12Volts.magnitude();
 
-    private static final double driveGearRatio = factory.getConstant(NAME, "driveGearRatio", 6.75);
+    private static final double driveGearRatio = TunerConstants.kDriveGearRatio;
 
     private double driveScalar;
     private static final double normalDriveScalar = kMaxVelOpenLoopMeters / maxVel12MPS;
@@ -149,6 +159,10 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 .withDeadband(driveDeadband * kMaxVelOpenLoopMeters)
                 .withRotationalDeadband(rotationalDeadband * kMaxAngularSpeed);
 
+        robotCentricRequest = new LegacySwerveRequest.RobotCentric()
+                .withDriveRequestType(LegacySwerveModule.DriveRequestType.OpenLoopVoltage)
+                .withSteerRequestType(LegacySwerveModule.SteerRequestType.MotionMagic);
+
         autoRequest = new ModuleRequest()
                 .withModuleStates(new SwerveModuleState[4]);
 
@@ -209,6 +223,33 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
             GreenLogger.addPeriodicLog(new DoubleArrayLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/DesiredSpeeds"), this::getDesiredSpeeds);
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/moduleTemps"), motorTemperatures.get(0).asSupplier());
         }
+
+        // Initialise PathPlanner autopath builder configured to CTRE Swerve Drive
+        RobotConfig pathRobotConfig = null;
+        try {
+            pathRobotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            DriverStation.reportWarning("Unable to configure PathPlanner!", e.getStackTrace());
+        }
+
+        if (pathRobotConfig != null) {
+            // https://pathplanner.dev/pplib-getting-started.html#holonomic-swerve
+            AutoBuilder.configure(
+                    this::getPose,
+                    this::resetOdometry,
+                    () -> chassisSpeed,
+                    (ChassisSpeeds speeds, DriveFeedforwards feedforwards) ->
+                            setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
+                            new PPHolonomicDriveController(
+                                    new PIDConstants(7.5, 0, 0),
+                                    new PIDConstants(7.5, 0, 0)
+                            ),
+                    pathRobotConfig,
+                    () -> robotState.allianceColor == Color.RED
+            );
+
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
+        }
     }
 
     /**
@@ -244,6 +285,11 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
         if (isBraking) {
             request = brakeRequest;
+        } else if (robotState.robotcentricRequestAmount > 0){
+            request = robotCentricRequest
+                    .withVelocityX(throttle * maxVel12MPS * driveScalar)
+                    .withVelocityY(strafe * maxVel12MPS * driveScalar)
+                    .withRotationalRate(rotation * kMaxAngularSpeed * Math.PI * rotationScalar);
         } else {
             request = fieldCentricRequest
                     .withVelocityX(throttle  * maxVel12MPS * driveScalar * deadbander)
@@ -372,6 +418,11 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
         updateRobotState();
     }
 
+    @Override
+    public void resetEstimatedOdometry(Pose2d pose) {
+        resetOdometry(pose);
+    }
+
     public void resetHeading(Rotation2d rotation) {
         GreenLogger.log("Resetting Headings!");
         train.setOperatorPerspectiveForward(rotation);
@@ -413,7 +464,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
 
             robotState.drivetrainTemp = motorTemperatures.get(0).getValueAsDouble();
 
-            drivetrainPoseLogger.append(new double[]{robotState.fieldToVehicle.getX(), robotState.fieldToVehicle.getY(), robotState.fieldToVehicle.getRotation().getDegrees()});
+            drivetrainPoseLogger.append(robotState.fieldToVehicle);
             drivetrainChassisSpeedsLogger.append(new double[]{robotState.deltaVehicle.vxMetersPerSecond, robotState.deltaVehicle.vyMetersPerSecond, robotState.deltaVehicle.omegaRadiansPerSecond});
 
             controlRequestLogger.append(request.getClass().getSimpleName());
@@ -446,6 +497,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 actualModuleStructLogger.append(actualModuleStates);
             }
 
+            robotState.robotChassis = chassisSpeed;
         }
     }
 
@@ -520,10 +572,9 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
         } else if (request instanceof ModuleRequest) {
             ChassisSpeeds moduleSpeeds = swerveKinematics.toChassisSpeeds(((ModuleRequest) request).moduleStates);
             return new double[] {
-                    //This conversion is super scuffed but it's accurate enough
-                    (moduleSpeeds.vxMetersPerSecond) / driveGearRatio ,
-                    (moduleSpeeds.vyMetersPerSecond) / driveGearRatio,
-                    (moduleSpeeds.omegaRadiansPerSecond) / driveGearRatio
+                    moduleSpeeds.vxMetersPerSecond,
+                    moduleSpeeds.vyMetersPerSecond,
+                    moduleSpeeds.omegaRadiansPerSecond
             };
         } else {
             return new double[3];
@@ -572,10 +623,7 @@ public class CTRESwerveDrive extends Drive implements EnhancedSwerveDrive {
                 deadbander = 0;
             }
 
-            //Keep this line for reference
-            Translation2d distanceToTarget = new Translation2d(robotState.allianceColor == com.team1816.lib.auto.Color.BLUE ? Constants.blueSpeakerX : Constants.redSpeakerX, Constants.speakerY).minus(robotState.fieldToVehicle.getTranslation());
-
-            double rotationalSpeed = thetaController.calculate(robotState.fieldToVehicle.getRotation().getRadians(), robotState.targetRotationRadians);
+            double rotationalSpeed = thetaController.calculate(robotState.fieldToVehicle.getRotation().getDegrees(), robotState.targetRotationRadians);
 
             setModuleStates(swerveKinematics.toSwerveModuleStates(new ChassisSpeeds(robotState.throttleInput  * maxVel12MPS * driveScalar * deadbander, robotState.strafeInput  * maxVel12MPS * driveScalar * deadbander, rotationalSpeed)));
 

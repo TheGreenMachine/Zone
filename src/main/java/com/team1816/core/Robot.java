@@ -1,15 +1,18 @@
 package com.team1816.core;
 
 import com.ctre.phoenix6.CANBus;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.FlippingUtil;
 import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
+import com.team1816.core.configuration.FieldConfig;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
 import com.team1816.lib.auto.Color;
-//import com.team1816.lib.autopath.Autopath;
+import com.team1816.lib.autopath.PatriotPath;
 import com.team1816.lib.hardware.factory.RobotFactory;
 import com.team1816.lib.input_handler.InputHandler;
 import com.team1816.lib.input_handler.controlOptions.ActionState;
@@ -20,21 +23,25 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.Util;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.season.auto.DynamicAutoScript2025;
-import com.team1816.season.subsystems.AlgaeCatcher;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Pneumatic;
+import com.team1816.season.subsystems.*;
+import com.team1816.season.auto.actions.NamedCommandRegistrar;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Robot extends TimedRobot {
@@ -70,16 +77,14 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     //TODO add new subsystems here
-//    private Autopath autopather;
+    private PatriotPath autopather;
     private Elevator elevator;
     private CoralArm coralArm;
-    private AlgaeCatcher algaeCatcher;
+    private Ramp ramp;
     private Pneumatic pneumatic;
 
     private LedManager ledManager;
     private Camera camera;
-
-    private DynamicAutoScript2025 dynamicAutoScript;
 
     /**
      * Factory
@@ -112,6 +117,8 @@ public class Robot extends TimedRobot {
      * Properties
      */
     private boolean faulted;
+    private boolean rampZeroed = false;
+    private boolean zeroingButtonWasPressed = false;
 
 
     /**
@@ -175,20 +182,21 @@ public class Robot extends TimedRobot {
             factory = Injector.get(RobotFactory.class);
             ledManager = Injector.get(LedManager.class);
             camera = Injector.get(Camera.class);
-            camera.setDriverMode(true);
+            camera.setDriverMode(0,false);
             robotState = Injector.get(RobotState.class);
             orchestrator = Injector.get(Orchestrator.class);
             infrastructure = Injector.get(Infrastructure.class);
             subsystemManager = Injector.get(SubsystemLooper.class);
             autoModeManager = Injector.get(AutoModeManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
-//            autopather = Injector.get(Autopath.class);
+            autopather = Injector.get(PatriotPath.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
-            algaeCatcher = Injector.get(AlgaeCatcher.class);
+            ramp = Injector.get(Ramp.class);
             pneumatic = Injector.get(Pneumatic.class);
 
-            dynamicAutoScript = new DynamicAutoScript2025(5, 3);
+            /* Register PathPlanner named commands */
+            NamedCommandRegistrar.registerCommands();
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -230,7 +238,7 @@ public class Robot extends TimedRobot {
 
             drive = (Injector.get(Drive.Factory.class)).getInstance();
 
-            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, algaeCatcher, pneumatic);
+            subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, ramp, pneumatic);
 
             subsystemManager.registerEnabledLoops(enabledLoop);
             subsystemManager.registerDisabledLoops(disabledLoop);
@@ -250,8 +258,17 @@ public class Robot extends TimedRobot {
             /** Register inputHandler */
             inputHandler = Injector.get(InputHandler.class);
 
+            /**NEW SUBSYSTEM ACTIONS*/
+                /** Driver Commands */
+                    /**Intake/Driving Inputs*/
+            inputHandler.listenAction("patriotPathToCoralSide1",
+                    ActionState.PRESSED, () -> {
+                Pose2d target = new Pose2d(5.120, 5.460, Rotation2d.fromDegrees(-132.517));
+                if (AutoBuilder.shouldFlip()) target = FlippingUtil.flipFieldPose(target);
+                
+                autopather.start(target);
+            });
 
-            /** Driver Commands */
             inputHandler.listenAction(
                     "zeroPose",
                     ActionState.PRESSED,
@@ -276,46 +293,28 @@ public class Robot extends TimedRobot {
                     "slowMode",
                     drive::setSlowMode
             );
-
-            /*inputHandler.listenAction(
-                    "autopathingSpeaker",
-                    ActionState.PRESSED,
-                    () ->
-                        autopather.start(new Pose2d(new Translation2d(1.6, 5.5), Rotation2d.fromDegrees(0)))
-            );
-
-            inputHandler.listenAction(
-                    "autopathingAmp",
-                    ActionState.PRESSED,
-                    () ->
-                        autopather.start(new Pose2d(new Translation2d(15.2, 1.1), Rotation2d.fromDegrees(135)))
-            );*/
-            /*NEW SUBSYSTEM ACTIONS*/
-            /*inputHandler.listenActionPressAndRelease(
-                    "intakeCoral",
-                    (pressed) -> {
-                        coralArm.setDesiredIntakeState((pressed && !CoralArm.robotState.isCoralBeamBreakTriggered) ? CoralArm.INTAKE_STATE.INTAKE : CoralArm.INTAKE_STATE.HOLD);
-                    }
-            );*/
             inputHandler.listenActionPressAndRelease(
                     "outtakeCoral",
                     (pressed) -> {
-                        coralArm.setDesiredIntakeState(pressed ? CoralArm.INTAKE_STATE.OUTTAKE : CoralArm.INTAKE_STATE.REST);
+                        if (pressed) {
+                            if (robotState.isCoralBeamBreakTriggered)
+                                coralArm.setDesiredIntakeState(CoralArm.INTAKE_STATE.OUTTAKE);
+                            else
+                                ramp.setDesiredState(Ramp.RAMP_STATE.SCORE);
+                        } else {
+                            orchestrator.setFeederStates(false);
+                        }
                     }
             );
-            inputHandler.listenActionPressAndRelease(
-                    "intake/OuttakeAlgae",
-                    (pressed) ->{
-                        if(pressed){
-                            if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD)
-                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.INTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
-                            else
-                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
-                        } else{
-                            if(algaeCatcher.getDesiredAlgaeCatcherIntakeState() != AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.HOLD){
-                                algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-                            }
-                        };
+            inputHandler.listenAction(
+                    "feeder",
+                    ActionState.PRESSED,
+                    () -> {
+                        orchestrator.setFeederStates(
+                                robotState.actualElevatorState == Elevator.ELEVATOR_STATE.FEEDER &&
+                                        robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER &&
+                                        robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER
+                        );
                     }
             );
             inputHandler.listenAction(
@@ -325,82 +324,122 @@ public class Robot extends TimedRobot {
                         pneumatic.toggle();
                     }
             );
-
-
-            /** Operator Commands */
-
-            /*NEW SUBSYSTEM ACTIONS*/
             inputHandler.listenAction(
-                    "pivotElevatorAndCoralL1",
+                    "rampClimbPosition",
                     ActionState.PRESSED,
                     () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L1);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L1);
-                    }
-            );
-            inputHandler.listenAction(
-                    "pivotElevatorAndCoralL2",
-                    ActionState.PRESSED,
-                    () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2);
-                    }
-            );
-/*            inputHandler.listenAction(
-                    "pivotElevatorAndCoralFeeder",
-                    ActionState.PRESSED,
-                    () -> {
-                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.FEEDER);
-                    }
-            );
-            inputHandler.listenAction(
-                    "pivotAlgaeStow",
-                    ActionState.PRESSED,
-                    () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-                    }
-            );
-            inputHandler.listenAction(
-                    "pivotAlgaeIntake",
-                    ActionState.PRESSED,
-                    () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.INTAKE);
-                    }
-            );
-            inputHandler.listenAction(
-                    "pivotAlgaeOuttake",
-                    ActionState.PRESSED,
-                    () -> {
-                        algaeCatcher.setDesiredPivotState(AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.OUTTAKE);
-                    }
-            );*/
-            inputHandler.listenAction(
-                    "pivotA1/L3",
-                    ActionState.PRESSED,
-                    () -> {
-                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3);
-                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3);
-                        }
-                        else{
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE1);
+                        if(robotState.actualCoralArmPivotState == CoralArm.PIVOT_STATE.FEEDER && robotState.actualRampState == Ramp.RAMP_STATE.L234_FEEDER){
+                            ramp.setDesiredState(Ramp.RAMP_STATE.CLIMB);
+                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.CLIMB, CoralArm.INTAKE_STATE.REST);
+                        } else {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+                            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
                         }
 
                     }
             );
+
+                  /**Position inputs*/
+
             inputHandler.listenAction(
-                    "pivotA2/L4",
+                    "L2",
                     ActionState.PRESSED,
                     () -> {
-                        if(CoralArm.robotState.isCoralBeamBreakTriggered){
-                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
-                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
+                        if (robotState.isCoralBeamBreakTriggered) {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_CORAL);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L2_CORAL);
                         }
-                        else{
-                            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.OUTTAKE, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.ALGAE2);                        }
+                        else {
+                            if (robotState.actualElevatorState == Elevator.ELEVATOR_STATE.L2_ALGAE) {
+                                orchestrator.setFeederStates(false);
+                            }
+                            else {
+                                elevator.setDesiredState(Elevator.ELEVATOR_STATE.L2_ALGAE);
+                                coralArm.setDesiredState(CoralArm.PIVOT_STATE.L2_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            }
+                        }
                     }
             );
+            inputHandler.listenAction(
+                    "L3",
+                    ActionState.PRESSED,
+                    () -> {
+                        if (robotState.isCoralBeamBreakTriggered) {
+                            elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_CORAL);
+                            coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L3_CORAL);
+                        }
+                        else {
+                            if (robotState.actualElevatorState == Elevator.ELEVATOR_STATE.L3_ALGAE) {
+                                orchestrator.setFeederStates(false);
+                            }
+                            else {
+                                elevator.setDesiredState(Elevator.ELEVATOR_STATE.L3_ALGAE);
+                                coralArm.setDesiredState(CoralArm.PIVOT_STATE.L3_ALGAE, CoralArm.INTAKE_STATE.REMOVE_ALGAE);
+                            }
+                        }
+                    }
+            );
+            inputHandler.listenAction(
+                    "L4",
+                    ActionState.PRESSED,
+                    () -> {
+                        elevator.setDesiredState(Elevator.ELEVATOR_STATE.L4);
+                        coralArm.setDesiredPivotState(CoralArm.PIVOT_STATE.L4);
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricRight",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricDown",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricLeft",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricStrafeInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricStrafeInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
+            inputHandler.listenActionPressAndRelease(
+                    "robotcentricUp",
+                    (pressed) -> {
+                        if (pressed) {
+                            robotState.robotcentricRequestAmount++;
+                            robotState.robotcentricThrottleInput += robotState.robotcentricInput;
+                        } else {
+                            robotState.robotcentricRequestAmount--;
+                            robotState.robotcentricThrottleInput -= robotState.robotcentricInput;
+                        }
+                    }
+            );
+
 
             /** Buttonboard Commands */
 
@@ -432,6 +471,41 @@ public class Robot extends TimedRobot {
                         coralArm.offsetCoralPivot(-0.1);
                     }
             );
+            inputHandler.listenAction(
+                    "increaseRampPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        ramp.offsetRamp(0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "decreaseRampPivotOffset",
+                    ActionState.HELD,
+                    () -> {
+                        ramp.offsetRamp(-0.1);
+                    }
+            );
+            inputHandler.listenAction(
+                    "dislodgeCoral",
+                    ActionState.PRESSED,
+                    () -> {
+                        if(robotState.actualRampState == Ramp.RAMP_STATE.DISLODGE_CORAL) {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+                        } else {
+                            ramp.setDesiredState(Ramp.RAMP_STATE.DISLODGE_CORAL);
+                        }
+                    }
+            );
+
+            //For testing only
+            inputHandler.listenAction(
+                    "testingOffsetPose",
+                    ActionState.PRESSED,
+                    () ->
+                            drive.resetEstimatedOdometry(robotState.fieldToVehicle.plus(new Transform2d(new Translation2d(1.0, 1.0), new Rotation2d(Math.toRadians(0)))))
+            );
+
+            /** Operator Commands */
 
 
             SmartDashboard.putString("Git Hash", Constants.kGitHash);
@@ -484,12 +558,11 @@ public class Robot extends TimedRobot {
         ledManager.setDefaultStatus(LedManager.RobotStatus.AUTONOMOUS);
         ledManager.indicateStatus(LedManager.RobotStatus.AUTONOMOUS);
 
-        drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
+        drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
+
+        ramp.setBraking(true);
 
         //TODO add new subsystem inits here
-        elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-        algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-        coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
         autoModeManager.startAuto();
@@ -515,8 +588,8 @@ public class Robot extends TimedRobot {
             infrastructure.startCompressor();
 
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-            algaeCatcher.setDesiredState(AlgaeCatcher.ALGAE_CATCHER_INTAKE_STATE.STOP, AlgaeCatcher.ALGAE_CATCHER_PIVOT_STATE.STOW);
-            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.REST);
+            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+            coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
 
 //            autopather.autopathMaxCalcMilli = 5;
 
@@ -580,7 +653,18 @@ public class Robot extends TimedRobot {
             Robot.robotDt = getLastRobotLoop();
             loopStart = Timer.getFPGATimestamp();
 
+            if (Constants.kUseVision) {
+                orchestrator.updatePoseWithVisionData();
+            }
 
+            if (RobotBase.isSimulation()) {
+                FieldConfig.field.getObject("SimActualRobotPosition").setPose(robotState.simActualFieldToVehicle);
+            }
+
+            robotState.isElevatorInRange = elevator.isElevatorInRange();
+            robotState.isCoralArmPivotInRange = coralArm.isCoralArmPivotInRange();
+            SmartDashboard.putBoolean("Elevator in range", robotState.isElevatorInRange);
+            SmartDashboard.putBoolean("Coral arm pivot in range", robotState.isCoralArmPivotInRange);
             if (Constants.kLoggingRobot) {
                 looperLogger.append(looperDt);
                 robotLoopLogger.append(robotDt);
@@ -590,6 +674,8 @@ public class Robot extends TimedRobot {
                 }
                 lowSpeedTrafficLogger.append(CANBus.getStatus(Constants.kLowSpeedBusName).BusUtilization);
             }
+
+//            GreenLogger.log(String.valueOf(robotState.fieldToVehicle));
 
             subsystemManager.outputToSmartDashboard(); // update shuffleboard for subsystem values
             robotState.outputToSmartDashboard(); // update robot state on field for Field2D widget
@@ -622,43 +708,28 @@ public class Robot extends TimedRobot {
                 }
             }
 
-            if (RobotBase.isReal()) {}
-
-            // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
-            boolean autoChanged = autoModeManager.update();
-            if(robotState.dIsAutoDynamic && robotState.dAutoChanged){
-                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
-
-                ArrayList<Trajectory.State> trajectoryStates = new ArrayList<>();
-                var trajectoryActions = robotState.dAutoTrajectoryActions;
-                for(int i = 0; i < trajectoryActions.size(); i++) {
-                    ArrayList<Trajectory.State> trajectoryActionStates = new ArrayList<>(trajectoryActions.get(i).getTrajectory().getStates());
-                    trajectoryStates.addAll(trajectoryActionStates);
-                }
-
-                if(trajectoryStates.isEmpty())
-                    robotState.field
-                            .getObject("Trajectory")
-                            .close();
-                else
-                    robotState.field
-                            .getObject("Trajectory")
-                            .setTrajectory(
-                                    new Trajectory(trajectoryStates)
-                            );
-
-                robotState.dAutoChanged = false;
-            } else if(!robotState.dIsAutoDynamic) {
-                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
-                robotState.field
-                        .getObject("Trajectory")
-                        .setTrajectory(
-                                autoModeManager.getSelectedAuto().getCurrentTrajectory()
-                        );
+            if (RobotBase.isReal()) { // Ramp zeroing button logic
+//                boolean zeroingButtonPressed = ramp.isZeroingButtonPressed();
+//                if (zeroingButtonPressed != zeroingButtonWasPressed && zeroingButtonPressed) { // When zeroing button becomes pressed
+//                    if (!rampZeroed) { // Zero position the first time the zeroing button is pressed
+//                        ramp.zeroSensors();
+//                        ledManager.indicateStatus(LedManager.RobotStatus.ZEROING, LedManager.ControlState.BLINK);
+//                        ledManager.writeToHardware(); // Need to manually call writeToHardware because it is not normally called when disabled
+//                        rampZeroed = true;
+//                    }
+//                    else { // Set to brake mode the second time the zeroing button is pressed
+//                        ramp.setBraking(true);
+//                        ledManager.indicateStatus(LedManager.RobotStatus.DISABLED, LedManager.ControlState.SOLID);
+//                        ledManager.writeToHardware(); // Need to manually call writeToHardware because it is not normally called when disabled
+//                        rampZeroed = false; // Allows for re-zeroing if it was zeroed incorrectly the first time
+//                    }
+//                }
+//                zeroingButtonWasPressed = zeroingButtonPressed;
             }
 
-            if(robotState.dIsAutoDynamic)
-                dynamicAutoScript.update();
+            // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
+            if(autoModeManager.update())
+                drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
             if (drive.isDemoMode()) { // Demo-mode
                 drive.update();
@@ -678,9 +749,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        robotState.field
-                .getObject("Trajectory")
-                .setTrajectory(autoModeManager.getSelectedAuto().getCurrentTrajectory());
+//        robotState.field
+//                .getObject("Trajectory")
+//                .setTrajectory(autoModeManager.getSelectedAuto().getCurrentTrajectory());
 
         if(Constants.kLoggingRobot) {
 //            GreenLogger.updatePeriodicLogs();
@@ -695,22 +766,17 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         try {
 
-            if (Constants.kUseVision) {
-                if (robotState.currentCamFind) {
-                    orchestrator.updatePoseWithVisionData();
-                }
-            }
-
             if(Constants.kLoggingRobot) {
 //                GreenLogger.updatePeriodicLogs();
             }
 
             manualControl();
-//            if(robotState.autopathing)
-//                autopather.routine();
+            if(robotState.autopathing) {
+                autopather.routine();
+            }
+
         } catch (Throwable t) {
             faulted = true;
-            throw t;
         }
     }
 
@@ -726,11 +792,17 @@ public class Robot extends TimedRobot {
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
         if(robotState.autopathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.autopathBeforeTime > robotState.autopathPathCancelBufferMilli){
-//            autopather.stop();
+            autopather.stop();
         }
 
         if (robotState.rotatingClosedLoop) {
             drive.rotationPeriodic();
+        } else if (robotState.robotcentricRequestAmount > 0){
+            drive.setTeleopInputs(
+                    robotState.robotcentricThrottleInput,
+                    robotState.robotcentricStrafeInput,
+                    robotState.robotcentricRotationInput
+            );
         } else {
             drive.setTeleopInputs(
                     robotState.throttleInput,

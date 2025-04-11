@@ -9,6 +9,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
+import java.util.List;
+
 /**
  * This class contains all constants pertinent to robot-specific aspects.
  * Only fields that are necessary and generalizable across systems belong in this class.
@@ -74,20 +76,50 @@ public class Constants {
     );
 
 
-    public static final double kCameraHeightMeters = 0.601; //FIXME
+    public static final List<Transform3d> kCameraMountingOffset3Ds = List.of(
+        new Transform3d(
+//                0.3048,
+//            0.0889,
+//            1.0033,
+                0.3556,
+              -0.2960878,
+                0.226568,
 
-    public static final Pose2d kCameraMountingOffset = new Pose2d( //FIXME
-            -0.369,
-            0,
-            Rotation2d.fromRadians(Math.PI)
+                new Rotation3d(0,Math.toRadians(-15),Math.toRadians(15))
+        )/*,
+        new Transform3d(
+            -0.3556,
+            -0.2960878,
+            0.226568,
+
+            new Rotation3d(0,Math.toRadians(-15),Math.toRadians(165))
+        )*/
     );
 
-    public static final Transform3d kCameraMountingOffset3D = new Transform3d( //FIXME
-            -0.369,
-            0,
-            Constants.kCameraHeightMeters,
-            new Rotation3d(Math.PI,-0.44,Math.PI)
-    );
+    //Position constants TODO: finish tuning all of these
+    public static final Pose2d reef1APose = new Pose2d(5.00779, 5.21384, Rotation2d.fromDegrees(240));
+    public static final Pose2d reef1MPose = new Pose2d(5.15137, 5.13114, Rotation2d.fromDegrees(60));
+    public static final Pose2d reef1BPose = new Pose2d(5.29478, 5.04814, Rotation2d.fromDegrees(240));
+    public static final Pose2d reef2APose = new Pose2d(5.78931, 4.19159, Rotation2d.fromDegrees(180));
+    public static final Pose2d reef2MPose = new Pose2d(5.7894855, 4.0259, Rotation2d.fromDegrees(0));
+    public static final Pose2d reef2BPose = new Pose2d(5.78931, 3.86021, Rotation2d.fromDegrees(180));
+    public static final Pose2d reef3APose = new Pose2d(5.29478, 3.00366, Rotation2d.fromDegrees(120));
+    public static final Pose2d reef3MPose = new Pose2d(5.15137, 2.92066, Rotation2d.fromDegrees(300));
+    public static final Pose2d reef3BPose = new Pose2d(5.00779, 2.83796, Rotation2d.fromDegrees(120));
+    public static final Pose2d reef4APose = new Pose2d(4.01873, 2.83796, Rotation2d.fromDegrees(60));
+    public static final Pose2d reef4MPose = new Pose2d(3.87515, 2.92066, Rotation2d.fromDegrees(240));
+    public static final Pose2d reef4BPose = new Pose2d(3.73174, 3.00366, Rotation2d.fromDegrees(60));
+    public static final Pose2d reef5APose = new Pose2d(3.23721, 3.86021, Rotation2d.fromDegrees(0));
+    public static final Pose2d reef5MPose = new Pose2d(3.23704, 4.0259, Rotation2d.fromDegrees(180));
+    public static final Pose2d reef5BPose = new Pose2d(3.23721, 4.19159, Rotation2d.fromDegrees(0));
+    public static final Pose2d reef6APose = new Pose2d(3.73174, 5.04814, Rotation2d.fromDegrees(300));
+    public static final Pose2d reef6MPose = new Pose2d(3.87515, 5.13114, Rotation2d.fromDegrees(120));
+    public static final Pose2d reef6BPose = new Pose2d(4.01873, 5.21384, Rotation2d.fromDegrees(300));
+    public static final Pose2d topFeederPose = new Pose2d(1.13598, 7.03814, Rotation2d.fromDegrees(306));
+    public static final Pose2d bottomFeederPose = new Pose2d(1.13598, 1.01366, Rotation2d.fromDegrees(54));
+    public static final Pose2d topStartPose = new Pose2d(7.12, 7.58, Rotation2d.fromDegrees(270));
+    public static final Pose2d middleStartPose = new Pose2d(7.9, 4.31, Rotation2d.fromDegrees(180));
+    public static final Pose2d bottomStartPose = new Pose2d(7.12, 0.47, Rotation2d.fromDegrees(90));
 
     /**
      * Drivetrain characterization
@@ -112,40 +144,6 @@ public class Constants {
     /**
      * Autonomous
      */
-    public static final double kPTranslational = 10;
-    public static final double kPRotational = 10;
-
-    /**
-     * Simulation
-     */
-    public static final ShuffleboardTab kSimWindow = Shuffleboard.getTab("Simulation");
-
-    /**
-     * AutoAiming stuff
-     */
-    //TODO set to meters, (currently in inches)
-    //Positive
-    public static final double lengthOfArm = Units.inchesToMeters(7.94);
-    //0-180
-    public static final double angleBetweenArmAndShooterDegrees = 180-116.52;
-    //Positive
-    public static final double outputVelocityPerSecond = 13;
-    //10.2 maybe if it don't work right away
-    //Negative
-    public static final double gravityPerSecond = -9.80665;
-    //Nonzero
-    public static final double errorPerUnitDistance = 0.1;
-    //the robot looks down the positive y axis, and the right side is the positive x axis while the left is the negative x axis
-    public static final double axlePositionOffsetX = 0;
-    public static final double axlePositionOffsetY = Units.inchesToMeters(12);
-    public static final double axlePositionOffsetZ = Units.inchesToMeters(24.5);
-    public static final double heightOfTarget = Units.inchesToMeters(80.4375);
-    //2.0431125
-    public static final double blueSpeakerX = Units.inchesToMeters(7);
-    public static final double redSpeakerX = Units.inchesToMeters(642.25+3);
-    //16.27
-    //TODO find out this measurement
-    public static final double speakerY = 5.6597042;
-    //5.6597042
-    public static final double axleRadiansDisplacement = 0;
+    public static final double kPTranslational = 20;
+    public static final double kPRotational = 20;
 }

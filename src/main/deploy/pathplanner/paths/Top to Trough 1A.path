@@ -1,0 +1,88 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.119715909090909,
+        "y": 7.530014204545455
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.921454911932148,
+        "y": 7.277208017726765
+      },
+      "isLocked": true,
+      "linkedName": "Top Facing Up"
+    },
+    {
+      "anchor": {
+        "x": 5.15,
+        "y": 5.13
+      },
+      "prevControl": {
+        "x": 5.437118217188379,
+        "y": 5.563293719607085
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Coral 1A Trough"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "coral l1 initialize",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral l1 initialize"
+        }
+      }
+    },
+    {
+      "name": "ramp hold l1",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp hold l1"
+        }
+      }
+    },
+    {
+      "name": "ramp score l1",
+      "waypointRelativePos": 0.9439713133124151,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ramp score l1"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Top Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}

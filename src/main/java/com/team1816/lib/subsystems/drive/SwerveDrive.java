@@ -2,6 +2,11 @@ package com.team1816.lib.subsystems.drive;
 
 import com.team1816.lib.Singleton;
 import com.team1816.lib.Inject;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.team1816.core.Robot;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
@@ -17,15 +22,22 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.lib.util.team254.SwerveDriveHelper;
 import com.team1816.lib.util.team254.SwerveDriveSignal;
+import com.team1816.core.Robot;
+import com.team1816.core.configuration.Constants;
+import com.team1816.core.states.RobotState;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
 import java.util.List;
@@ -93,7 +105,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
     /**
      * Odometry variables
      */
-    private final SwerveDriveOdometry swerveOdometry;
+    private final SwerveDriveOdometry simActualSwerveOdometry;
     private final SwerveDrivePoseEstimator swerveEstimator;
     private final SwerveDriveHelper swerveDriveHelper = new SwerveDriveHelper();
 
@@ -135,7 +147,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         actualModulePositions[kBackLeft] = new SwerveModulePosition();
         actualModulePositions[kBackRight] = new SwerveModulePosition();
 
-        swerveOdometry =
+        simActualSwerveOdometry =
             new SwerveDriveOdometry(
                 swerveKinematics,
                 Constants.EmptyRotation2d,
@@ -150,6 +162,36 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
             GreenLogger.addPeriodicLog(new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/Temperature"), swerveModules[0]::getMotorTemp);
             gyroPitchLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/Pitch");
             gyroRollLogger = new DoubleLogEntry(DataLogManager.getLog(), "Drivetrain/Swerve/Roll");
+        }
+
+        // Initialise PathPlanner autopath builder configured to Swerve Drive
+        RobotConfig pathRobotConfig = null;
+        try {
+            pathRobotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            DriverStation.reportWarning("Unable to configure PathPlanner!", e.getStackTrace());
+        }
+
+        if (pathRobotConfig != null) {
+            // https://pathplanner.dev/pplib-getting-started.html#holonomic-swerve
+            AutoBuilder.configure(
+                    this::getPose,
+                    this::resetOdometry,
+                    () -> chassisSpeed,
+                    (ChassisSpeeds speeds) ->
+                            setModuleStates(swerveKinematics.toSwerveModuleStates(speeds)),
+                    new PPHolonomicDriveController(
+                            new PIDConstants(5),
+                            new PIDConstants(5)
+                    ),
+                    pathRobotConfig,
+                    () -> {
+                        var alliance = DriverStation.getAlliance();
+                        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                    }
+            );
+
+            PathPlannerLogging.setLogActivePathCallback(p -> robotState.field.getObject("trajectory").setPoses(p));
         }
     }
 
@@ -215,9 +257,9 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         if (RobotBase.isSimulation()) {
             simulateGyroOffset();
         }
-        actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
+//        actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
 
-        swerveOdometry.update(actualHeading, actualModulePositions);
+        simActualSwerveOdometry.update(actualHeading, actualModulePositions);
         swerveEstimator.update(actualHeading, actualModulePositions);
 
         if (Constants.kLoggingDrivetrain) {
@@ -284,7 +326,6 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
      * Sets the module states to a desired set of states in closed loop - this is used during autos
      *
      * @param desiredStates desiredModuleStates
-     * @see com.team1816.lib.auto.actions.TrajectoryAction
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         if (controlState != ControlState.TRAJECTORY_FOLLOWING) {
@@ -329,6 +370,10 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         }
     }
 
+    public void updateOdometryWithVision(Pose2d estimatedPose2D, double timestamp, Matrix<N3, N1> stdDevs) {
+        swerveEstimator.addVisionMeasurement(estimatedPose2D, timestamp, stdDevs);
+    }
+
     /**
      * Updates robotState based on values from odometry and sensor readings in readFromHardware
      *
@@ -336,7 +381,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
      */
     @Override
     public void updateRobotState() {
-        robotState.fieldToVehicle = swerveOdometry.getPoseMeters();
+        robotState.simActualFieldToVehicle = simActualSwerveOdometry.getPoseMeters();
         robotState.fieldToVehicle = swerveEstimator.getEstimatedPosition();
         robotState.driverRelativeFieldToVehicle = new Pose2d( // for inputs ONLY
             robotState.fieldToVehicle.getTranslation(),
@@ -363,7 +408,7 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
         robotState.vehicleToFloorProximityCentimeters = infrastructure.getMaximumProximity();
 
         if (Constants.kLoggingDrivetrain) {
-            drivetrainPoseLogger.append(new double[]{robotState.fieldToVehicle.getX(), robotState.fieldToVehicle.getY(), robotState.fieldToVehicle.getRotation().getDegrees()});
+            drivetrainPoseLogger.append(robotState.fieldToVehicle);
             drivetrainChassisSpeedsLogger.append(new double[]{robotState.deltaVehicle.vxMetersPerSecond, robotState.deltaVehicle.vyMetersPerSecond, robotState.deltaVehicle.omegaRadiansPerSecond});
             gyroPitchLogger.append(pigeon.getPitchValue());
             gyroRollLogger.append(pigeon.getRollValue());
@@ -484,8 +529,22 @@ public class SwerveDrive extends Drive implements EnhancedSwerveDrive, PidProvid
     @Override
     public void resetOdometry(Pose2d pose) {
         actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
-        swerveOdometry.resetPosition(actualHeading, actualModulePositions, pose);
-        swerveOdometry.update(actualHeading, actualModulePositions);
+        swerveEstimator.resetPosition(actualHeading, actualModulePositions, pose);
+        swerveEstimator.update(actualHeading, actualModulePositions);
+        simActualSwerveOdometry.resetPosition(actualHeading, actualModulePositions, pose);
+        simActualSwerveOdometry.update(actualHeading, actualModulePositions);
+        updateRobotState();
+    }
+
+    /**
+     * Resets the odometry calculations to a specific pose without resetting simulated "actual" positions
+     *
+     * @param pose Pose2d
+     * @see Drive#resetOdometry(Pose2d)
+     */
+    @Override
+    public void resetEstimatedOdometry(Pose2d pose) {
+        actualHeading = Rotation2d.fromDegrees(pigeon.getYawValue());
         swerveEstimator.resetPosition(actualHeading, actualModulePositions, pose);
         swerveEstimator.update(actualHeading, actualModulePositions);
         updateRobotState();
