@@ -1,6 +1,8 @@
 package com.team1816.core;
 
 import com.ctre.phoenix6.CANBus;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.FlippingUtil;
 import com.team1816.core.auto.AutoModeManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
@@ -26,6 +28,7 @@ import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Pneumatic;
 import com.team1816.season.subsystems.*;
 import com.team1816.season.auto.actions.NamedCommandRegistrar;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -258,6 +261,14 @@ public class Robot extends TimedRobot {
             /**NEW SUBSYSTEM ACTIONS*/
                 /** Driver Commands */
                     /**Intake/Driving Inputs*/
+            inputHandler.listenAction("patriotPathToCoralSide1",
+                    ActionState.PRESSED, () -> {
+                Pose2d target = new Pose2d(5.120, 5.460, Rotation2d.fromDegrees(-132.517));
+                if (AutoBuilder.shouldFlip()) target = FlippingUtil.flipFieldPose(target);
+                
+                autopather.start(target);
+            });
+
             inputHandler.listenAction(
                     "zeroPose",
                     ActionState.PRESSED,

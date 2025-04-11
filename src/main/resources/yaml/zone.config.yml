@@ -171,7 +171,7 @@ subsystems:
             holdSpeed: .08
             removeAlgaeSpeed: .80
 
-            coralSensorChannel: 9
+            coralSensorChannel: 7
 
             coralArmL1Position: -43.501
             coralArmL2CoralPosition: -43.501
