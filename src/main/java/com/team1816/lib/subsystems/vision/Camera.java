@@ -169,7 +169,7 @@ public class Camera extends Subsystem{
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
         // Set rotation std dev to max value because we trust our gyro over vision correction
-        estStdDevs.set(2, 0, Double.MAX_VALUE);
+//        estStdDevs.set(2, 0, Double.MAX_VALUE);
 
         return estStdDevs;
     }
