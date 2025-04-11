@@ -1,7 +1,6 @@
 package com.team1816.lib.variableInputs;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.constant.Constable;
 import java.util.Optional;
@@ -46,11 +45,11 @@ public class Numeric extends Number
     }
 
     @Override
-    public int compareTo(@NotNull Double anotherDouble) {
+    public int compareTo(Double anotherDouble) {
         return Double.compare(getValue(), anotherDouble);
     }
 
-    public int compareTo(@NotNull Numeric anotherNumeric) {
+    public int compareTo(Numeric anotherNumeric) {
         return Double.compare(getValue(), anotherNumeric.getValue());
     }
 
