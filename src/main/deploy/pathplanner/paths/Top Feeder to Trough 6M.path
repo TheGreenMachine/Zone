@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.46,
-        "y": 7.34
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9764420097320903,
-        "y": 5.699527952679148
+        "x": 2.06251904254236,
+        "y": 5.617159907030075
       },
       "isLocked": true,
       "linkedName": "Top Feeder"
@@ -81,7 +81,7 @@
   "folder": "Top Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -48.26
+    "rotation": -53.972626614896356
   },
   "useDefaultConstraints": true
 }

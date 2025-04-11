@@ -16,28 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.15,
-        "y": 5.13
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
       },
       "prevControl": {
-        "x": 5.544040646159966,
-        "y": 4.914338387271544
-      },
-      "nextControl": {
-        "x": 3.7592901329258686,
-        "y": 5.891146688021694
-      },
-      "isLocked": false,
-      "linkedName": "Coral 1A Trough"
-    },
-    {
-      "anchor": {
-        "x": 1.46,
-        "y": 7.34
-      },
-      "prevControl": {
-        "x": 1.5734690757246692,
-        "y": 7.116468388571867
+        "x": 1.659546108534939,
+        "y": 7.034100342922795
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,19 +30,33 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.18196017180788934,
+      "waypointRelativePos": 0.1,
       "rotationDegrees": 59.99999999999999
     },
     {
-      "waypointRelativePos": 0.992125984251969,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": 59.99999999999999
     },
     {
-      "waypointRelativePos": 1.1940648184302973,
+      "waypointRelativePos": 0.6,
       "rotationDegrees": 59.99999999999999
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.17154255319148895,
+      "maxWaypointRelativePos": 0.324024822695035,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 540.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
@@ -74,7 +72,7 @@
     },
     {
       "name": "ramp score l1",
-      "waypointRelativePos": 0.15235457063712013,
+      "waypointRelativePos": 0.1,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -85,7 +83,7 @@
     },
     {
       "name": "ramp hold l1",
-      "waypointRelativePos": 1.1443494776828105,
+      "waypointRelativePos": 0.55,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -96,8 +94,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
@@ -105,7 +103,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -48.26
+    "rotation": -53.972626614896356
   },
   "reversed": false,
   "folder": "Middle Auto",

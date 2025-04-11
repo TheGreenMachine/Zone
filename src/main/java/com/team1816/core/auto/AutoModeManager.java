@@ -191,6 +191,8 @@ public class AutoModeManager {
         TWO_THING_TOP("Two Thing"),
         TWO_THING_BOTTOM("Two Thing", true),
 
+        MIDDLE_1L4_ALGAE_MIDDLE("Middle 1L4 Algae Auto"),
+
         TOP_1L4_2L1("Top 1L4 2L1 Auto"),
         BOTTOM_1L4_2L1("Top 1L4 2L1 Auto", true),
 
