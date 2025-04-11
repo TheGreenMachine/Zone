@@ -1,0 +1,128 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.562,
+        "y": 5.626961483593301
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.326732598474531,
+        "y": 5.711514719956279
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.389446721311475,
+        "y": 4.04298155737705
+      },
+      "prevControl": {
+        "x": 6.319347986614259,
+        "y": 4.9051959941528125
+      },
+      "nextControl": {
+        "x": 6.509323770491802,
+        "y": 2.5684938524590155
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.154713114754099,
+        "y": 2.7842725409836064
+      },
+      "prevControl": {
+        "x": 5.247560783842625,
+        "y": 2.5521533682622914
+      },
+      "nextControl": {
+        "x": 5.061865445665573,
+        "y": 3.0163917137049214
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.562,
+        "y": 2.208862704918032
+      },
+      "prevControl": {
+        "x": 5.394467213114754,
+        "y": 2.436629098360655
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.5729708116753303,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.6,
+      "maxWaypointRelativePos": 2.2,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 540.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "l3 algae",
+      "waypointRelativePos": 0.7706552706552726,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "l3 algae"
+        }
+      }
+    },
+    {
+      "name": "coral feeder",
+      "waypointRelativePos": 2.799145299145316,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral feeder"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

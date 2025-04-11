@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.116547788873038,
+        "y": 4.180028530670469
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.847244749831644,
+        "y": 5.268808262874039
+      },
+      "isLocked": false,
+      "linkedName": "Coral 2A Reef"
+    },
+    {
+      "anchor": {
+        "x": 5.243794579168899,
+        "y": 5.5810271041433905
+      },
+      "prevControl": {
+        "x": 5.514086300944406,
+        "y": 5.310735382367884
+      },
+      "nextControl": {
+        "x": 4.968188302421395,
+        "y": 5.8566333808908935
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
+      },
+      "prevControl": {
+        "x": 2.210778958872572,
+        "y": 6.801943849004148
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.972626614896356
+  },
+  "reversed": false,
+  "folder": "Middle Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle to 2A"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2a to 2 middle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 middle to 1 middle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 middle to 3 middle"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Middle",
+  "choreoAuto": false
+}
