@@ -131,7 +131,7 @@ subsystems:
             ## Swerve Characterization ##
             azimuthEncPPR: 2048
             ## Control Configurations ##
-            slowModeScalar: 0.4
+            slowModeScalar: 0.3
             turboModeScalar: 1.73
             driveDeadband: 0.1
             rotationalDeadband: 0.1

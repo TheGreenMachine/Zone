@@ -19,7 +19,7 @@ driver:
     start:
     back: zeroPose
     leftBumper: L2
-    rightBumper:
+    rightBumper: slowMode
   dpad:
     right: robotcentricRight
     down: robotcentricDown
