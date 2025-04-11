@@ -24,8 +24,6 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.team254.CheesyDriveHelper;
 import com.team1816.lib.util.team254.DriveSignal;
 import com.team1816.lib.util.team254.SwerveDriveSignal;
-import com.team1816.core.configuration.Constants;
-import com.team1816.core.states.RobotState;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -39,7 +37,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
 import static com.team1816.lib.util.driveUtil.DriveConversions.*;

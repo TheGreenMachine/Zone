@@ -8,6 +8,7 @@ import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.core.states.Orchestrator;
 import com.team1816.core.states.RobotState;
+import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.PlaylistManager;
@@ -236,7 +237,7 @@ public class Robot extends TimedRobot {
                 DriverStation.startDataLog(DataLogManager.getLog(), false);
             }
 
-            drive = (Injector.get(Drive.Factory.class)).getInstance();
+            drive = (Injector.get(DriveFactory.class)).getInstance();
 
             subsystemManager.setSubsystems(drive, ledManager, camera, coralArm, elevator, ramp, pneumatic);
 

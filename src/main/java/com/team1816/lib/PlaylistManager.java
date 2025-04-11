@@ -27,7 +27,7 @@ public class PlaylistManager {
      */
     @Inject
     public PlaylistManager() {
-        drive = (Injector.get(Drive.Factory.class)).getInstance();
+        drive = (Injector.get(DriveFactory.class)).getInstance();
         orchestrator = Injector.get(Orchestrator.class);
         GreenLogger.log("Result of file load = " + orchestrator.loadSong(Playlist.COCONUT_MALL));
 

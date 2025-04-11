@@ -1,6 +1,7 @@
 package com.team1816.lib.subsystems.vision;
 
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.Singleton;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.Inject;
 import com.team1816.core.configuration.Constants;

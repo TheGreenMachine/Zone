@@ -1,9 +1,10 @@
 package com.team1816.season.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.google.inject.Singleton;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.Inject;
+import com.team1816.lib.Singleton;
 import com.team1816.lib.hardware.components.motor.GhostMotor;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.configurations.GreenControlMode;
@@ -12,7 +13,6 @@ import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jakarta.inject.Inject;
 
 @Singleton
 public class Ramp extends Subsystem {

@@ -2,8 +2,6 @@ package com.team1816.season.subsystems;
 
 import com.team1816.lib.Singleton;
 import com.team1816.lib.Inject;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;

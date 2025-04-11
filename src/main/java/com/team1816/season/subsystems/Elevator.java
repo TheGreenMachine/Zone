@@ -1,8 +1,6 @@
 package com.team1816.season.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.team1816.lib.Singleton;
 import com.team1816.lib.Inject;

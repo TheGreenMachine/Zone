@@ -10,8 +10,6 @@ import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest;
 import com.team1816.lib.Singleton;
 import com.team1816.lib.Inject;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;

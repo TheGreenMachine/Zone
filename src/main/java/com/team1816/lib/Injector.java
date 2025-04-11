@@ -15,21 +15,8 @@ import java.util.List;
  */
 public class Injector {
     private static final HashMap<Class<?>, Object> instances = new HashMap<>();
-    private static final HashMap<Class<?>, Class<?>> classBindings = new HashMap<>();
-
-    private static Inject _injector;
 
     private static List<Module> _modules = new ArrayList<>();
-
-    /**
-     * This method will initial the injector using the items in the
-     * lib module and the passed in season module
-     *
-     * @param module This is the season module to register
-     */
-    public static void registerModule(Module module) {
-        _modules.add(module);
-    }
 
     /**
      * Registers an instance as a module
@@ -39,17 +26,6 @@ public class Injector {
      */
     public static <T> void register(T instance) {
         instances.put(instance.getClass(), instance);
-    }
-
-    /**
-     * Registers a class as a module
-     *
-     * @param type
-     * @param instance
-     * @param <T>
-     */
-    public static <T> void register(Class<T> type, Class<? extends T> instance) {
-        classBindings.put(type, instance);
     }
 
     /**
@@ -66,7 +42,6 @@ public class Injector {
         }
         System.out.println(type);
 
-        Class<?> implementation = classBindings.getOrDefault(type, type);
         try {
             Constructor<?> milbert = null;
             Constructor<?>[] constructors = type.getConstructors();
@@ -90,7 +65,7 @@ public class Injector {
             register(instance);
             return instance;
         } catch (Exception e) {
-            throw new RuntimeException("Failed to instantiate class: " + implementation.getName(), e);
+            throw new RuntimeException("Failed to instantiate class: " + type.getName(), e);
         }
 
     }

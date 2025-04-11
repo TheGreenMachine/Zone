@@ -5,6 +5,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
+import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Injector;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
@@ -53,7 +54,7 @@ public class PathPlannerAction implements AutoAction {
      * @throws RuntimeException when the path failed to load
      */
     public PathPlannerAction(String actionName, ActionType actionType, boolean mirror) {
-        this.drive = Injector.get(Drive.Factory.class).getInstance();
+        this.drive = Injector.get(DriveFactory.class).getInstance();
         this.valid = true;
         
         if (drive instanceof TankDrive) {

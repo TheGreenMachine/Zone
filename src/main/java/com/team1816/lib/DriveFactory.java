@@ -10,11 +10,10 @@ import com.team1816.lib.util.logUtil.GreenLogger;
  * @see Drive
  */
 @Singleton
-public class DriveFactory implements Drive.Factory {
+public class DriveFactory {
 
     private static Drive mDrive;
 
-    @Override
     public Drive getInstance() {
         RobotFactory factory = Injector.get(RobotFactory.class);
         if (mDrive == null) {

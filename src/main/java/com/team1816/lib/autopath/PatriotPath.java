@@ -1,12 +1,10 @@
 package com.team1816.lib.autopath;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
+import com.team1816.lib.Inject;
 import com.team1816.lib.Injector;
+import com.team1816.lib.Singleton;
 import com.team1816.lib.auto.AutoModeEndedException;
-import com.team1816.lib.auto.actions.PathPlannerAction;
 import com.team1816.lib.auto.actions.PatriotPathAction;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;

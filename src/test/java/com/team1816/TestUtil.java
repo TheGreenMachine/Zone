@@ -1,7 +1,6 @@
 package com.team1816;
 
 import com.team1816.lib.Injector;
-import com.team1816.lib.hardware.PIDSlotConfiguration;
 import com.team1816.lib.hardware.PIDUtil;
 import com.team1816.lib.hardware.SubsystemConfig;
 import com.team1816.lib.hardware.components.gyro.IPigeonIMU;

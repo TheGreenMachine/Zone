@@ -2,6 +2,7 @@ package com.team1816.lib.auto.actions;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Injector;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.drive.EnhancedSwerveDrive;
@@ -33,7 +34,7 @@ public class PatriotPathAction implements AutoAction {
      */
     public PatriotPathAction(Pose2d initialPose, Pose2d targetPose, double endVelocity) {
         this.initialPose = initialPose;
-        this.drive = Injector.get(Drive.Factory.class).getInstance();
+        this.drive = Injector.get(DriveFactory.class).getInstance();
         this.valid = true;
         
         if (drive instanceof TankDrive) {

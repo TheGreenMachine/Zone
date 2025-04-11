@@ -1,6 +1,7 @@
 package com.team1816.season.subsystems;
 
 import com.team1816.TestUtil;
+import com.team1816.lib.DriveFactory;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.Injector;
 import com.team1816.lib.hardware.components.gyro.IPigeonIMU;
@@ -31,7 +32,7 @@ public class SwerveDriveTest {
     private final SwerveDrive mDrive;
     private final double maxVel = 2.54; //  m per sec
     private final double maxRotVel = 2 * Math.PI; // rad per sec;
-    private final Drive.Factory mDriveFactory;
+    private final DriveFactory mDriveFactory;
     private static OngoingStubbing<Object> mockRobot;
 
     public SwerveDriveTest() {
@@ -41,7 +42,7 @@ public class SwerveDriveTest {
         when(mockFactory.getConstant("maxVelOpenLoop", 3)).thenReturn(maxVel);
         when(mockFactory.getConstant("maxRotVel", 2)).thenReturn(maxRotVel);
         TestUtil.SetupMockRobotFactory(mockFactory);
-        mDriveFactory = mock(Drive.Factory.class);
+        mDriveFactory = mock(DriveFactory.class);
         Injector.register(mDriveFactory);
         var test = mDriveFactory.getClass();
         state = Injector.get(RobotState.class);
