@@ -8,8 +8,8 @@ driver:
     right:
       horizontal: rotation
   buttonpad:
-#    a: activationDeepHanger
-    a: patriotPathToCoralSide1
+    a: activationDeepHanger
+#    a: patriotPathToCoralSide1
     b: feeder
     x: outtakeCoral
     y: rampClimbPosition
