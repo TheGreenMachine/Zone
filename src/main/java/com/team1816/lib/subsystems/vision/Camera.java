@@ -37,7 +37,7 @@ public class Camera extends Subsystem{
      * Properties
      */
     private static final String NAME = "camera";
-    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera"/*, "Microsoft_LifeCam_HD-3000"*/);
+    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera", "Arducam_OV9281_USB_Camera (1)");
     private static final List<AprilTag> aprilTags = List.of(
             new AprilTag(20, new Pose3d(1, 0, 0.1525, new Rotation3d(0,0,Math.PI)))
     );
@@ -163,7 +163,7 @@ public class Camera extends Subsystem{
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = robotState.kMultiTagStdDevs;
         // Ignore estimates when the tags are too far from the camera or the ambiguities are all too high
-        if (closestDist > 1.5 || lowestAmbiguity > 0.2)
+        if (closestDist > 2 || lowestAmbiguity > 0.2)
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         // Increase std devs based on (average) distance
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));

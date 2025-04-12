@@ -43,13 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Feeder to Trough 6M"
+            "pathName": "Top Feeder to Trough 6M Shifted"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Trough 6M to Top Feeder"
+            "pathName": "Trough 6M Shifted to Top Feeder"
           }
         }
       ]

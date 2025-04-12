@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.812090163934426,
-        "y": 5.229764344262294
+        "x": 3.8220000000000005,
+        "y": 5.234
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9979418671180356,
-        "y": 5.83507417496647
+        "x": 3.00785170318361,
+        "y": 5.839309830704177
       },
       "isLocked": true,
       "linkedName": "Coral 6M Trough"
@@ -45,8 +45,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 2.3,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,

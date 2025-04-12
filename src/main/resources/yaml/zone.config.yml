@@ -173,15 +173,15 @@ subsystems:
 
             coralSensorChannel: 7
 
-            coralArmL1Position: -43.501
-            coralArmL2CoralPosition: -43.501
-            coralArmL3CoralPosition: -37.427
-            coralArmL4Position: -40.925
-            coralArmUpPosition: -30.856
-            coralArmL2AlgaePosition: -46
-            coralArmL3AlgaePosition: -45.469
+            coralArmL1Position: -44.201
+            coralArmL2CoralPosition: -45.301
+            coralArmL3CoralPosition: -38.927
+            coralArmL4Position: -40.625
+            coralArmUpPosition: -31.556
+            coralArmL2AlgaePosition: -46.7
+            coralArmL3AlgaePosition: -46.169
             coralArmFeederPosition: -4.7
-            coralArmClimbPosition: -39.14
+            coralArmClimbPosition: -39.84
 
             coralArmMotorRotationsPerDegree: .24
     elevator:

@@ -86,14 +86,14 @@ public class Constants {
                 0.226568,
 
                 new Rotation3d(0,Math.toRadians(-15),Math.toRadians(15))
-        )/*,
+        ),
         new Transform3d(
             -0.3556,
             -0.2960878,
             0.226568,
 
             new Rotation3d(0,Math.toRadians(-15),Math.toRadians(165))
-        )*/
+        )
     );
 
     //Position constants TODO: finish tuning all of these

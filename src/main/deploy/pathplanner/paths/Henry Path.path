@@ -16,15 +16,15 @@
     },
     {
       "anchor": {
-        "x": 3.564,
+        "x": 3.59714,
         "y": 5.33993
       },
       "prevControl": {
-        "x": 3.363144063400491,
+        "x": 3.396284063400491,
         "y": 5.191078084551343
       },
       "nextControl": {
-        "x": 3.8185068171481875,
+        "x": 3.8516468171481875,
         "y": 5.528541936837029
       },
       "isLocked": false,
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 3.85,
-        "y": 5.50512
+        "x": 3.883,
+        "y": 5.44741
       },
       "prevControl": {
-        "x": 3.48705482449454,
-        "y": 5.356251827912541
+        "x": 3.5200548244945398,
+        "y": 5.2985418279125405
       },
       "nextControl": {
-        "x": 4.237602824603785,
-        "y": 5.664101928646227
+        "x": 4.270602824603785,
+        "y": 5.606391928646227
       },
       "isLocked": false,
       "linkedName": "Henry Coral 6B Reef"
@@ -113,8 +113,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.3,
+    "maxAcceleration": 2.3,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 540.0,
     "nominalVoltage": 12.0,
