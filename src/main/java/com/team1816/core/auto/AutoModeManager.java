@@ -181,6 +181,8 @@ public class AutoModeManager {
         MIDDLE_BOTTOM_1L4("Middle 1L4 Auto", true),
 
         MIDDLE_1L1("Middle 1L1 Auto"),
+        MIDDLE_1L1_TOP_FEEDER("Middle 1L1 Top Feeder Auto"),
+        MIDDLE_1L1_BOTTOM_FEEDER("Middle 1L1 Top Feeder Auto", true),
 
         TOP_4L4("Top 4L4 Auto"),
         BOTTOM_4L4("Top 4L4 Auto", true),
