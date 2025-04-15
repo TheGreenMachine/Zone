@@ -64,11 +64,11 @@ public class PatriotPathManager {
         }
 
         // Update logged target position if selected location is dynamic or has been changed
-        if (selectedLocation.isDynamic || selectedLocationChanged || colorManager.isColorChanged()) {
+        if (desiredLocation.isDynamic || selectedLocationChanged || colorManager.isColorChanged()) {
             if (desiredLocation == DesiredLocation.NOWHERE) {
                 robotState.field.getObject("patriotTarget").setPoses(List.of());
             } else {
-                robotState.field.getObject("patriotTarget").setPose(selectedLocation.getTargetPose());
+                robotState.field.getObject("patriotTarget").setPoses(desiredLocation.getTargetPose());
             }
         }
     }
