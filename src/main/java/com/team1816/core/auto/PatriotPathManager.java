@@ -160,7 +160,7 @@ public class PatriotPathManager {
                 "4", new Translation2d(4.098, 3.302),
                 "5", new Translation2d(3.610, 4.000),
                 "6", new Translation2d(4.038, 4.788)
-                );
+        );
 
         public static Pose2d flipIfNecessary(Pose2d pose) {
             return AutoBuilder.shouldFlip() ? FlippingUtil.flipFieldPose(pose) : pose;

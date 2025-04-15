@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * This class represents an action that will move the robot along a PathPlanner trajectory,
- * follow a PathPlanner auto, or dynamically generate a patriot path
+ * follow a PathPlanner auto
  */
 public class PathPlannerAction implements AutoAction {
     private Pose2d initialPose;
