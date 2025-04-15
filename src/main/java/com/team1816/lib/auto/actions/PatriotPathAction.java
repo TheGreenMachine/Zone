@@ -53,7 +53,7 @@ public class PatriotPathAction implements AutoAction {
     
     
     /**
-     * Returns the initial pose of the action. Note that this does not change based on the colour
+     * Returns the initial pose of the action. Note that this does not change based on the color
      * of the alliance.
      */
     public Pose2d getPathInitialPose() {

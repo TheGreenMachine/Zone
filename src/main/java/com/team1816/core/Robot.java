@@ -1,9 +1,9 @@
 package com.team1816.core;
 
 import com.ctre.phoenix6.CANBus;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.FlippingUtil;
 import com.team1816.core.auto.AutoModeManager;
+import com.team1816.core.auto.ColorManager;
+import com.team1816.core.auto.PatriotPathManager;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.configuration.FieldConfig;
 import com.team1816.core.states.Orchestrator;
@@ -28,14 +28,10 @@ import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Pneumatic;
 import com.team1816.season.subsystems.*;
 import com.team1816.season.auto.actions.NamedCommandRegistrar;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -77,7 +73,6 @@ public class Robot extends TimedRobot {
     private Drive drive;
 
     //TODO add new subsystems here
-    private PatriotPath autopather;
     private Elevator elevator;
     private CoralArm coralArm;
     private Ramp ramp;
@@ -95,8 +90,10 @@ public class Robot extends TimedRobot {
      * Autonomous
      */
     private AutoModeManager autoModeManager;
+    private ColorManager colorManager;
+    private PatriotPathManager patriotPathManager;
+    private PatriotPath patriotPath;
 
-    private Thread autoTargetAlignThread;
 
     /**
      * Timing
@@ -188,8 +185,10 @@ public class Robot extends TimedRobot {
             infrastructure = Injector.get(Infrastructure.class);
             subsystemManager = Injector.get(SubsystemLooper.class);
             autoModeManager = Injector.get(AutoModeManager.class);
+            colorManager = Injector.get(ColorManager.class);
             playlistManager = Injector.get(PlaylistManager.class);
-            autopather = Injector.get(PatriotPath.class);
+            patriotPath = Injector.get(PatriotPath.class);
+            patriotPathManager = Injector.get(PatriotPathManager.class);
             coralArm = Injector.get(CoralArm.class);
             elevator = Injector.get(Elevator.class);
             ramp = Injector.get(Ramp.class);
@@ -261,13 +260,6 @@ public class Robot extends TimedRobot {
             /**NEW SUBSYSTEM ACTIONS*/
                 /** Driver Commands */
                     /**Intake/Driving Inputs*/
-            inputHandler.listenAction("patriotPathToCoralSide1",
-                    ActionState.PRESSED, () -> {
-                Pose2d target = new Pose2d(5.120, 5.460, Rotation2d.fromDegrees(-132.517));
-                if (AutoBuilder.shouldFlip()) target = FlippingUtil.flipFieldPose(target);
-                
-                autopather.start(target);
-            });
 
             inputHandler.listenAction(
                     "zeroPose",
@@ -497,6 +489,12 @@ public class Robot extends TimedRobot {
                     }
             );
 
+            // Uses operator SmartDashboard input
+            inputHandler.listenAction("patriotPath", ActionState.PRESSED, () -> patriotPathManager.start());
+            inputHandler.listenAction("patriotPathDynamicLeft", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_A));
+            inputHandler.listenAction("patriotPathDynamicMiddle", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_MIDDLE));
+            inputHandler.listenAction("patriotPathDynamicRight", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_B));
+
             //For testing only
             inputHandler.listenAction(
                     "testingOffsetPose",
@@ -677,9 +675,14 @@ public class Robot extends TimedRobot {
 
 //            GreenLogger.log(String.valueOf(robotState.fieldToVehicle));
 
+            // Periodically check if patriot path target position has changed
+            patriotPathManager.update();
+
             subsystemManager.outputToSmartDashboard(); // update shuffleboard for subsystem values
             robotState.outputToSmartDashboard(); // update robot state on field for Field2D widget
             autoModeManager.outputToSmartDashboard(); // update shuffleboard selected auto mode
+            patriotPathManager.outputToSmartDashboard(); // update shuffleboard selected patriot target pose
+            colorManager.outputToSmartDashboard(); // update shuffleboard selected color
             playlistManager.outputToSmartDashboard(); // update shuffleboard selected song
         } catch (Throwable t) {
             faulted = true;
@@ -726,9 +729,10 @@ public class Robot extends TimedRobot {
 //                }
 //                zeroingButtonWasPressed = zeroingButtonPressed;
             }
-
+            // Periodically check if the robot has changed sides
+            colorManager.update();
             // Periodically check if drivers changed desired auto - if yes, then update the robot's position on the field
-            if(autoModeManager.update())
+            if (autoModeManager.update())
                 drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose(robotState.allianceColor));
 
             if (drive.isDemoMode()) { // Demo-mode
@@ -772,7 +776,7 @@ public class Robot extends TimedRobot {
 
             manualControl();
             if(robotState.autopathing) {
-                autopather.routine();
+                patriotPath.routine();
             }
 
         } catch (Throwable t) {
@@ -792,7 +796,7 @@ public class Robot extends TimedRobot {
         robotState.rotationInput = -inputHandler.getActionAsDouble("rotation");
 
         if(robotState.autopathing && (robotState.throttleInput != 0 || robotState.strafeInput != 0) && (double) System.nanoTime() /1000000 - robotState.autopathBeforeTime > robotState.autopathPathCancelBufferMilli){
-            autopather.stop();
+            patriotPath.stop();
         }
 
         if (robotState.rotatingClosedLoop) {

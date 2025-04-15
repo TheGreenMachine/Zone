@@ -2,14 +2,10 @@ package com.team1816.core.auto;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.team1816.core.states.RobotState;
-import com.team1816.lib.auto.Color;
+import com.team1816.lib.Injector;
 import com.team1816.lib.auto.modes.AutoMode;
-import com.team1816.lib.auto.modes.NoopAutoMode;
 import com.team1816.lib.auto.modes.PathPlannerAutoMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,11 +18,10 @@ public class AutoModeManager {
     /**
      * Properties: Selection
      */
-    private RobotState robotState;
     private final SendableChooser<DesiredAuto> autoModeChooser;
-    private final SendableChooser<Color> sideChooser;
     private DesiredAuto desiredAuto;
-    private Color teamColor;
+
+    private ColorManager colorManager;
     
     /**
      * Properties: Execution
@@ -36,17 +31,15 @@ public class AutoModeManager {
     
     /**
      * Instantiates and AutoModeManager with a default option and selective computation
-     *
-     * @param rs RobotState
      */
     @Inject
-    public AutoModeManager(RobotState rs) {
-        robotState = rs;
+    public AutoModeManager() {
         autoModeChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired auto mode
+
+        colorManager = Injector.get(ColorManager.class);
         
         SmartDashboard.putData("Auto mode", autoModeChooser); // appends chooser to shuffleboard=
-        sideChooser = new SendableChooser<>(); // Shuffleboard dropdown menu to choose desired side / bumper color
-        
+
         for (DesiredAuto desiredAuto : DesiredAuto.values()) {
             autoModeChooser.addOption(desiredAuto.name(), desiredAuto);
         }
@@ -54,11 +47,6 @@ public class AutoModeManager {
                 DesiredAuto.DEFAULT.name(),
                 DesiredAuto.DEFAULT
         );
-        
-        SmartDashboard.putData("Robot color", sideChooser); // appends chooser to shuffleboard
-        
-        sideChooser.setDefaultOption(Color.BLUE.name(), Color.BLUE); // initialize options
-        sideChooser.addOption(Color.RED.name(), Color.RED); // initialize options
         
         reset();
     }
@@ -71,8 +59,6 @@ public class AutoModeManager {
         autoModeThread = new Thread(autoMode::run);
 
         desiredAuto = DesiredAuto.DRIVE_STRAIGHT;
-        teamColor = sideChooser.getSelected();
-        robotState.allianceColor = teamColor;
     }
     
     /**
@@ -82,20 +68,11 @@ public class AutoModeManager {
      */
     public boolean update() {
         DesiredAuto selectedAuto = autoModeChooser.getSelected();
-        
-        Color selectedColor = Color.BLUE;
-        
-        if (RobotBase.isSimulation()) {
-            selectedColor = sideChooser.getSelected();
-        } else if (RobotBase.isReal()) {
-            var dsAlliance = DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : sideChooser.getSelected(); //ternary hell
-            selectedColor = (dsAlliance == DriverStation.Alliance.Red) ? Color.RED : Color.BLUE;
-        }
-        
+
         boolean autoChanged = desiredAuto != selectedAuto;
         boolean startPosChanged = false;
-        boolean colorChanged = teamColor != selectedColor;
-        
+        boolean colorChanged = colorManager.isColorChanged();
+
         // if auto has been changed, update selected auto mode + thread
         if (autoChanged || colorChanged || startPosChanged) {
             if (autoChanged) {
@@ -104,15 +81,10 @@ public class AutoModeManager {
                         "Auto changed from: " + desiredAuto + ", to: " + selectedAuto.name()
                 );
             }
-            if (colorChanged) {
-                teamColor = selectedColor;
-                GreenLogger.log("Robot color changed from: " + teamColor + ", to: " + selectedColor);
-            }
             
             autoMode = new PathPlannerAutoMode(selectedAuto.autoMode, selectedAuto.mirror);
             autoModeThread = new Thread(autoMode::run);
         }
-        robotState.allianceColor = teamColor;
         
         return autoChanged || colorChanged;
     }
@@ -123,9 +95,6 @@ public class AutoModeManager {
     public void outputToSmartDashboard() {
         if (desiredAuto != null) {
             SmartDashboard.putString("AutoModeSelected", desiredAuto.name());
-        }
-        if (teamColor != null) {
-            SmartDashboard.putString("RobotColorSelected", teamColor.name());
         }
     }
     

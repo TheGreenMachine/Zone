@@ -27,17 +27,17 @@ public class PatriotPath {
         robotState = Injector.get(RobotState.class);
     }
     
-    public void start(Pose2d autopathTargetPosition) {
+    public void start(Pose2d targetPosition) {
         if (robotState.autopathing && (double) System.nanoTime() / 1000000 - robotState.autopathBeforeTime < robotState.autopathPathCancelBufferMilli)
             return;
         robotState.autopathing = true;
 
-        GreenLogger.log("Starting Autopath");
+        GreenLogger.log("Starting Patriot Path");
         needsStop = false;
 
         robotState.autopathBeforeTime = (double) System.nanoTime() / 1000000;
 
-        pathPlannerAction = new PatriotPathAction(robotState.fieldToVehicle, autopathTargetPosition, 0);
+        pathPlannerAction = new PatriotPathAction(robotState.fieldToVehicle, targetPosition, 0);
 
         pathPlannerAction.start();
     }

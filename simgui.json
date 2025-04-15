@@ -96,6 +96,7 @@
       "/SmartDashboard/Dynamic Start": "String Chooser",
       "/SmartDashboard/Elevator+CoralArm": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Patriot Path Target": "String Chooser",
       "/SmartDashboard/Playlist": "String Chooser",
       "/SmartDashboard/Ramp": "Mechanism2d",
       "/SmartDashboard/Robot color": "String Chooser",
@@ -320,6 +321,10 @@
         },
         "height": 8.051901817321777,
         "left": 534,
+        "patriotTarget": {
+          "arrows": false,
+          "style": "Line"
+        },
         "right": 3466,
         "seenTargetPoses": {
           "image": "C:\\Users\\henry\\photonvision\\photonlib-java-examples\\poseest\\tag-blue.png",
@@ -396,6 +401,11 @@
           "width": 0.800000011920929
         },
         "width": 17.54825210571289,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Patriot Path Target": {
         "window": {
           "visible": true
         }
@@ -533,6 +543,9 @@
   },
   "NetworkTables Info": {
     "visible": true
+  },
+  "NetworkTables View": {
+    "visible": false
   },
   "Plot": {
     "Plot <0>": {
