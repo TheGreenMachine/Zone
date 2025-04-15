@@ -10,9 +10,9 @@ driver:
   buttonpad:
     a: activationDeepHanger
 #    a: patriotPath
-#    a: patriotPathDynamicLeft
-#    a: patriotPathDynamicMiddle
-#    a: patriotPathDynamicRight
+#    a: patriotPathDynamicA
+#    a: patriotPathDynamicM
+#    a: patriotPathDynamicB
     b: feeder
     x: outtakeCoral
     y: rampClimbPosition

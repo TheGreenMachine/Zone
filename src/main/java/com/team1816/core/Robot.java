@@ -491,9 +491,9 @@ public class Robot extends TimedRobot {
 
             // Uses operator SmartDashboard input
             inputHandler.listenAction("patriotPath", ActionState.PRESSED, () -> patriotPathManager.start());
-            inputHandler.listenAction("patriotPathDynamicLeft", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_A));
-            inputHandler.listenAction("patriotPathDynamicMiddle", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_MIDDLE));
-            inputHandler.listenAction("patriotPathDynamicRight", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_B));
+            inputHandler.listenAction("patriotPathDynamicA", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_A));
+            inputHandler.listenAction("patriotPathDynamicM", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_MIDDLE));
+            inputHandler.listenAction("patriotPathDynamicR", ActionState.PRESSED, () -> patriotPathManager.start(PatriotPathManager.DesiredLocation.NEAREST_CORAL_B));
 
             //For testing only
             inputHandler.listenAction(
