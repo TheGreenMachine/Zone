@@ -74,15 +74,15 @@ public class PatriotPathManager {
     }
 
     public void start() {
+        start(desiredLocation);
+    }
+
+    public void start(DesiredLocation desiredLocation) {
         if (desiredLocation == DesiredLocation.NOWHERE) {
             GreenLogger.log("Attempted to start patriot path manager with no desired location.");
             return;
         }
 
-        start(desiredLocation);
-    }
-
-    public void start(DesiredLocation desiredLocation) {
         patriotPath.start(desiredLocation.getTargetPose());
     }
 
