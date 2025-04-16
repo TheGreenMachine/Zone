@@ -36,7 +36,12 @@
       "name": "coral l234 initialize",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral l234 initialize"
+        }
+      }
     },
     {
       "name": "coral l4",
