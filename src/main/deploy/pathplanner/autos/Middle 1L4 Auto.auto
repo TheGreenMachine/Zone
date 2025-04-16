@@ -9,6 +9,18 @@
           "data": {
             "pathName": "Middle to 2A"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2A to TF"
+          }
         }
       ]
     }

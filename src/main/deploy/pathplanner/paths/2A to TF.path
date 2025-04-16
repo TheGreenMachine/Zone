@@ -1,0 +1,82 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.1,
+        "y": 4.180028530670469
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.454141604069154,
+        "y": 5.365269850893158
+      },
+      "isLocked": false,
+      "linkedName": "Coral 2A Reef"
+    },
+    {
+      "anchor": {
+        "x": 6.50325,
+        "y": 6.823249999999999
+      },
+      "prevControl": {
+        "x": 6.993743152776689,
+        "y": 6.151202409966418
+      },
+      "nextControl": {
+        "x": 5.737520955477438,
+        "y": 7.872411147463344
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5460770328102698,
+        "y": 7.257631954350927
+      },
+      "prevControl": {
+        "x": 2.704982598768934,
+        "y": 7.087806796024638
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top Feeder"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "coral feeder",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "coral feeder"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.3,
+    "maxAcceleration": 2.3,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 540.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.972626614896356
+  },
+  "reversed": false,
+  "folder": "Middle Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
