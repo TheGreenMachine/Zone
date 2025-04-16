@@ -164,21 +164,21 @@ public class AutoModeManager {
         
         DRIVE_STRAIGHT("Drive Straight Auto", false),
 
-        TUNE_DRIVETRAIN("Tune Drivetrain Auto"),
-        TUNE_DRIVETRAIN_STRAIGHT("Tune Drivetrain Straight Auto"),
-        TUNE_DRIVETRAIN_STRAIGHT_FAST("Tune Drivetrain Straight Fast Auto"),
+//        TUNE_DRIVETRAIN("Tune Drivetrain Auto"),
+//        TUNE_DRIVETRAIN_STRAIGHT("Tune Drivetrain Straight Auto"),
+//        TUNE_DRIVETRAIN_STRAIGHT_FAST("Tune Drivetrain Straight Fast Auto"),
         
         TOP_3L1("Top 3L1 Auto"),
         BOTTOM_3L1("Top 3L1 Auto", true),
 
-        SAFE_TOP_3L1("Safe Top 3L1 Auto"),
-        SAFE_BOTTOM_3L1("Safe Top 3L1 Auto", true),
+//        SAFE_TOP_3L1("Safe Top 3L1 Auto"),
+//        SAFE_BOTTOM_3L1("Safe Top 3L1 Auto", true),
 
-        TOP_4L1("Top 4L1 Auto"),
-        BOTTOM_4L1("Top 4L1 Auto", true),
+//        TOP_4L1("Top 4L1 Auto"),
+//        BOTTOM_4L1("Top 4L1 Auto", true),
         
-        MIDDLE_TOP_1L4("Middle 1L4 Auto"),
-        MIDDLE_BOTTOM_1L4("Middle 1L4 Auto", true),
+//        MIDDLE_TOP_1L4("Middle 1L4 Auto"),
+//        MIDDLE_BOTTOM_1L4("Middle 1L4 Auto", true),
 
         MIDDLE_1L1("Middle 1L1 Auto"),
         MIDDLE_1L1_TOP_FEEDER("Middle 1L1 Top Feeder Auto"),
@@ -187,21 +187,21 @@ public class AutoModeManager {
         TOP_4L4("Top 4L4 Auto"),
         BOTTOM_4L4("Top 4L4 Auto", true),
 
-        ONE_THING_TOP("One Thing"),
-        ONE_THING_BOTTOM("One Thing", true),
+//        ONE_THING_TOP("One Thing"),
+//        ONE_THING_BOTTOM("One Thing", true),
 
-        TWO_THING_TOP("Two Thing"),
-        TWO_THING_BOTTOM("Two Thing", true),
+//        TWO_THING_TOP("Two Thing"),
+//        TWO_THING_BOTTOM("Two Thing", true),
 
 //        MIDDLE_1L4_ALGAE_MIDDLE("Middle 1L4 Algae Auto"),
 
-        TOP_1L4_2L1("Top 1L4 2L1 Auto"),
-        BOTTOM_1L4_2L1("Top 1L4 2L1 Auto", true),
+//        TOP_1L4_2L1("Top 1L4 2L1 Auto"),
+//        BOTTOM_1L4_2L1("Top 1L4 2L1 Auto", true),
 
-        SAFE_TOP_1L4_2L1("Safe Top 1L4 2L1 Auto"),
-        SAFE_BOTTOM_1L4_2L1("Safe Top 1L4 2L1 Auto", true),
+//        SAFE_TOP_1L4_2L1("Safe Top 1L4 2L1 Auto"),
+//        SAFE_BOTTOM_1L4_2L1("Safe Top 1L4 2L1 Auto", true),
 
-        TOP_FULL_REEF_SIDE_1("Full Reef Side 1 Auto")
+//        TOP_FULL_REEF_SIDE_1("Full Reef Side 1 Auto")
         
         ;
 
