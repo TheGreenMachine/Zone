@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8220000000000005,
-        "y": 5.234
+        "x": 3.6464999999999996,
+        "y": 5.1267499999999995
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7871133851410708,
-        "y": 5.504241286609731
+        "x": 1.4724671252190893,
+        "y": 5.75352230141374
       },
       "isLocked": true,
-      "linkedName": "Coral 6M Trough"
+      "linkedName": "Coral 6M Trough Shifted"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 7.257631954350927
       },
       "prevControl": {
-        "x": 2.2469866150109232,
-        "y": 6.388689145969478
+        "x": 2.525773174354283,
+        "y": 6.327363773957147
       },
       "nextControl": null,
       "isLocked": true,
