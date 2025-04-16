@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.GhostMotor;
@@ -12,6 +13,8 @@ import com.team1816.lib.hardware.components.motor.configurations.GreenControlMod
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -78,6 +81,9 @@ public class Elevator extends Subsystem {
 
         elevatorMotor.selectPIDSlot(0);
 
+        super.desStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/desiredPivotPosition");
+        super.actStatesLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/actualPivotPosition");
+
         if (RobotBase.isSimulation()) {
             elevatorMotor.setMotionProfileMaxVelocity(70);
             elevatorMotor.setMotionProfileMaxAcceleration(20);
@@ -136,6 +142,11 @@ public class Elevator extends Subsystem {
 //            System.out.println("changed");
             robotState.actualElevatorState = desiredElevatorState;
             elevatorOutputsChanged = true;
+        }
+
+        if(Constants.kLoggingRobot) {
+            doubleDesStatesLogger().append(desiredElevatorPosition);
+            doubleActStatesLogger().append(actualElevatorPosition);
         }
     }
 
@@ -229,6 +240,14 @@ public class Elevator extends Subsystem {
             case L2_ALGAE -> elevatorL2AlgaePosition;
             case L3_ALGAE -> elevatorL3AlgaePosition;
         };
+    }
+
+    private DoubleLogEntry doubleDesStatesLogger() {
+        return (DoubleLogEntry) desStatesLogger;
+    }
+
+    private DoubleLogEntry doubleActStatesLogger() {
+        return (DoubleLogEntry) actStatesLogger;
     }
 
     /**
