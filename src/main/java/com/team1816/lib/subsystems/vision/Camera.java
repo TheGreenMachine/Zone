@@ -37,7 +37,7 @@ public class Camera extends Subsystem{
      * Properties
      */
     private static final String NAME = "camera";
-    private static final List<String> CAMS = List.of("Arducam_OV9281_USB_Camera", "Arducam_OV9281_USB_Camera (1)");
+    private static final List<String> CAMS = List.of(/*"Arducam_OV9281_USB_Camera", */"Arducam_OV9281_USB_Camera (1)");
     private static final List<AprilTag> aprilTags = List.of(
             new AprilTag(20, new Pose3d(1, 0, 0.1525, new Rotation3d(0,0,Math.PI)))
     );
