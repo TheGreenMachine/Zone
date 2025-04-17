@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 5.9,
+        "x": 5.85,
         "y": 4.026
       },
       "prevControl": {
-        "x": 6.725754308082658,
+        "x": 6.675754308082658,
         "y": 4.047580690331908
       },
       "nextControl": null,
@@ -40,17 +40,6 @@
         "type": "named",
         "data": {
           "name": "coral l1 initialize"
-        }
-      }
-    },
-    {
-      "name": "ramp score l1",
-      "waypointRelativePos": 0.8112953832362172,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ramp score l1"
         }
       }
     }

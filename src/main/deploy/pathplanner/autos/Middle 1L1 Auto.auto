@@ -9,6 +9,18 @@
           "data": {
             "pathName": "Middle 1L1 Path"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ramp score l1"
+          }
         }
       ]
     }
