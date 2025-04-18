@@ -2,6 +2,7 @@ package com.team1816.lib.autopath;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.team1816.core.configuration.Constants;
 import com.team1816.core.states.RobotState;
 import com.team1816.lib.Injector;
@@ -10,6 +11,9 @@ import com.team1816.lib.auto.actions.PathPlannerAction;
 import com.team1816.lib.auto.actions.PatriotPathAction;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import edu.wpi.first.math.geometry.Pose2d;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 
 @Singleton
 public class PatriotPath {
@@ -26,7 +30,7 @@ public class PatriotPath {
     public PatriotPath() {
         robotState = Injector.get(RobotState.class);
     }
-    
+
     public void start(Pose2d targetPosition) {
         if (robotState.autopathing && (double) System.nanoTime() / 1000000 - robotState.autopathBeforeTime < robotState.autopathPathCancelBufferMilli)
             return;
@@ -37,7 +41,26 @@ public class PatriotPath {
 
         robotState.autopathBeforeTime = (double) System.nanoTime() / 1000000;
 
-        pathPlannerAction = new PatriotPathAction(robotState.fieldToVehicle, targetPosition, 0);
+        pathPlannerAction = new PatriotPathAction(robotState.fieldToVehicle, targetPosition);
+
+        pathPlannerAction.start();
+    }
+
+    public void start(String resultPathName) {
+        if (robotState.autopathing && (double) System.nanoTime() / 1000000 - robotState.autopathBeforeTime < robotState.autopathPathCancelBufferMilli)
+            return;
+        robotState.autopathing = true;
+
+        GreenLogger.log("Starting Patriot Path");
+        needsStop = false;
+
+        try {
+            pathPlannerAction = new PatriotPathAction(PathPlannerPath.fromPathFile(resultPathName));
+        } catch (IOException | ParseException e) {
+            GreenLogger.log("Failed to load PathPlanner path! Defaulting to no-op path.");
+            GreenLogger.log(e);
+            pathPlannerAction = new PatriotPathAction(robotState.fieldToVehicle);
+        }
 
         pathPlannerAction.start();
     }
