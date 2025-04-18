@@ -588,7 +588,7 @@ public class Robot extends TimedRobot {
             infrastructure.startCompressor();
 
             elevator.setDesiredState(Elevator.ELEVATOR_STATE.FEEDER);
-            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
+//            ramp.setDesiredState(Ramp.RAMP_STATE.L234_FEEDER);
             coralArm.setDesiredState(CoralArm.PIVOT_STATE.FEEDER, CoralArm.INTAKE_STATE.INTAKE);
 
 //            autopather.autopathMaxCalcMilli = 5;
