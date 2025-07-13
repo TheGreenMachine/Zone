@@ -6,7 +6,6 @@ import com.team1816.core.configuration.FieldConfig;
 import com.team1816.lib.auto.Color;
 import com.team1816.lib.subsystems.drive.SwerveDrive;
 import com.team1816.lib.subsystems.drive.TankDrive;
-import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.season.subsystems.*;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -108,9 +107,6 @@ public class RobotState {
     public boolean isElevatorInRange = false;
     public boolean isCoralArmPivotInRange = false;
 
-    public VisionPoint superlativeTarget = new VisionPoint();
-    public List<VisionPoint> visibleTargets = new ArrayList<>();
-
     public final Mechanism2d rampMech2d = new Mechanism2d(2, 2);
     public final MechanismRoot2d rampMech2dRoot = rampMech2d.getRoot("root", 1, 1);
 
@@ -190,8 +186,6 @@ public class RobotState {
         actualPneumaticState = Pneumatic.PNEUMATIC_STATE.OFF;
 
         isPoseUpdated = true;
-        superlativeTarget = new VisionPoint();
-        visibleTargets = new ArrayList<>();
         drivetrainTemp = 0;
         vehicleToFloorProximityCentimeters = 0;
     }

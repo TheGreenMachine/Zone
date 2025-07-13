@@ -12,7 +12,6 @@ import com.team1816.lib.subsystems.LedManager;
 import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.logUtil.GreenLogger;
-import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.season.subsystems.CoralArm;
 import com.team1816.season.subsystems.Elevator;
 import com.team1816.season.subsystems.Ramp;
